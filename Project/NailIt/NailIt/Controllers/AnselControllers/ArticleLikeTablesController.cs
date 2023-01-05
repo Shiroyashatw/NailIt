@@ -77,6 +77,9 @@ namespace NailIt.Controllers.AnselControllers
         [HttpPost]
         public async Task<ActionResult<ArticleLikeTable>> PostArticleLikeTable(ArticleLikeTable articleLikeTable)
         {
+            var articleTable = _context.ArticleTables.FirstOrDefault(a => a.ArticleId == articleLikeTable.ArticleId);
+            if (articleTable != null) { articleTable.ArticleLikesCount += 1; }
+
             _context.ArticleLikeTables.Add(articleLikeTable);
             await _context.SaveChangesAsync();
 
@@ -92,6 +95,9 @@ namespace NailIt.Controllers.AnselControllers
             {
                 return NotFound();
             }
+
+            var articleTable = _context.ArticleTables.FirstOrDefault(a => a.ArticleId == articleLikeTable.ArticleId);
+            if (articleTable != null) { articleTable.ArticleLikesCount -= 1; }
 
             _context.ArticleLikeTables.Remove(articleLikeTable);
             await _context.SaveChangesAsync();
