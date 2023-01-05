@@ -44,11 +44,24 @@ namespace NailIt.Controllers.AnselControllers
                 articles = articles.Where(a => a.ArticleTitle.Contains(searchValue)).ToList();
             }
 
-            var reaultArticles = articles.Join(
+            var articlesJoinMember = articles.Join(
                 _context.MemberTables, 
                 a => a.ArticleAuthor, 
                 m => m.MemberId, 
                 (a, m) => new { article = a, m.MemberAccount, m.MemberNickname }).ToList();
+
+            var userArticleLike = _context.ArticleLikeTables.Where(a => a.MemberId == HttpContext.Session.GetInt32("MemberId")).ToList();
+            var leftJoinLike = (from article in articlesJoinMember
+                                join like in userArticleLike
+                                     on article.article.ArticleId equals like.ArticleId into gj
+                                from userlike in gj.DefaultIfEmpty()
+                                select new
+                                {
+                                    article.article,
+                                    memberAccount = article.MemberAccount,
+                                    memberNickname = article.MemberNickname,
+                                    like = userlike?.ArticleLikeId == null ? false : true
+                                }).ToList();
 
             var member = await _context.MemberTables.
                 Where(m => m.MemberId == ArticleAuthor).
@@ -61,7 +74,7 @@ namespace NailIt.Controllers.AnselControllers
 
             var articleCount = _context.ArticleTables.Where(a => a.ArticleAuthor == ArticleAuthor).Count();
 
-            return Ok(new { reaultArticles, member, articleCount });
+            return Ok(new { leftJoinLike, member, articleCount });
         }
     }
 }

@@ -28,7 +28,7 @@ namespace NailIt.Controllers
             // setup login user info
             //httpContextAccessor.HttpContext.Session.SetInt32(key, int_value);
             HttpContext.Session.SetString("userName", "小志");
-            HttpContext.Session.SetInt32("userId", 1);
+            HttpContext.Session.SetInt32("MemberId", 1);
 
             return View();
         }
