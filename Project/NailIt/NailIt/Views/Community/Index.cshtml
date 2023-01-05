@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor hca
+@{
+    ViewData["Title"] = "美甲小天地";
+    string userName = hca.HttpContext.Session.GetString("userName") ?? "Guest";
+}
+
+<h1>Index</h1>
+
+<p>
+    Community page
+</p>
+@{
+    if (userName == "Guest")
+    {
+        <p>未登入</p>
+    }
+    else
+    {
+        <p>@userName</p>
+    }
+}
