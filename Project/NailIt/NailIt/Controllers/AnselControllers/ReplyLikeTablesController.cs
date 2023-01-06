@@ -83,7 +83,7 @@ namespace NailIt.Controllers.AnselControllers
 
             _context.ReplyLikeTables.Add(replyLikeTable);
             await _context.SaveChangesAsync();
-
+                
             return CreatedAtAction("GetReplyLikeTable", new { id = replyLikeTable.ReplyLikeId }, replyLikeTable);
         }
 
@@ -106,12 +106,14 @@ namespace NailIt.Controllers.AnselControllers
                 _context.ReplyLikeTables.Remove(replyLikeTable);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { status = "OK" });
+                return NoContent();
+                //return Ok(new { status = "OK" });
 
             }
             catch (Exception e)
             {
-                return Ok(new { status = "Exception", message = e });
+                return NotFound(e);
+                    //Ok(new { status = "Exception", message = e });
             }
         }
 
