@@ -30,7 +30,7 @@ namespace NailIt.Controllers.AnselControllers
         /// <returns></returns>
         // GET: api/ArticleTables/L2/0
         [HttpGet("{boardSort}/{page}/{order}/{searchValue}")]
-        public async Task<ActionResult<IEnumerable<ArticleTable>>> GetArticleTables(string boardSort = "L2", int page = 0, string order = "latest", string searchValue = "")
+        public async Task<ActionResult<IEnumerable<ArticleTable>>> GetArticleTables(string boardSort = "L0", int page = 0, string order = "latest", string searchValue = "")
         {
             var amountPerPage = 10;
             var articles = await _context.ArticleTables.
