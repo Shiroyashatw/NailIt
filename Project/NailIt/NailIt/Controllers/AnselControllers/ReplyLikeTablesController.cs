@@ -91,25 +91,33 @@ namespace NailIt.Controllers.AnselControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReplyLikeTable(int id)
         {
-            var replyLikeTable = await _context.ReplyLikeTables.FindAsync(id);
-            if (replyLikeTable == null)
+            try
             {
-                return NotFound();
+                var replyLikeTable = await _context.ReplyLikeTables.FindAsync(id);
+                if (replyLikeTable == null)
+                {
+                    return NotFound();
+                }
+
+                // this reply ReplyLikesCount -1 at ReplyTables
+                var replyTable = _context.ReplyTables.FirstOrDefault(a => a.ReplyId == replyLikeTable.ReplyId);
+                if (replyTable != null) { replyTable.ReplyLikesCount -= 1; }
+
+                _context.ReplyLikeTables.Remove(replyLikeTable);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { status = "OK" });
+
             }
-
-            // this reply ReplyLikesCount -1 at ReplyTables
-            var replyTable = _context.ReplyTables.FirstOrDefault(a => a.ReplyId == replyLikeTable.ReplyId);
-            if (replyTable != null) { replyTable.ReplyLikesCount -= 1; }
-
-            _context.ReplyLikeTables.Remove(replyLikeTable);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception e)
+            {
+                return Ok(new { status = "Exception", message = e });
+            }
         }
 
-        private bool ReplyLikeTableExists(int id)
-        {
-            return _context.ReplyLikeTables.Any(e => e.ReplyLikeId == id);
-        }
+        //private bool ReplyLikeTableExists(int id)
+        //{
+        //    return _context.ReplyLikeTables.Any(e => e.ReplyLikeId == id);
+        //}
     }
 }
