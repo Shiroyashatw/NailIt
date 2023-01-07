@@ -28,7 +28,9 @@ namespace NailIt.Controllers.AnselControllers
         /// <param name="order">which order 'latest':'最新', 'other':'愛心'</param>
         /// <param name="searchValue">search article title</param>
         /// <returns></returns>
-        // GET: api/ArticleTables/L2/0
+        // GET: api/ArticleTables/L0/0/latest/Good
+        [HttpGet("{boardSort}/{page}")]
+        [HttpGet("{boardSort}/{page}/{order}")]
         [HttpGet("{boardSort}/{page}/{order}/{searchValue}")]
         public async Task<ActionResult<IEnumerable<ArticleTable>>> GetArticleTables(string boardSort = "L0", int page = 0, string order = "latest", string searchValue = "")
         {
@@ -91,6 +93,9 @@ namespace NailIt.Controllers.AnselControllers
                 return BadRequest();
             }
 
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
             _context.Entry(articleTable).State = EntityState.Modified;
 
             try
@@ -101,6 +106,7 @@ namespace NailIt.Controllers.AnselControllers
             {
                 if (!ArticleTableExists(id))
                 {
+                    t.Commit();
                     return NotFound();
                 }
                 else
@@ -109,6 +115,7 @@ namespace NailIt.Controllers.AnselControllers
                 }
             }
 
+            t.Commit();
             return NoContent();
         }
 
@@ -117,9 +124,13 @@ namespace NailIt.Controllers.AnselControllers
         [HttpPost]
         public async Task<ActionResult<ArticleTable>> PostArticleTable(ArticleTable articleTable)
         {
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
             _context.ArticleTables.Add(articleTable);
             await _context.SaveChangesAsync();
 
+            t.Commit();
             return CreatedAtAction("GetArticleTable", new { id = articleTable.ArticleId }, articleTable);
         }
 
@@ -133,9 +144,13 @@ namespace NailIt.Controllers.AnselControllers
                 return NotFound();
             }
 
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
             _context.ArticleTables.Remove(articleTable);
             await _context.SaveChangesAsync();
 
+            t.Commit();
             return NoContent();
         }
 

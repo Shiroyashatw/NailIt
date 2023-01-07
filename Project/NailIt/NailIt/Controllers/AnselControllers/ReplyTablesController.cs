@@ -149,6 +149,9 @@ namespace NailIt.Controllers.AnselControllers
         [HttpPost]
         public async Task<ActionResult<ReplyTable>> PostReplyTable(ReplyTable replyTable)
         {
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
             // this article ArticleReplyCount +1 at ArticleTables
             var articleTable = _context.ArticleTables.FirstOrDefault(a => a.ArticleId == replyTable.ArticleId);
             if (articleTable != null) { articleTable.ArticleReplyCount += 1; }
@@ -156,6 +159,7 @@ namespace NailIt.Controllers.AnselControllers
             _context.ReplyTables.Add(replyTable);
             await _context.SaveChangesAsync();
 
+            t.Commit();
             return CreatedAtAction("GetReplyTable", new { id = replyTable.ReplyId }, replyTable);
         }
 
@@ -169,6 +173,9 @@ namespace NailIt.Controllers.AnselControllers
                 return NotFound();
             }
 
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
             // this article ArticleReplyCount -1 at ArticleTables
             var articleTable = _context.ArticleTables.FirstOrDefault(a => a.ArticleId == replyTable.ArticleId);
             if (articleTable != null) { articleTable.ArticleReplyCount -= 1; }
@@ -176,6 +183,7 @@ namespace NailIt.Controllers.AnselControllers
             _context.ReplyTables.Remove(replyTable);
             await _context.SaveChangesAsync();
 
+            t.Commit();
             return NoContent();
         }
 
