@@ -49,25 +49,54 @@ namespace NailIt.Controllers.AnselControllers
                                 {
                                     reply.reply,
                                     memberNickname = reply.MemberNickname,
-                                    recordDateTime = getDateTimeDiff(reply.reply.ReplyLastEdit),
+                                    replyLastDateDiff = dateTimeDiff(DateTime.Now,reply.reply.ReplyLastEdit),
                                     like = userlike?.ReplyLikeId == null ? false : true
                                 }).ToList();
 
             return Ok(leftJoinLike);
         }
 
-        private string getDateTimeDiff(DateTime dateTime)
+        private string dateTimeDiff(DateTime date1, DateTime date2)
         {
-            var prevDate = new DateTime(2023, 1, 5); //15 July 2021
-            var today = DateTime.Now;
-            var diffOfDates = today - prevDate;
-            var dd = diffOfDates.Days;
+            string result = "";
 
-            Console.WriteLine("prevDate: {0}", prevDate);
-            Console.WriteLine("today: {0}", today);
+            //if (距離今天的時間 > 1年) 
+            if (date1.AddYears(-1) > date2)
+            {
+                int years = date1.Year - date2.Year;
+                result = $"{years}年前";
+            }
+            //else if(距離今天的時間 > 1月)
+            else if (date1.AddMonths(-1) > date2)
+            {
+                int months = (date1.Year - date2.Year) * 12 - date2.Month + date1.Month;
+                result = $"{months}月前";
+            }
+            //else if(距離今天的時間 > 1週)
+            else if (date1.AddDays(-7) > date2)
+            {
+                var weeks = (date1 - date2).TotalDays / 7;
+                result = $"{Math.Floor(weeks)}週前";//無條件捨去
+            }
+            //else if(距離今天的時間 > 1天)
+            else if (date1.AddDays(-1) > date2)
+            {
+                var days = (date1 - date2).TotalDays;
+                result = $"{Math.Floor(days)}天前";//無條件捨去
+            }
+            //else if(距離今天的時間 > 1小時)
+            else if (date1.AddHours(-1) > date2)
+            {
+                var hours = (date1 - date2).TotalHours;
+                result = $"{Math.Floor(hours)}小時前";//無條件捨去
+            }
+            else
+            {
+                var minutes = (date1 - date2).TotalMinutes;
+                result = $"{Math.Floor(minutes)}分前";//無條件捨去
+            }
 
-            string aa = 5.ToString();
-            return $"{aa}前";
+            return result;
         }
 
         // GET: api/ReplyTables/5
