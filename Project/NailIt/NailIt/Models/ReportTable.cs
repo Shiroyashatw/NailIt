@@ -15,8 +15,8 @@ namespace NailIt.Models
         public string ReportReasonC { get; set; }
         public string ReportContent { get; set; }
         public DateTime ReportBuildTime { get; set; }
-        public DateTime ReportCheckTime { get; set; }
-        public int ManagerId { get; set; }
+        public DateTime? ReportCheckTime { get; set; }
+        public int? ManagerId { get; set; }
         public bool? ReportResult { get; set; }
     }
 }

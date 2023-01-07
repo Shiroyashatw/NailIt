@@ -84,6 +84,11 @@ namespace NailIt.Controllers.AnselControllers
         [HttpPost]
         public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
         {
+            // At very begining, checking(審核) infos will be null.
+            reportTable.ReportCheckTime = null;
+            reportTable.ManagerId = null;
+            reportTable.ReportResult = null;
+
             // lock DB
             var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
 

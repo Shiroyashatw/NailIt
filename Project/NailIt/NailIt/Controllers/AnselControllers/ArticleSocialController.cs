@@ -28,9 +28,10 @@ namespace NailIt.Controllers.AnselControllers
         /// <param name="order">which order 'latest':'最新', 'other':'愛心'</param>
         /// <param name="searchValue">search article title</param>
         /// <returns></returns>
-        [HttpGet("{ArticleAuthor}/{page}")]
-        [HttpGet("{ArticleAuthor}/{page}/{order}")]
+        // GET: api/ArticleSocial/GetMyArticles/1/0/latest/Good
         [HttpGet("{ArticleAuthor}/{page}/{order}/{searchValue}")]
+        [HttpGet("{ArticleAuthor}/{page}/{order}")]
+        //[HttpGet("{ArticleAuthor}/{page}")]
         public async Task<ActionResult<IEnumerable<ArticleTable>>> GetMyArticles(int ArticleAuthor, int page = 0, string order = "latest", string searchValue = "")
         {
             var amountPerPage = 10;
