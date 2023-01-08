@@ -28,12 +28,18 @@ namespace NailIt
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // DB Context
             services.AddDbContext<NailitDBContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("linkToNailitDb")));
+            
+            // Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NailIt", Version = "v1" });
             });
+
+            // Session
             services.AddSession();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
