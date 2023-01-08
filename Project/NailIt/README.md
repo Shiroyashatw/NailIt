@@ -5,8 +5,8 @@
 # Package
 * Entity Framework
 * Swagger
-* Bootstrap: v4.6.2
-* jQuery: 
+* Bootstrap: v4.6.2 or v4.3.1(.NET5 mvc 內建)
+* jQuery: v3.5.1(.NET5 mvc 內建)
 
 # CSS
 1. 字體大小：依照PPT
