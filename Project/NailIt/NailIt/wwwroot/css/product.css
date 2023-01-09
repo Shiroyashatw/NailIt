@@ -1,0 +1,328 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+.container .row .main-item a {
+  text-decoration: none;
+  color: black;
+}
+.container .row .main-item .header-item {
+  font-size: 18px;
+}
+.container .row .main-item .middle-item {
+  margin-top: 20px;
+  height: 400px;
+}
+.container .row .main-item .middle-item .photo-little {
+  width: 150px;
+}
+.container .row .main-item .middle-item .photo-little .photocontainer {
+  height: 350px;
+  overflow: scroll;
+}
+.container .row .main-item .middle-item .photo-little .photocontainer .smallphoto {
+  margin: 10px 0;
+  max-width: 150px;
+  max-height: 150px;
+}
+.container .row .main-item .middle-item .photo-little .photocontainer .smallphoto img {
+  height: 100px;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.container .row .main-item .middle-item .photo-little .photobtn {
+  font-size: 16px;
+  width: 100%;
+  border: 0;
+  color: white;
+  background-color: gray;
+}
+.container .row .main-item .middle-item .photo-big {
+  max-width: 400px;
+  max-height: 400px;
+  margin-left: 15px;
+}
+.container .row .main-item .middle-item .photo-big img {
+  width: 400px;
+  height: 400px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.container .row .main-item .middle-item .product-info {
+  margin-left: 40px;
+  position: relative;
+}
+.container .row .main-item .middle-item .product-info .product-tag {
+  margin: 20px 0;
+}
+.container .row .main-item .middle-item .product-info .product-tag a {
+  font-size: 18px;
+  padding: 5px 15px;
+  border: 2px solid black;
+  border-radius: 10%;
+}
+.container .row .main-item .middle-item .product-info .product-tag a:hover {
+  color: white;
+  background-color: black;
+  transition: 0.5s;
+}
+.container .row .main-item .middle-item .product-info .product-footer {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+.container .row .main-item .middle-item .product-info .product-footer .reportbtn {
+  margin-bottom: 25px;
+}
+.container .row .main-item .middle-item .product-info .product-footer .reportbtn button {
+  border: 0;
+  background-color: white;
+}
+.container .row .main-item .middle-item .product-info .product-footer .reservebtn button {
+  padding: 5px 50px;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0.25rem;
+  color: white;
+  background-color: black;
+  border: 1px black;
+}
+.container .row .footter-item {
+  margin: 20px 0;
+}
+.container .row .footter-item .footer-info p {
+  padding: 0 0 0.3rem 1rem;
+  font-size: 20px;
+  border-bottom: 2px solid black;
+}
+.container .row .footter-item .footer-container p {
+  padding: 0 0 0 1rem;
+  font-size: 18px;
+}
+
+#alert_div {
+  position: fixed;
+  top: 10%;
+  left: 20%;
+  background-color: white;
+  width: 800px;
+  height: 450px;
+  border: 4px solid gray;
+  -webkit-animation-name: oxxo;
+          animation-name: oxxo;
+  -webkit-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+}
+
+@-webkit-keyframes oxxo {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 10%;
+  }
+}
+
+@keyframes oxxo {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 10%;
+  }
+}
+#hohodiv {
+  position: fixed;
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  background: rgba(128, 128, 128, 0.329);
+  height: 100%;
+  width: 100%;
+  top: 0%;
+  left: 0%;
+}
+
+.isShow {
+  display: block;
+}
+
+.isHide {
+  display: none;
+}
+
+.alert_div-header {
+  text-align: right;
+}
+.alert_div-header button {
+  padding: 0;
+  margin-right: 10px;
+  font-size: 20px;
+  border: 0;
+  background-color: white;
+}
+
+.form-info .item-circle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-info .item-circle .list {
+  width: 100%;
+  display: flex;
+  padding-top: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+.form-info .item-circle .list li {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  background-color: rgb(8, 237, 218);
+  border-radius: 50%;
+}
+.form-info .item-circle .list li + li {
+  margin-left: 100px;
+}
+.form-info .item-circle .list li + li::before {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 5px;
+  background-color: gray;
+  top: 0;
+  bottom: 0;
+  left: -100px;
+  margin: auto;
+}
+.form-info .form-container {
+  width: 100%;
+  height: 330px;
+  margin: auto;
+}
+.form-info .step-container {
+  border: 1px solid salmon;
+  padding: 0;
+}
+.form-info .step-container .calendar {
+  width: 95%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  margin-left: 0.5rem;
+  /* days */
+  /* dates */
+}
+.form-info .step-container .calendar .header {
+  display: flex;
+  justify-content: space-evenly;
+}
+.form-info .step-container .calendar .header .currentDate {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent-color);
+  text-align: center;
+  min-width: 20vmin;
+  color: #FF6733;
+}
+.form-info .step-container .calendar .header button {
+  border: 1px solid transparent;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.5s;
+  font-size: 1.2rem;
+}
+.form-info .step-container .calendar .header button:hover {
+  color: red;
+}
+.form-info .step-container .calendar .days {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  padding: 2px 0;
+  font-size: 0.8rem;
+  color: var(--accent-color);
+}
+.form-info .step-container .calendar .dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.form-info .step-container .calendar .date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  padding: 8px 5px;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+  color: rgba(0, 0, 0, 0.36);
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+}
+.form-info .step-container .calendar .date.currentMonth {
+  color: #000;
+}
+.form-info .step-container .calendar .date:hover,
+.form-info .step-container .calendar .date.selected {
+  border-color: var(--accent-color);
+  color: #7F7F7F;
+}
+.form-info .step-container .calendar .date.selected {
+  background-color: var(--accent-color);
+  color: orangered;
+}
+.form-info .step-container .form-footerbtn {
+  text-align: center;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-info .step-container .form-footerbtn .btn-box button {
+  border: 0;
+}
+.form-info .step-container .form-footerbtn .btn-box .cancelbtn {
+  color: white;
+  background-color: gray;
+}
+.form-info .step-container .form-footerbtn .btn-box .stepbtn {
+  color: white;
+  background-color: orangered;
+}
+
+#radio input[type=radio] {
+  display: none;
+}
+
+#radio input:checked + .button {
+  background: #5e7380;
+  color: #fff;
+  cursor: default;
+}
+
+#radio .button {
+  display: inline-block;
+  margin: 0 5px 10px 0;
+  padding: 5px 10px;
+  background: #f7f7f7;
+  color: #333;
+  cursor: pointer;
+}
+
+#radio .button:hover {
+  background: #bbb;
+  color: #fff;
+}
+
+#radio .round {
+  border-radius: 5px;
+}/*# sourceMappingURL=product.css.map */

@@ -24,13 +24,13 @@ namespace NailIt.Controllers.DogeControllers
         public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts()
         {
             var query = from o in _db.ManicuristTables
-                        // 利用 ManicuristId 設計師ID 兩表join
+                            // 利用 ManicuristId 設計師ID 兩表join
                         join demoset in _db.DemoSetTables
                         on o.ManicuristId equals demoset.ManicuristId
                         // demo表 美甲照片路徑
-                        //join demo in _db.DemoTables
-                        //on demoset.DemoSetId equals demo.DemoSetId
-                        select new { o, demoset};
+                        join demo in _db.DemoTables
+                        on demoset.DemoSetId equals demo.DemoSetId
+                        select new { o, demoset,demo };
             return await query.ToListAsync();
         }
     }
