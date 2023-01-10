@@ -419,3 +419,7 @@
 #radio .round {
     border-radius: 5px;
 }
+
+.btnnotclick {
+    pointer-events: none;
+}

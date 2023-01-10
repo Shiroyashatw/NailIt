@@ -83,7 +83,7 @@
                                     <button type="button">檢舉此商品</button>
                                 </div>
                                 <div class="reservebtn">
-                                    <button type="button" onclick="alertform()">預約</button>
+                                    <button type="button" id="reservebtn" onclick="alertform()">預約</button>
                                 </div>
                             </div>
                         </div>
@@ -222,11 +222,11 @@
                                         <div class="row">
                                             <div id="radio">
                                                 <!-- <p>可預約時間:</p> -->
-                                                <label class="col-4"><input type="radio" name="label" value="台劇" checked="checked"><span class="round button">9:00</span></label>
-                                                <label class="col-4"><input type="radio" name="label" value="古裝劇"><span class="round button">13:00</span></label>
-                                                <label class="col-4"><input type="radio" name="label" value="陸劇"><span class="round button">17:00</span></label>
-                                                <label class="col-4"><input type="radio" name="label" value="陸劇"><span class="round button">19:00</span></label>
-                                                <label class="col-4"><input type="radio" name="label" value="陸劇"><span class="round button">17:00</span></label>
+                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">9:00</span></label>
+                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">13:00</span></label>
+                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">17:00</span></label>
+                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">19:00</span></label>
+                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">17:00</span></label>
                                             </div>
                                         </div>
                                     </div>
@@ -391,58 +391,15 @@
     <!-- 日曆函數 -->
     <script src="js/calendar.js"></script>
     <script src="js/calendarscript.js"></script>
+    
+    <!-- 引用 商品資料 可預約日期 -->
+    <script src="./js/getdata.js"></script>
+    <script src="./js/getReserveDate.js"></script>
 
     <!--抓取資料 ajax-->
-    <script>
-        $.ajax({
-            url: "api/product",
-            method: 'GET',
-            dataType: 'json',
-            data: '',
-            async: true,
-
-            success: res => {
-                
-                // 帶入 a 標籤 裡面文字 設計師工作室
-                var Ores = res[0]['o']
-                var Demosetres = res[0]['demoset']
-
-                $('#topmanicuristSalonName').text(Ores['manicuristSalonName'])
-
-                $('#topdemosetName').text(Demosetres['demoSetName'])
-                $('#productName').text(Demosetres['demoSetName'])
-                $('#demoSetPrice').text("預估價格:" + Demosetres['demoSetPrice'])
-                $('#demoSetContent').text(Demosetres['demoSetContent'])
-
-                $('#botmanicuristSalonName').text("店家/設計師名稱:" + Ores['manicuristSalonName'])
-                $('#botphone').text("電話:" + Ores['manicuristSalonPhone'])
-                $('#botadress').text("地址:" + Ores['manicuristAddress'])
-                $('#botdemoSetDeposit').text("訂金:NT$" + Demosetres['demoSetDeposit'])
-
-                // 放入圖片
-                $('#show_big_photo').attr("src", res[0]['demo']['demoPic'])
-                var demo1 = res[0]['demo']['demoPic']
-                for (var i = 0; i < res.length; i++) {
-                    $('.photocontainer').append(`<div class="smallphoto"><img onclick="getsrc(this)" src="${res[i]['demo']['demoPic']}" alt=""></div>`)
-                }
-
-                $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag1']}</a>`)
-                $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag2']}</a>`)
-                $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag3']}</a>`)
-                $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag4']}</a>`)
-
-                //console.log(demo)
-                //console.log(res)
-                //console.log(leg)
-                //console.log(JSON.stringify(res))
-                //console.log(res[0]['demoset'])
-                //console.log(res[0]['demoset']['demoSetName'])
-            },
-            error: err => {
-                console.log(err)
-            },
-        });
-    </script>
+    <script>ajaxcall()</script>
+    <!-- 放入可選擇的預約日期 -->
+    <script>getReserveDate()</script>
 </body>
 
 </html>

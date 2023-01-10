@@ -325,4 +325,8 @@
 
 #radio .round {
   border-radius: 5px;
+}
+
+.btnnotclick {
+  pointer-events: none;
 }/*# sourceMappingURL=product.css.map */

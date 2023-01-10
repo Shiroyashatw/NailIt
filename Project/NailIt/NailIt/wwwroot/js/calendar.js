@@ -199,6 +199,7 @@ class Calendar {
       // 
 
       dateEL.classList.add('date');
+      dateEL.classList.add('btnnotclick');
       let dateString;
       let date;
 
@@ -241,6 +242,7 @@ class Calendar {
         }
       }
       dateEL.textContent = date;
+      dateEL.id = dateString;
       dateEL.title = dateString;
       dateEL.setAttribute("type","button");
       // 將 <p> 裡面的文字 設為 apple(之後要帶入的可預約時間)

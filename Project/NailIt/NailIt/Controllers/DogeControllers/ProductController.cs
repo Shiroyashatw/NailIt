@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System;
 
 namespace NailIt.Controllers.DogeControllers
 {
@@ -30,8 +31,18 @@ namespace NailIt.Controllers.DogeControllers
                         // demo表 美甲照片路徑
                         join demo in _db.DemoTables
                         on demoset.DemoSetId equals demo.DemoSetId
-                        select new { o, demoset,demo };
+                        select new { o, demoset, demo };
             return await query.ToListAsync();
+        }
+        [HttpGet("{reserve}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> Getdata()
+        {
+            var res = from p in _db.PlanTables
+                      join m in _db.ManicuristTables
+                      on p.ManicuristId equals m.ManicuristId
+                      select new { p,m };
+
+            return await res.ToListAsync();
         }
     }
 }
