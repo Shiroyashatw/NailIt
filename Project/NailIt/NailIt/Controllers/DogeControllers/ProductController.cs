@@ -34,6 +34,15 @@ namespace NailIt.Controllers.DogeControllers
                         select new { o, demoset, demo };
             return await query.ToListAsync();
         }
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts(int id)
+        {
+
+            var query = from demoset in _db.DemoSetTables
+                        where demoset.DemoSetId == id
+                        select demoset;
+            return await query.ToListAsync();
+        }
         [HttpGet("{reserve}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> Getdata()
         {
