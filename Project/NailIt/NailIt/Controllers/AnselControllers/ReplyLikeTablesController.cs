@@ -81,9 +81,13 @@ namespace NailIt.Controllers.AnselControllers
             var replyTable = _context.ReplyTables.FirstOrDefault(a => a.ReplyId == replyLikeTable.ReplyId);
             if (replyTable != null) { replyTable.ReplyLikesCount += 1; }
 
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
             _context.ReplyLikeTables.Add(replyLikeTable);
             await _context.SaveChangesAsync();
-                
+
+            t.Commit();
             return CreatedAtAction("GetReplyLikeTable", new { id = replyLikeTable.ReplyLikeId }, replyLikeTable);
         }
 
@@ -99,6 +103,9 @@ namespace NailIt.Controllers.AnselControllers
                     return NotFound();
                 }
 
+                // lock DB
+                var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
                 // this reply ReplyLikesCount -1 at ReplyTables
                 var replyTable = _context.ReplyTables.FirstOrDefault(a => a.ReplyId == replyLikeTable.ReplyId);
                 if (replyTable != null) { replyTable.ReplyLikesCount -= 1; }
@@ -106,6 +113,7 @@ namespace NailIt.Controllers.AnselControllers
                 _context.ReplyLikeTables.Remove(replyLikeTable);
                 await _context.SaveChangesAsync();
 
+                t.Commit();
                 return NoContent();
                 //return Ok(new { status = "OK" });
 

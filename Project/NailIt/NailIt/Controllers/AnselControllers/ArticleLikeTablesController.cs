@@ -81,9 +81,13 @@ namespace NailIt.Controllers.AnselControllers
             var articleTable = _context.ArticleTables.FirstOrDefault(a => a.ArticleId == articleLikeTable.ArticleId);
             if (articleTable != null) { articleTable.ArticleLikesCount += 1; }
 
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
             _context.ArticleLikeTables.Add(articleLikeTable);
             await _context.SaveChangesAsync();
 
+            t.Commit();
             return CreatedAtAction("GetArticleLikeTable", new { id = articleLikeTable.ArticleLikeId }, articleLikeTable);
         }
 
@@ -97,6 +101,9 @@ namespace NailIt.Controllers.AnselControllers
                 return NotFound();
             }
 
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
             // this article ArticleLikesCount -1 at ArticleTables
             var articleTable = _context.ArticleTables.FirstOrDefault(a => a.ArticleId == articleLikeTable.ArticleId);
             if (articleTable != null) { articleTable.ArticleLikesCount -= 1; }
@@ -104,6 +111,7 @@ namespace NailIt.Controllers.AnselControllers
             _context.ArticleLikeTables.Remove(articleLikeTable);
             await _context.SaveChangesAsync();
 
+            t.Commit();
             return NoContent();
         }
 

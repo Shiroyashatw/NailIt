@@ -1,0 +1,425 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+.container {
+    .row {
+
+        // 主體 div 包含上中下
+        .main-item {
+            a {
+                text-decoration: none;
+                color: black;
+            }
+
+            .header-item {
+                font-size: 18px;
+            }
+
+            // 中間資訊欄 照片加文字
+            .middle-item {
+                margin-top: 20px;
+                height: 400px;
+
+                // 左邊縮圖
+                .photo-little {
+                    width: 150px;
+
+                    // overflow: scroll;
+                    // overflow-x: hidden;
+                    .photocontainer {
+                        height: 350px;
+                        overflow: scroll;
+
+                        .smallphoto {
+                            margin: 10px 0;
+                            max-width: 150px;
+                            max-height: 150px;
+
+                            img {
+                                height: 100px;
+                                width: 100%;
+                                object-fit: cover;
+                            }
+                        }
+
+                    }
+
+                    .photobtn {
+                        font-size: 16px;
+                        width: 100%;
+                        border: 0;
+                        color: white;
+                        background-color: gray;
+                    }
+                }
+
+                // 中間大圖
+                .photo-big {
+                    max-width: 400px;
+                    max-height: 400px;
+                    // 左右間距
+                    margin-left: 15px;
+
+                    img {
+                        width: 400px;
+                        height: 400px;
+                        object-fit: contain;
+                    }
+                }
+
+                // 右邊商品介紹
+                .product-info {
+                    margin-left: 40px;
+                    position: relative;
+
+                    // 商品標籤
+                    .product-tag {
+                        margin: 20px 0;
+
+                        a {
+                            font-size: 18px;
+                            padding: 5px 15px;
+                            border: 2px solid black;
+                            border-radius: 10%;
+
+                            &:hover {
+                                color: white;
+                                background-color: black;
+                                transition: .5s;
+                            }
+                        }
+                    }
+
+                    // 尾部檢舉 預約按鈕
+                    .product-footer {
+                        position: absolute;
+                        bottom: 0px;
+                        left: 0px;
+
+                        .reportbtn {
+                            margin-bottom: 25px;
+
+                            button {
+                                // font-size: 16px;
+                                border: 0;
+                                background-color: white;
+                            }
+                        }
+
+                        .reservebtn {
+                            button {
+                                padding: 5px 50px;
+                                font-size: 18px;
+                                text-align: center;
+                                // 文字間距
+                                letter-spacing: .25rem;
+                                color: white;
+                                background-color: black;
+                                border: 1px black;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 底部資訊欄
+        .footter-item {
+            margin: 20px 0;
+
+            .footer-info {
+                p {
+                    padding: 0 0 .3rem 1rem;
+                    font-size: 20px;
+                    border-bottom: 2px solid black;
+                }
+            }
+
+            .footer-container {
+                p {
+                    padding: 0 0 0 1rem;
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+}
+
+
+// 彈出視窗 設計 
+#alert_div {
+    position: fixed;
+    top: 10%;
+    left: 20%;
+    background-color: white;
+    width: 800px;
+    height: 450px;
+    border: 4px solid gray;
+    animation-name: oxxo;
+    animation-duration: 0.5s;
+}
+
+@keyframes oxxo {
+    from {
+        top: 0%;
+    }
+
+    to {
+        top: 10%;
+    }
+}
+
+// 背後灰色遮照
+#hohodiv {
+    position: fixed;
+    backdrop-filter: blur(2px);
+    background: rgba(128, 128, 128, 0.329);
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    left: 0%;
+}
+
+.isShow {
+    display: block;
+}
+
+.isHide {
+    display: none;
+}
+
+.alert_div-header {
+    text-align: right;
+
+    button {
+        padding: 0;
+        margin-right: 10px;
+        font-size: 20px;
+        border: 0;
+        background-color: white;
+    }
+}
+
+// 表單 css
+.form-info {
+
+    // height: 500px;
+    //  表單 上方 進度條
+    .item-circle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        // background-color: #546377;
+        .list {
+            width: 100%;
+            display: flex;
+            padding-top: 1rem;
+            justify-content: center;
+            align-items: center;
+
+            li {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                width: 30px;
+                height: 30px;
+                position: relative;
+                background-color: rgb(8, 237, 218);
+                border-radius: 50%;
+
+                &+li {
+                    margin-left: 100px;
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        width: 100px;
+                        height: 5px;
+                        background-color: gray;
+                        top: 0;
+                        bottom: 0;
+                        left: -100px;
+                        margin: auto;
+                    }
+                }
+            }
+        }
+    }
+
+    // 表單中間主體內容 往下切分兩份 step-container 
+    .form-container {
+        width: 100%;
+        height: 330px;
+        margin: auto;
+        // text-align: center;
+    }
+
+    // 步驟內容
+    .step-container {
+        border: 1px solid salmon;
+        padding: 0;
+
+        // 日曆 css
+        .calendar {
+            width: 95%;
+            user-select: none;
+            margin-left: .5rem;
+
+            .header {
+                display: flex;
+                justify-content: space-evenly;
+
+                // margin-bottom: 20px;
+                .currentDate {
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    color: var(--accent-color);
+                    text-align: center;
+                    min-width: 20vmin;
+                    color: #FF6733;
+                }
+            }
+
+            .header button {
+                border: 1px solid transparent;
+                outline: none;
+                background-color: transparent;
+                cursor: pointer;
+                // padding: 0 1px;
+                transition: all 0.5s;
+                font-size: 1.2rem;
+            }
+
+            .header button:hover {
+                // border: 2px solid var(--accent-color);
+                color: red;
+            }
+
+            /* days */
+            .days {
+                display: flex;
+                justify-content: space-around;
+                text-align: center;
+                padding: 2px 0;
+                font-size: .8rem;
+                color: var(--accent-color);
+            }
+
+            /* dates */
+            .dates {
+                display: grid;
+                grid-template-columns: repeat(7, 1fr);
+                gap: 8px;
+            }
+
+            .date {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1rem;
+                padding: 8px 5px;
+                transition: all 0.3s;
+                border: 2px solid transparent;
+                color: rgba(0, 0, 0, 0.36);
+                cursor: pointer;
+                background-color: transparent;
+                box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+
+            }
+
+            .date.currentMonth {
+                color: #000;
+            }
+
+            .date:hover,
+            .date.selected {
+                border-color: var(--accent-color);
+                color: #7F7F7F;
+            }
+
+            .date.selected {
+                background-color: var(--accent-color);
+                color: orangered;
+            }
+        }
+
+        // 底部按鈕
+        .form-footerbtn {
+            // height: 50px;
+            // margin-top: 40px;
+            // padding-right: 30px;
+            text-align: center;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            // justify-content: space-between;
+            .btn-box {
+
+                // height: 30px;
+                // position: absolute;
+                // top: 0;
+                // left: 0;
+                // bottom: 0;
+                // right: 0;
+                button {
+                    // margin: 0 5px;
+                    // padding: .2rem 1rem;
+                    border: 0;
+                }
+
+                .cancelbtn {
+                    color: white;
+                    background-color: gray;
+                }
+
+                .stepbtn {
+                    color: white;
+                    background-color: orangered;
+                }
+            }
+
+
+
+        }
+    }
+}
+
+
+
+#radio input[type="radio"] {
+    display: none;
+}
+
+#radio input:checked+.button {
+    background: #5e7380;
+    color: #fff;
+    cursor: default;
+}
+
+#radio .button {
+    display: inline-block;
+    margin: 0 5px 10px 0;
+    padding: 5px 10px;
+    background: #f7f7f7;
+    color: #333;
+    cursor: pointer;
+}
+
+#radio .button:hover {
+    background: #bbb;
+    color: #fff;
+}
+
+#radio .round {
+    border-radius: 5px;
+}
+
+.btnnotclick {
+    pointer-events: none;
+}

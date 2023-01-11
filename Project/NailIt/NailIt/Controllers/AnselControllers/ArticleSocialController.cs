@@ -28,7 +28,10 @@ namespace NailIt.Controllers.AnselControllers
         /// <param name="order">which order 'latest':'最新', 'other':'愛心'</param>
         /// <param name="searchValue">search article title</param>
         /// <returns></returns>
+        // GET: api/ArticleSocial/GetMyArticles/1/0/latest/Good
         [HttpGet("{ArticleAuthor}/{page}/{order}/{searchValue}")]
+        [HttpGet("{ArticleAuthor}/{page}/{order}")]
+        //[HttpGet("{ArticleAuthor}/{page}")]
         public async Task<ActionResult<IEnumerable<ArticleTable>>> GetMyArticles(int ArticleAuthor, int page = 0, string order = "latest", string searchValue = "")
         {
             var amountPerPage = 10;
@@ -66,15 +69,15 @@ namespace NailIt.Controllers.AnselControllers
             var member = await _context.MemberTables.
                 Where(m => m.MemberId == ArticleAuthor).
                 Select(m => new{
-                    m.MemberId, 
-                    m.MemberAccount, 
-                    m.MemberNickname,
+                    //m.MemberId, 
+                    //m.MemberAccount, 
+                    //m.MemberNickname,
                     m.MemberManicurist
                 }).SingleAsync();
 
             var articleCount = _context.ArticleTables.Where(a => a.ArticleAuthor == ArticleAuthor).Count();
 
-            return Ok(new { leftJoinLike, member, articleCount });
+            return Ok(new { reaultArticles=leftJoinLike, MemberManicurist=member.MemberManicurist, articleCount });
         }
     }
 }

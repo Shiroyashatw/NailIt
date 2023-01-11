@@ -51,6 +51,8 @@ namespace NailIt.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasAnnotation("Relational:Collation", "Chinese_Taiwan_Stroke_CI_AS");
+
             modelBuilder.Entity<ArticleLikeTable>(entity =>
             {
                 entity.HasKey(e => e.ArticleLikeId);
@@ -101,6 +103,11 @@ namespace NailIt.Models
                 entity.Property(e => e.ArticleBuildTime)
                     .HasColumnType("datetime")
                     .HasColumnName("article_BuildTime");
+
+                entity.Property(e => e.ArticleContent)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnName("article_Content");
 
                 entity.Property(e => e.ArticleLastEdit)
                     .HasColumnType("datetime")

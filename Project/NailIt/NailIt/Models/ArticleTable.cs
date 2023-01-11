@@ -15,5 +15,6 @@ namespace NailIt.Models
         public int ArticleLikesCount { get; set; }
         public DateTime ArticleBuildTime { get; set; }
         public DateTime ArticleLastEdit { get; set; }
+        public string ArticleContent { get; set; }
     }
 }
