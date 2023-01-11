@@ -141,19 +141,17 @@
                                 <p>
                                     卸甲:
                                     <select name="">
-                                        <option value=""></option>
+                                        <option value="C0">不用卸甲</option>
+                                        <option value="C1">去指甲油(無凝膠)</option>
+                                        <option value="C2">本店卸甲</option>
+                                        <option value="C3">他店卸甲</option>
                                     </select>
                                 </p>
                                 <p>
-                                    施作項目-手:
+                                    施作項目:
                                     <select name="">
-                                        <option value=""></option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目-腳:
-                                    <select name="">
-                                        <option value=""></option>
+                                        <option value="1043">1043</option>
+                                        <option value="1045">1045</option>
                                     </select>
                                 </p>
                                 <p>預估價位:NT$ 1,450</p>
@@ -222,11 +220,7 @@
                                         <div class="row">
                                             <div id="radio">
                                                 <!-- <p>可預約時間:</p> -->
-                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">9:00</span></label>
-                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">13:00</span></label>
-                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">17:00</span></label>
-                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">19:00</span></label>
-                                                <label class="col-4"><input type="radio" name="label" value=""><span class="round button">17:00</span></label>
+                                                <!-- <label class="col-4"><input type="radio" name="label" value=""><span class="round button">9:00</span></label> -->
                                             </div>
                                         </div>
                                     </div>
@@ -395,11 +389,14 @@
     <!-- 引用 商品資料 可預約日期 -->
     <script src="./js/getdata.js"></script>
     <script src="./js/getReserveDate.js"></script>
+    <!-- <script src="./js/getReserveTime.js"></script> -->
 
     <!--抓取資料 ajax-->
     <script>ajaxcall()</script>
     <!-- 放入可選擇的預約日期 -->
     <script>getReserveDate()</script>
+    <!-- 取得可放入的預約時間 -->
+    <script>getReserveTime()</script>
 </body>
 
 </html>

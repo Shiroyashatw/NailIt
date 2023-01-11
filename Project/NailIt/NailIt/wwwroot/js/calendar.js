@@ -238,7 +238,7 @@ class Calendar {
         // 顯示這個日曆表 這個月的年月日 格式為 EX:2023-1-1
         dateEL.classList.add('currentMonth');
         if (date === this.#date) {
-          dateEL.classList.add('selected');
+          // dateEL.classList.add('selected');
         }
       }
       dateEL.textContent = date;
