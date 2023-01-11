@@ -77,7 +77,7 @@ namespace NailIt.Controllers.AnselControllers
 
             var articleCount = _context.ArticleTables.Where(a => a.ArticleAuthor == ArticleAuthor).Count();
 
-            return Ok(new { leftJoinLike, member, articleCount });
+            return Ok(new { reaultArticles=leftJoinLike, member, articleCount });
         }
     }
 }
