@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Project",
+    "\\Project\\NailIt",
+    "\\Project\\NailIt\\NailIt",
+    "\\Project\\NailIt\\NailIt\\Controllers",
+    "\\Project\\NailIt\\NailIt\\Controllers\\AnselControllers",
+    "\\Project\\NailIt\\NailIt\\Controllers\\YueyueControllers",
+    "\\Project\\NailIt\\NailIt\\Views",
+    "\\Project\\NailIt\\NailIt\\wwwroot"
+  ],
+  "SelectedNode": "\\Project\\NailIt\\NailIt.sln",
+  "PreviewInSolutionExplorer": false
+}

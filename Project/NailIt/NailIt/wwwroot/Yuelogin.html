@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="./CSS/bootstrap.css" />
+		<script src="./jquery.js"></script>
+	</head>
+	<body>
+		<div style="background-color: pink; height: 90px">
+			<h1>頁首</h1>
+		</div>
+		<div class="container-fluid" style="">
+			<div class="row">
+				<div class="col-md-1" style=""></div>
+				<div
+					class="col-md-5 column"
+					style="background-color: white; height: 500px"
+				>
+					<h3 style="margin-bottom: 4%; margin-top: 20%"><b>會員登入</b></h3>
+
+					<label
+						for="accountInput"
+						style="font-size: 120%; margin-bottom: 5%; margin-left: 10%"
+						>帳號：</label
+					>
+					<input id="accountInput" type="text" placeholder="請輸入您的帳號" />
+					<br />
+					<label for="pwInput" style="font-size: 120%; margin-left: 10%"
+						>密碼：</label
+					>
+					<input id="pwInput" type="password" />
+					<span style="display: inline">
+						<img
+							id="pwEye"
+							src="./pic/eyeclose.jpg"
+							style="width: 5%"
+							onclick="clickEye()"
+						/>
+					</span>
+
+					<br />
+					<a
+						href="./forgot.html"
+						style="
+							text-decoration: underline;
+							font-size: 5%;
+							margin-left: 23%;
+							color: black;
+						"
+						>忘記密碼?</a
+					>
+					<br />
+					<br />
+					<a href="./register.html">
+						<button
+							style="
+								border: 0;
+								color: antiquewhite;
+								background-color: black;
+								width: 18%;
+								margin-left: 22%;
+							"
+						>
+							註冊
+						</button>
+					</a>
+					<button
+						style="
+							border: 0cm;
+							width: 18%;
+							margin-left: 1%;
+							background-color: #ff6733;
+							color: white;
+						"
+					>
+						登入
+					</button>
+				</div>
+				<div class="col-md-5" style="margin-top: 5%">
+					<img style="width: 70%" src="./pic/meme.webp" />
+				</div>
+				<div class="col-md-1" style=""></div>
+			</div>
+		</div>
+		<div style="width: 100%; height: 100px; background-color: black"></div>
+		<script>
+			function clickEye() {
+				if (pwInput.type === "password") {
+					pwInput.type = "text";
+					pwEye.src = "./pic/eyeopen.jpg";
+				} else {
+					pwInput.type = "password";
+					pwEye.src = "./pic/eyeclose.jpg";
+				}
+			}
+		</script>
+	</body>
+</html>
