@@ -69,15 +69,15 @@ namespace NailIt.Controllers.AnselControllers
             var member = await _context.MemberTables.
                 Where(m => m.MemberId == ArticleAuthor).
                 Select(m => new{
-                    m.MemberId, 
-                    m.MemberAccount, 
-                    m.MemberNickname,
+                    //m.MemberId, 
+                    //m.MemberAccount, 
+                    //m.MemberNickname,
                     m.MemberManicurist
                 }).SingleAsync();
 
             var articleCount = _context.ArticleTables.Where(a => a.ArticleAuthor == ArticleAuthor).Count();
 
-            return Ok(new { reaultArticles=leftJoinLike, member, articleCount });
+            return Ok(new { reaultArticles=leftJoinLike, MemberManicurist=member.MemberManicurist, articleCount });
         }
     }
 }
