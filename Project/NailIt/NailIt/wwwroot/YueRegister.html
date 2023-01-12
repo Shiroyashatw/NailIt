@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="./YueCss/bootstrap.css" />
+		<script src="./YueJs/jquery.js"></script>
+		<style>
+			.myfont {
+				font-size: 120%;
+				margin-bottom: 1.5%;
+				margin-left: 10%;
+			}
+		</style>
+	</head>
+	<body>
+		<div style="background-color: pink; height: 90px">
+			<h1>頁首</h1>
+		</div>
+		<div class="row" style="height: 550px">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<form action="/api/Member" method="post">
+					<h3 style="margin-top: 4%"><b>註冊</b></h3>
+					<label for="acInput" class="myfont">帳號：</label>
+					<input type="text" id="pwInput" name="MemberAccount"/>
+					<br />
+					<label for="pwInput" class="myfont">密碼：</label>
+					<input type="password" id="pwInput" name="MemberPassword" />
+					<br />
+					<label for="pwInput2" class="myfont">確認密碼：</label>
+					<input type="password" id="pwInput2" />
+					<br />
+					<label for="nickInput" class="myfont">暱稱：</label>
+					<input type="text" id="nickInput" name="MemberNickname" />
+					<br />
+					<label for="nameInput" class="myfont">姓名：</label>
+					<input type="text" id="nameInput" name="MemberName" />
+					<br />
+					<label for="GenderInput" class="myfont" name="MemberGender">性別：</label>
+					<select name="MemberGender">
+						<option value=false>女</option>
+						<option value=true>男</option>
+					</select>
+					<br />
+					<label for="phoneInput" class="myfont" >手機號碼：</label>
+					<input type="text" id="phoneInput" name="MemberPhone"/>
+					<br />
+					<label for="birthInput" class="myfont">生日：</label>
+					<input id="birthInput" type="date" name="MemberBirth" />
+					<br />
+					<label for="mailInput" class="myfont">電子郵件：</label>
+					<input type="text" id="mailInput" name="MemberEmail"/>
+					<br />
+					<input type="submit"
+						   value="確定"
+						   style="
+						border: 0cm;
+						width: 13%;
+						margin-left: 1%;
+						background-color: #000000;
+						color: white;
+					" />
+					<input value=null style="visibility:hidden" name="MemberScore">
+					<input value=false style="visibility:hidden" name="MemberManicurist">
+					<input value=null style="visibility:hidden" name="MemberLogincredit">
+					<input value=0 style="visibility:hidden" name="MemberReportpoint">
+					<input value=null style="visibility:hidden" name="MemberBanned">
+				</form>
+			</div>
+			<div class="col-md-1">
+				<input type="button" onclick="aaa()">
+			</div>
+		</div>
+		<div style="width: 100%; height: 100px; background-color: black"></div>
+		<script>
+			function aaa() {
+				console.log(birthInput.value);
+				console.log( typeof(birthInput.value));
+			}
+		</script>
+	</body>
+</html>
