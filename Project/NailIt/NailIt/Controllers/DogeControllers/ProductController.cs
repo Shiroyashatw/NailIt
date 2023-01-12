@@ -21,8 +21,8 @@ namespace NailIt.Controllers.DogeControllers
             _db = db;
         }
         // 可以讀到資料 拿回 設計師表(ManicuristTables) join Demo的集合表(DemoSet_Table)
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts(int id)
         {
             var query = from o in _db.ManicuristTables
                             // 利用 ManicuristId 設計師ID 兩表join
@@ -34,22 +34,24 @@ namespace NailIt.Controllers.DogeControllers
                         select new { o, demoset, demo };
             return await query.ToListAsync();
         }
-        [HttpGet("id/{id}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts(int id)
-        {
-
-            var query = from demoset in _db.DemoSetTables
-                        where demoset.DemoSetId == id
-                        select demoset;
-            return await query.ToListAsync();
-        }
-        [HttpGet("{reserve}")]
+        
+        [HttpGet("r/{reserve}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> Getdata()
         {
             var res = from p in _db.PlanTables
                       join m in _db.ManicuristTables
                       on p.ManicuristId equals m.ManicuristId
                       select new { p,m };
+
+            return await res.ToListAsync();
+        }
+        [HttpGet("s/{service}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetServicedata()
+        {
+            var res = from demoset in _db.DemoSetTables
+                      join s in _db.ServiceTables
+                      on demoset.ManicuristId equals s.ManicuristId
+                      select new { demoset, s };
 
             return await res.ToListAsync();
         }

@@ -1,14 +1,14 @@
 function ajaxcall() {
         $.ajax({
-            url: "api/product",
+            url: "api/product/1",
             method: 'GET',
             dataType: 'json',
-            data: '',
             async: true,
 
             success: res => {
                 
                 // 帶入 a 標籤 裡面文字 設計師工作室
+                console.log(Ores);
                 var Ores = res[0]['o']
                 var Demosetres = res[0]['demoset']
 
@@ -44,7 +44,7 @@ function ajaxcall() {
                 //console.log(res[0]['demoset']['demoSetName'])
             },
             error: err => {
-                console.log(err)
+                console.log("無法讀取" + err)
             },
         })
 }

@@ -120,7 +120,7 @@
             </div>
             <!-- 主要表單 -->
             <div class="form-info">
-                <form action="">
+                <form action="" method="post">
                     <div class="item-circle">
                         <ol class="list">
                             <li>1</li>
@@ -140,7 +140,7 @@
                                 </p>
                                 <p>
                                     卸甲:
-                                    <select name="">
+                                    <select name="OrderRemovalC">
                                         <option value="C0">不用卸甲</option>
                                         <option value="C1">去指甲油(無凝膠)</option>
                                         <option value="C2">本店卸甲</option>
@@ -149,9 +149,14 @@
                                 </p>
                                 <p>
                                     施作項目:
-                                    <select name="">
-                                        <option value="1043">1043</option>
-                                        <option value="1045">1045</option>
+                                    <select name="orderitem">
+                                        <option value="1">固定造型</option>
+                                    </select>
+                                </p>
+                                <p>
+                                    造型:
+                                    <select name="orderitem">
+                                        <option value="1">固定造型</option>
                                     </select>
                                 </p>
                                 <p>預估價位:NT$ 1,450</p>
@@ -162,7 +167,7 @@
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" onclick="Closeform()">取消</button>
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">下一步</button>
                                     </div>
                                 </div>
@@ -195,20 +200,6 @@
                                         <div class="day">日</div>
                                     </div>
                                     <div class="dates">
-                                        <!-- <div class="date">1</div>
-                                        <div class="date">2</div>
-                                        <div class="date">3</div>
-                                        <div class="date">4</div>
-                                        <div class="date">5</div>
-                                        <div class="date">6</div>
-                                        <div class="date">7</div>
-                                        <div class="date">8</div>
-                                        <div class="date">9</div>
-                                        <div class="date">10</div>
-                                        <div class="date">11</div>
-                                        <div class="date">12</div>
-                                        <div class="date">13</div>
-                                        <div class="date">14</div> -->
                                     </div>
                                 </div>
                             </div>
@@ -228,7 +219,7 @@
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" onclick="Closeform()">取消</button>
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step1()">上一步</button>
                                         <button class="stepbtn" type="button" onclick="step3()">下一步</button>
                                     </div>
@@ -245,27 +236,12 @@
                                 <p>預約日期:2023-1-1</p>
                                 <p>
                                     施作部位:
-                                    <select name="">
-                                        <option value="">手</option>
-                                    </select>
                                 </p>
                                 <p>
                                     卸甲:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
                                 </p>
                                 <p>
-                                    施作項目-手:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目-腳:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
+                                    施作項目:
                                 </p>
                                 <p>預估價位:NT$ 1,450</p>
                                 <p>訂金:NT$ 200</p>
@@ -275,7 +251,7 @@
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" onclick="Closeform()">取消</button>
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">上一步</button>
                                         <button class="stepbtn" type="button" onclick="step4()">下一步</button>
                                     </div>
@@ -292,27 +268,9 @@
                                 <p>預約日期:2023-1-1 13:00</p>
                                 <p>
                                     施作部位:
-                                    <select name="">
-                                        <option value="">手</option>
-                                    </select>
                                 </p>
                                 <p>
                                     卸甲:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目-手:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目-腳:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
                                 </p>
                                 <p>預估價位:NT$ 1,450</p>
                                 <p>訂金:NT$ 200</p>
@@ -322,7 +280,7 @@
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" onclick="Closeform()">取消</button>
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step3()">上一步</button>
                                         <button class="stepbtn" type="submit" onclick="">送出</button>
                                     </div>
