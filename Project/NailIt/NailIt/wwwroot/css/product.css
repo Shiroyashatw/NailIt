@@ -200,6 +200,56 @@
   left: -100px;
   margin: auto;
 }
+.form-info .form-header {
+  height: 60px;
+}
+.form-info .Progress {
+  width: 100%;
+  position: absolute;
+  display: flex;
+  text-transform: uppercase;
+}
+.form-info .Progress .line {
+  --c: #3498db;
+  width: 15px;
+  height: 15px;
+  position: relative;
+  margin-left: 8rem;
+  display: flex;
+  justify-content: center;
+  color: var(--c);
+}
+.form-info .Progress .line .step {
+  font-size: 20px;
+  line-height: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--c);
+  text-align: center;
+  position: absolute;
+  background: white;
+}
+.form-info .Progress .line .step::before {
+  content: attr(datatext);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -30px;
+}
+.form-info .Progress .line .step::after {
+  content: "";
+  width: 150px;
+  height: 2px;
+  background: var(--c);
+  position: absolute;
+  top: 15px;
+  overflow: hidden;
+  z-index: -1;
+}
+.form-info .Progress .line:nth-child(4) .step::after {
+  content: none;
+}
 .form-info .form-container {
   width: 100%;
   height: 330px;

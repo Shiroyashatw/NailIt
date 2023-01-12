@@ -1,6 +1,6 @@
-function ajaxcall() {
+function ajaxcall(id) {
         $.ajax({
-            url: "api/product/1",
+            url: "api/product/" + id,
             method: 'GET',
             dataType: 'json',
             async: true,
