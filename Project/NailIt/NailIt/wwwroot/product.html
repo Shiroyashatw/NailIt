@@ -26,6 +26,7 @@
 </head>
 
 <body>
+
     <!-- 內容主體 -->
     <div class="container">
         <!-- 切版 -->
@@ -95,13 +96,13 @@
                             <p>相關資訊</p>
                         </div>
                         <div class="footer-container">
-                            <p>服務項目:手、足</p>
+                            <p class="demoSetPartC"></p>
                             <p id="botmanicuristSalonName"></p>
                             <p>店家/設計師評價:</p>
                             <p><span style="color: yellow;">★★★★★</span>5.0</p>
-                            <p id="botphone"></p>
+                            <p class="botphone"></p>
                             <p id="botadress"></p>
-                            <p id="botdemoSetDeposit"></p>
+                            <p class="demoSetDeposit"></p>
                         </div>
                     </div>
                 </div>
@@ -130,17 +131,17 @@
                                 </div>
                             </div>
                             <div class="line">
-                                <div class="step" datatext="time">
+                                <div class="step" datatext="預約時間">
                                     <i class="bi bi-calendar3"></i>
                                 </div>
                             </div>
                             <div class="line">
-                                <div class="step" datatext="money">
+                                <div class="step" datatext="預付訂金">
                                     <i class="bi bi-currency-dollar"></i>
                                 </div>
                             </div>
                             <div class="line">
-                                <div class="step" datatext="check">
+                                <div class="step" datatext="訂單送出">
                                     <i class="bi bi-check-lg"></i>
                                 </div>
                             </div>
@@ -151,17 +152,16 @@
                             <div class="step-container col-9">
                                 <p>
                                     施作部位:
-                                    <select name="">
-                                        <option value="">手</option>
+                                    <select name="OrderPartC">
                                     </select>
                                 </p>
                                 <p>
                                     卸甲:
                                     <select name="OrderRemovalC">
-                                        <option value="C0">不用卸甲</option>
-                                        <option value="C1">去指甲油(無凝膠)</option>
-                                        <option value="C2">本店卸甲</option>
-                                        <option value="C3">他店卸甲</option>
+                                        <option value="B0">不用卸甲</option>
+                                        <option value="B1">去指甲油(無凝膠)</option>
+                                        <option value="B2">本店卸甲</option>
+                                        <option value="B3">他店卸甲</option>
                                     </select>
                                 </p>
                                 <p>
@@ -172,12 +172,15 @@
                                 </p>
                                 <p>
                                     造型:
-                                    <select name="orderitem">
-                                        <option value="1">固定造型</option>
+                                    <select name="OrderItemName">
+                                        <option value="1">繽紛</option>
                                     </select>
                                 </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                
+                                <p class="demoSetPrice"></p>
+                                <input type="hidden" name="OrderPrice" value="">
+                                <p class="demoSetDeposit"></p>
+                                <input type="hidden" name="OrderDeposit" value="">
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -252,6 +255,11 @@
                     <div id="step3" class="container step3-paymoney isHide">
                         <div class="form-container row">
                             <div class="step-container col-9">
+
+                                <input type="hidden" name="MemberId" value="1">
+                                <input type="hidden" name="ManicuristId" value="1">
+                                <input type="hidden" name="OrderType" value="1">
+
                                 <p>預約日期:2023-1-1</p>
                                 <p>
                                     施作部位:
@@ -316,23 +324,23 @@
 
     <!-- <form action="">
         下訂會員編號。
-        <input type="text" name="MemberId">
+        <input type="text" name="MemberId"> 寫死
         被預約美甲師編號。
-        <input type="text" name="ManicuristId">
+        <input type="text" name="ManicuristId"> 寫死
         預訂行程編號。
-        <input type="text" name="PlanId">
+        <input type="text" name="PlanId"> 已帶入
         預估價格。
-        <input type="text" name="OrderPrice">
+        <input type="text" name="OrderPrice"> 已帶入
         訂金。
-        <input type="text" name="OrderDeposit">
+        <input type="text" name="OrderDeposit"> 已帶入
         施作部位(手腳)
-        <input type="text" name="OrderPartC">
+        <input type="text" name="OrderPartC"> 已帶入
         卸甲類型
-        <input type="text" name="OrderRemovalC">
+        <input type="text" name="OrderRemovalC"> 寫死(好像不用帶入)
         訂單類型
-        <input type="text" name="OrderType">
+        <input type="text" name="OrderType"> 商品頁面寫死
         施作項目
-        <input type="text" name="OrderItem">
+        <input type="text" name="OrderItem"> 
         施作項目名稱
         <input type="text" name="OrderItemName">
         客戶下定時間
@@ -400,21 +408,17 @@
     <!-- 引用 商品資料 可預約日期 -->
     <script src="./js/getdata.js"></script>
     <script src="./js/getReserveDate.js"></script>
-    <!-- <script src="./js/getReserveTime.js"></script> -->
 
-    <!--抓取資料 ajax-->
-    <script>
-    var getUrlString = location.href;
-    var url = new URL(getUrlString);
-    var id = url.searchParams.get('id'); // 回傳 21
-
-    ajaxcall(id)
     
+    <script>
+    // 抓取資料 ajax
+    ajaxcall()
+    // 放入可選擇的預約日期
+    getReserveDate()
+    // 取得可放入的預約時間
+    getReserveTime()
     </script>
-    <!-- 放入可選擇的預約日期 -->
-    <script>getReserveDate()</script>
-    <!-- 取得可放入的預約時間 -->
-    <script>getReserveTime()</script>
+    
 </body>
 
 </html>

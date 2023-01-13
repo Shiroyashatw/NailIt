@@ -1,6 +1,11 @@
-function ajaxcall(id) {
+var getUrlString = location.href;
+var url = new URL(getUrlString);
+// 讀取網址 抓取後面 demoSet ID 進行設定
+var dsetID = url.searchParams.get('id');
+
+function ajaxcall() {
         $.ajax({
-            url: "api/product/" + id,
+            url: "api/product/" + dsetID,
             method: 'GET',
             dataType: 'json',
             async: true,
@@ -8,10 +13,27 @@ function ajaxcall(id) {
             success: res => {
                 
                 // 帶入 a 標籤 裡面文字 設計師工作室
-                console.log(Ores);
                 var Ores = res[0]['o']
                 var Demosetres = res[0]['demoset']
 
+                var demoSetPartCtext = ''
+                var demoSetPartC = Demosetres['demoSetPartC']
+
+                if (demoSetPartC == "C0") {
+                    demoSetPartCtext = "手"
+                    $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)); 
+                }
+                else if (demoSetPartC == "C1") {
+                    demoSetPartCtext = "腳"
+                    $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)); 
+                }
+                else {
+                    demoSetPartCtext = "手、腳"
+                    $('select[name="OrderPartC"]').append(new Option("手", "C0")); 
+                    $('select[name="OrderPartC"]').append(new Option("腳", "C1")); 
+                }
+
+                $('.demoSetPartC').text("服務項目:" + demoSetPartCtext)
                 $('#topmanicuristSalonName').text(Ores['manicuristSalonName'])
 
                 $('#topdemosetName').text(Demosetres['demoSetName'])
@@ -20,10 +42,12 @@ function ajaxcall(id) {
                 $('#demoSetContent').text(Demosetres['demoSetContent'])
 
                 $('#botmanicuristSalonName').text("店家/設計師名稱:" + Ores['manicuristSalonName'])
-                $('#botphone').text("電話:" + Ores['manicuristSalonPhone'])
+                $('.botphone').text("電話:" + Ores['manicuristSalonPhone'])
                 $('#botadress').text("地址:" + Ores['manicuristAddress'])
-                $('#botdemoSetDeposit').text("訂金:NT$" + Demosetres['demoSetDeposit'])
-
+                $('.demoSetPrice').text("預估金額:" + Demosetres['demoSetPrice']);
+                $('input[name="OrderPrice"]').val(Demosetres['demoSetPrice']);
+                $('.demoSetDeposit').text("訂金:NT$" + Demosetres['demoSetDeposit'])
+                $('input[name="OrderDeposit"]').val(Demosetres['demoSetDeposit']);
                 // 放入圖片
                 $('#show_big_photo').attr("src", res[0]['demo']['demoPic'])
                 var demo1 = res[0]['demo']['demoPic']

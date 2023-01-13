@@ -41,8 +41,13 @@
     </form>
 
     <script>
-
-
+        // var today = new Date();
+        // var mm = today.getMonth() + 1;
+        // console.log(typeof(mm));
+        // if(mm < 10){
+        //     mm = ("0" + mm).toString();
+        // }
+        // console.log(mm)
         $('#btnsend').on('click', function () {
             var data = $('#form1').serializeArray()
             console.log(data);
@@ -51,7 +56,8 @@
             for (var i = 0; i < data.length; i++) {
                     returnArray[data[i]['name']] = data[i]['value'];
                 }
-            console.log(returnArray);
+            var datatest = JSON.stringify(returnArray);
+            console.log(datatest);
 
             $.ajax({
                 url: "api/service",
