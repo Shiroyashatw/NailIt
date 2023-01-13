@@ -13,7 +13,7 @@ namespace NailIt.Models
         public string ManicuristAddress { get; set; }
         public string ManicuristCounty { get; set; }
         public string ManicuristTownship { get; set; }
-        public string ManicuristPublic { get; set; }
+        public bool? ManicuristPublic { get; set; }
         public string ManicuristSalonPhone { get; set; }
         public string ManicuristLicense { get; set; }
         public string ManicuristBankCode { get; set; }
