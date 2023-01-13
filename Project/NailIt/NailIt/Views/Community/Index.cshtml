@@ -4,19 +4,154 @@
     ViewData["Title"] = "美甲小天地";
     string userName = hca.HttpContext.Session.GetString("userName") ?? "Guest";
 }
-
-<h1>Index</h1>
-
-<p>
-    Community page
-</p>
-@{
-    if (userName == "Guest")
-    {
-        <p>未登入</p>
-    }
-    else
-    {
-        <p>@userName</p>
-    }
+@section Head{
+    <!-- Google Icons -->
+    @*<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />*@
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/c86cec09de.js" crossorigin="anonymous"></script>
+    <!-- Custom js -->
+    <script src="~/AnselLib/Ansel_Service.js"></script>
+    <script src="~/AnselLib/Ansel_Community.js"></script>
+    <style>
+        #searchInput{
+            border: none;
+            border-bottom: 1px solid #000;
+        }
+        #searchInput:focus-visible{
+            outline: none;
+        }
+        /* style="border-bottom:2px solid #dee2e6" */
+        .bottomBorder{
+            border-bottom:2px solid #dee2e6;
+        }
+    </style>
 }
+@section Scripts{}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+
+    <div class="col-sm-10">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Library</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Data</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <nav class="col-sm-2">
+                <h4>看板</h4>
+                <ul class="nav flex-sm-column communityUl">
+                    <li>
+                        <button class="btn btn-light" onclick="showMyMain()">我的</button>
+                    </li>
+                </ul>
+            </nav>
+            <!-- style="height: 100%;line-height: 50px;text-align:center;" -->
+            <!-- align-self-center -->
+            <!-- align-items-stretch -->
+            <!-- d-flex align-items-center -->
+            <main class="col-sm-10">
+                <div class="d-flex justify-content-between align-items-baseline">
+                    <div class="d-flex flex-column">
+                        <h4 id="mainTitle">mainTitle</h4>
+                        <div id="memberInfo" class="d-flex align-items-center">
+                            <div id="avatar" class="bg-secondary" style="aspect-ratio:1;border-radius: 50%;color: #fff;">
+                                <div>
+                                    Avatarrr
+                                </div>
+                            </div>
+                            <div id="memberNames">
+                                <div>member Nickname</div>
+                                <div>member Username</div>
+                                <div>總篇數</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <input type="text" id="searchInput" placeholder="關鍵字搜尋">
+                        <i class="fa-solid fa-magnifying-glass" id="btnSearch" style="cursor: pointer;" onclick="showSearch()"></i>
+                        <i class="fa-solid fa-magnifying-glass" id="btnMySearch" style="cursor: pointer;" onclick="showMySearch()"></i>
+                        <label for="order" class="mb-0 ml-3 mr-1">排序:</label>
+                        <select id="order" name="order" id="order">
+                            <option value="latest">最新</option>
+                            <option value="like">熱門</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="articles" class="mt-5"></div>
+                <button id="btnMoreArticle" class="btn btn-secondary" onclick="showMoreArticle()">載入更多</button>
+            </main>
+        </div>
+    </div>
+
+    <div class="col-sm-1"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="articleModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
+                <div id="ModalAuthorInfo" class="d-flex align-items-center">
+                    <div id="avatar" class="bg-secondary d-flex align-items-center" style="aspect-ratio:1;border-radius: 50%;color: #fff;">
+                        <div>
+                            Avatarrr
+                        </div>
+                    </div>
+                    <div id="ModalAuthor">
+                        <div>Author Nickname</div>
+                        <div>Author Username</div>
+                    </div>
+                </div>
+                <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
+                <div class="d-flex align-items-start flex-column">
+                    <button type="button" class="close mb-auto" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="row">
+                        <i id="ModelArticleLike" class="fa-solid fa-heart"></i>
+                        <span id="ModelArticleLikesCount">0</span>
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- Body -->
+            <div class="modal-body" style="max-height: calc(100vh - 190px); overflow-y: auto;">
+                <div class="bottomBorder">
+                    <div id="ModalArticleTitle" class="mb-1 mb-sm-2">
+                        <h4 class="mb-0">Article Title</h4>
+                        <span>articleLastEdit</span>
+                    </div>
+                    <p id="ModalArticleContent">
+                        What follows is just some placeholder text for this modal dialog. You just gotta ignite the light and let it shine! Come just as you are to me. Just own the night like the 4th of July. Infect me with your love and fill me with your poison. Come just as you are to me. End of the rainbow looking treasure.
+                        I can't sleep let's run away and don't ever look back, don't ever look back. I can't sleep let's run away and don't ever look back, don't ever look back. Yes, we make angels cry, raining down on earth from up above. I'm walking on air (tonight). Let you put your hands on me in my skin-tight jeans. Stinging like a bee I earned my stripes. I went from zero, to my own hero. Even brighter than the moon, moon, moon. Make 'em go, 'Aah, aah, aah' as you shoot across the sky-y-y! Why don't you let me stop by?
+                        Boom, boom, boom. Never made me blink one time. Yeah, you're lucky if you're on her plane. Talk about our future like we had a clue. Oh my God no exaggeration. You're original, cannot be replaced. The girl's a freak, she drive a jeep in Laguna Beach. It's no big deal, it's no big deal, it's no big deal. In another life I would make you stay. I'm ma get your heart racing in my skin-tight jeans. I wanna walk on your wave length and be there when you vibrate Never made me blink one time.
+                        We'd keep all our promises be us against the world. In another life I would be your girl. We can dance, until we die, you and I, will be young forever. And on my 18th Birthday we got matching tattoos. So open up your heart and just let it begin. 'Cause she's the muse and the artist. She eats your heart out. Like Jeffrey Dahmer (woo). Pop your confetti. (This is how we do) I know one spark will shock the world, yeah yeah. If you only knew what the future holds.
+                        Sipping on Rosé, Silver Lake sun, coming up all lazy. It’s in the palm of your hand now baby. So we hit the boulevard. So make a wish, I'll make it like your birthday everyday. Do you ever feel already buried deep six feet under? It's time to bring out the big balloons. You could've been the greatest. Passport stamps, she's cosmopolitan. Your kiss is cosmic, every move is magic.
+                        We're living the life. We're doing it right. Open up your heart. I was tryna hit it and quit it. Her love is like a drug. Always leaves a trail of stardust. The girl's a freak, she drive a jeep in Laguna Beach. Fine, fresh, fierce, we got it on lock. All my girls vintage Chanel baby.
+                        Before you met me I was alright but things were kinda heavy. Peach-pink lips, yeah, everybody stares. This is no big deal. Calling out my name. I could have rewrite your addiction. She's got that, je ne sais quoi, you know it. Heavy is the head that wears the crown. 'Cause, baby, you're a firework. Like thunder gonna shake the ground.
+                        Just own the night like the 4th of July! I’m gon’ put her in a coma. What you're waiting for, it's time for you to show it off. Can't replace you with a million rings. You open my eyes and I'm ready to go, lead me into the light. And here you are. I’m gon’ put her in a coma. Come on, let your colours burst. So cover your eyes, I have a surprise. As I march alone to a different beat. Glitter all over the room pink flamingos in the pool.
+                    </p>
+                </div>
+                <div>
+                    <div class="row">
+                        <h5>留言區</h5><span id="ModalArticleReplyCount"> 共X則留言</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="留言..." style="width: 100%;">
+                            <div id="ModelReplies"></div>
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

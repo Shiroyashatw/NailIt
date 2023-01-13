@@ -31,16 +31,19 @@ namespace NailIt.Controllers.DogeControllers
                         // demo表 美甲照片路徑
                         join demo in _db.DemoTables
                         on demoset.DemoSetId equals demo.DemoSetId
+                        where demoset.DemoSetId == id
                         select new { o, demoset, demo };
             return await query.ToListAsync();
         }
         
-        [HttpGet("r/{reserve}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> Getdata()
+        [HttpGet]
+        [Route("{id:int}/reserve")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> Getdata(int id)
         {
             var res = from p in _db.PlanTables
                       join m in _db.ManicuristTables
                       on p.ManicuristId equals m.ManicuristId
+                      where m.ManicuristId == id
                       select new { p,m };
 
             return await res.ToListAsync();
