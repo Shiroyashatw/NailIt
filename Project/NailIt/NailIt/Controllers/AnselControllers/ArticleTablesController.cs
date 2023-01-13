@@ -38,13 +38,18 @@ namespace NailIt.Controllers.AnselControllers
             var articles = await _context.ArticleTables.
                 Where(a => a.ArticleBoardC == boardSort).
                 OrderByDescending(a => (order == "latest") ? a.ArticleId : a.ArticleLikesCount).
-                Skip(page*amountPerPage).
-                Take(amountPerPage).ToListAsync();
-
-            if (searchValue != "")
+                ThenByDescending(a => a.ArticleId).
+                ToListAsync();
+            if (searchValue != "")            
             {
-                articles = articles.Where(a => a.ArticleTitle.Contains(searchValue)).ToList();
+                articles = articles.
+                Where(a => a.ArticleTitle.Contains(searchValue)).
+                ToList();
             }
+            articles = articles.
+                Skip(page * amountPerPage).
+                Take(amountPerPage).
+                ToList();
 
             var articlesJoinMember = articles.Join(
                 _context.MemberTables,

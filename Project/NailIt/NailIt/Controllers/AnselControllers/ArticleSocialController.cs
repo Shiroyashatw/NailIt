@@ -36,16 +36,20 @@ namespace NailIt.Controllers.AnselControllers
         {
             var amountPerPage = 10;
             var articles = await _context.ArticleTables.
-                Where(a => a.ArticleAuthor == ArticleAuthor).                
-                OrderByDescending(a => (order=="latest") ? a.ArticleId : a.ArticleLikesCount).
-                Skip(page * amountPerPage).
-                Take(amountPerPage)
-                .ToListAsync();
-
+                Where(a => a.ArticleAuthor == ArticleAuthor).
+                OrderByDescending(a => (order == "latest") ? a.ArticleId : a.ArticleLikesCount).
+                ThenByDescending(a => a.ArticleId).
+                ToListAsync();
             if (searchValue != "")
             {
-                articles = articles.Where(a => a.ArticleTitle.Contains(searchValue)).ToList();
+                articles = articles.
+                    Where(a => a.ArticleTitle.Contains(searchValue)).
+                    ToList();
             }
+            articles = articles.
+                Skip(page * amountPerPage).
+                Take(amountPerPage).
+                ToList();
 
             var articlesJoinMember = articles.Join(
                 _context.MemberTables, 
