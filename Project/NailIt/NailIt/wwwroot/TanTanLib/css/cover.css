@@ -1,0 +1,227 @@
+.container-fluid {
+    height: 90px;
+    position: fixed;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: white;
+    opacity: .9;
+    z-index: 9999;
+
+}
+
+#navall>div {
+    /* background-color: blue; */
+    max-height: 100%;
+    /* 待研究 */
+    height: 90px;
+}
+
+#brand {
+    font-family: Cascadia Mono SemiBold;
+    font-size: 30px;
+    color: black;
+    height: 100%;
+}
+
+
+
+.navmid {
+    /* background-color: blue; */
+    height: 100%;
+}
+
+.navmid>li {
+    display: inline;
+    color: black;
+
+}
+
+.navmid>li>a {
+    color: black;
+}
+
+.navmid>li>a:hover {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 7px;
+}
+
+.navend1 {
+    /* background-color: darksalmon; */
+    font-size: 14px;
+    text-align: right;
+}
+
+.navend2>img {
+    width: 25px;
+    /* background-color: blue; */
+
+}
+
+/* 內文------------------------------------------------------------------------------ */
+.myblock {
+    padding-top: 5%;
+}
+
+.mycar {
+    margin-top: 90px;
+}
+
+.carousel-item img {
+    height: 430px;
+    object-fit:fill;
+    object-position: center center;
+}
+
+.carousel-control-next,
+.carousel-control-prev
+    {
+    filter: invert(100%);
+
+}
+
+.carousel .carousel-indicators li {
+    background-color: gray;
+}
+
+.carousel .carousel-indicators li.active {
+    
+    background-color: #3B3838;
+}
+
+/* 內文1------------------------------------------------------------------------------ */
+
+
+.mytite {
+    /* background-color: aqua; */
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 20px;
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
+}
+
+b,p{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 18px;
+}
+
+
+
+select{
+    opacity: 80%;
+    border: none;
+    outline: none;
+}
+input{
+
+    border: none;
+    outline: none;
+}
+
+.resertite{
+    border: 2px;
+    border-bottom-style: solid;
+}
+
+.searchButton img {
+
+    height: 24px;
+} 
+
+
+/* TOP---------------------------------------------------------- */
+.top5pic img {
+    height: 200px;
+}
+
+/* SEARCH---------------------------------------------------------- */
+
+.seatitle {
+    background-color: #000000;
+    height: 55px;
+
+}
+
+.seatitle>b {
+    font-size: 18px;
+    color: white;
+}
+
+.colcir {
+    background-color: rgb(116, 112, 112);
+    color: white;
+    font-weight: bold;
+    width: 60px;
+    height: 60px;
+    /* margin: 20px; */
+}
+.colcir:hover{
+    color: #000000;
+    /* text-decoration-line:none; */
+}
+
+.coldot{
+    margin:4% 0%;
+}
+
+.colmix {
+    background-image: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
+
+}
+
+.mytag button{
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    border: 2px solid black; 
+    height:60px;
+    margin:1% 0%;
+
+  }
+
+  .mytag  button {
+    transition-duration: 0.4s;
+  }
+  
+  .mytag   button:hover {
+    background-color:#D0CECE; 
+    font-weight: bolder;
+    
+  }
+
+  /* 頁尾---------------------------------------------------------- */
+
+  #hid{    
+    background-color:white; 
+    border: 0px solid white; 
+    height:60px;
+    margin:1% 0%;
+    }
+
+
+footer{
+    margin-top:7%;
+    background-color:rgb(0, 0, 0); 
+    color: white;
+}
+
+
+#footit{
+    margin-top:6%;
+}
+
+#footit b{
+    font-size: 14px;
+    margin-right:1%;
+}
+
+#footpre pre{
+    color: white;
+    font-size: 14px;
+}
+
+#footpre,#footcopy{
+    margin-top:1%;
+}
+
