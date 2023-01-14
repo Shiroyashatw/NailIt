@@ -1,8 +1,9 @@
-﻿// only for testing
-sessionStorage.setItem("MemberId", "1");
+﻿// only for testing. Should get data from backend.
+// sessionStorage.setItem("MemberId", "1");
 
 var scop = {
-    userId: sessionStorage.getItem("MemberId"), // 目前登入者
+    loginId: 0, // 目前登入者
+    userName: "", // 目前登入者
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
     articleCode: "", // ex:"L0"
@@ -38,7 +39,7 @@ var showMyMain = async function (memberId) {
     // update main area
     if (memberId == undefined) {
         $("#mainTitle").html("我的");
-        memberId = scop.userId;
+        memberId = scop.loginId;
     }
     else $("#mainTitle").hide();
     $("#memberInfo").children().show();
@@ -179,7 +180,9 @@ var getMyArticles = async function () {
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
-
+    scop.loginId = $("#loginId").val();
+    scop.userName = $("#userName").val();
+    console.log(scop.loginId, scop.userName);
     // $('#articleModal').modal({
     //     show: true, // 預設開啟modal
     //     // backdrop: static // 點擊背景不會關閉modal
