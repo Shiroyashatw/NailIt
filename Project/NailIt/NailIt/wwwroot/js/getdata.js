@@ -19,6 +19,9 @@ function ajaxcall() {
                 var demoSetPartCtext = ''
                 var demoSetPartC = Demosetres['demoSetPartC']
 
+                $('input[name="ManicuristId"]').val(Ores['manicuristId']);
+                
+                // 施作部位判定
                 if (demoSetPartC == "C0") {
                     demoSetPartCtext = "手"
                     $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)); 
@@ -34,6 +37,10 @@ function ajaxcall() {
                 }
 
                 $('.demoSetPartC').text("服務項目:" + demoSetPartCtext)
+
+                $('select[name="OrderItem"]').append(new Option("固定項目", Demosetres['demoSetId']));
+                $('select[name="OrderItemName"]').append(new Option(Demosetres['demoSetName'], Demosetres['demoSetName']));
+
                 $('#topmanicuristSalonName').text(Ores['manicuristSalonName'])
 
                 $('#topdemosetName').text(Demosetres['demoSetName'])

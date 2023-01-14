@@ -21,7 +21,7 @@ namespace NailIt.Controllers.DogeControllers
             _db = db;
         }
         // 可以讀到資料 拿回 設計師表(ManicuristTables) join Demo的集合表(DemoSet_Table)
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts(int id)
         {
             var query = from o in _db.ManicuristTables
@@ -35,7 +35,14 @@ namespace NailIt.Controllers.DogeControllers
                         select new { o, demoset, demo };
             return await query.ToListAsync();
         }
-        
+        [HttpPost]
+        public async Task<ActionResult<OrderTable>> insertOrder(OrderTable orderTable)
+        {
+            
+            _db.OrderTables.Add(orderTable);
+            await _db.SaveChangesAsync();
+            return Content("OK");
+        }
         [HttpGet]
         [Route("{id:int}/reserve")]
         public async Task<ActionResult<IEnumerable<dynamic>>> Getdata(int id)

@@ -28,13 +28,14 @@
 <body>
     <a href="product.html?id=1">aaa</a>
     <form id="form1" action="/api/service" method="post">
-        <label for="">設計師ID:</label><input type="text" id="ManicuristId" name="ManicuristId" />
-        <br>
+        
         <label for="">項目名稱:</label><input type="text" id="ServiceName" name="ServiceName">
         <br>
-        <label for="">施作類型:</label><input type="text" id="ServicePartC" name="ServicePartC">
+        <label for="">設計師ID:</label><input type="text" id="ManicuristId" name="ManicuristId" />
         <br>
         <label for="">預估金額:</label><input type="text" id="ServicePrice" name="ServicePrice">
+        <br>
+        <label for="">施作類型:</label><input type="text" id="ServicePartC" name="ServicePartC">
         <br>
         <label for="">訂金:</label><input type="text" id="SeriveDeposit" name="SeriveDeposit">
         <input type="button" value="" id="btnsend">送出
@@ -56,8 +57,6 @@
             for (var i = 0; i < data.length; i++) {
                     returnArray[data[i]['name']] = data[i]['value'];
                 }
-            var datatest = JSON.stringify(returnArray);
-            console.log(datatest);
 
             $.ajax({
                 url: "api/service",
