@@ -91,11 +91,13 @@ namespace NailIt.Controllers.AnselControllers
             return CreatedAtAction("GetArticleLikeTable", new { id = articleLikeTable.ArticleLikeId }, articleLikeTable);
         }
 
-        // DELETE: api/ArticleLikeTables/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteArticleLikeTable(int id)
+        // DELETE: api/ArticleLikeTables/1/1
+        [HttpDelete("{articleId}/{memberId}")]
+        public async Task<IActionResult> DeleteArticleLikeTable(int articleId, int memberId)
         {
-            var articleLikeTable = await _context.ArticleLikeTables.FindAsync(id);
+
+            var articleLikeTable = await _context.ArticleLikeTables.
+            Where(a => a.ArticleId == articleId && a.MemberId == memberId).FirstOrDefaultAsync();
             if (articleLikeTable == null)
             {
                 return NotFound();

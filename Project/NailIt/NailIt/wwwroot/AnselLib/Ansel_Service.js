@@ -105,8 +105,8 @@ class ArticleLikeService {
     static postArticleLike(data) {
         return fetchPost(`/api/ArticleLikeTables`, data);
     }
-    static deleteArticleLike(id) {
-        return fetchDelete(`/api/ArticleLikeTables/${id}`);
+    static deleteArticleLike(articleId, memberId) {
+        return fetchDelete(`/api/ArticleLikeTables/${articleId}/${memberId}`);
     }
 }
 class ReplyService {

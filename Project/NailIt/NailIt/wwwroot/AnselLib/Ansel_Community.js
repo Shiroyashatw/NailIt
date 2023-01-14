@@ -18,8 +18,50 @@ var scop = {
 //#region Function
 
 //#region Action
+// show reply like status change
+var showReplyLikeToggle = function (likeObj) {}
+// show article like status change
+var showArticleLikeToggle = async function (likeObj) {
+    // get like status
+    let article = {};
+    if (scop.articles.reaultArticles == undefined) {
+        article = scop.articles[scop.articleIndex];
+    }else{
+        article = scop.articles.reaultArticles[scop.articleIndex];
+    }    
+
+    // build a like with articleId and memberId:scop.loginId
+    let articleLike = new ArticleLikeTable({
+        articleId: article.article.articleId,
+        memberId: scop.loginId
+    });
+    // if like == false (build a like)
+    if (article.like == false) {
+        // POST the like
+        let result = await postArticleLike(articleLike);
+        // Check api success, like data of scop.articles change to ture, and update display.
+        if (result) {
+            article.like = true;
+            $(likeObj).css("color","red");
+            article.article.articleLikesCount++;
+        }
+    }    
+    // else (delete a like)
+    else{
+        // DELETE the articleLike
+        let result = await deleteArticleLike(articleLike.articleId, articleLike.memberId);
+        // Check api success, like data of scop.articles change to false, and update display.
+        if (result) {
+            article.like = false;
+            $(likeObj).css("color","rgb(108, 117, 125)");
+            article.article.articleLikesCount--;
+        }
+    }
+    // Update articleLikesCount display.
+    $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
+}
 // show person page
-var showPersonPage = async function () {
+var showPersonPage = function () {
     showMyMain(scop.memberId);
     // Modal hide
     $("#articleModal").modal("hide");
@@ -96,7 +138,7 @@ var showMain = async function (code, name) {
 }
 //#endregion
 
-//# update functions
+//#region Update functions
 var updateReplaies = function () {
     let replyHTML = "";
     for (const reply of scop.replies) {
@@ -131,7 +173,7 @@ var updateArticles = function (articles) {
                 <h4 class="m-0">${article.article.articleTitle}</h4>
                 <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
                 <span>${article.article.articleContent}</span><br>
-                <i class="fa-solid fa-heart text-danger"></i>${article.article.articleLikesCount}
+                <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
                 <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
             </div>`;
     }
@@ -145,16 +187,32 @@ var updateArticles = function (articles) {
 //#endregion
 
 //#region Call API
+var deleteArticleLike = async function (articleId, memberId) {
+    // call api get related data
+    let res = await ArticleLikeService.deleteArticleLike(articleId, memberId);
+    if(!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    return true;
+}
+var postArticleLike = async function (articleLike) {
+    // call api get related data
+    let res = await ArticleLikeService.postArticleLike(articleLike);
+    if(res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    return true;
+}
 var getReplies = async function (articleId) {
     // call api get related data
-    scop.replies = await ReplyService.getReplies(articleId);
+    let res = await ReplyService.getReplies(articleId);
+    if(res.status != undefined){alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`);scop.replies = [];return;}
+    scop.replies = res;
 }
 var getMyArticles = async function () {
     // call api get related data
     if ($('#searchInput').val() == "") {
         articles = await ArticleSocialService.getMyArticles(scop.memberId, scop.page, $('#order').val());
+        if(articles.status != undefined){ alert(`[${articles.status}]後端執行異常，請聯絡系統人員，感謝!`); return []; }
     } else {
         articles = await ArticleSocialService.getMyArticlesWithKeyword(scop.memberId, scop.page, $('#order').val(), $('#searchInput').val());
+        if(articles.status != undefined){ alert(`[${articles.status}]後端執行異常，請聯絡系統人員，感謝!`); return []; }
     }
     if (scop.page == 0) scop.articles = articles;
     else {
@@ -168,8 +226,10 @@ var getArticles = async function () {
     // call api get related data
     if ($('#searchInput').val() == "") {
         articles = await ArticleService.getArticles(scop.articleCode, scop.page, $('#order').val());
+        if(articles.status != undefined){ alert(`[${articles.status}]後端執行異常，請聯絡系統人員，感謝!`); return []; }
     } else {
         articles = await ArticleService.getArticlesWithKeyword(scop.articleCode, scop.page, $('#order').val(), $('#searchInput').val());
+        if(articles.status != undefined){ alert(`[${articles.status}]後端執行異常，請聯絡系統人員，感謝!`); return []; }
     }
     if (scop.page == 0) scop.articles = articles;
     else {
@@ -177,7 +237,6 @@ var getArticles = async function () {
             scop.articles.push(item);
         }
     }
-    // console.log(articles);
     return articles;
 }
 //#endregion
@@ -195,7 +254,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // initial data
     scop.articleCodeList = await SocialService.getCodes("L");
+    if (scop.articleCodeList.status != undefined) alert(`[${scop.articleCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
     scop.reportCodeList = await SocialService.getCodes("G");
+    if (scop.reportCodeList.status != undefined) alert(`[${scop.reportCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
 
     // initial Modal show setting
     $('#articleModal').on('show.bs.modal', function (event) {
@@ -209,6 +270,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         $("#ModalAuthor").children()[1].innerText = item.memberAccount;
 
         if (item.like) $("#ModelArticleLike").css("color", "red");
+        else $("#ModelArticleLike").css("color","rgb(108, 117, 125)");
         $("#ModelArticleLikesCount").text(item.article.articleLikesCount);
         $("#ModalArticleTitle").children()[0].innerText = item.article.articleTitle;
         $("#ModalArticleTitle").children()[1].innerText = item.article.articleLastEdit;
