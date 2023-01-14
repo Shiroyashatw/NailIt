@@ -20,6 +20,8 @@ var scop = {
 //#region Action
 // show person page
 var showPersonPage = async function () {
+    showMyMain(scop.memberId);
+    // Modal hide
     $("#articleModal").modal("hide");
 }
 // show Modal
@@ -31,6 +33,7 @@ var showModal = async function (articleId) {
 
     scop.articleIndex = articles.findIndex((item) => item.article.articleId == articleId);
     // call and show relies
+    scop.memberId = articles[scop.articleIndex].article.articleAuthor;
     await getReplies(articles[scop.articleIndex].article.articleId);
     updateReplaies();
 
@@ -66,13 +69,10 @@ var showMyMain = async function (memberId) {
     // update main area
     if (memberId == undefined) {
         $("#mainTitle").html("我的");
-        memberId = scop.loginId;
-    }
-    else $("#mainTitle").hide();
+        scop.memberId = scop.loginId;
+    }else $("#mainTitle").hide();
     $("#memberInfo").children().show();
     $("#btnMoreArticle").removeAttr("disabled");
-    // show member info and articles
-    scop.memberId = memberId;
     await getMyArticles();
     $("#avatar").addClass("d-flex align-items-center");
     $("#memberNames").children()[0].innerText = scop.articles.reaultArticles[0].memberNickname;
@@ -186,7 +186,8 @@ var getArticles = async function () {
 document.addEventListener("DOMContentLoaded", async function () {
     scop.loginId = $("#loginId").val();
     scop.userName = $("#userName").val();
-    console.log(scop.loginId, scop.userName);
+    scop.memberId = scop.loginId;
+    console.log(scop.loginId, scop.userName,scop.memberId);
     // $('#articleModal').modal({
     //     show: true, // 預設開啟modal
     //     // backdrop: static // 點擊背景不會關閉modal
