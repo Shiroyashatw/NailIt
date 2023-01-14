@@ -122,7 +122,7 @@
             </div>
             <!-- 主要表單 -->
             <div class="form-info">
-                <form action="" method="post">
+                <form id="form1" action="" method="post">
                     <div class="form-header">
                         <div class="Progress">
                             <div class="line">
@@ -166,17 +166,17 @@
                                 </p>
                                 <p>
                                     施作項目:
-                                    <select name="orderitem">
-                                        <option value="1">固定造型</option>
+                                    <select name="OrderItem">
+
                                     </select>
                                 </p>
                                 <p>
                                     造型:
                                     <select name="OrderItemName">
-                                        <option value="1">繽紛</option>
+
                                     </select>
                                 </p>
-                                
+
                                 <p class="demoSetPrice"></p>
                                 <input type="hidden" name="OrderPrice" value="">
                                 <p class="demoSetDeposit"></p>
@@ -257,9 +257,16 @@
                             <div class="step-container col-9">
 
                                 <input type="hidden" name="MemberId" value="1">
-                                <input type="hidden" name="ManicuristId" value="1">
-                                <input type="hidden" name="OrderType" value="1">
-
+                                <input type="hidden" name="ManicuristId" value="">
+                                <input type="hidden" name="OrderType" value="true">
+                                <input type="hidden" name="OrderOrderTime" value="">
+                                <input type="hidden" name="OrderStateC" value="">
+                                
+                                <!-- <input type="hidden" name="OrderAcceptTime" value="">
+                                
+                                <input type="hidden" name="OrderDoneTime" value="">
+                                
+                                <input type="hidden" name="OrderCompleteTime" value=""> -->
                                 <p>預約日期:2023-1-1</p>
                                 <p>
                                     施作部位:
@@ -309,7 +316,7 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step3()">上一步</button>
-                                        <button class="stepbtn" type="submit" onclick="">送出</button>
+                                        <button id="btnsend" class="stepbtn" type="button" onclick="">送出</button>
                                     </div>
                                 </div>
                             </div>
@@ -340,11 +347,11 @@
         訂單類型
         <input type="text" name="OrderType"> 商品頁面寫死
         施作項目
-        <input type="text" name="OrderItem"> 
+        <input type="text" name="OrderItem"> 已帶入
         施作項目名稱
-        <input type="text" name="OrderItemName">
+        <input type="text" name="OrderItemName"> 已帶入
         客戶下定時間
-        <input type="text" name="OrderOrderTime">
+        <input type="text" name="OrderOrderTime"> 點擊送出時生成
         美甲師接受訂單時間
         <input type="text" name="OrderAcceptTime">
         美甲師確定完成訂單完成時間
@@ -352,7 +359,7 @@
         客戶確定完成時間
         <input type="text" name="OrderCompleteTime">
         訂單狀態
-        <input type="text" name="OrderStateC">
+        <input type="text" name="OrderStateC"> 點擊送出時生成 A0 預約中
     </form> -->
 
     <!-- 切換預約頁面函數 -->
@@ -399,7 +406,7 @@
         getsrc(whichpic);
     </script>
     <script>
-        
+
     </script>
     <!-- 日曆函數 -->
     <script src="js/calendar.js"></script>
@@ -409,16 +416,55 @@
     <script src="./js/getdata.js"></script>
     <script src="./js/getReserveDate.js"></script>
 
-    
+
     <script>
-    // 抓取資料 ajax
-    ajaxcall()
-    // 放入可選擇的預約日期
-    getReserveDate()
-    // 取得可放入的預約時間
-    getReserveTime()
+        // 加入時區 8小時
+        var date = new Date(+new Date() + 8 * 3600 * 1000)
+        // 轉換成 SQL datetime格式
+        var today = date.toISOString().slice(0, 19) // .replace('T', ' ');
+        console.log(today)
+        // 抓取資料 ajax
+        ajaxcall()
+        // 放入可選擇的預約日期
+        getReserveDate()
+        // 取得可放入的預約時間
+        getReserveTime()
+
+        $('#btnsend').on('click', function () {
+            $('input[name="OrderOrderTime"]').val(today);
+            $('input[name="OrderStateC"]').val("A0");
+
+            var data = $('#form1').serializeArray();
+            var returnArray = {}
+            // var Yes = true
+            for (var i = 0; i < data.length; i++) {
+                returnArray[data[i]['name']] = data[i]['value'];
+                if(data[i]['value'] == "true"){
+                    returnArray[data[i]['name']] = true;
+                }
+            }
+            console.log(JSON.stringify(returnArray));
+            // console.log(returnArray)
+            // JSON datetime 格式
+            // 2019-01-06T17:16:40
+            // json bool 格式 true false
+            $.ajax({
+                url: "api/product",
+                method: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify(returnArray),
+
+                success: res => {
+                    console.log("Y")
+                },
+                error: err => {
+                    console.log("N")
+                },
+            });
+
+        })
     </script>
-    
+
 </body>
 
 </html>

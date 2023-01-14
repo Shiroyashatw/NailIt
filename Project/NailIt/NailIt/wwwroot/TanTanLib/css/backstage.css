@@ -3,14 +3,11 @@
     position: fixed;
     font-weight: bold;
     font-size: 16px;
-    background-color: white;
-    opacity: .9;
-    z-index: 100;
-
+    background-color:black;
 }
 
 #navall>div {
-    /* background-color: blue; */
+    background-color:black; 
     max-height: 100%;
     /* 待研究 */
     height: 90px;
@@ -19,14 +16,15 @@
 #brand {
     font-family: Cascadia Mono SemiBold;
     font-size: 30px;
-    color: black;
+    color: white;
     height: 100%;
 }
 
-#navend{
-    /* background-color: darksalmon; */
+#navend {
+    
     font-size: 14px;
     text-align: right;
+    color: white;
 }
 
 /* 左側------------------------------------------------------------------------------------------------------- */
@@ -75,8 +73,8 @@ p{
 
 
 .mycon{
-    margin-top: 100px;
-    padding-top:2%;
+    margin-top: 90px;
+    padding-top:3.5%;
     height: 720px;
 }
 

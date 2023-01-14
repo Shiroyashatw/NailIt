@@ -1,13 +1,12 @@
 var MID; // 設計師ID
 
-// 讀取的設計師ID傳回設定
-MID = $("input[name='ManicuristId']").val()
-
 
 function getReserveDate() {
     // console.log(id); // 1
     // onsole.log(typeof(id)); // string
     $('#reservebtn, .lastMonth, .nextMonth').on('click',function(){
+        // 讀取的設計師ID傳回設定
+        MID = $("input[name='ManicuristId']").attr('value')
         $.ajax({
             url: `api/product/${MID}/reserve`,
             method: 'GET',
