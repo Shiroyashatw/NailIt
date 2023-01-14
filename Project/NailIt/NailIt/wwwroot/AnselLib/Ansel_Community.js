@@ -1,8 +1,9 @@
-﻿// only for testing
-sessionStorage.setItem("MemberId", "1");
+﻿// only for testing. Should get data from backend.
+// sessionStorage.setItem("MemberId", "1");
 
 var scop = {
-    userId: sessionStorage.getItem("MemberId"), // 目前登入者
+    loginId: 0, // 目前登入者
+    userName: "", // 目前登入者
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
     articleCode: "", // ex:"L0"
@@ -17,58 +18,9 @@ var scop = {
 //#region Function
 
 //#region Action
-// show articles by sort of article
-var showMain = async function (code, name) {
-    scop.articleCode = code;
-    scop.page = 0;
-    // update main area
-    $("#mainTitle").html(name);
-    $("#mainTitle").show();
-    $("#memberInfo").children().hide();
-    $("#btnMoreArticle").removeAttr("disabled");
-    // show search button
-    $("#btnSearch").show();
-    $("#btnMySearch").hide();
-    $("#avatar").removeClass("d-flex align-items-center");
-    // show articles
-    await getArticles();
-    updateArticles(scop.articles);
-}
-// search button show articles
-var showSearch = async function () {
-    // show articles
-    await getArticles();
-    updateArticles(scop.articles);
-}
-// show articles of one person (my or other)
-var showMyMain = async function (memberId) {
-    scop.articleCode = "My";
-    scop.page = 0;
-    // update main area
-    if (memberId == undefined) {
-        $("#mainTitle").html("我的");
-        memberId = scop.userId;
-    }
-    else $("#mainTitle").hide();
-    $("#memberInfo").children().show();
-    $("#btnMoreArticle").removeAttr("disabled");
-    // show search button
-    $("#btnSearch").toggle();
-    $("#btnMySearch").toggle();
-    // show member info and articles
-    scop.memberId = memberId;
-    await getMyArticles();
-    $("#avatar").addClass("d-flex align-items-center");
-    $("#memberNames").children()[0].innerText = scop.articles.reaultArticles[0].memberNickname;
-    $("#memberNames").children()[1].innerText = scop.articles.reaultArticles[0].memberAccount;
-    $("#memberNames").children()[2].innerText = `${scop.articles.articleCount}篇文章`;
-    updateArticles(scop.articles.reaultArticles);
-}
-// search button show articles of one person (my or other)
-var showMySearch = async function () {
-    // show articles
-    await getMyArticles();
-    updateArticles(scop.articles.reaultArticles);
+// show person page
+var showPersonPage = async function () {
+    $("#articleModal").modal("hide");
 }
 // show Modal
 var showModal = async function (articleId) {
@@ -85,6 +37,19 @@ var showModal = async function (articleId) {
     // Modal show article data
     await $("#articleModal").modal("show");
 }
+// search button show articles
+var showSearch = async function () {
+    scop.page = 0;
+    $("#btnMoreArticle").removeAttr("disabled");
+    // show articles
+    if (scop.articleCode == "My") {
+        await getMyArticles();
+        updateArticles(scop.articles.reaultArticles);
+    } else {
+        await getArticles();
+        updateArticles(scop.articles);
+    }
+}
 // load more 10 articles
 var showMoreArticle = async function () {
     scop.page++;
@@ -94,20 +59,81 @@ var showMoreArticle = async function () {
     else moreArticles = await getArticles();
     updateArticles(moreArticles);
 }
+// show articles of one person (my or other)
+var showMyMain = async function (memberId) {
+    scop.articleCode = "My";
+    scop.page = 0;
+    // update main area
+    if (memberId == undefined) {
+        $("#mainTitle").html("我的");
+        memberId = scop.loginId;
+    }
+    else $("#mainTitle").hide();
+    $("#memberInfo").children().show();
+    $("#btnMoreArticle").removeAttr("disabled");
+    // show member info and articles
+    scop.memberId = memberId;
+    await getMyArticles();
+    $("#avatar").addClass("d-flex align-items-center");
+    $("#memberNames").children()[0].innerText = scop.articles.reaultArticles[0].memberNickname;
+    $("#memberNames").children()[1].innerText = scop.articles.reaultArticles[0].memberAccount;
+    $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
+    updateArticles(scop.articles.reaultArticles);
+}
+// show articles by sort of article
+var showMain = async function (code, name) {
+    scop.articleCode = code;
+    scop.page = 0;
+    // update main area
+    $("#mainTitle").html(name);
+    $("#mainTitle").show();
+    $("#memberInfo").children().hide();
+    $("#btnMoreArticle").removeAttr("disabled");
+    $("#avatar").removeClass("d-flex align-items-center");
+    // show articles
+    await getArticles();
+    updateArticles(scop.articles);
+}
 //#endregion
 
 //# update functions
+var updateReplaies = function () {
+    let replyHTML = "";
+    for (const reply of scop.replies) {
+        replyHTML += `<div>
+                        <div class="d-flex justify-content-between align-items-center"> <!-- Reply header -->
+                            <div>
+                                <span>${reply.memberNickname}</span><span>${reply.replyLastDateDiff}</span>
+                            </div>
+                            <div class="d-flex align-items-center">`;
+        if (reply.like) { // show user already like the comment
+            replyHTML += `<i class="fa-solid fa-heart text-danger"></i>`;
+        } else {
+            replyHTML += `<i class="fa-solid fa-heart text-secondary"></i>`;
+        }
+        replyHTML += `<span>${reply.reply.replyLikesCount}</span>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+            </div>
+            <div> <!-- Reply content -->
+                    ${reply.reply.replyContent}
+                </div>
+            </div>`;
+    }
+    $("#ModelReplies").empty();
+    $("#ModelReplies").append(replyHTML);
+}
 var updateArticles = function (articles) {
     let articlesHTML = "";
     for (const article of articles) {
         articlesHTML +=
-            `<div class="mb-4 bottomBorder" onclick="showModal($(this).data('articleid'))" data-articleid="${article.article.articleId}">
-                        <h4 class="m-0">${article.article.articleTitle}</h4>
-                        <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-                        <span>${article.article.articleContent}</span><br>
-                        <i class="fa-solid fa-heart text-danger"></i>${article.article.articleLikesCount}
-                        <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
-                    </div>`;
+            `<div class="mb-4 bottomBorder cursor-pointer" onclick="showModal($(this).data('articleid'))" data-articleid="${article.article.articleId}">
+                <h4 class="m-0">${article.article.articleTitle}</h4>
+                <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
+                <span>${article.article.articleContent}</span><br>
+                <i class="fa-solid fa-heart text-danger"></i>${article.article.articleLikesCount}
+                <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
+            </div>`;
     }
     if (scop.page == 0) $("#articles").empty();
     $("#articles").append(articlesHTML);
@@ -116,54 +142,12 @@ var updateArticles = function (articles) {
         $("#btnMoreArticle").prop("disabled", "true");
     }
 }
-var updateReplaies = function () {
-    let replyHTML = "";
-    for (const reply of scop.replies) {
-        replyHTML += `<div>
-                                <div class="d-flex justify-content-between align-items-center"> <!-- Reply header -->
-                                    <div>
-                                        <span>${reply.memberNickname}</span><span>${reply.replyLastDateDiff}</span>
-                                    </div>
-                                    <div class="d-flex align-items-center">`;
-        if (reply.like) { // show user already like the comment
-            replyHTML += `<i class="fa-solid fa-heart text-danger"></i>`;
-        } else {
-            replyHTML += `<i class="fa-solid fa-heart"></i>`;
-        }
-        replyHTML += `<span>${reply.reply.replyLikesCount}</span>
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                        </div>
-                    </div>
-                    <div> <!-- Reply content -->
-                            ${reply.reply.replyContent}
-                        </div>
-                    </div>`;
-    }
-    $("#ModelReplies").empty();
-    $("#ModelReplies").append(replyHTML);
-}
 //#endregion
 
 //#region Call API
 var getReplies = async function (articleId) {
     // call api get related data
     scop.replies = await ReplyService.getReplies(articleId);
-}
-var getArticles = async function () {
-    // call api get related data
-    if ($('#searchInput').val() == "") {
-        articles = await ArticleService.getArticles(scop.articleCode, scop.page, $('#order').val());
-    } else {
-        articles = await ArticleService.getArticlesWithKeyword(scop.articleCode, scop.page, $('#order').val(), $('#searchInput').val());
-    }
-    if (scop.page == 0) scop.articles = articles;
-    else {
-        for (const item of articles) {
-            scop.articles.push(item);
-        }
-    }
-    console.log(articles);
-    return articles;
 }
 var getMyArticles = async function () {
     // call api get related data
@@ -180,11 +164,29 @@ var getMyArticles = async function () {
     }
     return articles.reaultArticles;
 }
+var getArticles = async function () {
+    // call api get related data
+    if ($('#searchInput').val() == "") {
+        articles = await ArticleService.getArticles(scop.articleCode, scop.page, $('#order').val());
+    } else {
+        articles = await ArticleService.getArticlesWithKeyword(scop.articleCode, scop.page, $('#order').val(), $('#searchInput').val());
+    }
+    if (scop.page == 0) scop.articles = articles;
+    else {
+        for (const item of articles) {
+            scop.articles.push(item);
+        }
+    }
+    // console.log(articles);
+    return articles;
+}
 //#endregion
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
-
+    scop.loginId = $("#loginId").val();
+    scop.userName = $("#userName").val();
+    console.log(scop.loginId, scop.userName);
     // $('#articleModal').modal({
     //     show: true, // 預設開啟modal
     //     // backdrop: static // 點擊背景不會關閉modal
@@ -212,6 +214,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         $("#ModalArticleContent").html(item.article.articleContent);
         $("#ModalArticleReplyCount").html(`共${item.article.articleReplyCount}則留言`);
     })
+
+    // bind action, show articles when press 'Enter' at searchinput 
+    $("#searchInput").on('keypress', function (e) {
+        if (e.which == 13) {
+            showSearch();
+        }
+    });
 
     //#region setup community menu and show first sort
     let menuHTML = "";
