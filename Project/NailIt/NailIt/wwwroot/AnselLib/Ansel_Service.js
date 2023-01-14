@@ -1,10 +1,10 @@
 ﻿// 前後Server相同
- function getHost() {
-     var url = window.location.href;
-     var arr = url.split("/");
-     return arr[0] + "//" + arr[2]
- }
- const apiServer = getHost();
+function getHost() {
+    var url = window.location.href;
+    var arr = url.split("/");
+    return arr[0] + "//" + arr[2]
+}
+const apiServer = getHost();
 
 // 前後Server不同，指定Server
 //const apiServer = "https://localhost:44308";
@@ -124,8 +124,8 @@ class ReplyLikeService {
     static postReplyLike(data) {
         return fetchPost(`/api/ReplyLikeTables`, data);
     }
-    static deleteReplyLike(id) {
-        return fetchDelete(`/api/ReplyLikeTables/${id}`);
+    static deleteReplyLike(replyId, memberId) {
+        return fetchDelete(`/api/ReplyLikeTables/${replyId}/${memberId}`);
     }
 }
 //#endregion
@@ -165,9 +165,9 @@ class ArticleTable {
 }
 class ArticleLikeTable {
     constructor(data) {
-        this.articleLikeId = initialNum(data.articleLikeId);
-        this.articleId = initialNum(data.articleId);
-        this.memberId = initialNum(data.memberId);
+        this.ArticleLikeId = initialNum(data.ArticleLikeId);
+        this.ArticleId = initialNum(data.ArticleId);
+        this.MemberId = initialNum(data.MemberId);
     }
 }
 class ArticlePicTable {
