@@ -25,6 +25,9 @@
         .bottomBorder{
             border-bottom:2px solid #dee2e6;
         }
+        .cursor-pointer {
+            cursor: pointer;
+        }
     </style>
 }
 @section Scripts{}
@@ -72,7 +75,7 @@
                     <input type="text" id="searchInput" placeholder="關鍵字搜尋">
                     <i class="fa-solid fa-magnifying-glass"  id="btnSearch" style="cursor: pointer;" onclick="showSearch()"></i>
                     <label for="order" class="mb-0 ml-3 mr-1">排序:</label>
-                    <select id="order" name="order" id="order" onchange="showSearch()">
+                    <select id="order" name="order" id="order" onchange="showSearch()" class="cursor-pointer">
                         <option value="latest">最新</option>
                         <option value="like">熱門</option>
                     </select>
@@ -91,7 +94,7 @@
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
-                <div id="ModalAuthorInfo" class="d-flex align-items-center">
+                <div id="ModalAuthorInfo" class="d-flex align-items-center cursor-pointer" onclick="showPersonPage()">
                     <div id="avatar" class="bg-secondary d-flex align-items-center" style="aspect-ratio:1;border-radius: 50%;color: #fff;">
                         <div>
                             Avatarrr
