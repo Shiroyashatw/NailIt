@@ -60,7 +60,13 @@ namespace NailIt.Controllers.YiPControllers
             return await query.ToListAsync();
         }
 
-
+        [HttpPost]
+        public async Task<ActionResult<DemoSetTable>> PostDataSetTable(DemoSetTable DemoSetTable)
+        {
+            Context.DemoSetTables.Add(DemoSetTable);
+            await Context.SaveChangesAsync();
+            return CreatedAtAction("GetDataSetTable", new { id = DemoSetTable.DemoSetId }, DemoSetTable);
+        }
     }
 }
 
