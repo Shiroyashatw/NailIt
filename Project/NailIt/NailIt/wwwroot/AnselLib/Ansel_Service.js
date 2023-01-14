@@ -10,86 +10,52 @@
 //const apiServer = "https://localhost:44308";
 
 //#region fetch api
-function fetchGet(uri) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            return res.json();
-        }).then((res) => {
-            resolve(res);
-        }).catch((e) => {
-            reject(e);
-        });
+// If "status" attribute can be found in return, it's not a success response.
+async function fetchGet(uri) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
-};
-function fetchPost(uri, value) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'POST',
-            body: JSON.stringify(value),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            return res.json();
-        }).then((res) => {
-            resolve(res);
-        }).catch((e) => {
-            reject(e);
-        });
+    return res.json();
+}
+async function fetchPost(uri, value) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'POST',
+        body: JSON.stringify(value),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
-};
-function fetchPut(uri, value) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'PUT',
-            body: JSON.stringify(value),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            return res;
-        }).then((res) => {
-            resolve(res); //回傳NoContent
-        }).catch((e) => {
-            reject(e);
-        });
+    return res.json();
+}
+async function fetchPut(uri, value) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'PUT',
+        body: JSON.stringify(value),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
-};
-function fetchDelete(uri) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            return res;
-        }).then((res) => {
-            resolve(res); //回傳NoContent
-        }).catch((e) => {
-            reject(e);
-        });
+    return res; //回傳NoContent
+}
+async function fetchDelete(uri) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
-};
-function fetchPostMul(uri, value) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'POST',
-            body: value, //fetch傳遞form data，不用特別設定headers下的Content-Type
-        }).then((res) => {
-            return res.json();
-        }).then((res) => {
-            resolve(res);
-        }).catch((e) => {
-            reject(e);
-        });
+    return res; //回傳NoContent
+}
+async function fetchPostMul(uri, value) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'POST',
+        body: value, //fetch傳遞form data，不用特別設定headers下的Content-Type
     });
-};
+    return res.json();
+}
 //#endregion
 
 //#region Api Service
