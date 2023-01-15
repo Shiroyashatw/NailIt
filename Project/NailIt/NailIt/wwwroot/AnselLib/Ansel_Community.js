@@ -11,12 +11,30 @@ var scop = {
     articles: [], // 目前帶出的list of article
     articleIndex: 0, // 現在選取的article在list中的index
     page: 0, // 目前頁數
-    memberId: 0, // 目前帶出的會員個人頁面
+    articleAuthorId: 0, // 目前帶出的文章作者或會員個人頁面
     replies: [], // 目前article的replies
 }
 
 //#region Function
 //#region Action
+// When the user clicks on the button,toggle between hiding and showing the dropdown content 
+var showDropdown = function (obj) {
+    if ($(obj).parent().children()[1].classList.contains("show")) {
+        // display none all dropdown-content
+        $(".dropdown-content").each((index, elem) => {
+            if (elem.classList.contains("show"))
+                elem.classList.remove("show");
+        });
+    } else {
+        // display none all dropdown-content
+        $(".dropdown-content").each((index, elem) => {
+            if (elem.classList.contains("show"))
+                elem.classList.remove("show");
+        });
+        // show the dropdown
+        $(obj).parent().children()[1].classList.add("show");
+    }
+}
 // show reply like status change
 var showReplyLikeToggle = async function (likeObj) {
     // get the reply (like status)
@@ -97,7 +115,7 @@ var showArticleLikeToggle = async function (likeObj) {
 }
 // show person page
 var showPersonPage = function () {
-    showMyMain(scop.memberId);
+    showMyMain(scop.articleAuthorId);
     // Modal hide
     $("#articleModal").modal("hide");
 }
@@ -110,7 +128,7 @@ var showModal = async function (articleId) {
 
     scop.articleIndex = articles.findIndex((item) => item.article.articleId == articleId);
     // call and show relies
-    scop.memberId = articles[scop.articleIndex].article.articleAuthor;
+    scop.articleAuthorId = articles[scop.articleIndex].article.articleAuthor;
     await getReplies(articles[scop.articleIndex].article.articleId);
     updateReplaies();
 
@@ -146,7 +164,7 @@ var showMyMain = async function (memberId) {
     // update main area
     if (memberId == undefined) {
         $("#mainTitle").html("我的");
-        scop.memberId = scop.loginId;
+        scop.articleAuthorId = scop.loginId;
     } else $("#mainTitle").hide();
     $("#memberInfo").children().show();
     $("#btnMoreArticle").removeAttr("disabled");
@@ -174,6 +192,21 @@ var showMain = async function (code, name) {
 //#endregion
 
 //#region render updates
+var updateArtiModDropdown = function () {
+    let dropContentHTML = ``;
+    // Can edit and delete own article
+    if (scop.articleAuthorId == scop.loginId) {
+        dropContentHTML = `
+            <a href="#">編輯</a>
+            <a href="#" class="text-danger">刪除</a>`;
+    } 
+    // Only can report others reply
+    else {
+        dropContentHTML = `
+            <a href="#" class="text-danger">檢舉</a>`;
+    }
+    $("#ArtiModDropContent").html(dropContentHTML);
+};
 var updateTheArticle = function (article) {
     let articleHTML = `
         <h4 class="m-0">${article.article.articleTitle}</h4>
@@ -196,16 +229,37 @@ var updateReplaies = function () {
         } else {
             replyHTML += `<i class="fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>`;
         }
-        replyHTML += `<span>${reply.reply.replyLikesCount}</span>
-                    <i class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+        replyHTML += `
+                    <span>${reply.reply.replyLikesCount}</span>
+                    <div class="dropdown">
+                        <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis-vertical"></i>
+                        <div class="dropdown-content">
+        `;
+        // Can edit and delete own reply
+        if (reply.reply.memberId == scop.loginId) {
+            replyHTML += `
+                <a href="#">編輯</a>
+                <a href="#" class="text-danger">刪除</a>
+            `;
+        }
+        // Only can report others reply
+        else {
+            replyHTML += `
+                <a href="#" class="text-danger">檢舉</a>
+            `;
+        }
+        replyHTML += `                    
+                        </div>
+                    </div>
                 </div>
                 <div> <!-- Reply content -->
                         ${reply.reply.replyContent}
                     </div>
-                </div>`;
+                </div>
+        `;
     }
-    $("#ModelReplies").empty();
-    $("#ModelReplies").append(replyHTML);
+    // $("#ModelReplies").empty();
+    $("#ModelReplies").html(replyHTML);
 }
 var updateArticles = function (articles) {
     let articlesHTML = "";
@@ -262,10 +316,10 @@ var getReplies = async function (articleId) {
 var getMyArticles = async function () {
     // call api get related data
     if ($('#searchInput').val() == "") {
-        articles = await ArticleSocialService.getMyArticles(scop.memberId, scop.page, $('#order').val());
+        articles = await ArticleSocialService.getMyArticles(scop.articleAuthorId, scop.page, $('#order').val());
         if (articles.status != undefined) { alert(`[${articles.status}]後端執行異常，請聯絡系統人員，感謝!`); return []; }
     } else {
-        articles = await ArticleSocialService.getMyArticlesWithKeyword(scop.memberId, scop.page, $('#order').val(), $('#searchInput').val());
+        articles = await ArticleSocialService.getMyArticlesWithKeyword(scop.articleAuthorId, scop.page, $('#order').val(), $('#searchInput').val());
         if (articles.status != undefined) { alert(`[${articles.status}]後端執行異常，請聯絡系統人員，感謝!`); return []; }
     }
     if (scop.page == 0) scop.articles = articles;
@@ -299,12 +353,8 @@ var getArticles = async function () {
 document.addEventListener("DOMContentLoaded", async function () {
     scop.loginId = $("#loginId").val();
     scop.userName = $("#userName").val();
-    scop.memberId = scop.loginId;
-    console.log(scop.loginId, scop.userName, scop.memberId);
-    // $('#articleModal').modal({
-    //     show: true, // 預設開啟modal
-    //     // backdrop: static // 點擊背景不會關閉modal
-    // })
+    scop.articleAuthorId = scop.loginId;
+    console.log(scop.loginId, scop.userName, scop.articleAuthorId);
 
     // initial data
     scop.articleCodeList = await SocialService.getCodes("L");
@@ -312,7 +362,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     scop.reportCodeList = await SocialService.getCodes("G");
     if (scop.reportCodeList.status != undefined) alert(`[${scop.reportCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
 
-    // initial Modal show setting
+    //#region Event Binding
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            $(".dropdown-content").each((index, elem) => {
+                if (elem.classList.contains("show"))
+                    elem.classList.remove("show");
+            });
+        }
+    }
+    // Initial Modal show setting
     $('#articleModal').on('show.bs.modal', function (event) {
         let articles = scop.articles;
         if (scop.articles.articleCount !== undefined) {
@@ -330,14 +390,17 @@ document.addEventListener("DOMContentLoaded", async function () {
         $("#ModalArticleTitle").children()[1].innerText = item.article.articleLastEdit;
         $("#ModalArticleContent").html(item.article.articleContent);
         $("#ModalArticleReplyCount").html(`共${item.article.articleReplyCount}則留言`);
+        // Render nodal dropdown
+        updateArtiModDropdown();
     })
 
-    // bind action, show articles when press 'Enter' at searchinput 
+    // Bind action, show articles when press 'Enter' at searchinput 
     $("#searchInput").on('keypress', function (e) {
         if (e.which == 13) {
             showSearch();
         }
     });
+    //#endregion
 
     //#region setup community menu and show first sort
     let menuHTML = "";

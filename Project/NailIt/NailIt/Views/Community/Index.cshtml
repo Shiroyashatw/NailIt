@@ -13,26 +13,16 @@
     <!-- Custom js -->
     <script src="~/AnselLib/Ansel_Service.js"></script>
     <script src="~/AnselLib/Ansel_Community.js"></script>
-    <style>
-        #searchInput{
-            border: none;
-            border-bottom: 1px solid #000;
-        }
-        #searchInput:focus-visible{
-            outline: none;
-        }
-        /* style="border-bottom:2px solid #dee2e6" */
-        .bottomBorder{
-            border-bottom:2px solid #dee2e6;
-        }
-        .cursor-pointer {
-            cursor: pointer;
-        }
-    </style>
+    
+    <link rel="stylesheet" href="~/AnselLib/Ansel_Community.css">
+    <style></style>
 }
 @section Scripts{}
+
+@* invisible infornation *@
 <input id="loginId" type="text" value="@loginId" class="d-none">
 <input id="userName" type="text" value="@userName" class="d-none">
+
 <div class="">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -113,7 +103,14 @@
                     <div class="row">
                         <i id="ModelArticleLike" class="fa-solid fa-heart cursor-pointer" onclick="showArticleLikeToggle(this)" style="color:rgb(108, 117, 125);"></i>
                         <span id="ModelArticleLikesCount">0</span>
-                        <i class="fa-solid fa-ellipsis cursor-pointer"></i>
+                        <div class="dropdown">
+                            <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis"></i>
+                            <div id="ArtiModDropContent" class="dropdown-content">
+                                <a href="#home">編輯</a>
+                                <a href="#about" class="text-danger">刪除</a>
+                                <a href="#contact" class="text-danger">檢舉</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
