@@ -744,16 +744,16 @@
                                                     <label for="UpTagF">標籤1：</label>
                                                     <div id="tagF">
                                                         <div class="Tag">
-                                                            <input required class="ExitEmpty" type="radio" id="TagFF" name="UpTagF" value="可愛" onclick="GetVal(this,'UpTagF')"/>
-                                                            <label class="TagStyle RMClass"  for="TagFF"  >可愛</label>
+                                                            <input required class="ExitEmpty" type="radio" id="TagFF" name="UpTagF" v-bind:value="NineTag[0]" onclick="GetVal(this,'UpTagF')"/>
+                                                            <label class="TagStyle RMClass" for="TagFF">{{NineTag[0]}}</label>
                                                         </div>
                                                         <div class="Tag">
-                                                            <input type="radio" id="TagFS" name="UpTagF" value="敲敲口愛" onclick="GetVal(this,'UpTagF')"/>
-                                                            <label class="TagStyle RMClass" for="TagFS">敲敲口愛</label>
+                                                            <input type="radio" id="TagFS" name="UpTagF" v-bind:value="NineTag[1]" onclick="GetVal(this,'UpTagF')"/>
+                                                            <label class="TagStyle RMClass" for="TagFS">{{NineTag[1]}}</label>
                                                         </div>
                                                         <div class="Tag">
-                                                            <input type="radio" id="TagFT" name="UpTagF" value="不口愛" onclick="GetVal(this,'UpTagF')"/>
-                                                            <label class="TagStyle RMClass" for="TagFT"  >不口愛</label>
+                                                            <input type="radio" id="TagFT" name="UpTagF" v-bind:value="NineTag[2]" onclick="GetVal(this,'UpTagF')"/>
+                                                            <label class="TagStyle RMClass" for="TagFT">{{NineTag[2]}}</label>
                                                         </div>
                                                         <div class="Tag">
                                                             <input type="radio" id="TagFL" name="UpTagF" value="自訂" onclick="GetVal(this,'UpTagF')" />
@@ -772,16 +772,16 @@
                                                     <label for="UpTagS">標籤2：</label>
                                                     <div id="tagS">
                                                         <div class="Tag">
-                                                            <input required class="ExitEmpty" type="radio" id="TagSF" name="UpTagS" value="可愛" onclick="GetVal(this,'UpTagS')" />
-                                                            <label class="TagStyle RMClass" for="TagSF">可愛</label>
+                                                            <input required class="ExitEmpty" type="radio" id="TagSF" name="UpTagS" v-bind:value="NineTag[3]" onclick="GetVal(this,'UpTagS')" />
+                                                            <label class="TagStyle RMClass" for="TagSF">{{NineTag[3]}}</label>
                                                         </div>
                                                         <div class="Tag">
-                                                            <input type="radio" id="TagSS" name="UpTagS" value="敲敲口愛" onclick="GetVal(this,'UpTagS')" />
-                                                            <label class="TagStyle RMClass" for="TagSS">敲敲口愛</label>
+                                                            <input type="radio" id="TagSS" name="UpTagS" v-bind:value="NineTag[4]" onclick="GetVal(this,'UpTagS')" />
+                                                            <label class="TagStyle RMClass" for="TagSS">{{NineTag[4]}}</label>
                                                         </div>
                                                         <div class="Tag">
-                                                            <input type="radio" id="TagST" name="UpTagS" value="不口愛" onclick="GetVal(this,'UpTagS')" />
-                                                            <label class="TagStyle RMClass" for="TagST">不口愛</label>
+                                                            <input type="radio" id="TagST" name="UpTagS" v-bind:value="NineTag[5]" onclick="GetVal(this,'UpTagS')" />
+                                                            <label class="TagStyle RMClass" for="TagST">{{NineTag[5]}}</label>
                                                         </div>
                                                         <div class="Tag">
                                                             <input type="radio" id="TagSL" name="UpTagS" value="自訂" onclick="GetVal(this,'UpTagS')" />
@@ -800,16 +800,16 @@
                                                     <label for="UpTagT">標籤3：</label>
                                                     <div id="tagT">
                                                         <div class="Tag">
-                                                            <input required class="ExitEmpty" type="radio" id="TagTF" name="UpTagT" value="可愛" onclick="GetVal(this,'UpTagT')" />
-                                                            <label class="TagStyle RMClass" for="TagTF">可愛</label>
+                                                            <input required class="ExitEmpty" type="radio" id="TagTF" name="UpTagT" v-bind:value="NineTag[6]" onclick="GetVal(this,'UpTagT')" />
+                                                            <label class="TagStyle RMClass" for="TagTF">{{NineTag[6]}}</label>
                                                         </div>
                                                         <div class="Tag">
-                                                            <input type="radio" id="TagTS" name="UpTagT" value="敲敲口愛" onclick="GetVal(this,'UpTagT')" />
-                                                            <label class="TagStyle RMClass" for="TagTS">敲敲口愛</label>
+                                                            <input type="radio" id="TagTS" name="UpTagT" v-bind:value="NineTag[7]" onclick="GetVal(this,'UpTagT')" />
+                                                            <label class="TagStyle RMClass" for="TagTS">{{NineTag[7]}}</label>
                                                         </div>
                                                         <div class="Tag">
-                                                            <input type="radio" id="TagTT" name="UpTagT" value="不口愛" onclick="GetVal(this,'UpTagT')" />
-                                                            <label class="TagStyle RMClass" for="TagTT">不口愛</label>
+                                                            <input type="radio" id="TagTT" name="UpTagT" v-bind:value="NineTag[8]" onclick="GetVal(this,'UpTagT')" />
+                                                            <label class="TagStyle RMClass" for="TagTT">{{NineTag[8]}}</label>
                                                         </div>
                                                         <div class="Tag">
                                                             <input type="radio" id="TagTL" name="UpTagT" value="自訂" onclick="GetVal(this,'UpTagT')" />
@@ -1031,7 +1031,9 @@
                 TagTtxt: "",
                 PutManicurist: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristIntro": "" }],
                 preview: false,
-                Editing:true,
+                Editing: true,
+                TagList: [{ "tagId": 1, "tagName": "純色" }, { "tagId": 2, "tagName": "漸層" }, { "tagId": 3, "tagName": "碎花" }, { "tagId": 4, "tagName": "幾何" }, { "tagId": 5, "tagName": "立體" }, { "tagId": 6, "tagName": "晶片" }, { "tagId": 7, "tagName": "鑽石" }, { "tagId": 8, "tagName": "可愛風" }, { "tagId": 9, "tagName": "知性風" }, { "tagId": 10, "tagName": "華麗風" }, { "tagId": 11, "tagName": "花磚" }, { "tagId": 12, "tagName": "大理石" }, { "tagId": 13, "tagName": "手繪美甲" }, { "tagId": 14, "tagName": "卡通人物" }, { "tagId": 15, "tagName": "乾燥玫瑰" }],
+                NineTag:[]
             },
             methods: {
                 InsertDemo: function () {
@@ -1124,6 +1126,46 @@
             }
         });
 
+        $.ajax({
+            type: "get",
+            url: "/api/TagTable",
+            success: function (e) {
+                console.log(e);
+                ShowData.TagList = e;
+
+                var TagLenth = [];
+                var Gettag = [];
+                var Temp=0;
+                //Gettag[0] = Math.floor(Math.random() * e.length - 1) + 1;
+                for (let i = 0; i < e.length; i++) {
+                    TagLenth[i] = i;
+                }
+                console.log(TagLenth);
+                while (Gettag.length != 9) {
+                //for (let x = 0; x < 10; x++) {
+                    var Rd = Math.floor(Math.random() * e.length - 1) + 1;
+                    var Posi = TagLenth.indexOf(Rd);
+                    console.log("亂數為：" + Rd + "位置為：" + Posi);
+                    console.log("現在陣列為" + TagLenth);
+                    if (Posi == -1) {
+                        //Temp = Temp + 1;
+                        continue;
+                    } else {
+                        //Gettag[x - Temp] = Rd;
+                        Gettag.push(Rd);
+                        TagLenth.splice(Posi, 1);
+                    }
+                }
+                //console.log(Gettag);
+                //console.log(Gettag.length);
+                //console.log(e[0].tagName);
+                for (let g = 0; g < 9; g++) {
+                    ShowData.NineTag.push(e[Gettag[g]].tagName);
+                    //console.log(e[Gettag[g]].tagName);
+                }
+            }
+        });
+
         let inputfile;
         async function Getfile(e) {
             let form = new FormData();
@@ -1167,6 +1209,8 @@
             //var FirstFilePath = "UploadFolder/" + inputMorefile[0];
             
         }
+
+
 
 
 

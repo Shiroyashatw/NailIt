@@ -553,7 +553,7 @@
                     <div class="col-10 EventDemo">
                         <div v-for="(item,key) in MainDemoCover">
                             <div class="Seemore my-0">
-                                <img class="Demoimg" v-bind:src="MainDemoCover[0].demoPic" alt="">
+                                <img class="Demoimg" v-bind:src="MainDemoCover[key].demoPic" alt="">
                                 <figcaption class="Clickme">查看</figcaption>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{MainDemoCover[key].demoSetName}}</p>
@@ -674,7 +674,7 @@
                 DemoList: [{ "demoPic": "UploadFolder/Oneone.png" }, { "demoPic": "UploadFolder/Twotwo.png" }, { "demoPic": "UploadFolder/Threetwo.png" }, { "demoPic": "UploadFolder/Fourthree.png" }, { "demoPic": "UploadFolder/Fivethree.png" }],
                 MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
                 width: "",
-                MainDemoCoverLenth: ""
+                    MainDemoCoverLenth: "",
                 }
             },
         }).$mount('#ShowData');
@@ -732,6 +732,8 @@
 
             }
         });
+
+
 
 
     </script>
