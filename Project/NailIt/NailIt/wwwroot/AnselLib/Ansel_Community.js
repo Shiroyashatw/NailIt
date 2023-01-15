@@ -192,30 +192,6 @@ var showMain = async function (code, name) {
 //#endregion
 
 //#region render updates
-var updateArtiModDropdown = function () {
-    let dropContentHTML = ``;
-    // Can edit and delete own article
-    if (scop.articleAuthorId == scop.loginId) {
-        dropContentHTML = `
-            <a href="#">編輯</a>
-            <a href="#" class="text-danger">刪除</a>`;
-    } 
-    // Only can report others reply
-    else {
-        dropContentHTML = `
-            <a href="#" class="text-danger">檢舉</a>`;
-    }
-    $("#ArtiModDropContent").html(dropContentHTML);
-};
-var updateTheArticle = function (article) {
-    let articleHTML = `
-        <h4 class="m-0">${article.article.articleTitle}</h4>
-        <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-        <span>${article.article.articleContent}</span><br>
-        <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
-        <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}`;
-    $(`div[data-articleid="${article.article.articleId}"]`).html(articleHTML);
-}
 var updateReplaies = function () {
     let replyHTML = "";
     for (const reply of scop.replies) {
@@ -260,6 +236,30 @@ var updateReplaies = function () {
     }
     // $("#ModelReplies").empty();
     $("#ModelReplies").html(replyHTML);
+}
+var updateArtiModDropdown = function () {
+    let dropContentHTML = ``;
+    // Can edit and delete own article
+    if (scop.articleAuthorId == scop.loginId) {
+        dropContentHTML = `
+            <a href="#">編輯</a>
+            <a href="#" class="text-danger">刪除</a>`;
+    }
+    // Only can report others reply
+    else {
+        dropContentHTML = `
+            <a href="#" class="text-danger">檢舉</a>`;
+    }
+    $("#ArtiModDropContent").html(dropContentHTML);
+};
+var updateTheArticle = function (article) {
+    let articleHTML = `
+        <h4 class="m-0">${article.article.articleTitle}</h4>
+        <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
+        <span>${article.article.articleContent}</span><br>
+        <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
+        <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}`;
+    $(`div[data-articleid="${article.article.articleId}"]`).html(articleHTML);
 }
 var updateArticles = function (articles) {
     let articlesHTML = "";
@@ -378,18 +378,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (scop.articles.articleCount !== undefined) {
             articles = scop.articles.reaultArticles;
         }
-        let item = articles[scop.articleIndex];
+        let article = articles[scop.articleIndex];
 
-        $("#ModalAuthor").children()[0].innerText = item.memberNickname;
-        $("#ModalAuthor").children()[1].innerText = item.memberAccount;
+        $("#ModalAuthor").children()[0].innerText = article.memberNickname;
+        $("#ModalAuthor").children()[1].innerText = article.memberAccount;
 
-        if (item.like) $("#ModelArticleLike").css("color", "red");
+        if (article.like) $("#ModelArticleLike").css("color", "red");
         else $("#ModelArticleLike").css("color", "rgb(108, 117, 125)");
-        $("#ModelArticleLikesCount").text(item.article.articleLikesCount);
-        $("#ModalArticleTitle").children()[0].innerText = item.article.articleTitle;
-        $("#ModalArticleTitle").children()[1].innerText = item.article.articleLastEdit;
-        $("#ModalArticleContent").html(item.article.articleContent);
-        $("#ModalArticleReplyCount").html(`共${item.article.articleReplyCount}則留言`);
+        $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
+        $("#ModalArticleTitle").children()[0].innerText = article.article.articleTitle;
+        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit;
+        $("#ModalArticleContent").html(article.article.articleContent);
+        $("#ModalArticleReplyCount").html(`共${article.article.articleReplyCount}則留言`);
         // Render nodal dropdown
         updateArtiModDropdown();
     })
