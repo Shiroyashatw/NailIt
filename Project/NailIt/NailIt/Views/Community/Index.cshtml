@@ -78,13 +78,13 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="articleModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel" aria-hidden="true">
+<!-- The Modal articleModal -->
+<div class="modal fade" id="articleModal" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
-                <div id="ModalAuthorInfo" class="d-flex align-items-center cursor-pointer" onclick="showPersonPage()">
+                <div id="ModalAuthorInfo" class="d-flex align-items-center cursor-pointer" data-dismiss="modal" onclick="showMyMain()">
                     <div id="avatar" class="bg-secondary d-flex align-items-center" style="aspect-ratio:1;border-radius: 50%;color: #fff;">
                         <div>
                             Avatarrr
@@ -136,13 +136,11 @@
                     <div class="row">
                         <h5>留言區</h5><span id="ModalArticleReplyCount"> 共X則留言</span>
                     </div>
-                    <div class="row">
-                        <div class="col-1"></div>
+                    <div class="row d-flex justify-content-center">
                         <div class="col-10">
-                            <input type="text" placeholder="留言..." style="width: 100%;">
+                            <input id="replyInput" type="text" placeholder="留言..." style="width: 100%;">
                             <div id="ModelReplies"></div>
                         </div>
-                        <div class="col-1"></div>
                     </div>
                 </div>
 
@@ -150,3 +148,32 @@
         </div>
     </div>
 </div>
+
+
+<!-- The Modal confirmModal -->
+<div class="modal fade" id="confirmModal">
+<div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+    
+    <!-- Modal Header -->
+    <div class="modal-header">
+        <h4 class="modal-title">是否確認刪除該資料</h4>
+    </div>
+    
+    <!-- Modal body -->
+    <div id="confirmModalBody" class="modal-body">
+        Modal body..
+    </div>
+    
+    <!-- Modal footer -->
+    <div class="modal-footer">
+        <button id="btnConfirmDel" type="button" class="btn btn-danger" data-dismiss="modal">刪除</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+    </div>
+    
+    </div>
+</div>
+</div>
+
+<!-- The actual snackbar -->
+<div id="snackbar">Some text some message..</div>

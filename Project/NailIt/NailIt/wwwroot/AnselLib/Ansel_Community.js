@@ -6,17 +6,89 @@ var scop = {
     userName: "", // 目前登入者
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
-    articleCode: "", // ex:"L0"
+    articleCode: "", // 目前所在的版別ex:"L0"
     // articleName: "", // ex:"交流"
     articles: [], // 目前帶出的list of article
     articleIndex: 0, // 現在選取的article在list中的index
     page: 0, // 目前頁數
     articleAuthorId: 0, // 目前帶出的文章作者或會員個人頁面
     replies: [], // 目前article的replies
+    replyId: 0, // 給刪除reply使用
 }
 
 //#region Function
 //#region Action
+// Remove the reply from replies
+var showDeleteReply = async function () {
+    let result = await deleteReply(scop.replyId);
+    if (result) {
+        // remove the reply
+        $(`div[data-replyid="${scop.replyId}"]`).remove();
+        currentArticle().article.articleReplyCount--;
+        updateTheArticle(currentArticle());
+        // snack bar inform complete delete
+        showSnackbar("刪除已完成!");
+    }
+}
+// Show the new article in articles
+// var showNewReply = function () {
+//     console.log("showNewReply");
+// }
+// Remove the article from articles
+var showDeleteArticle = async function () {
+    let articleId = currentArticle().article.articleId;
+    let result = await deleteArticle(articleId);
+    if (result) {
+        // remove the article data-articleid
+        $(`div[data-articleid="${articleId}"]`).remove();
+        if (scop.articleCode == "My") {
+            scop.articles.articleCount--;
+            $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
+            // snack bar inform complete delete
+            showSnackbar("刪除已完成!");
+        }
+    }
+    $("#articleModal").modal("hide");
+}
+// Show the new article in articles
+// var showNewArticle = function () {
+//     console.log("showNewReply");
+// }
+// Show confirm Modal, if delete the article or reply.
+var showConfirmDelete = function (obj) {
+    // fade articleModal
+    $("#articleModal").css("z-index", "1040");
+    let replyId = $(obj).parent().parent().parent().parent().data("replyid");
+    if (replyId != undefined) {
+        let replyIndex = scop.replies.findIndex(r => r.reply.replyId == replyId);
+        // bind reply info
+        $("#confirmModalBody").html(`<p>留言內容: ${scop.replies[replyIndex].reply.replyContent}<br>
+                                          按讚數: ${scop.replies[replyIndex].reply.replyLikesCount}</p>`);
+        // bind delete action
+        scop.replyId = replyId;
+        btnConfirmDel.onclick = showDeleteReply;
+    } else {
+        let article = currentArticle();
+        // bind article info
+        $("#confirmModalBody").html(`<p>文章標題: ${article.article.articleTitle}<br>
+                                          按讚數: ${article.article.articleLikesCount}<br>
+                                          留言數: ${article.article.articleReplyCount}</p>`);
+        // bind delete action
+        btnConfirmDel.onclick = showDeleteArticle;
+    }
+    // show confirm modal
+    $("#confirmModal").modal("show");
+}
+var showSnackbar = function (text) {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+    // Add the "show" class to DIV
+    x.className = "snackShow";
+    x.innerText = text;
+    // After 2.5 seconds, remove the show class from DIV
+    setTimeout(function () { x.className = x.className.replace("snackShow", ""); }, 2500);
+    console.log("snackShow")
+}
 // When the user clicks on the button,toggle between hiding and showing the dropdown content 
 var showDropdown = function (obj) {
     if ($(obj).parent().children()[1].classList.contains("show")) {
@@ -74,13 +146,7 @@ var showReplyLikeToggle = async function (likeObj) {
 // show article like status change
 var showArticleLikeToggle = async function (likeObj) {
     // get like status
-    let article = {};
-    if (scop.articles.reaultArticles == undefined) {
-        article = scop.articles[scop.articleIndex];
-    } else {
-        article = scop.articles.reaultArticles[scop.articleIndex];
-    }
-
+    let article = currentArticle();
     // build a like with articleId and memberId:scop.loginId
     let articleLike = new ArticleLikeTable({
         ArticleId: article.article.articleId,
@@ -112,12 +178,6 @@ var showArticleLikeToggle = async function (likeObj) {
     $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
     // Render the reply
     updateTheArticle(article);
-}
-// show person page
-var showPersonPage = function () {
-    showMyMain(scop.articleAuthorId);
-    // Modal hide
-    $("#articleModal").modal("hide");
 }
 // show Modal
 var showModal = async function (articleId) {
@@ -158,11 +218,11 @@ var showMoreArticle = async function () {
     updateArticles(moreArticles);
 }
 // show articles of one person (my or other)
-var showMyMain = async function (memberId) {
+var showMyMain = async function () {
     scop.articleCode = "My";
     scop.page = 0;
     // update main area
-    if (memberId == undefined) {
+    if (scop.articleAuthorId == scop.loginId) {
         $("#mainTitle").html("我的");
         scop.articleAuthorId = scop.loginId;
     } else $("#mainTitle").hide();
@@ -214,8 +274,7 @@ var updateReplaies = function () {
         // Can edit and delete own reply
         if (reply.reply.memberId == scop.loginId) {
             replyHTML += `
-                <a href="#">編輯</a>
-                <a href="#" class="text-danger">刪除</a>
+                <a href="#" class="text-danger" onclick="showConfirmDelete(this)">刪除</a>
             `;
         }
         // Only can report others reply
@@ -243,7 +302,7 @@ var updateArtiModDropdown = function () {
     if (scop.articleAuthorId == scop.loginId) {
         dropContentHTML = `
             <a href="#">編輯</a>
-            <a href="#" class="text-danger">刪除</a>`;
+            <a href="#" class="text-danger" onclick="showConfirmDelete()">刪除</a>`;
     }
     // Only can report others reply
     else {
@@ -283,6 +342,25 @@ var updateArticles = function (articles) {
 //#endregion
 
 //#region call API
+var deleteArticle = async function (articleId) {
+    // call api get related data
+    let res = await ArticleService.deleteArticle(articleId);
+    if (!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    return true;
+}
+var deleteReply = async function (replyId) {
+    // call api get related data
+    let res = await ReplyService.deleteReply(replyId);
+    if (!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    return true;
+}
+var postReply = async function (reply) {
+    // call api get related data
+    let res = await ReplyService.postReply(reply);
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return {}; }
+    // return built model for displaying the reply
+    return res;
+}
 var deleteReplyLike = async function (replyId, memberId) {
     // call api get related data
     let res = await ReplyLikeService.deleteReplyLike(replyId, memberId);
@@ -348,6 +426,14 @@ var getArticles = async function () {
     return articles;
 }
 //#endregion
+
+var currentArticle = function () {
+    let articles = scop.articles;
+    if (scop.articles.reaultArticles != undefined) {
+        articles = scop.articles.reaultArticles;
+    }
+    return articles[scop.articleIndex]
+}
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -363,6 +449,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (scop.reportCodeList.status != undefined) alert(`[${scop.reportCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
 
     //#region Event Binding
+    // Bind action, while confirm modal hide, show article Modal will come up.
+    $('#confirmModal').on('hide.bs.modal', function (event) {
+        $('#articleModal').css('z-index', '1050');
+    })
+    // Bind action, show up the new reply
+    $("#replyInput").on('keypress', function (e) {
+        if (e.which == 13) {
+            // reply can't be empty or only space
+            if ($(e.target).val().trim() == "") return;
+            showNewReply();
+        }
+    })
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {
         if (!event.target.matches('.dropbtn')) {
@@ -374,11 +472,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     // Initial Modal show setting
     $('#articleModal').on('show.bs.modal', function (event) {
-        let articles = scop.articles;
-        if (scop.articles.articleCount !== undefined) {
-            articles = scop.articles.reaultArticles;
-        }
-        let article = articles[scop.articleIndex];
+        let article = currentArticle();
 
         $("#ModalAuthor").children()[0].innerText = article.memberNickname;
         $("#ModalAuthor").children()[1].innerText = article.memberAccount;
@@ -393,7 +487,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Render nodal dropdown
         updateArtiModDropdown();
     })
-
     // Bind action, show articles when press 'Enter' at searchinput 
     $("#searchInput").on('keypress', function (e) {
         if (e.which == 13) {
