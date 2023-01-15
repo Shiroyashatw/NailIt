@@ -26,47 +26,43 @@
 </head>
 
 <body>
-    <a href="product.html">aaa</a>
+    <a href="product.html?id=1">aaa</a>
     <form id="form1" action="/api/service" method="post">
-        <label for="">設計師ID:</label><input type="text" id="ManicuristId" name="ManicuristId" />
-        <br>
+        
         <label for="">項目名稱:</label><input type="text" id="ServiceName" name="ServiceName">
         <br>
-        <label for="">施作類型:</label><input type="text" id="ServicePartC" name="ServicePartC">
+        <label for="">設計師ID:</label><input type="text" id="ManicuristId" name="ManicuristId" />
         <br>
         <label for="">預估金額:</label><input type="text" id="ServicePrice" name="ServicePrice">
+        <br>
+        <label for="">施作類型:</label><input type="text" id="ServicePartC" name="ServicePartC">
         <br>
         <label for="">訂金:</label><input type="text" id="SeriveDeposit" name="SeriveDeposit">
         <input type="button" value="" id="btnsend">送出
     </form>
 
     <script>
-
-
+        // var today = new Date();
+        // var mm = today.getMonth() + 1;
+        // console.log(typeof(mm));
+        // if(mm < 10){
+        //     mm = ("0" + mm).toString();
+        // }
+        // console.log(mm)
         $('#btnsend').on('click', function () {
-            var jsonobj = [];
-            var ManicuristId = $('input[name=ManicuristId]').val();
-            var ServiceName = $('input[name=ServiceName]').val();
-            var ServicePartC = $('input[name=ServicePartC]').val();
-            var ServicePrice = $('input[name=ServicePrice]').val();
-            var SeriveDeposit = $('input[name=SeriveDeposit]').val();
+            var data = $('#form1').serializeArray()
+            console.log(data);
+            var returnArray = {};
 
-            item = {}
-            item['ManicuristId'] = ManicuristId;
-            item['ServiceName'] = ServiceName;
-            item['ServicePartC'] = ServicePartC;
-            item['ServicePrice'] = ServicePrice;
-            item['SeriveDeposit'] = SeriveDeposit;
+            for (var i = 0; i < data.length; i++) {
+                    returnArray[data[i]['name']] = data[i]['value'];
+                }
 
-            jsonobj.push(item);
-
-            var jsonString = JSON.stringify(jsonobj[0]);
-            console.log(jsonString);
             $.ajax({
                 url: "api/service",
                 method: 'POST',
                 contentType: 'application/json',
-                data: jsonString,
+                data: JSON.stringify(returnArray),
 
                 success: res => {
                     console.log(res);

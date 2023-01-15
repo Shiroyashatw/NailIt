@@ -92,12 +92,13 @@ namespace NailIt.Controllers.AnselControllers
         }
 
         // DELETE: api/ReplyLikeTables/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReplyLikeTable(int id)
+        [HttpDelete("{replyId}/{memberId}")]
+        public async Task<IActionResult> DeleteReplyLikeTable(int replyId, int memberId)
         {
             try
             {
-                var replyLikeTable = await _context.ReplyLikeTables.FindAsync(id);
+                var replyLikeTable = await _context.ReplyLikeTables.
+                Where(r => r.ReplyId == replyId && r.MemberId == memberId).FirstOrDefaultAsync();
                 if (replyLikeTable == null)
                 {
                     return NotFound();

@@ -40,7 +40,7 @@ namespace NailIt.Controllers.AnselControllers
                 m => m.MemberId,
                 (r, m) => new { reply = r, m.MemberNickname }).ToList();
 
-            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == HttpContext.Session.GetInt32("MemberId")).ToList();
+            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == HttpContext.Session.GetInt32("loginId")).ToList();
             var leftJoinLike = (from reply in repliesJoinMember
                                 join like in userReplyLike
                                      on reply.reply.ReplyId equals like.ReplyId into gj
@@ -49,7 +49,7 @@ namespace NailIt.Controllers.AnselControllers
                                 {
                                     reply.reply,
                                     memberNickname = reply.MemberNickname,
-                                    replyLastDateDiff = dateTimeDiff(DateTime.Now,reply.reply.ReplyLastEdit),
+                                    replyLastDateDiff = dateTimeDiff(DateTime.UtcNow,reply.reply.ReplyLastEdit),
                                     like = userlike?.ReplyLikeId == null ? false : true
                                 }).ToList();
 
