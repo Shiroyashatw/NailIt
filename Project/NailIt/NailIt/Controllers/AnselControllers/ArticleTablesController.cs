@@ -57,7 +57,7 @@ namespace NailIt.Controllers.AnselControllers
                 m => m.MemberId,
                 (a, m) => new { article = a, m.MemberAccount, m.MemberNickname }).ToList();
 
-            var userArticleLike = _context.ArticleLikeTables.Where(a => a.MemberId == HttpContext.Session.GetInt32("MemberId")).ToList();
+            var userArticleLike = _context.ArticleLikeTables.Where(a => a.MemberId == HttpContext.Session.GetInt32("loginId")).ToList();
             var leftJoinLike = (from article in articlesJoinMember
                                join like in userArticleLike
                                     on article.article.ArticleId equals like.ArticleId into gj

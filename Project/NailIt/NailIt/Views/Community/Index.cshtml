@@ -2,8 +2,9 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor hca
 @{
     ViewData["Title"] = "美甲小天地";
-    int loginId = hca.HttpContext.Session.GetInt32("MemberId") ?? 0;
-    string userName = hca.HttpContext.Session.GetString("UserName") ?? "Guest";
+    int loginId = hca.HttpContext.Session.GetInt32("loginId") ?? 0;
+    string loginName = hca.HttpContext.Session.GetString("loginName") ?? "Guest";
+    string loginNickname = hca.HttpContext.Session.GetString("loginNickname") ?? "Guest";
 }
 @section Head{
     <!-- Google Icons -->
@@ -21,7 +22,8 @@
 
 @* invisible infornation *@
 <input id="loginId" type="text" value="@loginId" class="d-none">
-<input id="userName" type="text" value="@userName" class="d-none">
+<input id="loginName" type="text" value="@loginName" class="d-none">
+<input id="loginNickname" type="text" value="@loginNickname" class="d-none">
 
 <div class="">
     <nav aria-label="breadcrumb">
@@ -36,7 +38,7 @@
             <h4>看板</h4>
             <ul class="nav flex-sm-column communityUl">
                 <li>
-                    <button class="btn btn-light" onclick="showMyMain()">我的</button>
+                    <button class="btn btn-light" onclick="showMyMain(true)">我的</button>
                 </li>
             </ul>
         </nav> 

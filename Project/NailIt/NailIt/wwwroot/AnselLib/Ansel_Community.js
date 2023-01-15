@@ -2,8 +2,9 @@
 // sessionStorage.setItem("MemberId", "1");
 
 var scop = {
-    loginId: 0, // 目前登入者
-    userName: "", // 目前登入者
+    loginId: 0, // 目前登入者Id
+    loginName: "", // 目前登入者名字
+    loginNickname: "", // 目前登入者暱稱
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
     articleCode: "", // 目前所在的版別ex:"L0"
@@ -26,14 +27,36 @@ var showDeleteReply = async function () {
         $(`div[data-replyid="${scop.replyId}"]`).remove();
         currentArticle().article.articleReplyCount--;
         updateTheArticle(currentArticle());
-        // snack bar inform complete delete
+        // snack bar inform complete
         showSnackbar("刪除已完成!");
     }
 }
 // Show the new article in articles
-// var showNewReply = function () {
-//     console.log("showNewReply");
-// }
+var showNewReply = async function () {
+    let reply = new ReplyTable({
+        ArticleId: currentArticle().article.articleId,
+        MemberId: scop.loginId,
+        ReplyContent: $("#replyInput").val(),
+    })
+    let resultReply = await postReply(reply);
+    if (resultReply != {}) {
+        reply = {
+            reply: resultReply,
+            memberNickname: scop.loginNickname,
+            replyLastDateDiff: "0分鐘前",
+            like: false
+        }
+        // add input replies. prepend the new reply. clean input. update the articleReplyCount++
+        scop.replies.unshift(reply);
+        updateNewReply(resultReply);
+        $("#replyInput").val("");
+        currentArticle().article.articleReplyCount++;
+        // Render the reply
+        updateTheArticle(currentArticle());
+        // snack bar inform complete
+        showSnackbar("留言已完成!");
+    }
+}
 // Remove the article from articles
 var showDeleteArticle = async function () {
     let articleId = currentArticle().article.articleId;
@@ -44,7 +67,7 @@ var showDeleteArticle = async function () {
         if (scop.articleCode == "My") {
             scop.articles.articleCount--;
             $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
-            // snack bar inform complete delete
+            // snack bar inform complete
             showSnackbar("刪除已完成!");
         }
     }
@@ -87,7 +110,6 @@ var showSnackbar = function (text) {
     x.innerText = text;
     // After 2.5 seconds, remove the show class from DIV
     setTimeout(function () { x.className = x.className.replace("snackShow", ""); }, 2500);
-    console.log("snackShow")
 }
 // When the user clicks on the button,toggle between hiding and showing the dropdown content 
 var showDropdown = function (obj) {
@@ -218,11 +240,11 @@ var showMoreArticle = async function () {
     updateArticles(moreArticles);
 }
 // show articles of one person (my or other)
-var showMyMain = async function () {
+var showMyMain = async function (own) {
     scop.articleCode = "My";
     scop.page = 0;
     // update main area
-    if (scop.articleAuthorId == scop.loginId) {
+    if (own) {
         $("#mainTitle").html("我的");
         scop.articleAuthorId = scop.loginId;
     } else $("#mainTitle").hide();
@@ -230,8 +252,8 @@ var showMyMain = async function () {
     $("#btnMoreArticle").removeAttr("disabled");
     await getMyArticles();
     $("#avatar").addClass("d-flex align-items-center");
-    $("#memberNames").children()[0].innerText = scop.articles.reaultArticles[0].memberNickname;
-    $("#memberNames").children()[1].innerText = scop.articles.reaultArticles[0].memberAccount;
+    $("#memberNames").children()[0].innerText = scop.articles.member.memberNickname;
+    $("#memberNames").children()[1].innerText = scop.articles.member.memberAccount;
     $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
     updateArticles(scop.articles.reaultArticles);
 }
@@ -252,6 +274,29 @@ var showMain = async function (code, name) {
 //#endregion
 
 //#region render updates
+var updateNewReply = function (reply) {
+    let replyHTML = `
+                <div data-replyid="${reply.replyId}">
+                    <div class="d-flex align-items-center"> <!-- Reply header -->
+                        <div style="margin-right:auto">
+                            <span>${scop.loginNickname}</span><span>1秒前</span>
+                        </div>
+                        <i class="fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>
+                        <span>${reply.replyLikesCount}</span>
+                        <div class="dropdown">
+                            <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis-vertical"></i>
+                            <div class="dropdown-content">
+                                <a href="#" class="text-danger" onclick="showConfirmDelete(this)">刪除</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div> <!-- Reply content -->
+                        ${reply.replyContent}
+                    </div>
+                </div>
+    `;
+    $("#ModelReplies").prepend(replyHTML);
+}
 var updateReplaies = function () {
     let replyHTML = "";
     for (const reply of scop.replies) {
@@ -293,7 +338,6 @@ var updateReplaies = function () {
                 </div>
         `;
     }
-    // $("#ModelReplies").empty();
     $("#ModelReplies").html(replyHTML);
 }
 var updateArtiModDropdown = function () {
@@ -438,9 +482,9 @@ var currentArticle = function () {
 
 document.addEventListener("DOMContentLoaded", async function () {
     scop.loginId = $("#loginId").val();
-    scop.userName = $("#userName").val();
-    scop.articleAuthorId = scop.loginId;
-    console.log(scop.loginId, scop.userName, scop.articleAuthorId);
+    scop.loginName = $("#loginName").val();
+    scop.loginNickname = $("#loginNickname").val();
+    console.log(scop.loginId, scop.loginName, scop.loginNickname);
 
     // initial data
     scop.articleCodeList = await SocialService.getCodes("L");
@@ -481,7 +525,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         else $("#ModelArticleLike").css("color", "rgb(108, 117, 125)");
         $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
         $("#ModalArticleTitle").children()[0].innerText = article.article.articleTitle;
-        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit;
+        $("#ModalArticleTitle").children()[1].innerText = new Date(article.article.articleLastEdit);
         $("#ModalArticleContent").html(article.article.articleContent);
         $("#ModalArticleReplyCount").html(`共${article.article.articleReplyCount}則留言`);
         // Render nodal dropdown
