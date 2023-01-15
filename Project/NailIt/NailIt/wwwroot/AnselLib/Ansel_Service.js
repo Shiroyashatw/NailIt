@@ -1,95 +1,61 @@
 ﻿// 前後Server相同
- function getHost() {
-     var url = window.location.href;
-     var arr = url.split("/");
-     return arr[0] + "//" + arr[2]
- }
- const apiServer = getHost();
+function getHost() {
+    var url = window.location.href;
+    var arr = url.split("/");
+    return arr[0] + "//" + arr[2]
+}
+const apiServer = getHost();
 
 // 前後Server不同，指定Server
 //const apiServer = "https://localhost:44308";
 
 //#region fetch api
-function fetchGet(uri) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            return res.json();
-        }).then((res) => {
-            resolve(res);
-        }).catch((e) => {
-            reject(e);
-        });
+// If "status" attribute can be found in return, it's not a success response.
+async function fetchGet(uri) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
-};
-function fetchPost(uri, value) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'POST',
-            body: JSON.stringify(value),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            return res.json();
-        }).then((res) => {
-            resolve(res);
-        }).catch((e) => {
-            reject(e);
-        });
+    return res.json();
+}
+async function fetchPost(uri, value) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'POST',
+        body: JSON.stringify(value),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
-};
-function fetchPut(uri, value) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'PUT',
-            body: JSON.stringify(value),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            return res;
-        }).then((res) => {
-            resolve(res); //回傳NoContent
-        }).catch((e) => {
-            reject(e);
-        });
+    return res.json();
+}
+async function fetchPut(uri, value) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'PUT',
+        body: JSON.stringify(value),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
-};
-function fetchDelete(uri) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            return res;
-        }).then((res) => {
-            resolve(res); //回傳NoContent
-        }).catch((e) => {
-            reject(e);
-        });
+    return res; //回傳NoContent
+}
+async function fetchDelete(uri) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
-};
-function fetchPostMul(uri, value) {
-    return new Promise((resolve, reject) => {
-        fetch(`${apiServer}${uri}`, {
-            method: 'POST',
-            body: value, //fetch傳遞form data，不用特別設定headers下的Content-Type
-        }).then((res) => {
-            return res.json();
-        }).then((res) => {
-            resolve(res);
-        }).catch((e) => {
-            reject(e);
-        });
+    return res; //回傳NoContent
+}
+async function fetchPostMul(uri, value) {
+    let res = await fetch(`${apiServer}${uri}`, {
+        method: 'POST',
+        body: value, //fetch傳遞form data，不用特別設定headers下的Content-Type
     });
-};
+    return res.json();
+}
 //#endregion
 
 //#region Api Service
@@ -139,8 +105,8 @@ class ArticleLikeService {
     static postArticleLike(data) {
         return fetchPost(`/api/ArticleLikeTables`, data);
     }
-    static deleteArticleLike(id) {
-        return fetchDelete(`/api/ArticleLikeTables/${id}`);
+    static deleteArticleLike(articleId, memberId) {
+        return fetchDelete(`/api/ArticleLikeTables/${articleId}/${memberId}`);
     }
 }
 class ReplyService {
@@ -158,8 +124,8 @@ class ReplyLikeService {
     static postReplyLike(data) {
         return fetchPost(`/api/ReplyLikeTables`, data);
     }
-    static deleteReplyLike(id) {
-        return fetchDelete(`/api/ReplyLikeTables/${id}`);
+    static deleteReplyLike(replyId, memberId) {
+        return fetchDelete(`/api/ReplyLikeTables/${replyId}/${memberId}`);
     }
 }
 //#endregion
@@ -199,9 +165,9 @@ class ArticleTable {
 }
 class ArticleLikeTable {
     constructor(data) {
-        this.articleLikeId = initialNum(data.articleLikeId);
-        this.articleId = initialNum(data.articleId);
-        this.memberId = initialNum(data.memberId);
+        this.ArticleLikeId = initialNum(data.ArticleLikeId);
+        this.ArticleId = initialNum(data.ArticleId);
+        this.MemberId = initialNum(data.MemberId);
     }
 }
 class ArticlePicTable {

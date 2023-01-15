@@ -21,6 +21,8 @@
 * before using this command, please update the connection string. To connect to local Db.
 Scaffold-DbContext -Connection "Server=.\sqlexpress;Database=NailitDB;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f
 
+Scaffold-DbContext -Connection "Server=.\sqlexpress;Database=NailitDB;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+
 # Swagger UI
 * 如果有寫api，除了postman可以測api，也推薦可以用swagger測試api，swagger會自動帶出目前專案有的api，還會自動顯示有哪些參數需要傳入，可以試試
 * VS跑起來之後，連線https://localhost:xxxxx/swagger/index.html，就會進到swagger UI介面
