@@ -46,7 +46,16 @@ namespace NailIt.Controllers.AnselControllers
                 Where(a => a.ArticleTitle.Contains(searchValue)).
                 ToList();
             }
-            articles = articles.
+            // remove the article had been report by this user
+            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D5").ToList();
+            var leftJoinReport = (from article in articles
+                                  join report in userArticleReport
+                                       on article.ArticleId equals report.ReportItem into gj
+                                  from userReport in gj.DefaultIfEmpty()
+                                  where userReport?.ReportId == null
+                                  select article
+                                 ).ToList();
+            articles = leftJoinReport.
                 Skip(page * amountPerPage).
                 Take(amountPerPage).
                 ToList();
