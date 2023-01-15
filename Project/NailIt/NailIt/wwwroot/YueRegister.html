@@ -1,85 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="text/html" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-		<link rel="stylesheet" href="./YueCss/bootstrap.css" />
-		<script src="./YueJs/jquery.js"></script>
-		<style>
-			.myfont {
-				font-size: 120%;
-				margin-bottom: 1.5%;
-				margin-left: 10%;
-			}
-		</style>
-	</head>
-	<body>
-		<div style="background-color: pink; height: 90px">
-			<h1>頁首</h1>
-		</div>
-		<div class="row" style="height: 550px">
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
-				<form action="/api/Member" method="post">
-					<h3 style="margin-top: 4%"><b>註冊</b></h3>
-					<label for="acInput" class="myfont">帳號：</label>
-					<input type="text" id="pwInput" name="MemberAccount"/>
-					<br />
-					<label for="pwInput" class="myfont">密碼：</label>
-					<input type="password" id="pwInput" name="MemberPassword" />
-					<br />
-					<label for="pwInput2" class="myfont">確認密碼：</label>
-					<input type="password" id="pwInput2" />
-					<br />
-					<label for="nickInput" class="myfont">暱稱：</label>
-					<input type="text" id="nickInput" name="MemberNickname" />
-					<br />
-					<label for="nameInput" class="myfont">姓名：</label>
-					<input type="text" id="nameInput" name="MemberName" />
-					<br />
-					<label for="GenderInput" class="myfont" name="MemberGender">性別：</label>
-					<select name="MemberGender">
-						<option value=false>女</option>
-						<option value=true>男</option>
-					</select>
-					<br />
-					<label for="phoneInput" class="myfont" >手機號碼：</label>
-					<input type="text" id="phoneInput" name="MemberPhone"/>
-					<br />
-					<label for="birthInput" class="myfont">生日：</label>
-					<input id="birthInput" type="date" name="MemberBirth" />
-					<br />
-					<label for="mailInput" class="myfont">電子郵件：</label>
-					<input type="text" id="mailInput" name="MemberEmail"/>
-					<br />
-					<input type="submit"
-						   value="確定"
-						   style="
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="application/json" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Document</title>
+	<link rel="stylesheet" href="./YueCss/bootstrap.css" />
+	<script src="./YueJs/jquery.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+	
+	<style>
+		.myfont {
+			font-size: 120%;
+			margin-bottom: 1.5%;
+			margin-left: 10%;
+		}
+	</style>
+</head>
+<body>
+	<div style="background-color: pink; height: 90px">
+		<h1>頁首</h1>
+	</div>
+	<div class="row" style="height: 580px">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<h3 style="margin-top: 1%"><b>註冊</b></h3>
+			<span style="color:red ;position:absolute; top:8%;left:10%">*</span>
+			<label for="acInput" class="myfont">帳號：</label>
+			<input type="text" id="acInput" maxlength="20" />
+			<span id="acInputDes" style="margin-left:2%;color:red">(只能輸入由大小寫英文及數字或底線，最短為8字，最長為20字)</span>
+			<br />
+			<span style="color:red ;position:absolute; top:17%;left:10%">*</span>
+			<label for="pwInput" class="myfont">密碼：</label>
+			<input type="password" id="pwInput" maxlength="20" />
+			<span id="pwInputDes" style="margin-left: 2%; color: red">(只能輸入由大小寫英文及數字或底線，最短為8字，最長為20字)</span>
+			<br />
+			<span style="color:red ;position:absolute; top:25%;left:10%">*</span>
+			<label for="pwInput2" class="myfont">確認密碼：</label>
+			<input type="password" id="pwInput2" />
+			<span id="pwInput2Des" style="margin-left: 2%; color: red">(密碼確認需一致)</span>
+			<br />
+			<label for="nickInput" class="myfont">暱稱：</label>
+			<input type="text" id="nickInput" maxlength="20" />
+			<span style="margin-left:2%">(若未填將預設為姓名)</span>
+			<br />
+			<span style="color:red ;position:absolute; top:41%;left:10%">*</span>
+			<label for="nameInput" class="myfont">姓名：</label>
+			<input type="text" id="nameInput" maxlength="20" />
+			<span id="nameInputDes" style="margin-left: 2%; color: red">(請輸入本人的中文姓名)</span>
+			<br />
+			<span style="color:red ;position:absolute; top:49%;left:10%">*</span>
+			<label for="GenderInput" class="myfont">性別：</label>
+			<select id="MemberGender">
+				<option value=0>女</option>
+				<option value=1>男</option>
+			</select>
+			<br />
+			<span style="color:red ;position:absolute; top:58%;left:10%">*</span>
+			<label for="phoneInput" class="myfont">手機號碼：</label>
+			<input type="text" id="phoneInput" maxlength="10" />
+			<span style="margin-left:2% ;color:red" id="phoneInputDes">(請直接輸入號碼，不需要加"-"符號，例：0912345678)</span>
+			<br />
+			<label for="birthInput" class="myfont">生日：</label>
+			<input id="birthInput" type="date" max="2023-01-14" />
+			<br />
+			<label for="questionInput" class="myfont">安全提問：</label>
+			<input type="text" id="questionInput" />
+			<span  id="questionInputDes"style="margin-left: 2%; color: red">(用於忘記密碼時可讓您重設密碼，最多10字)</span>
+			<br />
+			<label for="answerInput" class="myfont">答案：</label>
+			<input type="text" id="answerInput" />
+			<span  id="answerInputDes"style="margin-left: 2%; color: red">(答案與問題並不一定要相關，只要能記住就行，最多10字)</span>
+			<br />
+			<input type="submit"
+				   value="確定"
+				   onclick="RegisterPost()"
+				   style="
 						border: 0cm;
 						width: 13%;
 						margin-left: 1%;
 						background-color: #000000;
 						color: white;
 					" />
-					<input value=null style="visibility:hidden" name="MemberScore">
-					<input value=false style="visibility:hidden" name="MemberManicurist">
-					<input value=null style="visibility:hidden" name="MemberLogincredit">
-					<input value=0 style="visibility:hidden" name="MemberReportpoint">
-					<input value=null style="visibility:hidden" name="MemberBanned">
-				</form>
-			</div>
-			<div class="col-md-1">
-				<input type="button" onclick="aaa()">
-			</div>
 		</div>
-		<div style="width: 100%; height: 100px; background-color: black"></div>
-		<script>
-			function aaa() {
-				console.log(birthInput.value);
-				console.log( typeof(birthInput.value));
-			}
-		</script>
-	</body>
+	</div>
+	<div style="width: 100%; height: 100px; background-color: black"></div>
+	<script src="./YueJs/Registerjs.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+</body>
 </html>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,89 +20,56 @@ namespace NailIt.Controllers.YueyueControllers
         {
             _context = context;
         }
-
-        // GET: api/Member
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberTable>>> GetMemberTables()
-        {
-            return await _context.MemberTables.ToListAsync();
-        }
-
-        // GET: api/Member/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MemberTable>> GetMemberTable(int id)
-        {
-            var memberTable = await _context.MemberTables.FindAsync(id);
-
-            if (memberTable == null)
-            {
-                return NotFound();
-            }
-
-            return memberTable;
-        }
-
-        // PUT: api/Member/5
+        // PUT: api/Member   //登入用
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMemberTable(int id, MemberTable memberTable)
+        [HttpPut]
+        public async Task<string> PutMemberTable((string username, string password) ACandPW)
         {
-            if (id != memberTable.MemberId)
+            string account= ACandPW.username;    
+            string password= ACandPW.password;
+            var myMember =(
+            from MemberTable in _context.MemberTables
+            where MemberTable.MemberAccount == account
+            select MemberTable);
+            MemberTable nowUse;
+            if (myMember.Any())
+                nowUse = myMember.ToList()[0];
+            else
+                return "noAc";
+            
+            if (nowUse.MemberPassword != password)
+                return "wrongPw";
+            else 
             {
-                return BadRequest();
-            }
-
-            _context.Entry(memberTable).State = EntityState.Modified;
-
-            try
-            {
+                Guid g = Guid.NewGuid();
+                _context.Entry(myMember).State = EntityState.Modified;
+                nowUse.MemberLogincredit = g;
+                HttpContext.Session.SetString("token", g.ToString());
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MemberTableExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return "OK";
             }
 
-            return NoContent();
         }
 
-        // POST: api/Member
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+       // POST: api/Member      用於註冊會員
+       // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<MemberTable>> PostMemberTable(MemberTable memberTable)
+        public async Task<bool> PostMemberTable(MemberTable memberTable)
         {
-            _context.MemberTables.Add(memberTable);
-            await _context.SaveChangesAsync();
+            var myMember =
+            from MemberTable in _context.MemberTables
+            where MemberTable.MemberAccount == memberTable.MemberAccount
+            select MemberTable;
 
-            return CreatedAtAction("GetMemberTable", new { id = memberTable.MemberId }, memberTable);
-        }
-
-        // DELETE: api/Member/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMemberTable(int id)
-        {
-            var memberTable = await _context.MemberTables.FindAsync(id);
-            if (memberTable == null)
+            if (!myMember.Any())
             {
-                return NotFound();
+                _context.MemberTables.Add(memberTable);
+                await _context.SaveChangesAsync();
+                return true;
             }
-
-            _context.MemberTables.Remove(memberTable);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            else
+                return false;
         }
-
-        private bool MemberTableExists(int id)
-        {
-            return _context.MemberTables.Any(e => e.MemberId == id);
-        }
+     
     }
 }
