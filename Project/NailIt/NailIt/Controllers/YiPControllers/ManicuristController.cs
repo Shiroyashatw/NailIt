@@ -28,7 +28,7 @@ namespace NailIt.Controllers.YiPControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetThisManicuristTable(int id)
+        public async Task<ActionResult<IEnumerable<ManicuristTable>>> GetThisManicuristTable(int id)
         {
             var myquery = from User in Context.ManicuristTables where User.ManicuristId == id select User;
             return await myquery.ToListAsync();

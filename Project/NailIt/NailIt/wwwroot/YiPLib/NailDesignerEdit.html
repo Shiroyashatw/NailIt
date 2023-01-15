@@ -145,6 +145,8 @@
             padding-right: 10px;
             max-width: 100%;
             display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
         }
 
         .Demoimg {
@@ -156,9 +158,9 @@
             object-position: center;
         }
 
-        .Seemore:hover {
+/*        .Seemore:hover {
             filter: grayscale(60%);
-        }
+        }*/
 
         .Clickme {
             position: relative;
@@ -384,6 +386,11 @@
             margin-left: 20px;
         }
 
+        .DemoGroup {
+            margin-left: 30px;
+            margin-bottom: 30px;
+        }
+
         #file-uploader {
             display: none;
         }
@@ -473,39 +480,97 @@
             }
 
         .OnTxt {
+            margin-top:4px;
+            margin-left:80px;
             border: none;
             border-bottom: 1px solid black;
-            width:80px;
+            width: 80px;
         }
 
-            #OnTxt:focus {
+            .OnTxt:focus {
                 outline: none;
             }
 
         .TagStyle {
-            border: #FF6733 solid 3px;
-            border-radius:15px;
-            background-color:white;
+            border: #FF6733 solid 2px;
+            /*border-radius: 15px;*/
+            border-radius: 10px;
+            background-color: white;
         }
         .TagFullColor {
             background-color: #FF6733;
             color:white;
         }
 
-        .valid {
+/*        .valid {
             border-bottom: 1px solid green;
         }
 
         .invalid {
             border-bottom: 1px solid red;
+        }*/
+
+        .Tag {
+            float: left;
+            margin: 0 15px 0 0;
+            width: 70px;
+            height: 40px;
+            position: relative;
         }
+
+            .Tag label,
+            .Tag input[type="radio"] {
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+                .Tag input[type="radio"] {
+                    opacity: 0.011;
+                    z-index: 100;
+                }
+
+                    .Tag input[type="radio"]:checked + label {
+                        background-color: #FF6733;
+                        color: white;
+                    }
+
+            .Tag label {
+                cursor: pointer;
+                z-index: 90;
+                line-height: 1.8em;
+                text-align:center;
+            }
+
+        #SalonN {
+            border: none;
+            border-bottom: 1px solid black;
+            width:100%;
+        }
+
+            #SalonN:focus {
+                outline: none;
+            }
+
+
+        #Infotext {
+            width: 100%;
+            height: 200px;
+            resize: none;
+            overflow: hidden;
+        }
+
+
 
     </style>
 </head>
 
 <body>
 
-    <div class="container-fluid" id="ShowData">
+    <div class="container-fluid" id="ShowData" v-cloak>
         <div>
             <nav class="row FixPad">
                 <div class="col">
@@ -540,7 +605,8 @@
             <div class="col-4"></div>
             <div class="col-3" id="EdChBt">
                 <a class="Editbtn" href="NailDesigner.html">完成</a>
-                <a class="Checkbtn">預覽</a>
+                <a class="Checkbtn" v-if="Editing" v-on:click="Previewing">預覽</a>
+                <a class="Checkbtn" v-if="preview" v-on:click="BackEdit">編輯</a>
             </div>
             <div class="col-5"></div>
         </div>
@@ -563,19 +629,22 @@
                 </div>
             </div>
             <div class="col-5" id="Profile">
-                <b id="Title" class="Bigtext FixsmPad">{{DesignList.manicuristSalonName}}</b>
-                <p id="Context">{{DesignList.manicuristIntro}}</p>
-                <div id="Score">
-                    <div class="ratings">
-                        <div class="Emptystar">★★★★★</div>
-                        <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
-                    </div>
-                    <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
-                </div>
+                <input type="text" id="SalonN" maxlength="20" placeholder="店家名稱" v-if="Editing" v-model="PutManicurist[0].manicuristSalonName" />
+                <b id="Title" v-if="preview" class="Bigtext FixsmPad">{{PutManicurist[0].manicuristSalonName}}</b>
+                <p id="Context" v-if="preview">{{PutManicurist[0].manicuristIntro}}</p>
+                <br />
+                <textarea id="Infotext" maxlength="200" class="mt-3" placeholder="自我介紹" v-if="Editing" v-model="PutManicurist[0].manicuristIntro"></textarea>
+                <!--<div id="Score">
+        <div class="ratings">
+            <div class="Emptystar">★★★★★</div>
+            <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
+        </div>
+        <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
+    </div>-->
             </div>
             <div class="col-2">
-                <div style="height: 80%;"></div>
-                <button id="Sendbtn">預約</button>
+                <!--<div style="height: 80%;"></div>-->
+                <!--<button id="Sendbtn">預約</button>-->
             </div>
             <div class="col-1">
             </div>
@@ -620,7 +689,7 @@
                 <!-- Modal -->
 
                 <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-dialog   ">
                         <form>
                             <div class="modal-content">
                                 <div class="modal-header border-0">
@@ -634,12 +703,12 @@
                                         <!--<form>-->
                                             <div class="py-2">
                                                 <label for="UpName">美甲造型款式名稱：</label>
-                                                <input v-model="InsertDemoSet[0].demoSetName" class="TxtStyle" id="UpName" type="text" minlength="1" maxlength="20" required />
+                                                <input v-model="InsertDemoSet[0].demoSetName" class="TxtStyle ExitEmpty" id="UpName" type="text" minlength="1" maxlength="20" required />
                                             </div>
                                             <div class="py-2">
                                                 <label for="UpContext">美甲造型款式內容：</label>
                                                 <br />
-                                                <textarea required v-model="InsertDemoSet[0].demoSetContent" id="UpContext" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                                                <textarea required v-model="InsertDemoSet[0].demoSetContent" class="ExitEmpty" id="UpInFo" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                                             </div>
                                             <div>
                                                 <label for="UpFile">照片：</label>
@@ -648,7 +717,7 @@
                                                     <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
                                                     <label id="UpFileLabel" class="align-items-center">
                                                         上傳檔案
-                                                        <input id="UpFile" type="file" accept="image/*" multiple="multiple" onchange="GetMorefile(this)" />
+                                                        <input id="UpFile" class="ExitEmpty" type="file" accept="image/*" multiple="multiple" onchange="GetMorefile(this)" />
                                                     </label>
                                                 </div>
                                             </div>
@@ -674,59 +743,111 @@
                                                 <div class="py-2 d-flex">
                                                     <label for="UpTagF">標籤1：</label>
                                                     <div id="tagF">
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="可愛" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
+                                                        <div class="Tag">
+                                                            <input required class="ExitEmpty" type="radio" id="TagFF" name="UpTagF" value="可愛" onclick="GetVal(this,'UpTagF')"/>
+                                                            <label class="TagStyle RMClass"  for="TagFF"  >可愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagFS" name="UpTagF" value="敲敲口愛" onclick="GetVal(this,'UpTagF')"/>
+                                                            <label class="TagStyle RMClass" for="TagFS">敲敲口愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagFT" name="UpTagF" value="不口愛" onclick="GetVal(this,'UpTagF')"/>
+                                                            <label class="TagStyle RMClass" for="TagFT"  >不口愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagFL" name="UpTagF" value="自訂" onclick="GetVal(this,'UpTagF')" />
+                                                            <label class="TagStyle RMClass" for="TagFL">自訂</label>
+                                                            <input type="text" class="OnTxt" name="UpTagF" v-model="TagFtxt" />
+                                                            <!--<input type="text" v-model="TagFtxt" />-->
+                                                        </div>
+                                                        <!--<input type="button" class="m-1 TagStyle RMClass" value="可愛" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
                                                         <input type="button" class="m-1 TagStyle RMClass" value="敲口愛" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
                                                         <input type="button" class="m-1 TagStyle RMClass" value="不口愛" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
                                                         <input type="button" class="m-1 TagStyle RMClass" value="自訂" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
-                                                        <input type="text" class="m-1 OnTxt" name="UpTagF" />
+                                                        <input type="text" class="m-1 OnTxt" name="UpTagF" />-->
                                                     </div>
                                                 </div>
                                                 <div class="py-2  d-flex">
                                                     <label for="UpTagS">標籤2：</label>
                                                     <div id="tagS">
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="華麗風" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
+                                                        <div class="Tag">
+                                                            <input required class="ExitEmpty" type="radio" id="TagSF" name="UpTagS" value="可愛" onclick="GetVal(this,'UpTagS')" />
+                                                            <label class="TagStyle RMClass" for="TagSF">可愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagSS" name="UpTagS" value="敲敲口愛" onclick="GetVal(this,'UpTagS')" />
+                                                            <label class="TagStyle RMClass" for="TagSS">敲敲口愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagST" name="UpTagS" value="不口愛" onclick="GetVal(this,'UpTagS')" />
+                                                            <label class="TagStyle RMClass" for="TagST">不口愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagSL" name="UpTagS" value="自訂" onclick="GetVal(this,'UpTagS')" />
+                                                            <label class="TagStyle RMClass" for="TagSL">自訂</label>
+                                                            <input type="text" class=" OnTxt" name="UpTagS" v-model="TagStxt" />
+                                                        </div>
+                                                        <!--<input type="button" class="m-1 TagStyle RMClass" value="華麗風" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
                                                         <input type="button" class="m-1 TagStyle RMClass" value="碎花" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
                                                         <input type="button" class="m-1 TagStyle RMClass" value="漸層" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
                                                         <input type="button" class="m-1 TagStyle RMClass" value="自訂" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
                                                         <input type="text" class="m-1 OnTxt" name="UpTagS" />
-                                                        <input style="display:none;" type="text" id="UpTagSVal"  />
+                                                        <input style="display:none;" type="text" id="UpTagSVal" />-->
                                                     </div>
                                                 </div>
                                                 <div class="py-2  d-flex">
                                                     <label for="UpTagT">標籤3：</label>
                                                     <div id="tagT">
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="華麗風" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="碎花" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="漸層" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="自訂" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
-                                                        <input type="text" class="m-1 OnTxt" name="UpTagT" />
+                                                        <div class="Tag">
+                                                            <input required class="ExitEmpty" type="radio" id="TagTF" name="UpTagT" value="可愛" onclick="GetVal(this,'UpTagT')" />
+                                                            <label class="TagStyle RMClass" for="TagTF">可愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagTS" name="UpTagT" value="敲敲口愛" onclick="GetVal(this,'UpTagT')" />
+                                                            <label class="TagStyle RMClass" for="TagTS">敲敲口愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagTT" name="UpTagT" value="不口愛" onclick="GetVal(this,'UpTagT')" />
+                                                            <label class="TagStyle RMClass" for="TagTT">不口愛</label>
+                                                        </div>
+                                                        <div class="Tag">
+                                                            <input type="radio" id="TagTL" name="UpTagT" value="自訂" onclick="GetVal(this,'UpTagT')" />
+                                                            <label class="TagStyle RMClass" for="TagTL" >自訂</label>
+                                                            <input type="text" class=" OnTxt" name="UpTagT" v-model="TagTtxt" />
+                                                        </div>
+                                                        <!--<input type="button" class="m-1 TagStyle RMClass" value="華麗風" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
+    <input type="button" class="m-1 TagStyle RMClass" value="碎花" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
+    <input type="button" class="m-1 TagStyle RMClass" value="漸層" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
+    <input type="button" class="m-1 TagStyle RMClass" value="自訂" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
+    <input type="text" class="m-1 OnTxt" name="UpTagT" />-->
                                                     </div>
 
                                                 </div>
                                             </div>
                                             <div class="py-2  d-flex">
                                                 <label>主打：</label>
-                                                <input type="checkbox" v-model="InsertDemoSet[0].demoSetMain" />
+                                                <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetMain" />
                                                 <div v-if="InsertDemoSet[0].demoSetMain">
                                                     <label>期間</label>
-                                                    <input id="Startd" onchange="GetStDate(this)" type="date" />
+                                                    <input class="ExitEmpty" id="Startd" onchange="GetStDate(this)" type="date"/>
                                                     <span>-</span>
-                                                    <input id="Endd" onchange="GetEdDate(this)" type="date" />
+                                                    <input class="ExitEmpty" id="Endd" onchange="GetEdDate(this)" type="date" />
                                                 </div>
                                             </div>
                                             <div class="py-2">
                                                 <span for="UpDeposit">預估金額：</span>
                                                 <label>$NT</label>
-                                                <input required class="TxtStyle PrideWid" type="text" v-model="InsertDemoSet[0].demoSetPrice" />
+                                                <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetPrice" />
                                             </div>
                                             <div class="py-2">
                                                 <span for="UpPrice">訂金：</span>
                                                 <label>$NT</label>
-                                                <input required class="TxtStyle PrideWid" type="text" v-model="InsertDemoSet[0].demoSetDeposit" />
+                                                <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetDeposit" />
                                             </div>
                                             <div class="py-2">
                                                 <label for="UpMain">是否上架：</label>
-                                                <input type="checkbox" v-model="InsertDemoSet[0].demoSetPublic" />
+                                                <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetPublic" />
                                             </div>
                                         <!--</form>-->
                                     </div>
@@ -760,7 +881,6 @@
                         <div v-for="(item,key) in DemoCover">
                             <div class="Seemore my-0">
                                 <img class="Demoimg" v-bind:src="DemoCover[key].demoPic" alt="">
-                                <figcaption class="Clickme">查看</figcaption>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{DemoCover[key].demoSetName}}</p>
                             <p class="DemoGroup">${{DemoCover[key].demoSetPrice}}</p>
@@ -800,7 +920,6 @@
                         <div v-for="(item,key) in MainDemoCover">
                             <div class="Seemore my-0">
                                 <img class="Demoimg" v-bind:src="MainDemoCover[key].demoPic" alt="">
-                                <figcaption class="Clickme">查看</figcaption>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{MainDemoCover[key].demoSetName}}</p>
                             <p class="DemoGroup">${{MainDemoCover[key].demoSetPrice}}</p>
@@ -844,10 +963,13 @@
         }
 
         $('.OnTxt').css('visibility', 'hidden');
-        function GetVal(e,u) {
-            var NowGroup = `input[name=${e.name}]`
+        function GetVal(e, u) {
+            console.log(e);
+            //var NowGroup = `input[name=${e.name}]`
+            var NowGroup = `label[name=${e.name}]`
             $(NowGroup).removeClass('TagFullColor');
             
+            //var Nowtxt = `input[type=text][name=${e.name}]`
             var Nowtxt = `input[type=text][name=${e.name}]`
             if (e.value == "自訂") {
                 $(Nowtxt).css('visibility', 'visible');
@@ -856,20 +978,23 @@
                 $(Nowtxt).css('visibility', 'hidden');
             }
 
-            var NowBtn = `input[value=${e.value}][name=${e.name}]`
+            //var NowBtn = `input[value=${e.value}][name=${e.name}]`
+            var NowBtn = `label[value=${e.value}][name=${e.name}]`;
             $(NowBtn).addClass('TagFullColor');
 
+            console.log(e.value);
+
             if (e.name == 'UpTagF') {
-                ShowData.InsertDemoSet[0].demoSetTag1 = e.value;
+                    ShowData.InsertDemoSet[0].demoSetTag1 = e.value;
             }
 
             if (e.name == 'UpTagS') {
-                ShowData.InsertDemoSet[0].demoSetTag2 = e.value;
-                $('#UpTagSVal').value = e.value;
+                    ShowData.InsertDemoSet[0].demoSetTag2 = e.value;
             }
 
             if (e.name == 'UpTagT') {
-                ShowData.InsertDemoSet[0].demoSetTag3 = e.value;
+                    ShowData.InsertDemoSet[0].demoSetTag3 = e.value;
+
             }
         }
 
@@ -901,13 +1026,32 @@
                 width: "",
                 InsertDemoSet: [{ "demoSetName": null, "demoSetCover": 1, "manicuristId": 2, "demoSetPartC": null, "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": null, "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
                 picked: '',
+                TagFtxt: "",
+                TagStxt: "",
+                TagTtxt: "",
+                PutManicurist: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristIntro": "" }],
+                preview: false,
+                Editing:true,
             },
             methods: {
                 InsertDemo: function () {
                     this.InsertDemoSet[0].demoSetPartC = this.picked;
                     this.InsertDemoSet[0].manicuristId = 2;
                     console.log(this.InsertDemoSet[0]);
-                    
+                    console.log(this.TagFtxt);
+                    console.log(this.TagStxt);
+                    console.log(this.TagTtxt);
+                    if (this.InsertDemoSet[0].demoSetTag1 == "自訂") {
+                        this.InsertDemoSet[0].demoSetTag1 = this.TagFtxt;
+                    }
+                    if (this.InsertDemoSet[0].demoSetTag2 == "自訂") {
+                        this.InsertDemoSet[0].demoSetTag2 = this.TagStxt;
+                    }
+                    if (this.InsertDemoSet[0].demoSetTag3 == "自訂") {
+                        this.InsertDemoSet[0].demoSetTag3 = this.TagTtxt;
+                    }
+
+                    //$('form > input').text("");
 
                     //$.ajax({
                     //    type: "post",
@@ -919,8 +1063,16 @@
                     //        window.location = "/YiPLib/NailDesignerEdit.html"
                     //    }
                     //})
+                },
+                Previewing: function () {
+                    this.preview = true;
+                    this.Editing = false;
+                },
+                BackEdit: function () {
+                    this.preview = false;
+                    this.Editing = true;
                 }
-                }
+             }
         })
 
         $.ajax({
@@ -991,7 +1143,7 @@
 
         }
         function cleartext() {
-            document.getElementById('UpFileText').innerHTML = '';
+            document.getElementsByClassName('ExitEmpty').value = '';
         }
 
         let inputMorefile=[];
