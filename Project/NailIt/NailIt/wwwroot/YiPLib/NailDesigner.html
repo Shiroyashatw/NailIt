@@ -143,6 +143,8 @@
             padding-right: 10px;
             max-width: 100%;
             display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
         }
 
         .Demoimg {
@@ -153,17 +155,10 @@
             object-fit: cover;
             object-position: center;
         }
-/*        .Seemore {
-            transition: 1s linear;
-        }*/
 
         .Seemore:hover {
             filter: grayscale(60%);
         }
-
-/*                .Seemore:hover>.Demoimg {
-            filter: blur(2px);
-        }*/
 
         .Clickme {
             position: relative;
@@ -175,7 +170,6 @@
             text-align: center;
             background-color: white;
             color: black;
-            /*background-color: rgba(107, 105, 105, 0.81);*/
             z-index: 99;
             visibility: hidden;
         }
