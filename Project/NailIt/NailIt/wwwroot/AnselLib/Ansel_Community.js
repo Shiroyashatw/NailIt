@@ -67,10 +67,12 @@ var showNewReply = async function () {
         }
         // add input replies. prepend the new reply. clean input. update the articleReplyCount++
         scop.replies.unshift(reply);
+        // Render reply area
         renderNewReply(resultReply);
         $("#replyInput").val("");
         currentArticle().article.articleReplyCount++;
-        // Render the reply
+        $("#ModalArticleReplyCount").html(`共${currentArticle().article.articleReplyCount}則留言`);
+        // Render the reply at articles
         renderTheArticle(currentArticle());
         // snack bar inform complete
         showSnackbar("留言已完成!");
