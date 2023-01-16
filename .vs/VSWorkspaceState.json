@@ -7,8 +7,10 @@
     "\\Project\\NailIt\\NailIt\\Controllers",
     "\\Project\\NailIt\\NailIt\\Controllers\\AnselControllers",
     "\\Project\\NailIt\\NailIt\\Controllers\\YueyueControllers",
+    "\\Project\\NailIt\\NailIt\\Models",
     "\\Project\\NailIt\\NailIt\\Views",
     "\\Project\\NailIt\\NailIt\\wwwroot"
   ],
+  "SelectedNode": "\\Project\\NailIt\\NailIt\\Controllers\\YueyueControllers\\MemberController.cs",
   "PreviewInSolutionExplorer": false
 }

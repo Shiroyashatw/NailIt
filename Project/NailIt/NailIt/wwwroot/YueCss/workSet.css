@@ -1,0 +1,17 @@
+.tag {
+	display: inline-block;
+	margin-top: 5%;
+	padding: 2%;
+	margin-bottom: 0%;
+}
+.tag:hover {
+	border-color: darkgrey;
+	cursor: pointer;
+}
+dialog {
+	border: none;
+	box-shadow: 0 2px 6px #ccc;
+	border-radius: 10px;
+	width: 55%;
+	height: 70%;
+}

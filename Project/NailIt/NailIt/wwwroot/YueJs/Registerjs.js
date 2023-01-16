@@ -83,7 +83,7 @@ function RegisterPost() { //呼叫post api 的方法
         var raw = JSON.stringify({
             "MemberAccount": acInput.value,
             "MemberPassword": pwInput.value,
-            "MemberName": nickInput.value,
+            "MemberName": nameInput.value,
             "MemberNickname": nickValue(),
             "MemberGender": genderValue(),
             "MemberPhone": phoneInput.value,
@@ -98,8 +98,6 @@ function RegisterPost() { //呼叫post api 的方法
             "member_Question": questionInput.value,
             "member_Answer": answerInput.value
         });
-        console.log(questionInput.value);
-        console.log(answerInput.value);
 
         var requestOptions = {
             method: 'POST',
