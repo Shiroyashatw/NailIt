@@ -2,6 +2,9 @@
     display: none;
 }
 
+// 當按鈕不能點擊時
+$btnnotclcik: rgba(0, 0, 0, 0.1);
+
 .container {
     .row {
         // 主體 div 包含上中下
@@ -31,7 +34,7 @@
                         overflow: scroll;
 
                         .smallphoto {
-                            margin: 10px 0;
+                            margin: 10px 0 10px 0;
                             max-width: 150px;
                             max-height: 150px;
 
@@ -40,7 +43,14 @@
                                 width: 100%;
                                 object-fit: cover;
                             }
+                            &:first-child {
+                                margin-top: 0;
+                            }
+                            &:last-child {
+                                margin-bottom: 0;
+                            }
                         }
+
 
                     }
 
@@ -74,11 +84,14 @@
 
                     // 商品標籤
                     .product-tag {
+                        height: 200px;
                         margin: 20px 0;
-
                         a {
-                            font-size: 18px;
+                            display: inline-block;
                             padding: 5px 15px;
+                            margin: .2rem .5rem;
+                            font-size: 18px;
+                            
                             border: 2px solid black;
                             border-radius: 10%;
 
@@ -204,53 +217,10 @@
 .form-info {
 
     // height: 500px;
-    //  表單 上方 進度條
-    .item-circle {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        // background-color: #546377;
-        .list {
-            width: 100%;
-            display: flex;
-            padding-top: 1rem;
-            justify-content: center;
-            align-items: center;
-
-            li {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                width: 30px;
-                height: 30px;
-                position: relative;
-                background-color: rgb(8, 237, 218);
-                border-radius: 50%;
-
-                &+li {
-                    margin-left: 100px;
-
-                    &::before {
-                        content: '';
-                        position: absolute;
-                        width: 100px;
-                        height: 5px;
-                        background-color: gray;
-                        top: 0;
-                        bottom: 0;
-                        left: -100px;
-                        margin: auto;
-                    }
-                }
-            }
-        }
-    }
     .form-header {
         height: 80px;
     }
+    // 進度條CSS
     .Progress {
         width: 100%;
         position: absolute;
@@ -313,8 +283,7 @@
     .step-container {
         //border: 1px solid salmon;
         padding: 0;
-
-        // 日曆 css
+        // 日曆 CSS
         .calendar {
             width: 95%;
             user-select: none;
@@ -389,15 +358,60 @@
             .date:hover,
             .date.selected {
                 border-color: var(--accent-color);
-                color: #7F7F7F;
+                color: orangered;
             }
 
             .date.selected {
                 background-color: var(--accent-color);
                 color: orangered;
             }
+            .btnnotclick {
+                pointer-events: none;
+                background-color: $btnnotclcik;
+            }
         }
-
+        // 選擇時間 CSS
+        .time-container {
+            .container {
+                padding-top: 50px;
+            }
+            #radio input[type="radio"] {
+                display: none;
+            }
+            #radio input:checked+.button {
+                background: #5e7380;
+                color: #fff;
+                cursor: default;
+            }
+            #radio .button {
+                display: inline-block;
+                margin: 0 5px 10px 0;
+                padding: 5px 10px;
+                background: #f7f7f7;
+                color: #333;
+                cursor: pointer;
+            }
+            
+            #radio .button:hover {
+                transition: .3s;
+                background: orangered;
+                color: #fff;
+            }
+            
+            #radio .round {
+                border-radius: 5px;
+            }
+            #radio {
+                .btnnotclick{
+                    background-color: $btnnotclcik;
+                    &:hover {
+                        transition: .3s;
+                        color: #333;
+                        background: gray;
+                    }
+                }
+            }
+        }
         // 底部按鈕
         .form-footerbtn {
             // height: 50px;
@@ -443,34 +457,5 @@
 
 
 
-#radio input[type="radio"] {
-    display: none;
-}
 
-#radio input:checked+.button {
-    background: #5e7380;
-    color: #fff;
-    cursor: default;
-}
 
-#radio .button {
-    display: inline-block;
-    margin: 0 5px 10px 0;
-    padding: 5px 10px;
-    background: #f7f7f7;
-    color: #333;
-    cursor: pointer;
-}
-
-#radio .button:hover {
-    background: #bbb;
-    color: #fff;
-}
-
-#radio .round {
-    border-radius: 5px;
-}
-
-.btnnotclick {
-    pointer-events: none;
-}

@@ -21,7 +21,7 @@
   overflow: scroll;
 }
 .container .row .main-item .middle-item .photo-little .photocontainer .smallphoto {
-  margin: 10px 0;
+  margin: 10px 0 10px 0;
   max-width: 150px;
   max-height: 150px;
 }
@@ -30,6 +30,12 @@
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+}
+.container .row .main-item .middle-item .photo-little .photocontainer .smallphoto:first-child {
+  margin-top: 0;
+}
+.container .row .main-item .middle-item .photo-little .photocontainer .smallphoto:last-child {
+  margin-bottom: 0;
 }
 .container .row .main-item .middle-item .photo-little .photobtn {
   font-size: 16px;
@@ -54,11 +60,14 @@
   position: relative;
 }
 .container .row .main-item .middle-item .product-info .product-tag {
+  height: 200px;
   margin: 20px 0;
 }
 .container .row .main-item .middle-item .product-info .product-tag a {
-  font-size: 18px;
+  display: inline-block;
   padding: 5px 15px;
+  margin: 0.2rem 0.5rem;
+  font-size: 18px;
   border: 2px solid black;
   border-radius: 10%;
 }
@@ -162,44 +171,6 @@
   background-color: white;
 }
 
-.form-info .item-circle {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.form-info .item-circle .list {
-  width: 100%;
-  display: flex;
-  padding-top: 1rem;
-  justify-content: center;
-  align-items: center;
-}
-.form-info .item-circle .list li {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  width: 30px;
-  height: 30px;
-  position: relative;
-  background-color: rgb(8, 237, 218);
-  border-radius: 50%;
-}
-.form-info .item-circle .list li + li {
-  margin-left: 100px;
-}
-.form-info .item-circle .list li + li::before {
-  content: "";
-  position: absolute;
-  width: 100px;
-  height: 5px;
-  background-color: gray;
-  top: 0;
-  bottom: 0;
-  left: -100px;
-  margin: auto;
-}
 .form-info .form-header {
   height: 80px;
 }
@@ -325,11 +296,50 @@
 .form-info .step-container .calendar .date:hover,
 .form-info .step-container .calendar .date.selected {
   border-color: var(--accent-color);
-  color: #7F7F7F;
+  color: orangered;
 }
 .form-info .step-container .calendar .date.selected {
   background-color: var(--accent-color);
   color: orangered;
+}
+.form-info .step-container .calendar .btnnotclick {
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.form-info .step-container .time-container .container {
+  padding-top: 50px;
+}
+.form-info .step-container .time-container #radio input[type=radio] {
+  display: none;
+}
+.form-info .step-container .time-container #radio input:checked + .button {
+  background: #5e7380;
+  color: #fff;
+  cursor: default;
+}
+.form-info .step-container .time-container #radio .button {
+  display: inline-block;
+  margin: 0 5px 10px 0;
+  padding: 5px 10px;
+  background: #f7f7f7;
+  color: #333;
+  cursor: pointer;
+}
+.form-info .step-container .time-container #radio .button:hover {
+  transition: 0.3s;
+  background: orangered;
+  color: #fff;
+}
+.form-info .step-container .time-container #radio .round {
+  border-radius: 5px;
+}
+.form-info .step-container .time-container #radio .btnnotclick {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.form-info .step-container .time-container #radio .btnnotclick:hover {
+  transition: 0.3s;
+  color: #333;
+  background: gray;
 }
 .form-info .step-container .form-footerbtn {
   text-align: center;
@@ -348,36 +358,4 @@
 .form-info .step-container .form-footerbtn .btn-box .stepbtn {
   color: white;
   background-color: orangered;
-}
-
-#radio input[type=radio] {
-  display: none;
-}
-
-#radio input:checked + .button {
-  background: #5e7380;
-  color: #fff;
-  cursor: default;
-}
-
-#radio .button {
-  display: inline-block;
-  margin: 0 5px 10px 0;
-  padding: 5px 10px;
-  background: #f7f7f7;
-  color: #333;
-  cursor: pointer;
-}
-
-#radio .button:hover {
-  background: #bbb;
-  color: #fff;
-}
-
-#radio .round {
-  border-radius: 5px;
-}
-
-.btnnotclick {
-  pointer-events: none;
 }/*# sourceMappingURL=product.css.map */
