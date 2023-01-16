@@ -102,23 +102,24 @@
                     <br>
                     <label for="member" class="label-title"><b>會員帳號</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="20" v-bind:value="memberlist.memberAccount">
+                        <input type="text" class="form-control" maxlength="20" v-model="memberlist.memberAccount">
                     </div>
                     <label for="member" class="label-title"><b>修改密碼</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="20" id="newword1">
+                        <input type="password" class="form-control" maxlength="20" id="newword1">
                     </div>
                     <label for="member" class="label-title"><b>確認密碼</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="20" id="newword2">
+                        <input type="password" class="form-control" maxlength="20" id="newword2">
+                        <span id="newPwd2span" style="color:red"></span>
                     </div>
                     <label for="member" class="label-title"><b>會員暱稱</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="20" v-bind:value="memberlist.memberNickname">
+                        <input type="text" class="form-control" maxlength="20" v-model="memberlist.memberNickname">
                     </div>
                     <label for="member" class="label-title" maxlength="20"><b>姓名</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="20" v-bind:value="memberlist.memberName">
+                        <input type="text" class="form-control" maxlength="20" v-model="memberlist.memberName">
                     </div>
                     <label for="member" class="label-title"><b>性別</b></label>
                     <div class="input-group mb-3">
@@ -129,7 +130,7 @@
                     </div>
                     <label for="member" class="label-title"><b>手機號碼</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="10" v-bind:value="memberlist.memberPhone">
+                        <input type="text" class="form-control" maxlength="10" v-model="memberlist.memberPhone">
                     </div>
                     <label for="member" class="label-title"><b>生日</b></label>
                     <div class="input-group mb-3">
@@ -140,9 +141,9 @@
                     </div>
                     <label for="member" class="label-title"><b>e-mail</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="50" v-bind:value="memberlist.memberEmail">
+                        <input type="text" class="form-control" maxlength="50" v-model="memberlist.memberEmail">
                     </div>
-                    <button type="button" class="btn btn-dark">確認修改</button>
+                    <button type="button" class="btn btn-dark" v-on:click="btnmodifmember">確認修改</button>
                 </div>
                 <div class="content" id="shop-infor">
                     <div class="inner2">
@@ -173,7 +174,7 @@
                     <br>
                     <label for="shop" class="label-title"><b>店家/美甲師名稱</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="20" v-bind:value="shoplist.manicuristSalonName">
+                        <input type="text" class="form-control" maxlength="20" v-model="shoplist.manicuristSalonName">
                     </div>
                     <label for="shop" class="label-title"><b>店家/美甲師地址</b></label>
                     <input type="checkbox" name="check" id="isdetil">
@@ -187,20 +188,20 @@
                     <br>
                     <label for="shop" class="label-title"><b>店家/美甲師電話</b></label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="10" v-bind:value="shoplist.manicuristSalonPhone">
+                        <input type="text" class="form-control" maxlength="10" v-model="shoplist.manicuristSalonPhone">
                     </div>
                     <label for="shop" class="label-title"><b>介紹</b></label>
                     <div class="input-group mb-3">
-                        <textarea name="introduction" class="form-control" id="" cols="30" rows="5" v-bind:value="shoplist.manicuristIntro"></textarea>
+                        <textarea name="introduction" class="form-control" id="" cols="30" rows="5" v-model="shoplist.manicuristIntro"></textarea>
                     </div>
                     <label for="shop" class="label-title"><b>證照</b></label>
                     <div>
-                        <input id="license" type="text" class="form-control" v-bind:value="shoplist.manicuristLicense">
+                        <input id="license" type="text" class="form-control" v-model="shoplist.manicuristLicense">
                     </div>
                     <br>
  
                     <br>
-                    <button type="button" class="btn btn-dark">確認修改</button>
+                    <button type="button" class="btn btn-dark" v-on:click="btnshopmodif">確認修改</button>
                     <br>
                 </div>
                 <div class="content" id="Bank-card">
@@ -271,7 +272,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light" data-dismiss="modal">取消</button>
-                                        <button type="button" id="btn-input" class="btn" v-on:click="insertcard">送出</button>
+                                        <button type="button" id="btn-input" class="btn" >送出</button>
                                     </div>
                                 </div>
                             </div>
@@ -798,6 +799,7 @@
     <script src="./ted.js/member.js"></script>
     <script>
         $("#btn-tool").attr('title','一組三位數的安全碼，通常位於信用卡或簽帳金融卡背面。這組數字有時稱為信用卡安全碼或信用卡檢查碼，可提供多一層保障以防詐騙。');
+
         var app = new Vue({
             el: "#memberinfor",
             data:
@@ -808,37 +810,71 @@
                     "memberBirth": "1993-10-27T00:00:00", "memberEmail": "saya029@gmail.com", "memberScore": 4.9,
                     "memberManicurist": true, "memberLogincredit": null, "memberReportpoint": 0,
                     "memberBanned": null, "member_Verify": null, "member_Question": null, "member_Answer": null
-                
+
                 }],
                 shoplist: [{
-                  
-                        "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg",
-                        "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號",
-                        "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true,
-                        "manicuristSalonPhone": "0923859697",
-                        "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試",
-                        "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459",
-                        "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計",
-                        "manicuristScore": 4.6
-             
+
+                    "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg",
+                    "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號",
+                    "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true,
+                    "manicuristSalonPhone": "0923859697",
+                    "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試",
+                    "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459",
+                    "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計",
+                    "manicuristScore": 4.6
+
                 }]
             },
             methods: {
-                insertcard: function () {
-                    //新增信用卡
+                btnmodifmember: function () {
+                    var new1 = $("#newword1").val();
+                    var new2 = $("#newword2").val();
+                    if ((new1 != null) || (new2 != null)) {
+                        var span = $("#newPwd2span");
+                        if (new1 != new2) {
+                            span.html("兩次輸入不一樣，請重新輸入")
+                        } else {
+                            $.ajax({
+                                type: "put",
+                                url: "/api/MemberTables/1",
+                                contentType: "application/json",
+                                data: JSON.stringify(this.memberlist),
+                                success: function () {
+                                    window.location = "/tedLb/tedmember.html";
+
+                                } })
+                        }
+                    } else {
+                        $.ajax({
+                            type: "put",
+                            url: "/api/MemberTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(this.memberlist),
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("資料修改成功");
+                            }
+                        })
+                    }
+                },
+                btnshopmodif: function () {
                     $.ajax({
-                        type: "post",
-                        url: "/api/CreditCardTables/1",
+                        type: "put",
+                        url: "/api/ManicuristTables/1",
                         contentType: "application/json",
-                        data: JSON.stringify(this),
+                        data: JSON.stringify(this.shoplist),
                         success: function () {
-                            alert(this);
+                            window.location = "/tedLb/tedmember.html";
+                            alert("資料修改成功");
                         }
                     })
                 }
             }
 
         })
+           
+            
+        
         //會員修改判斷
  
         $.ajax({
@@ -858,7 +894,7 @@
                 var mon = (e.memberBirth).indexOf("-", 5);
                 var day = (e.memberBirth).indexOf("T");
                 $("#inputGroupSelect02").val((e.memberBirth).substr(5, mon - 5)).selected;
-                $("#inputGroupSelect03").val((e.memberBirth).substr(mon+1, day - mon - 1)).selected;
+                $("#inputGroupSelect03").val((e.memberBirth).substr(mon + 1, day - mon - 1)).selected;
             }
         })
         $.ajax({
