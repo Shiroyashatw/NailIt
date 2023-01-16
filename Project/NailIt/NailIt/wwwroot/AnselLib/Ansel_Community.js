@@ -45,7 +45,7 @@ var showDeleteReply = async function () {
         // remove the reply
         $(`div[data-replyid="${scop.replyId}"]`).remove();
         currentArticle().article.articleReplyCount--;
-        updateTheArticle(currentArticle());
+        renderTheArticle(currentArticle());
         // snack bar inform complete
         showSnackbar("刪除已完成!");
     }
@@ -67,11 +67,11 @@ var showNewReply = async function () {
         }
         // add input replies. prepend the new reply. clean input. update the articleReplyCount++
         scop.replies.unshift(reply);
-        updateNewReply(resultReply);
+        renderNewReply(resultReply);
         $("#replyInput").val("");
         currentArticle().article.articleReplyCount++;
         // Render the reply
-        updateTheArticle(currentArticle());
+        renderTheArticle(currentArticle());
         // snack bar inform complete
         showSnackbar("留言已完成!");
     }
@@ -219,7 +219,7 @@ var showArticleLikeToggle = async function (likeObj) {
     // Update articleLikesCount display.
     $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
     // Render the reply
-    updateTheArticle(article);
+    renderTheArticle(article);
 }
 // show Modal
 var showModal = async function (articleId) {
@@ -232,7 +232,7 @@ var showModal = async function (articleId) {
     // call and show relies
     scop.articleAuthorId = articles[scop.articleIndex].article.articleAuthor;
     await getReplies(articles[scop.articleIndex].article.articleId);
-    updateReplaies();
+    renderReplaies();
 
     // Modal show article data
     await $("#articleModal").modal("show");
@@ -244,10 +244,10 @@ var showSearch = async function () {
     // show articles
     if (scop.articleCode == "My") {
         await getMyArticles();
-        updateArticles(scop.articles.reaultArticles);
+        renderArticles(scop.articles.reaultArticles);
     } else {
         await getArticles();
-        updateArticles(scop.articles);
+        renderArticles(scop.articles);
     }
 }
 // load more 10 articles
@@ -257,7 +257,7 @@ var showMoreArticle = async function () {
     let moreArticles = [];
     if (scop.articleCode == "My") moreArticles = await getMyArticles();
     else moreArticles = await getArticles();
-    updateArticles(moreArticles);
+    renderArticles(moreArticles);
 }
 // show articles of one person (my or other)
 var showMyMain = async function (own) {
@@ -275,7 +275,7 @@ var showMyMain = async function (own) {
     $("#memberNames").children()[0].innerText = scop.articles.member.memberNickname;
     $("#memberNames").children()[1].innerText = scop.articles.member.memberAccount;
     $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
-    updateArticles(scop.articles.reaultArticles);
+    renderArticles(scop.articles.reaultArticles);
 }
 // show articles by sort of article
 var showMain = async function (code, name) {
@@ -289,12 +289,12 @@ var showMain = async function (code, name) {
     $("#avatar").removeClass("d-flex align-items-center");
     // show articles
     await getArticles();
-    updateArticles(scop.articles);
+    renderArticles(scop.articles);
 }
 //#endregion
 
 //#region render updates
-var updateNewReply = function (reply) {
+var renderNewReply = function (reply) {
     let replyHTML = `
                 <div data-replyid="${reply.replyId}">
                     <div class="d-flex align-items-center"> <!-- Reply header -->
@@ -317,7 +317,7 @@ var updateNewReply = function (reply) {
     `;
     $("#ModelReplies").prepend(replyHTML);
 }
-var updateReplaies = function () {
+var renderReplaies = function () {
     let replyHTML = "";
     for (const reply of scop.replies) {
         replyHTML += `<div data-replyid="${reply.reply.replyId}">
@@ -360,7 +360,7 @@ var updateReplaies = function () {
     }
     $("#ModelReplies").html(replyHTML);
 }
-var updateArtiModDropdown = function () {
+var renderArtiModDropdown = function () {
     let dropContentHTML = ``;
     // Can edit and delete own article
     if (scop.articleAuthorId == scop.loginId) {
@@ -375,7 +375,7 @@ var updateArtiModDropdown = function () {
     }
     $("#ArtiModDropContent").html(dropContentHTML);
 };
-var updateTheArticle = function (article) {
+var renderTheArticle = function (article) {
     let articleHTML = `
         <h4 class="m-0">${article.article.articleTitle}</h4>
         <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
@@ -384,7 +384,7 @@ var updateTheArticle = function (article) {
         <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}`;
     $(`div[data-articleid="${article.article.articleId}"]`).html(articleHTML);
 }
-var updateArticles = function (articles) {
+var renderArticles = function (articles) {
     let articlesHTML = "";
     for (const article of articles) {
         articlesHTML +=
@@ -404,7 +404,7 @@ var updateArticles = function (articles) {
     }
 }
 // Render report reason options
-var updateReport = function () {
+var renderReport = function () {
     let reportListHTML = "";
     console.log(scop.reportCodeList)
     for (const [key, value] of Object.entries(scop.reportCodeList)) {
@@ -415,7 +415,7 @@ var updateReport = function () {
     $("#reportModalBody").html(reportListHTML);
 }
 // Setup community menu and show first sort
-var updateMenu = function () {
+var renderMenu = function () {
     let menuHTML = "";
     for (const [key, value] of Object.entries(scop.articleCodeList)) {
         menuHTML += `<li><button class="btn btn-light" onclick="showMain('${value.codeId}','${value.codeRepresent}')">${value.codeRepresent}</button></li>`;
@@ -546,10 +546,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Initial data, menu list and report list
     scop.articleCodeList = await SocialService.getCodes("L");
     if (scop.articleCodeList.status != undefined) alert(`[${scop.articleCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
-    else updateMenu(); // Setup community menu and show first sort
+    else renderMenu(); // Setup community menu and show first sort
     scop.reportCodeList = await SocialService.getCodes("G");
     if (scop.reportCodeList.status != undefined) alert(`[${scop.reportCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
-    else updateReport(); // Render report reason options
+    else renderReport(); // Render report reason options
 
     //#region Event Binding
     // While report modal hide, show article Modal will come up.
@@ -605,7 +605,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         $("#ModalArticleContent").html(article.article.articleContent);
         $("#ModalArticleReplyCount").html(`共${article.article.articleReplyCount}則留言`);
         // Render nodal dropdown
-        updateArtiModDropdown();
+        renderArtiModDropdown();
     })
     // Show articles when press 'Enter' at searchinput 
     $("#searchInput").on('keypress', function (e) {
