@@ -51,7 +51,7 @@
                 <div class="d-flex flex-column">
                     <h4 id="mainTitle">mainTitle</h4>
                     <div id="memberInfo" class="d-flex align-items-center">
-                        <div id="avatar" class="bg-secondary" style="aspect-ratio:1;border-radius: 50%;color: #fff;">
+                        <div id="avatar" class="bg-secondary rounded-circle" style="aspect-ratio:1;color: #fff;">
                             <div>
                                 Avatarrr
                             </div>
@@ -81,13 +81,13 @@
 </div>
 
 <!-- The Modal articleModal -->
-<div class="modal fade" id="articleModal" data-backdrop="static">
+<div class="modal fade" id="articleModal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
                 <div id="ModalAuthorInfo" class="d-flex align-items-center cursor-pointer" data-dismiss="modal" onclick="showMyMain()">
-                    <div id="avatar" class="bg-secondary d-flex align-items-center" style="aspect-ratio:1;border-radius: 50%;color: #fff;">
+                    <div id="avatar" class="bg-secondary d-flex align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;">
                         <div>
                             Avatarrr
                         </div>
@@ -108,9 +108,9 @@
                         <div class="dropdown">
                             <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis"></i>
                             <div id="ArtiModDropContent" class="dropdown-content">
-                                <a href="#home">編輯</a>
-                                <a href="#about" class="text-danger">刪除</a>
-                                <a href="#contact" class="text-danger">檢舉</a>
+                                <a href="javascript:void(0)">編輯</a>
+                                <a href="javascript:void(0)" class="text-danger">刪除</a>
+                                <a href="javascript:void(0)" class="text-danger">檢舉</a>
                             </div>
                         </div>
                     </div>
@@ -124,14 +124,7 @@
                         <span>articleLastEdit</span>
                     </div>
                     <p id="ModalArticleContent">
-                        What follows is just some placeholder text for this modal dialog. You just gotta ignite the light and let it shine! Come just as you are to me. Just own the night like the 4th of July. Infect me with your love and fill me with your poison. Come just as you are to me. End of the rainbow looking treasure.
-                        I can't sleep let's run away and don't ever look back, don't ever look back. I can't sleep let's run away and don't ever look back, don't ever look back. Yes, we make angels cry, raining down on earth from up above. I'm walking on air (tonight). Let you put your hands on me in my skin-tight jeans. Stinging like a bee I earned my stripes. I went from zero, to my own hero. Even brighter than the moon, moon, moon. Make 'em go, 'Aah, aah, aah' as you shoot across the sky-y-y! Why don't you let me stop by?
-                        Boom, boom, boom. Never made me blink one time. Yeah, you're lucky if you're on her plane. Talk about our future like we had a clue. Oh my God no exaggeration. You're original, cannot be replaced. The girl's a freak, she drive a jeep in Laguna Beach. It's no big deal, it's no big deal, it's no big deal. In another life I would make you stay. I'm ma get your heart racing in my skin-tight jeans. I wanna walk on your wave length and be there when you vibrate Never made me blink one time.
-                        We'd keep all our promises be us against the world. In another life I would be your girl. We can dance, until we die, you and I, will be young forever. And on my 18th Birthday we got matching tattoos. So open up your heart and just let it begin. 'Cause she's the muse and the artist. She eats your heart out. Like Jeffrey Dahmer (woo). Pop your confetti. (This is how we do) I know one spark will shock the world, yeah yeah. If you only knew what the future holds.
-                        Sipping on Rosé, Silver Lake sun, coming up all lazy. It’s in the palm of your hand now baby. So we hit the boulevard. So make a wish, I'll make it like your birthday everyday. Do you ever feel already buried deep six feet under? It's time to bring out the big balloons. You could've been the greatest. Passport stamps, she's cosmopolitan. Your kiss is cosmic, every move is magic.
-                        We're living the life. We're doing it right. Open up your heart. I was tryna hit it and quit it. Her love is like a drug. Always leaves a trail of stardust. The girl's a freak, she drive a jeep in Laguna Beach. Fine, fresh, fierce, we got it on lock. All my girls vintage Chanel baby.
-                        Before you met me I was alright but things were kinda heavy. Peach-pink lips, yeah, everybody stares. This is no big deal. Calling out my name. I could have rewrite your addiction. She's got that, je ne sais quoi, you know it. Heavy is the head that wears the crown. 'Cause, baby, you're a firework. Like thunder gonna shake the ground.
-                        Just own the night like the 4th of July! I’m gon’ put her in a coma. What you're waiting for, it's time for you to show it off. Can't replace you with a million rings. You open my eyes and I'm ready to go, lead me into the light. And here you are. I’m gon’ put her in a coma. Come on, let your colours burst. So cover your eyes, I have a surprise. As I march alone to a different beat. Glitter all over the room pink flamingos in the pool.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi fugiat deserunt culpa harum, quod minima esse velit perspiciatis itaque. Pariatur minima nobis blanditiis nam voluptates repellendus optio laboriosam qui, reiciendis totam odit ducimus assumenda repudiandae quaerat asperiores iusto quo voluptatum ullam ad illo quae ea temporibus debitis! Iste est explicabo esse provident. Reprehenderit officia voluptate minus odio temporibus quod aspernatur ut quaerat ab dolorum? Sint natus quas vero, maxime fuga suscipit assumenda aperiam numquam pariatur corrupti perferendis repellendus explicabo, nemo, blanditiis optio impedit eligendi nostrum ipsum. Quos nisi impedit perferendis animi error, blanditiis, voluptatibus quasi alias et voluptate possimus commodi!
                     </p>
                 </div>
                 <div>
@@ -154,27 +147,54 @@
 
 <!-- The Modal confirmModal -->
 <div class="modal fade" id="confirmModal">
-<div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content">
-    
-    <!-- Modal Header -->
-    <div class="modal-header">
-        <h4 class="modal-title">是否確認刪除該資料</h4>
-    </div>
-    
-    <!-- Modal body -->
-    <div id="confirmModalBody" class="modal-body">
-        Modal body..
-    </div>
-    
-    <!-- Modal footer -->
-    <div class="modal-footer">
-        <button id="btnConfirmDel" type="button" class="btn btn-danger" data-dismiss="modal">刪除</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-    </div>
-    
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+        
+        <!-- Modal Header -->
+        <div class="modal-header border-0">
+            <h4 class="modal-title">是否確認刪除該資料</h4>
+        </div>
+        
+        <!-- Modal body -->
+        <div id="confirmModalBody" class="modal-body">
+            Modal body.. 
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer border-0">
+            <button id="btnConfirmDel" type="button" class="btn btn-danger" data-dismiss="modal">刪除</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        </div>
+        
+        </div>
     </div>
 </div>
+
+<!-- The Modal reportModal -->
+<div class="modal fade" id="reportModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+        
+        <!-- Modal Header -->
+        <div class="modal-header d-flex flex-column border-0">
+            <h4 id="reportModalTitle" class="modal-title">你為何要檢舉這則xx?</h4>
+            <p class="mb-0">你的檢舉將會匿名，但針對智慧財產權侵害情形提出投訴時例外。如果有人有立即的安全疑慮，請立即與當地緊急救護服務聯絡，把握救援時間。</p>
+        </div>
+        
+        <!-- Modal body -->
+        <div id="reportModalBody" class="modal-body">
+            <input name="reportOption" type="radio" id="G0"><label for="G0">這是垃圾訊息</label><br>
+            <input name="reportOption" type="radio" id="G1"><label for="G1">裸露或性行為</label><br>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer border-0">
+            <button id="btnConfirmDel" type="button" class="btn btn-danger" data-dismiss="modal">檢舉</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        </div>
+        
+        </div>
+    </div>
 </div>
 
 <!-- The actual snackbar -->

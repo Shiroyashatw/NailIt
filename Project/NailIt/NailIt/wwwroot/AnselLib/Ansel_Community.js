@@ -14,11 +14,30 @@ var scop = {
     page: 0, // 目前頁數
     articleAuthorId: 0, // 目前帶出的文章作者或會員個人頁面
     replies: [], // 目前article的replies
-    replyId: 0, // 給刪除reply使用
+    replyId: 0, // 給刪除/檢舉reply使用
 }
 
 //#region Function
 //#region Action
+// Report article or reply, and the item disappear from display.
+var showReportAction = async function () { }
+// Show report reason list, before confirm report
+var showReportModal = function (obj) {
+    // fade articleModal
+    $("#articleModal").css("z-index", "1040");
+    let replyId = $(obj).parent().parent().parent().parent().data("replyid");
+    // check it's reply or article
+    if (replyId != undefined) {
+        $("#reportModalTitle").text("你為何要檢舉這則留言?");
+        let replyIndex = scop.replies.findIndex(r => r.reply.replyId == replyId);
+        scop.replyId = replyId;
+    } else {
+        $("#reportModalTitle").text("你為何要檢舉這則貼文?");
+
+    }
+    // show report modal
+    $("#reportModal").modal("show");
+}
 // Remove the reply from replies
 var showDeleteReply = async function () {
     let result = await deleteReply(scop.replyId);
@@ -78,10 +97,11 @@ var showDeleteArticle = async function () {
 //     console.log("showNewReply");
 // }
 // Show confirm Modal, if delete the article or reply.
-var showConfirmDelete = function (obj) {
+var showConfirmDelModal = function (obj) {
     // fade articleModal
     $("#articleModal").css("z-index", "1040");
     let replyId = $(obj).parent().parent().parent().parent().data("replyid");
+    // check it's reply or article
     if (replyId != undefined) {
         let replyIndex = scop.replies.findIndex(r => r.reply.replyId == replyId);
         // bind reply info
@@ -286,7 +306,7 @@ var updateNewReply = function (reply) {
                         <div class="dropdown">
                             <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis-vertical"></i>
                             <div class="dropdown-content">
-                                <a href="#" class="text-danger" onclick="showConfirmDelete(this)">刪除</a>
+                                <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal(this)">刪除</a>
                             </div>
                         </div>
                     </div>
@@ -319,13 +339,13 @@ var updateReplaies = function () {
         // Can edit and delete own reply
         if (reply.reply.memberId == scop.loginId) {
             replyHTML += `
-                <a href="#" class="text-danger" onclick="showConfirmDelete(this)">刪除</a>
+                <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal(this)">刪除</a>
             `;
         }
         // Only can report others reply
         else {
             replyHTML += `
-                <a href="#" class="text-danger">檢舉</a>
+                <a href="javascript:void(0)" class="text-danger" onclick="showReportModal(this)">檢舉</a>
             `;
         }
         replyHTML += `                    
@@ -345,13 +365,13 @@ var updateArtiModDropdown = function () {
     // Can edit and delete own article
     if (scop.articleAuthorId == scop.loginId) {
         dropContentHTML = `
-            <a href="#">編輯</a>
-            <a href="#" class="text-danger" onclick="showConfirmDelete()">刪除</a>`;
+            <a href="javascript:void(0)">編輯</a>
+            <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal()">刪除</a>`;
     }
     // Only can report others reply
     else {
         dropContentHTML = `
-            <a href="#" class="text-danger">檢舉</a>`;
+            <a href="javascript:void(0)" class="text-danger" onclick="showReportModal()">檢舉</a>`;
     }
     $("#ArtiModDropContent").html(dropContentHTML);
 };
@@ -383,9 +403,41 @@ var updateArticles = function (articles) {
         $("#btnMoreArticle").prop("disabled", "true");
     }
 }
+// Render report reason options
+var updateReport = function () {
+    let reportListHTML = "";
+    console.log(scop.reportCodeList)
+    for (const [key, value] of Object.entries(scop.reportCodeList)) {
+        reportListHTML += `
+            <input name="reportOption" type="radio" id="${key}" value="${value.codeId}"><label for="${key}">${value.codeRepresent}</label><br>
+        `;
+    }
+    $("#reportModalBody").html(reportListHTML);
+}
+// Setup community menu and show first sort
+var updateMenu = function () {
+    let menuHTML = "";
+    for (const [key, value] of Object.entries(scop.articleCodeList)) {
+        menuHTML += `<li><button class="btn btn-light" onclick="showMain('${value.codeId}','${value.codeRepresent}')">${value.codeRepresent}</button></li>`;
+
+        // show first sort
+        if (key == 0) {
+            scop.articleCode = value.codeId;
+            scop.articleName = value.codeRepresent;
+            showMain(value.codeId, value.codeRepresent);
+        }
+    }
+    $(".communityUl").prepend(menuHTML);
+}
 //#endregion
 
 //#region call API
+var postReport = async function (report) {
+    // call api get related data
+    let res = await SocialService.postReport(report);
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    return true;
+}
 var deleteArticle = async function (articleId) {
     // call api get related data
     let res = await ArticleService.deleteArticle(articleId);
@@ -481,23 +533,35 @@ var currentArticle = function () {
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
+    // $('#reportModal').modal({
+    //     show: true, // 預設開啟modal
+    // })
+
+    // 是否需要把backend的session設定到frontend ?
     scop.loginId = $("#loginId").val();
     scop.loginName = $("#loginName").val();
     scop.loginNickname = $("#loginNickname").val();
     console.log(scop.loginId, scop.loginName, scop.loginNickname);
 
-    // initial data
+    // Initial data, menu list and report list
     scop.articleCodeList = await SocialService.getCodes("L");
     if (scop.articleCodeList.status != undefined) alert(`[${scop.articleCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
+    else updateMenu(); // Setup community menu and show first sort
     scop.reportCodeList = await SocialService.getCodes("G");
     if (scop.reportCodeList.status != undefined) alert(`[${scop.reportCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
+    else updateReport(); // Render report reason options
 
     //#region Event Binding
-    // Bind action, while confirm modal hide, show article Modal will come up.
-    $('#confirmModal').on('hide.bs.modal', function (event) {
+    // While report modal hide, show article Modal will come up.
+    $('#reportModal').on('hide.bs.modal', function (e) {
+        $("input[name='reportOption']:checked").prop('checked', false);
         $('#articleModal').css('z-index', '1050');
     })
-    // Bind action, show up the new reply
+    // While confirm modal hide, show article Modal will come up.
+    $('#confirmModal').on('hide.bs.modal', function (e) {
+        $('#articleModal').css('z-index', '1050');
+    })
+    // If input is not empty, build the new reply
     $("#replyInput").on('keypress', function (e) {
         if (e.which == 13) {
             // reply can't be empty or only space
@@ -514,8 +578,20 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         }
     }
+    // If #replyInput have value, check user don't want to reply it, and ready to loose it, while closing #articleModal.
+    $('#articleModal').on('hide.bs.modal', function (e) {
+        // check if the replyInput has a value
+        if ($("#replyInput").val().trim() != "") {
+            if (!confirm('有留言尚未送出，離開將會遺失，是否確認離開?')) {
+                e.preventDefault();
+            } else {
+                // remove draft reply
+                $("#replyInput").val("");
+            }
+        }
+    });
     // Initial Modal show setting
-    $('#articleModal').on('show.bs.modal', function (event) {
+    $('#articleModal').on('show.bs.modal', function (e) {
         let article = currentArticle();
 
         $("#ModalAuthor").children()[0].innerText = article.memberNickname;
@@ -531,27 +607,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Render nodal dropdown
         updateArtiModDropdown();
     })
-    // Bind action, show articles when press 'Enter' at searchinput 
+    // Show articles when press 'Enter' at searchinput 
     $("#searchInput").on('keypress', function (e) {
         if (e.which == 13) {
             showSearch();
         }
     });
-    //#endregion
-
-    //#region setup community menu and show first sort
-    let menuHTML = "";
-    for (const [key, value] of Object.entries(scop.articleCodeList)) {
-        menuHTML += `<li><button class="btn btn-light" onclick="showMain('${value.codeId}','${value.codeRepresent}')">${value.codeRepresent}</button></li>`;
-
-        // show first sort
-        if (key == 0) {
-            scop.articleCode = value.codeId;
-            scop.articleName = value.codeRepresent;
-            showMain(value.codeId, value.codeRepresent);
-        }
-    }
-    $(".communityUl").prepend(menuHTML);
     //#endregion
 
 });
