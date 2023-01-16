@@ -82,7 +82,7 @@ namespace NailIt.Controllers.AnselControllers
         // POST: api/Social/PostReportTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
+        public async Task<ActionResult<ReportTable>> PostSocialReport(ReportTable reportTable)
         {
             // At very begining, checking(審核) infos will be null.
             reportTable.ReportCheckTime = null;
