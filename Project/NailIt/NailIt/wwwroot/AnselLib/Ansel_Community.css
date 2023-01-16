@@ -16,13 +16,13 @@
 
 
 
-/*#region Search_Input*/
-#searchInput {
+/*#region border_bottom_Input*/
+.border_bottom_Input {
   border: none;
   border-bottom: 1px solid #000;
 }
 
-#searchInput:focus-visible {
+.border_bottom_Input:focus-visible {
   outline: none;
 }
 

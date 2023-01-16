@@ -4,15 +4,15 @@
 var scop = {
     loginId: 0, // 目前登入者Id
     loginName: "", // 目前登入者名字
-    loginNickname: "", // 目前登入者暱稱
+    loginNickname: "", // 目前登入者暱稱, 給新增留言使用
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
     articleCode: "", // 目前所在的版別ex:"L0"
     // articleName: "", // ex:"交流"
     articles: [], // 目前帶出的list of article
-    articleIndex: 0, // 現在選取的article在list中的index
-    page: 0, // 目前頁數
-    articleAuthorId: 0, // 目前帶出的文章作者或會員個人頁面
+    articleId: 0, // 現在選取的articleId, 給刪除/編輯/檢舉article以及新增reply使用
+    page: 0, // 目前頁數，給查詢/帶出更多使用
+    articleAuthorId: 0, // 目前帶出的文章作者或會員個人頁面, 用來比對是否為本人貼文或留言
     replies: [], // 目前article的replies
     replyId: 0, // 給刪除/檢舉reply使用
 }
@@ -20,7 +20,51 @@ var scop = {
 //#region Function
 //#region Action
 // Report article or reply, and the item disappear from display.
-var showReportAction = async function () { }
+var showReportAction = async function () {
+    // check report value exist
+    let reportCodeId = $("input[name='reportOption']:checked").val();
+    if (reportCodeId == undefined) {
+        alert("請選取檢舉事項!");
+        return;
+    }
+    let reportRepresent = scop.reportCodeList.find(r => r.codeId == reportCodeId).codeRepresent;
+    // new report
+    let report = new ReportTable({
+        ReportBuilder: scop.loginId,
+        ReportTarget: scop.articleAuthorId,
+        ReportItem: currentArticle().article.articleId,
+        ReportPlaceC: "D5",
+        ReportReasonC: reportCodeId,
+        ReportContent: reportRepresent
+    });
+    // if it's article report
+    if (scop.replyId != 0) {
+        let reply = scop.replies.find(r => r.reply.replyId == scop.replyId);
+        report.ReportTarget = reply.reply.memberId;
+        report.ReportItem = reply.reply.replyId;
+        report.ReportPlaceC = "D6";  
+    }
+    // call api
+    let result = await SocialService.postReply(report);
+    // check result
+    if (true) {
+        // clean OtherInput and close report modal
+        $("#reportOtherInput").val("");
+        $("#reportModal").modal("hide");
+        // hide the reply/article
+        if (scop.replyId != 0) { // article
+            // remove the article data-articleid
+            $(`div[data-articleid="${scop.articleId}"]`).remove();
+            // hide article modal
+            $("#articleModal").modal("hide");
+        }else{ // reply
+            $(`div[data-replyid="${scop.replyId}"]`).remove();
+        }            
+        // snack bar inform complete
+        showSnackbar("檢舉已完成!");
+    }
+
+ }
 // Show report reason list, before confirm report
 var showReportModal = function (obj) {
     // fade articleModal
@@ -29,11 +73,12 @@ var showReportModal = function (obj) {
     // check it's reply or article
     if (replyId != undefined) {
         $("#reportModalTitle").text("你為何要檢舉這則留言?");
-        let replyIndex = scop.replies.findIndex(r => r.reply.replyId == replyId);
+        // prepare replyId for report.
         scop.replyId = replyId;
     } else {
         $("#reportModalTitle").text("你為何要檢舉這則貼文?");
-
+        // use replyId equal 0, to tell it's article report.
+        scop.replyId = 0;
     }
     // show report modal
     $("#reportModal").modal("show");
@@ -94,10 +139,6 @@ var showDeleteArticle = async function () {
     }
     $("#articleModal").modal("hide");
 }
-// Show the new article in articles
-// var showNewArticle = function () {
-//     console.log("showNewReply");
-// }
 // Show confirm Modal, if delete the article or reply.
 var showConfirmDelModal = function (obj) {
     // fade articleModal
@@ -105,10 +146,10 @@ var showConfirmDelModal = function (obj) {
     let replyId = $(obj).parent().parent().parent().parent().data("replyid");
     // check it's reply or article
     if (replyId != undefined) {
-        let replyIndex = scop.replies.findIndex(r => r.reply.replyId == replyId);
+        let reply = scop.replies.find(r => r.reply.replyId == replyId);
         // bind reply info
-        $("#confirmModalBody").html(`<p>留言內容: ${scop.replies[replyIndex].reply.replyContent}<br>
-                                          按讚數: ${scop.replies[replyIndex].reply.replyLikesCount}</p>`);
+        $("#confirmModalBody").html(`<p>留言內容: ${reply.reply.replyContent}<br>
+                                          按讚數: ${reply.reply.replyLikesCount}</p>`);
         // bind delete action
         scop.replyId = replyId;
         btnConfirmDel.onclick = showDeleteReply;
@@ -155,8 +196,7 @@ var showDropdown = function (obj) {
 var showReplyLikeToggle = async function (likeObj) {
     // get the reply (like status)
     let replyId = $(likeObj).parent().parent().data("replyid")
-    let replyIndex = scop.replies.findIndex(r => r.reply.replyId == replyId);
-    let reply = scop.replies[replyIndex];
+    let reply = scop.replies.find(r => r.reply.replyId == replyId);
     // build a like with replyId and memberId:scop.loginId
     let replyLike = new ReplyLikeTable({
         ReplyId: replyId,
@@ -230,10 +270,11 @@ var showModal = async function (articleId) {
         articles = scop.articles.reaultArticles;
     }
 
-    scop.articleIndex = articles.findIndex((item) => item.article.articleId == articleId);
+    scop.articleId = articleId;
+    let article = currentArticle();
     // call and show relies
-    scop.articleAuthorId = articles[scop.articleIndex].article.articleAuthor;
-    await getReplies(articles[scop.articleIndex].article.articleId);
+    scop.articleAuthorId = article.article.articleAuthor;
+    await getReplies(article.article.articleId);
     renderReplaies();
 
     // Modal show article data
@@ -408,13 +449,14 @@ var renderArticles = function (articles) {
 // Render report reason options
 var renderReport = function () {
     let reportListHTML = "";
-    console.log(scop.reportCodeList)
     for (const [key, value] of Object.entries(scop.reportCodeList)) {
         reportListHTML += `
             <input name="reportOption" type="radio" id="${key}" value="${value.codeId}"><label for="${key}">${value.codeRepresent}</label><br>
         `;
     }
+    reportListHTML += `<input id="reportOtherInput" type="text" class="border_bottom_Input" style="width:80%">`;
     $("#reportModalBody").html(reportListHTML);
+    $("#reportOtherInput").hide();
 }
 // Setup community menu and show first sort
 var renderMenu = function () {
@@ -526,18 +568,14 @@ var getArticles = async function () {
 //#endregion
 
 var currentArticle = function () {
-    let articles = scop.articles;
-    if (scop.articles.reaultArticles != undefined) {
-        articles = scop.articles.reaultArticles;
-    }
-    return articles[scop.articleIndex]
+    return scop.articles.find(a => a.article.articleId == scop.articleId)
 }
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
-    // $('#reportModal').modal({
-    //     show: true, // 預設開啟modal
-    // })
+    $('#reportModal').modal({
+        show: true, // 預設開啟modal
+    })
 
     // 是否需要把backend的session設定到frontend ?
     scop.loginId = $("#loginId").val();
@@ -555,14 +593,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     //#region Event Binding
     // While report modal hide, show article Modal will come up.
-    $('#reportModal').on('hide.bs.modal', function (e) {
-        $("input[name='reportOption']:checked").prop('checked', false);
-        $('#articleModal').css('z-index', '1050');
-    })
+    $("#reportModal").on("hide.bs.modal", function (e) {
+        $("input[name='reportOption']:checked").prop("checked", false);
+        $("#articleModal").css("z-index", "1050");
+    });
     // While confirm modal hide, show article Modal will come up.
-    $('#confirmModal').on('hide.bs.modal', function (e) {
-        $('#articleModal').css('z-index', '1050');
-    })
+    $("#confirmModal").on("hide.bs.modal", function (e) {
+        $("#articleModal").css("z-index", "1050");
+    });
     // If input is not empty, build the new reply
     $("#replyInput").on('keypress', function (e) {
         if (e.which == 13) {
@@ -570,7 +608,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if ($(e.target).val().trim() == "") return;
             showNewReply();
         }
-    })
+    });
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {
         if (!event.target.matches('.dropbtn')) {
@@ -581,10 +619,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
     // If #replyInput have value, check user don't want to reply it, and ready to loose it, while closing #articleModal.
-    $('#articleModal').on('hide.bs.modal', function (e) {
+    $("#articleModal").on("hide.bs.modal", function (e) {
         // check if the replyInput has a value
         if ($("#replyInput").val().trim() != "") {
-            if (!confirm('有留言尚未送出，離開將會遺失，是否確認離開?')) {
+            if (!confirm("有留言尚未送出，離開將會遺失，是否確認離開?")) {
                 e.preventDefault();
             } else {
                 // remove draft reply
@@ -592,8 +630,16 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
     });
+    // Show input of report other, if otherOption been chosen.
+    $("input[name='reportOption']").on("change",function(e){
+        if (this.value == "G9") {
+            $("#reportOtherInput").show();
+        }else{
+            $("#reportOtherInput").hide();            
+        }
+    });
     // Initial Modal show setting
-    $('#articleModal').on('show.bs.modal', function (e) {
+    $("#articleModal").on("show.bs.modal", function (e) {
         let article = currentArticle();
 
         $("#ModalAuthor").children()[0].innerText = article.memberNickname;
@@ -608,9 +654,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         $("#ModalArticleReplyCount").html(`共${article.article.articleReplyCount}則留言`);
         // Render nodal dropdown
         renderArtiModDropdown();
-    })
+    });
     // Show articles when press 'Enter' at searchinput 
-    $("#searchInput").on('keypress', function (e) {
+    $("#searchInput").on("keypress", function (e) {
         if (e.which == 13) {
             showSearch();
         }
