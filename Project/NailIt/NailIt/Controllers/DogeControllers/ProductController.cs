@@ -55,14 +55,32 @@ namespace NailIt.Controllers.DogeControllers
 
             return await res.ToListAsync();
         }
-        [HttpGet("s/{service}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetServicedata()
+        [HttpGet]
+        [Route("MID/service/{mid:int}/{opartc}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetServicedata(int mid,string opartc)
         {
-            var res = from demoset in _db.DemoSetTables
-                      join s in _db.ServiceTables
-                      on demoset.ManicuristId equals s.ManicuristId
-                      select new { demoset, s };
-
+            var res = from s in _db.ServiceTables
+                      where s.ManicuristId == mid && (s.ServicePartC == opartc || s.ServicePartC == "C2")
+                      select s;
+            return await res.ToListAsync();
+        }
+        [HttpGet]
+        [Route("MID/dset/{mid:int}/{opartc}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetDemosetdata(int mid, string opartc)
+        {
+            var res = from dset in _db.DemoSetTables
+                      where dset.ManicuristId == mid && dset.DemoSetPublic == true 
+                      && (dset.DemoSetPartC == opartc || dset.DemoSetPartC == "C2")
+                      select dset;
+            return await res.ToListAsync();
+        }
+        [HttpGet]
+        [Route("MID/{mid:int}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetManicuristData(int mid)
+        {
+            var res = from m in _db.ManicuristTables
+                      where m.ManicuristId == mid
+                      select m;
             return await res.ToListAsync();
         }
     }
