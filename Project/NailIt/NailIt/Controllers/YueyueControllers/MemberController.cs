@@ -23,10 +23,10 @@ namespace NailIt.Controllers.YueyueControllers
         // PUT: api/Member   //登入用
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<string> PutMemberTable((string username, string password) ACandPW)
+        public async Task<string> PutMemberTable(string[] ACandPW)
         {
-            string account= ACandPW.username;    
-            string password= ACandPW.password;
+            string account = ACandPW[0];
+            string password = ACandPW[1];
             var myMember =(
             from MemberTable in _context.MemberTables
             where MemberTable.MemberAccount == account
@@ -35,16 +35,16 @@ namespace NailIt.Controllers.YueyueControllers
             if (myMember.Any())
                 nowUse = myMember.ToList()[0];
             else
-                return "noAc";
+                return "noAC";
             
             if (nowUse.MemberPassword != password)
-                return "wrongPw";
+                return "wrongPW";
             else 
             {
                 Guid g = Guid.NewGuid();
-                _context.Entry(myMember).State = EntityState.Modified;
+                _context.Entry(nowUse).State = EntityState.Modified;
                 nowUse.MemberLogincredit = g;
-                HttpContext.Session.SetString("token", g.ToString());
+                HttpContext.Session.SetString("NailitToken", g.ToString());
                 await _context.SaveChangesAsync();
                 return "OK";
             }

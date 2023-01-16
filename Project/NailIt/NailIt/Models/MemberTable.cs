@@ -15,14 +15,14 @@ namespace NailIt.Models
         public bool MemberGender { get; set; }
         public string MemberPhone { get; set; }
         public DateTime? MemberBirth { get; set; }
-        public string MemberEmail { get; set; } 
+        public string MemberEmail { get; set; }
         public double? MemberScore { get; set; }
         public bool MemberManicurist { get; set; }
         public Guid? MemberLogincredit { get; set; }
         public int MemberReportpoint { get; set; }
         public int? MemberBanned { get; set; }
-        public string member_Verify { get; set; }
-        public string member_Question { get; set; }
-        public string member_Answer { get; set; }
+        public string MemberVerify { get; set; }
+        public string MemberQuestion { get; set; }
+        public string MemberAnswer { get; set; }
     }
 }

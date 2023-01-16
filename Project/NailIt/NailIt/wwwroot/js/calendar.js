@@ -90,12 +90,12 @@ class Calendar {
       // 當點擊 畫面上 class = "date" 時 觸發
       // 顯示出 log 出 點擊的時間
       if (e.target.classList.contains('date')) {
-        console.log(e.target.title);
+        // console.log(e.target.title);
         // split() 方法使用指定的分隔符字符串将一个String對象分割成子字符串數組
         // map() 方法會建立一個新的陣列
         // parseInt() 將字串轉換為以十進位表示的整數
         const params = e.target.title.split('-').map(str => parseInt(str, 10));
-        console.log(params);
+        // console.log(params);
         this.#setDate(...params, false);
       }
     });
@@ -117,7 +117,7 @@ class Calendar {
     const currentDateEL = this.element.querySelector('.currentDate');
 
     // 測試 旁邊欄位 顯示 選擇的日期
-    const choseDateEL = document.querySelector('.chosedate');
+    // const choseDateEL = document.querySelector('.chosedate');
 
     // 全域變數 日期字串 = #getDateString 函數 (年,月,日)
     this.#dateString = this.#getDateString(this.#year, this.#month, this.#date);
@@ -125,7 +125,7 @@ class Calendar {
     currentDateEL.textContent = this.#dateString;
 
     // 加入 選擇日期的 文字
-    choseDateEL.textContent = this.#dateString;
+    // choseDateEL.textContent = this.#dateString;
   }
 
   // 取得上個月資訊
