@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-		<link rel="stylesheet" href="./YueCss/bootstrap.css" />
-		
-	</head>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Document</title>
+	<link rel="stylesheet" href="./YueCss/bootstrap.css" />
+	<script src="/YueJs/jquery.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+</head>
 	<body>
 		<div style="background-color: pink; height: 90px">
 			<h1>頁首</h1>
@@ -53,15 +54,14 @@
 							註冊
 						</button>
 					</a>
-					<button
-							onclick="login()"
+					<button onclick="login()"
 							style="
 							border: 0cm;
 							width: 18%;
 							margin-left: 1%;
 							background-color: #ff6733;
 							color: white;
-						
+
 						">
 						登入
 					</button>
@@ -73,7 +73,9 @@
 			</div>
 		</div>
 		<div style="width: 100%; height: 100px; background-color: black"></div>
-		<script src="/YueJs/jquery.js"></script>
 		<script src="./YueJs/Loginjs.js"></script>
+		
+		<script src="./YueJs/toastr.js"></script>
+
 	</body>
 </html>
