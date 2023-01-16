@@ -20,7 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\DogeControllers\" />
+    <Folder Include="wwwroot\YiPLib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\TanTanLib\js\bsmlist.js" />
   </ItemGroup>
 
 </Project>

@@ -26,6 +26,7 @@
 </head>
 
 <body>
+
     <!-- 內容主體 -->
     <div class="container">
         <!-- 切版 -->
@@ -41,7 +42,8 @@
                     <div class="header-item" style="display: flex;">
                         <div class="link"><a href="#">首頁</a><i class="bi bi-chevron-right"></i></div>
                         <div class="link"><a href="#">美甲查詢</a><i class="bi bi-chevron-right"></i></div>
-                        <div class="link"><a href="#" id="topmanicuristSalonName"></a><i class="bi bi-chevron-right"></i></div>
+                        <div class="link"><a href="#" id="topmanicuristSalonName"></a><i
+                                class="bi bi-chevron-right"></i></div>
                         <div class="link"><a href="#" id="topdemosetName"></a></div>
                     </div>
                     <!-- middle-item 中間資訊欄 照片加文字 -->
@@ -75,7 +77,7 @@
                             <p id="demoSetContent"></p>
                             <!-- tag標籤 -->
                             <div class="product-tag">
-                                
+
                             </div>
                             <!--  檢舉 預約 -->
                             <div class="product-footer">
@@ -94,13 +96,13 @@
                             <p>相關資訊</p>
                         </div>
                         <div class="footer-container">
-                            <p>服務項目:手、足</p>
+                            <p class="demoSetPartC"></p>
                             <p id="botmanicuristSalonName"></p>
                             <p>店家/設計師評價:</p>
                             <p><span style="color: yellow;">★★★★★</span>5.0</p>
-                            <p id="botphone"></p>
+                            <p class="botphone"></p>
                             <p id="botadress"></p>
-                            <p id="botdemoSetDeposit"></p>
+                            <p class="demoSetDeposit"></p>
                         </div>
                     </div>
                 </div>
@@ -120,49 +122,72 @@
             </div>
             <!-- 主要表單 -->
             <div class="form-info">
-                <form action="">
-                    <div class="item-circle">
-                        <ol class="list">
-                            <li>1</li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li>4</li>
-                        </ol>
+                <form id="form1" action="" method="post">
+                    <div class="form-header">
+                        <div class="Progress">
+                            <div class="line">
+                                <div class="step" datatext="選項目">
+                                    <i class="bi bi-cart"></i>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="step" datatext="預約時間">
+                                    <i class="bi bi-calendar3"></i>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="step" datatext="預付訂金">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="step" datatext="訂單送出">
+                                    <i class="bi bi-check-lg"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="step1" class="container step1-choseitem">
                         <div class="form-container row">
                             <div class="step-container col-9">
                                 <p>
                                     施作部位:
-                                    <select name="">
-                                        <option value="">手</option>
+                                    <select name="OrderPartC">
                                     </select>
                                 </p>
                                 <p>
                                     卸甲:
-                                    <select name="">
-                                        <option value="C0">不用卸甲</option>
-                                        <option value="C1">去指甲油(無凝膠)</option>
-                                        <option value="C2">本店卸甲</option>
-                                        <option value="C3">他店卸甲</option>
+                                    <select name="OrderRemovalC">
+                                        <option value="B0">不用卸甲</option>
+                                        <option value="B1">去指甲油(無凝膠)</option>
+                                        <option value="B2">本店卸甲</option>
+                                        <option value="B3">他店卸甲</option>
                                     </select>
                                 </p>
                                 <p>
                                     施作項目:
-                                    <select name="">
-                                        <option value="1043">1043</option>
-                                        <option value="1045">1045</option>
+                                    <select name="OrderItem">
+
                                     </select>
                                 </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                <p>
+                                    造型:
+                                    <select name="OrderItemName">
+
+                                    </select>
+                                </p>
+
+                                <p class="demoSetPrice"></p>
+                                <input type="hidden" name="OrderPrice" value="">
+                                <p class="demoSetDeposit"></p>
+                                <input type="hidden" name="OrderDeposit" value="">
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" onclick="Closeform()">取消</button>
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">下一步</button>
                                     </div>
                                 </div>
@@ -175,8 +200,10 @@
                                 <!-- 放入日曆 -->
                                 <div class="calendar">
                                     <div class="header">
-                                        <button type="button" class="lastYear" title="Last year"><i class="bi bi-chevron-double-left"></i></button>
-                                        <button type="button" class="lastMonth" title="Last month"><i class="bi bi-chevron-compact-left"></i></button>
+                                        <button type="button" class="lastYear" title="Last year"><i
+                                                class="bi bi-chevron-double-left"></i></button>
+                                        <button type="button" class="lastMonth" title="Last month"><i
+                                                class="bi bi-chevron-compact-left"></i></button>
                                         <div class="currentDate"></div>
                                         <button type="button" class="nextMonth" title="Next month">
                                             <i class="bi bi-chevron-compact-right"></i>
@@ -195,20 +222,6 @@
                                         <div class="day">日</div>
                                     </div>
                                     <div class="dates">
-                                        <!-- <div class="date">1</div>
-                                        <div class="date">2</div>
-                                        <div class="date">3</div>
-                                        <div class="date">4</div>
-                                        <div class="date">5</div>
-                                        <div class="date">6</div>
-                                        <div class="date">7</div>
-                                        <div class="date">8</div>
-                                        <div class="date">9</div>
-                                        <div class="date">10</div>
-                                        <div class="date">11</div>
-                                        <div class="date">12</div>
-                                        <div class="date">13</div>
-                                        <div class="date">14</div> -->
                                     </div>
                                 </div>
                             </div>
@@ -228,7 +241,7 @@
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" onclick="Closeform()">取消</button>
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step1()">上一步</button>
                                         <button class="stepbtn" type="button" onclick="step3()">下一步</button>
                                     </div>
@@ -242,30 +255,27 @@
                     <div id="step3" class="container step3-paymoney isHide">
                         <div class="form-container row">
                             <div class="step-container col-9">
+
+                                <input type="hidden" name="MemberId" value="1">
+                                <input type="hidden" name="ManicuristId" value="">
+                                <input type="hidden" name="OrderType" value="true">
+                                <input type="hidden" name="OrderOrderTime" value="">
+                                <input type="hidden" name="OrderStateC" value="">
+                                
+                                <!-- <input type="hidden" name="OrderAcceptTime" value="">
+                                
+                                <input type="hidden" name="OrderDoneTime" value="">
+                                
+                                <input type="hidden" name="OrderCompleteTime" value=""> -->
                                 <p>預約日期:2023-1-1</p>
                                 <p>
                                     施作部位:
-                                    <select name="">
-                                        <option value="">手</option>
-                                    </select>
                                 </p>
                                 <p>
                                     卸甲:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
                                 </p>
                                 <p>
-                                    施作項目-手:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目-腳:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
+                                    施作項目:
                                 </p>
                                 <p>預估價位:NT$ 1,450</p>
                                 <p>訂金:NT$ 200</p>
@@ -275,7 +285,7 @@
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" onclick="Closeform()">取消</button>
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">上一步</button>
                                         <button class="stepbtn" type="button" onclick="step4()">下一步</button>
                                     </div>
@@ -292,27 +302,9 @@
                                 <p>預約日期:2023-1-1 13:00</p>
                                 <p>
                                     施作部位:
-                                    <select name="">
-                                        <option value="">手</option>
-                                    </select>
                                 </p>
                                 <p>
                                     卸甲:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目-手:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目-腳:
-                                    <select name="">
-                                        <option value=""></option>
-                                    </select>
                                 </p>
                                 <p>預估價位:NT$ 1,450</p>
                                 <p>訂金:NT$ 200</p>
@@ -322,9 +314,9 @@
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" onclick="Closeform()">取消</button>
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step3()">上一步</button>
-                                        <button class="stepbtn" type="submit" onclick="">送出</button>
+                                        <button id="btnsend" class="stepbtn" type="button" onclick="">送出</button>
                                     </div>
                                 </div>
                             </div>
@@ -337,6 +329,38 @@
         </div>
     </div>
 
+    <!-- <form action="">
+        下訂會員編號。
+        <input type="text" name="MemberId"> 寫死
+        被預約美甲師編號。
+        <input type="text" name="ManicuristId"> 寫死
+        預訂行程編號。
+        <input type="text" name="PlanId"> 已帶入
+        預估價格。
+        <input type="text" name="OrderPrice"> 已帶入
+        訂金。
+        <input type="text" name="OrderDeposit"> 已帶入
+        施作部位(手腳)
+        <input type="text" name="OrderPartC"> 已帶入
+        卸甲類型
+        <input type="text" name="OrderRemovalC"> 寫死(好像不用帶入)
+        訂單類型
+        <input type="text" name="OrderType"> 商品頁面寫死
+        施作項目
+        <input type="text" name="OrderItem"> 已帶入
+        施作項目名稱
+        <input type="text" name="OrderItemName"> 已帶入
+        客戶下定時間
+        <input type="text" name="OrderOrderTime"> 點擊送出時生成
+        美甲師接受訂單時間
+        <input type="text" name="OrderAcceptTime">
+        美甲師確定完成訂單完成時間
+        <input type="text" name="OrderDoneTime">
+        客戶確定完成時間
+        <input type="text" name="OrderCompleteTime">
+        訂單狀態
+        <input type="text" name="OrderStateC"> 點擊送出時生成 A0 預約中
+    </form> -->
 
     <!-- 切換預約頁面函數 -->
     <script>
@@ -381,22 +405,65 @@
         }
         getsrc(whichpic);
     </script>
+    <script>
 
+    </script>
     <!-- 日曆函數 -->
     <script src="js/calendar.js"></script>
     <script src="js/calendarscript.js"></script>
-    
-    <!-- 引用 商品資料 可預約日期 -->
-    <script src="./js/getdata.js"></script>
-    <script src="./js/getReserveDate.js"></script>
-    <!-- <script src="./js/getReserveTime.js"></script> -->
 
-    <!--抓取資料 ajax-->
-    <script>ajaxcall()</script>
-    <!-- 放入可選擇的預約日期 -->
-    <script>getReserveDate()</script>
-    <!-- 取得可放入的預約時間 -->
-    <script>getReserveTime()</script>
+    <!-- 引用 商品資料 可預約日期 -->
+    <script src="./js/getReserveDate.js"></script>
+
+
+    <script>
+        // 加入時區 8小時
+        var date = new Date(+new Date() + 8 * 3600 * 1000)
+        // 轉換成 SQL datetime格式
+        var today = date.toISOString().slice(0, 19) // .replace('T', ' ');
+        console.log(today)
+        // 抓取資料 ajax
+        ajaxcall()
+        // 放入可選擇的預約日期
+        getReserveDate()
+        // 取得可放入的預約時間
+        getReserveTime()
+
+        $('#btnsend').on('click', function () {
+            $('input[name="OrderOrderTime"]').val(today);
+            $('input[name="OrderStateC"]').val("A0");
+
+            var data = $('#form1').serializeArray();
+            var returnArray = {}
+            // var Yes = true
+            for (var i = 0; i < data.length; i++) {
+                returnArray[data[i]['name']] = data[i]['value'];
+                if(data[i]['value'] == "true"){
+                    returnArray[data[i]['name']] = true;
+                }
+            }
+            console.log(JSON.stringify(returnArray));
+            // console.log(returnArray)
+            // JSON datetime 格式
+            // 2019-01-06T17:16:40
+            // json bool 格式 true false
+            $.ajax({
+                url: "api/product",
+                method: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify(returnArray),
+
+                success: res => {
+                    console.log("Y")
+                },
+                error: err => {
+                    console.log("N")
+                },
+            });
+
+        })
+    </script>
+
 </body>
 
 </html>

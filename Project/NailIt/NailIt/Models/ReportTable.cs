@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -7,6 +10,7 @@ namespace NailIt.Models
 {
     public partial class ReportTable
     {
+        [Key]
         public int ReportId { get; set; }
         public int ReportBuilder { get; set; }
         public int ReportTarget { get; set; }
