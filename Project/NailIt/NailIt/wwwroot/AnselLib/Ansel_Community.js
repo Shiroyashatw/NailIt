@@ -57,15 +57,12 @@ var showReportAction = async function () {
         // hide the reply/article
         if (scop.replyId == 0) { // article
             // remove the article from display
-            $(`div[data-articleid="${scop.articleId}"]`).remove();
+            renderRemoveArticle();
             // hide article modal
             $("#articleModal").modal("hide");
         } else { // reply
-            // remove the reply from display
-            $(`div[data-replyid="${scop.replyId}"]`).remove();
-            currentArticle().article.articleReplyCount--
-            $("#ModalArticleReplyCount").html(`共${currentArticle().article.articleReplyCount}則留言`);
-            renderTheArticle(currentArticle());
+            // remove the reply from display. update reply area reply count. update the article reply count.
+            renderRemoveTheReply();            
         }
         // snack bar inform complete
         showSnackbar("檢舉已完成!");
@@ -94,10 +91,8 @@ var showReportModal = function (obj) {
 var showDeleteReply = async function () {
     let result = await deleteReply(scop.replyId);
     if (result) {
-        // remove the reply
-        $(`div[data-replyid="${scop.replyId}"]`).remove();
-        currentArticle().article.articleReplyCount--;
-        renderTheArticle(currentArticle());
+        // remove the reply from display. update reply area reply count. update the article reply count.
+        renderRemoveTheReply();
         // snack bar inform complete
         showSnackbar("刪除已完成!");
     }
@@ -105,7 +100,7 @@ var showDeleteReply = async function () {
 // Show the new article in articles
 var showNewReply = async function () {
     let reply = new ReplyTable({
-        ArticleId: currentArticle().article.articleId,
+        ArticleId: scop.articleId,
         MemberId: scop.loginId,
         ReplyContent: $("#replyInput").val(),
     })
@@ -132,19 +127,14 @@ var showNewReply = async function () {
 }
 // Remove the article from articles
 var showDeleteArticle = async function () {
-    let articleId = currentArticle().article.articleId;
-    let result = await deleteArticle(articleId);
+    let result = await deleteArticle(scop.articleId);
     if (result) {
         // remove the article data-articleid
-        $(`div[data-articleid="${articleId}"]`).remove();
-        if (scop.articleCode == "My") {
-            scop.articles.articleCount--;
-            $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
-            // snack bar inform complete
-            showSnackbar("刪除已完成!");
-        }
+        renderRemoveArticle();
+        // snack bar inform complete
+        showSnackbar("刪除已完成!");
+        $("#articleModal").modal("hide");
     }
-    $("#articleModal").modal("hide");
 }
 // Show confirm Modal, if delete the article or reply.
 var showConfirmDelModal = function (obj) {
@@ -240,7 +230,7 @@ var showArticleLikeToggle = async function (likeObj) {
     let article = currentArticle();
     // build a like with articleId and memberId:scop.loginId
     let articleLike = new ArticleLikeTable({
-        ArticleId: article.article.articleId,
+        ArticleId: scop.articleId,
         MemberId: scop.loginId
     });
     // if like == false (create a like)
@@ -272,16 +262,11 @@ var showArticleLikeToggle = async function (likeObj) {
 }
 // show Modal
 var showModal = async function (articleId) {
-    let articles = scop.articles;
-    if (scop.articles.articleCount !== undefined) {
-        articles = scop.articles.reaultArticles;
-    }
-
     scop.articleId = articleId;
     let article = currentArticle();
     // call and show relies
     scop.articleAuthorId = article.article.articleAuthor;
-    await getReplies(article.article.articleId);
+    await getReplies(articleId);
     renderReplaies();
 
     // Modal show article data
@@ -344,6 +329,13 @@ var showMain = async function (code, name) {
 //#endregion
 
 //#region render updates
+// remove the reply from display. update reply area reply count. update the article reply count.
+var renderRemoveTheReply = function () {
+    $(`div[data-replyid="${scop.replyId}"]`).remove();
+    currentArticle().article.articleReplyCount--;
+    $("#ModalArticleReplyCount").html(`共${currentArticle().article.articleReplyCount}則留言`);
+    renderTheArticle(currentArticle());
+}
 var renderNewReply = function (reply) {
     let replyHTML = `
                 <div data-replyid="${reply.replyId}">
@@ -425,6 +417,13 @@ var renderArtiModDropdown = function () {
     }
     $("#ArtiModDropContent").html(dropContentHTML);
 };
+var renderRemoveArticle = function () {
+    $(`div[data-articleid="${scop.articleId}"]`).remove();
+    if (scop.articleCode == "My") {
+        scop.articles.articleCount--;
+        $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
+    }
+}
 var renderTheArticle = function (article) {
     let articleHTML = `
         <h4 class="m-0">${article.article.articleTitle}</h4>
