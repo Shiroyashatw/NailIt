@@ -55,7 +55,6 @@ var showReportAction = async function () {
         // close report modal
         $("#reportModal").modal("hide");
         // hide the reply/article
-        console.log(report)
         if (scop.replyId == 0) { // article
             // remove the article from display
             $(`div[data-articleid="${scop.articleId}"]`).remove();
@@ -64,6 +63,9 @@ var showReportAction = async function () {
         } else { // reply
             // remove the reply from display
             $(`div[data-replyid="${scop.replyId}"]`).remove();
+            currentArticle().article.articleReplyCount--
+            $("#ModalArticleReplyCount").html(`共${currentArticle().article.articleReplyCount}則留言`);
+            renderTheArticle(currentArticle());
         }
         // snack bar inform complete
         showSnackbar("檢舉已完成!");
