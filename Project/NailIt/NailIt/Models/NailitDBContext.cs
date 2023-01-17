@@ -21,6 +21,7 @@ namespace NailIt.Models
         public virtual DbSet<ArticlePicTable> ArticlePicTables { get; set; }
         public virtual DbSet<ArticleTable> ArticleTables { get; set; }
         public virtual DbSet<CodeTable> CodeTables { get; set; }
+        public virtual DbSet<ColorTable> ColorTables { get; set; }
         public virtual DbSet<CommentTable> CommentTables { get; set; }
         public virtual DbSet<CreditCardTable> CreditCardTables { get; set; }
         public virtual DbSet<DemoSetTable> DemoSetTables { get; set; }
@@ -40,14 +41,14 @@ namespace NailIt.Models
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=NailitDB;Integrated Security=True;");
-//            }
-//        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=NailitDB;Integrated Security=True;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -106,7 +107,7 @@ namespace NailIt.Models
 
                 entity.Property(e => e.ArticleContent)
                     .IsRequired()
-                    .HasMaxLength(200)
+                    .HasMaxLength(500)
                     .HasColumnName("article_Content");
 
                 entity.Property(e => e.ArticleLastEdit)
@@ -149,6 +150,25 @@ namespace NailIt.Models
                     .IsFixedLength(true);
             });
 
+            modelBuilder.Entity<ColorTable>(entity =>
+            {
+                entity.HasKey(e => e.ColorId)
+                    .HasName("PK__Color_Ta__795F1D747055E1F2");
+
+                entity.ToTable("Color_Table");
+
+                entity.Property(e => e.ColorId).HasColumnName("Color_ID");
+
+                entity.Property(e => e.ColorCss)
+                    .HasMaxLength(7)
+                    .HasColumnName("Color_css");
+
+                entity.Property(e => e.ColorName)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .HasColumnName("Color_Name");
+            });
+
             modelBuilder.Entity<CommentTable>(entity =>
             {
                 entity.HasKey(e => e.CommentId);
@@ -186,6 +206,18 @@ namespace NailIt.Models
 
                 entity.Property(e => e.CreditCardId).HasColumnName("creditCard_ID");
 
+                entity.Property(e => e.CreditCardBilladdress)
+                    .HasMaxLength(50)
+                    .HasColumnName("creditCard_billaddress");
+
+                entity.Property(e => e.CreditCardExpirationdateMon).HasColumnName("creditCard_expirationdate_mon");
+
+                entity.Property(e => e.CreditCardExpirationdateYear).HasColumnName("creditCard_expirationdate_year");
+
+                entity.Property(e => e.CreditCardHolder)
+                    .HasMaxLength(20)
+                    .HasColumnName("creditCard_holder");
+
                 entity.Property(e => e.CreditCardNumber)
                     .IsRequired()
                     .HasMaxLength(16)
@@ -194,6 +226,8 @@ namespace NailIt.Models
                     .IsFixedLength(true);
 
                 entity.Property(e => e.CreditCardOwner).HasColumnName("creditCard_Owner");
+
+                entity.Property(e => e.CreditCardPostalCode).HasColumnName("creditCard_Postal_code");
             });
 
             modelBuilder.Entity<DemoSetTable>(entity =>
@@ -211,7 +245,9 @@ namespace NailIt.Models
 
                 entity.Property(e => e.DemoSetCount).HasColumnName("demoSet_Count");
 
-                entity.Property(e => e.DemoSetCover).HasColumnName("demoSet_Cover");
+                entity.Property(e => e.DemoSetCover)
+                    .HasMaxLength(50)
+                    .HasColumnName("demoSet_Cover");
 
                 entity.Property(e => e.DemoSetDeposit)
                     .HasColumnType("money")
@@ -364,11 +400,7 @@ namespace NailIt.Models
                     .HasMaxLength(50)
                     .HasColumnName("manicurist_Pic");
 
-                entity.Property(e => e.ManicuristPublic)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .HasColumnName("manicurist_Public")
-                    .IsFixedLength(true);
+                entity.Property(e => e.ManicuristPublic).HasColumnName("manicurist_Public");
 
                 entity.Property(e => e.ManicuristSalonName)
                     .IsRequired()
@@ -401,6 +433,10 @@ namespace NailIt.Models
                     .IsRequired()
                     .HasMaxLength(20)
                     .HasColumnName("member_Account");
+
+                entity.Property(e => e.MemberAnswer)
+                    .HasMaxLength(20)
+                    .HasColumnName("member_Answer");
 
                 entity.Property(e => e.MemberBanned).HasColumnName("member_Banned");
 
@@ -439,9 +475,19 @@ namespace NailIt.Models
                     .IsUnicode(false)
                     .HasColumnName("member_Phone");
 
+                entity.Property(e => e.MemberQuestion)
+                    .HasMaxLength(20)
+                    .HasColumnName("member_Question");
+
                 entity.Property(e => e.MemberReportpoint).HasColumnName("member_Reportpoint");
 
                 entity.Property(e => e.MemberScore).HasColumnName("member_Score");
+
+                entity.Property(e => e.MemberVerify)
+                    .HasMaxLength(6)
+                    .IsUnicode(false)
+                    .HasColumnName("member_Verify")
+                    .IsFixedLength(true);
             });
 
             modelBuilder.Entity<MessageTable>(entity =>
@@ -536,6 +582,10 @@ namespace NailIt.Models
                 entity.Property(e => e.OrderAcceptTime)
                     .HasColumnType("datetime")
                     .HasColumnName("order_AcceptTime");
+
+                entity.Property(e => e.OrderCancelTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("order_CancelTime");
 
                 entity.Property(e => e.OrderCompleteTime)
                     .HasColumnType("datetime")
