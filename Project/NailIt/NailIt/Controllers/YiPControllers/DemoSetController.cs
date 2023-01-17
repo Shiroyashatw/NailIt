@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NailIt.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace NailIt.Controllers.YiPControllers
 {
@@ -61,12 +62,26 @@ namespace NailIt.Controllers.YiPControllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<DemoSetTable>> PostDataSetTable(DemoSetTable DemoSetTable)
+        public async Task<ActionResult<DemoSetTable>> PostDemoSetTable(DemoSetTable DemoSetTable)
         {
             Context.DemoSetTables.Add(DemoSetTable);
             await Context.SaveChangesAsync();
             return CreatedAtAction("GetDataSetTable", new { id = DemoSetTable.DemoSetId }, DemoSetTable);
         }
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetPostDemoSetTable(int id)
+        {
+            //傳入DemoSet 美甲師id 找到最後一筆 回傳 demoset ID
+            var query = await (from User in Context.DemoSetTables
+                         where User.ManicuristId == id
+                         orderby User.DemoSetId
+                         select User).LastOrDefaultAsync();
+
+            return Ok(new { query });
+        }
+
     }
 }
 

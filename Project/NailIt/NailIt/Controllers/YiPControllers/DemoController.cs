@@ -34,5 +34,13 @@ namespace NailIt.Controllers.YiPControllers
             //select User;
             return await query.ToListAsync();
         }
+
+        [HttpPost]
+        public async Task<ActionResult<DemoSetTable>> PostDemoTable(DemoTable DemoTable)
+        {
+            Context.DemoTables.Add(DemoTable);
+            await Context.SaveChangesAsync();
+            return CreatedAtAction("GetDemotTable", new { id = DemoTable.DemoSetId }, DemoTable);
+        }
     }
 }

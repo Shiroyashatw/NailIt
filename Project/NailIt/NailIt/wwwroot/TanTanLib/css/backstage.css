@@ -71,6 +71,10 @@ p{
     
 }
 
+.table th,
+.table td {
+    vertical-align: middle;
+}
 
 .mycon{
     margin-top: 90px;
@@ -113,7 +117,7 @@ p{
 
 
 
-#serbut{
+.serbut{
     font-weight: bold;
     border:none;
     background-color:#FF6733;

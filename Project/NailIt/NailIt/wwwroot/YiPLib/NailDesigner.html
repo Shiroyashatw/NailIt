@@ -40,10 +40,6 @@
             background-color: white;
         }
 
-        .CBtnpd {
-            border: none;
-            background-color: white;
-        }
 
         .CBtn {
             border: none;
@@ -98,6 +94,7 @@
             max-width: 100%;
             object-fit: cover;
             height: 250px;
+            width: 250px;
             object-position: center;
         }
 
@@ -112,7 +109,8 @@
         }
 
         #Context {
-            height: 70%;
+            /*height: 70%;*/
+            height:150px;
             white-space: pre-wrap;
             word-wrap: break-word;
         }
@@ -187,8 +185,9 @@
 
         .ratings {
             position: relative;
+            /*position: absolute;*/
             vertical-align: middle;
-            display: inline-block;
+            /*display: inline-block;*/
             color: #ddd;
             overflow: hidden;
             font-size: 30px;
@@ -197,6 +196,7 @@
 
         .Fullstar {
             position: absolute;
+            /*position: relative;*/
             left: 0;
             top: 0;
             white-space: nowrap;
@@ -371,12 +371,11 @@
         }
 
         #Score {
-            height: 20%;
-            display: flex;
+            /*height: 20%;*/
         }
 
         #Scorefloat {
-            margin-left: 20px;
+            /*display: inline;*/
         }
 
         .produce {
@@ -429,7 +428,7 @@
         <div class="row">
             <div class="col-4"></div>
             <div class="col-3" id="EdChBt">
-                <a id="Editbtn" href="NailDesignerEdit.html">編輯</a>
+                <button id="Editbtn" v-on:click="GoToEdit">編輯</button>
             </div>
             <div class="col-5"></div>
         </div>
@@ -444,13 +443,16 @@
             </div>
             <div class="col-5" id="Profile">
                 <b id="Title" class="Bigtext FixsmPad">{{DesignList.manicuristSalonName}}</b>
-                <p id="Context">{{DesignList.manicuristIntro}}</p>
-                <div id="Score">
-                    <div class="ratings">
-                        <div class="Emptystar">★★★★★</div>
-                        <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
+                <p id="Context" class="mt-3">{{DesignList.manicuristIntro}}</p>
+                <div id="Scorediv" class="d-flex">
+                    <div id="Score">
+                        <div class="ratings">
+                            <div class="Emptystar">★★★★★</div>
+                            <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
+                        </div>
                     </div>
-                    <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
+                            <p class="d-flex mb-0 mt-3 ml-2" id="Scorefloat">{{DesignList.manicuristScore}}</p>
+                    <!--class="mb-0 mt-3 ml-2"-->
                 </div>
             </div>
             <div class="col-2">
@@ -462,13 +464,13 @@
         </div>
 
 
-        <div class="row FixPad">
+        <div class="row FixPad" id="NavTool">
             <div class="col-1"></div>
             <div class="col-10">
                 <button class="CBtn CBpd recentbtn Bigtext ShapeColor" onclick="Showthis(this)" value="demo">作品</button>
-                <button class="CBtnpd recentbtn Bigtext ShapeColor" onclick="Showthis(this)" value="event">主打</button>
-                <button class="CBtnpd recentbtn Bigtext ShapeColor" onclick="Showthis(this)" value="star">評價</button>
-                <button class="CBtnpd recentbtn Bigtext ShapeColor" onclick="Showthis(this)" value="produce">介紹</button>
+                <button class="CBtn recentbtn Bigtext ShapeColor" onclick="Showthis(this)" value="event">主打</button>
+                <button class="CBtn recentbtn Bigtext ShapeColor" onclick="Showthis(this)" value="star">評價</button>
+                <button class="CBtn recentbtn Bigtext ShapeColor" onclick="Showthis(this)" value="produce">介紹</button>
             </div>
             <div class="col-1"></div>
         </div>
@@ -677,6 +679,11 @@
                     MainDemoCoverLenth: "",
                 }
             },
+            methods: {
+                GoToEdit: function () {
+                    window.location = "NailDesignerEdit.html";
+                }
+                }
         }).$mount('#ShowData');
 
         //ShowData.$mount('#ShowData');
@@ -729,7 +736,6 @@
             success: function (e) {
                 //console.log(e);
                 ShowData.MainDemoCover = e;
-
             }
         });
 

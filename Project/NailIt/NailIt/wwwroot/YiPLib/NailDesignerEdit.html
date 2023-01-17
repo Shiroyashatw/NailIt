@@ -99,6 +99,7 @@
             max-width: 100%;
             object-fit: cover;
             height: 250px;
+            width: 250px;
             object-position: center;
         }
 
@@ -563,6 +564,17 @@
             overflow: hidden;
         }
 
+        [v-cloak] {
+            display: none;
+        }
+
+        #UpInFo{
+            overflow:hidden;
+            height:100px;
+            width:100%;
+            resize:none;
+        }
+
 
 
     </style>
@@ -604,7 +616,7 @@
         <div class="row">
             <div class="col-4"></div>
             <div class="col-3" id="EdChBt">
-                <a class="Editbtn" href="NailDesigner.html">完成</a>
+                <button class="Editbtn" v-on:click="PutM">完成</button>
                 <a class="Checkbtn" v-if="Editing" v-on:click="Previewing">預覽</a>
                 <a class="Checkbtn" v-if="preview" v-on:click="BackEdit">編輯</a>
             </div>
@@ -621,7 +633,7 @@
                 <!--<div class="d-flex justify-content-start" id="EdUp">-->
                 <div id="EdUp">
                     <div>
-                        <label id="Mylabel">
+                        <label id="Mylabel" >
                             <img id="editimg" />編輯
                             <input type="file" id="file-uploader" accept="image/*" onchange="Getfile(this)" />
                         </label>
@@ -629,11 +641,13 @@
                 </div>
             </div>
             <div class="col-5" id="Profile">
-                <input type="text" id="SalonN" maxlength="20" placeholder="店家名稱" v-if="Editing" v-model="PutManicurist[0].manicuristSalonName" />
-                <b id="Title" v-if="preview" class="Bigtext FixsmPad">{{PutManicurist[0].manicuristSalonName}}</b>
-                <p id="Context" v-if="preview">{{PutManicurist[0].manicuristIntro}}</p>
+                <!--<input type="text" id="SalonN" maxlength="20" placeholder="店家名稱" v-if="Editing" v-model="PutManicurist[0].manicuristSalonName" />-->
+                <b id="Title" class="Bigtext FixsmPad">{{DesignList.manicuristSalonName}}</b>
+                <p id="Context" class="mt-3" v-if="preview">{{PutManicurist[0].manicuristIntro}}</p>
                 <br />
-                <textarea id="Infotext" maxlength="200" class="mt-3" placeholder="自我介紹" v-if="Editing" v-model="PutManicurist[0].manicuristIntro"></textarea>
+                <form>
+                    <textarea id="Infotext" maxlength="200" class="mt-3" placeholder="自我介紹" v-if="Editing" v-model="PutManicurist[0].manicuristIntro"></textarea>
+                </form>
                 <!--<div id="Score">
         <div class="ratings">
             <div class="Emptystar">★★★★★</div>
@@ -692,7 +706,7 @@
                     <div class="modal-dialog   ">
                         <form>
                             <div class="modal-content">
-                                <div class="modal-header border-0">
+                                <div class="modal-header border-0 pb-0">
                                     <h5 class="modal-title" id="staticBackdropLabel">新增造型款式</h5>
                                     <button class="close" data-dismiss="modal" aria-label="Close">
                                         <span onclick="cleartext()" aria-hidden="true">&times;</span>
@@ -700,7 +714,6 @@
                                 </div>
                                 <div class="modal-body">
                                     <div>
-                                        <!--<form>-->
                                             <div class="py-2">
                                                 <label for="UpName">美甲造型款式名稱：</label>
                                                 <input v-model="InsertDemoSet[0].demoSetName" class="TxtStyle ExitEmpty" id="UpName" type="text" minlength="1" maxlength="20" required />
@@ -717,7 +730,7 @@
                                                     <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
                                                     <label id="UpFileLabel" class="align-items-center">
                                                         上傳檔案
-                                                        <input id="UpFile" class="ExitEmpty" type="file" accept="image/*" multiple="multiple" onchange="GetMorefile(this)" />
+                                                        <input id="UpFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
                                                     </label>
                                                 </div>
                                             </div>
@@ -742,30 +755,11 @@
                                             <div>
                                                 <div class="py-2 d-flex">
                                                     <label for="UpTagF">標籤1：</label>
-                                                    <div id="tagF">
-                                                        <div class="Tag">
-                                                            <input required class="ExitEmpty" type="radio" id="TagFF" name="UpTagF" v-bind:value="NineTag[0]" onclick="GetVal(this,'UpTagF')"/>
-                                                            <label class="TagStyle RMClass" for="TagFF">{{NineTag[0]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagFS" name="UpTagF" v-bind:value="NineTag[1]" onclick="GetVal(this,'UpTagF')"/>
-                                                            <label class="TagStyle RMClass" for="TagFS">{{NineTag[1]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagFT" name="UpTagF" v-bind:value="NineTag[2]" onclick="GetVal(this,'UpTagF')"/>
-                                                            <label class="TagStyle RMClass" for="TagFT">{{NineTag[2]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagFL" name="UpTagF" value="自訂" onclick="GetVal(this,'UpTagF')" />
-                                                            <label class="TagStyle RMClass" for="TagFL">自訂</label>
-                                                            <input type="text" class="OnTxt" name="UpTagF" v-model="TagFtxt" />
-                                                            <!--<input type="text" v-model="TagFtxt" />-->
-                                                        </div>
-                                                        <!--<input type="button" class="m-1 TagStyle RMClass" value="可愛" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="敲口愛" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="不口愛" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="自訂" name="UpTagF" onclick="GetVal(this,'UpTagF')" />
-                                                        <input type="text" class="m-1 OnTxt" name="UpTagF" />-->
+                                                    <div id="tagF" >
+                                                        <select required v-model="InsertDemoSet[0].demoSetTag1">
+                                                            <option value="none" selected disabled hidden>請選擇</option>
+                                                            <option id="UpTagF" v-for="(Tag,Key) in FixTag" v-bind:value="FixTag[Key]">{{FixTag[Key]}}</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="py-2  d-flex">
@@ -788,12 +782,6 @@
                                                             <label class="TagStyle RMClass" for="TagSL">自訂</label>
                                                             <input type="text" class=" OnTxt" name="UpTagS" v-model="TagStxt" />
                                                         </div>
-                                                        <!--<input type="button" class="m-1 TagStyle RMClass" value="華麗風" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="碎花" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="漸層" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
-                                                        <input type="button" class="m-1 TagStyle RMClass" value="自訂" name="UpTagS" onclick="GetVal(this,'UpTagS')" />
-                                                        <input type="text" class="m-1 OnTxt" name="UpTagS" />
-                                                        <input style="display:none;" type="text" id="UpTagSVal" />-->
                                                     </div>
                                                 </div>
                                                 <div class="py-2  d-flex">
@@ -816,11 +804,6 @@
                                                             <label class="TagStyle RMClass" for="TagTL" >自訂</label>
                                                             <input type="text" class=" OnTxt" name="UpTagT" v-model="TagTtxt" />
                                                         </div>
-                                                        <!--<input type="button" class="m-1 TagStyle RMClass" value="華麗風" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
-    <input type="button" class="m-1 TagStyle RMClass" value="碎花" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
-    <input type="button" class="m-1 TagStyle RMClass" value="漸層" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
-    <input type="button" class="m-1 TagStyle RMClass" value="自訂" name="UpTagT" onclick="GetVal(this,'UpTagT')" />
-    <input type="text" class="m-1 OnTxt" name="UpTagT" />-->
                                                     </div>
 
                                                 </div>
@@ -849,7 +832,6 @@
                                                 <label for="UpMain">是否上架：</label>
                                                 <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetPublic" />
                                             </div>
-                                        <!--</form>-->
                                     </div>
                                     <div>
 
@@ -939,8 +921,6 @@
         var FloatStar;
         var DemoLenth;
 
-        
-
         $('.Chgcontext').hide();
         $('#pageone').show();
         $('button[value=demo]').addClass('NowUnderLine');
@@ -962,6 +942,7 @@
             }
         }
 
+
         $('.OnTxt').css('visibility', 'hidden');
         function GetVal(e, u) {
             console.log(e);
@@ -978,15 +959,10 @@
                 $(Nowtxt).css('visibility', 'hidden');
             }
 
-            //var NowBtn = `input[value=${e.value}][name=${e.name}]`
             var NowBtn = `label[value=${e.value}][name=${e.name}]`;
             $(NowBtn).addClass('TagFullColor');
 
             console.log(e.value);
-
-            if (e.name == 'UpTagF') {
-                    ShowData.InsertDemoSet[0].demoSetTag1 = e.value;
-            }
 
             if (e.name == 'UpTagS') {
                     ShowData.InsertDemoSet[0].demoSetTag2 = e.value;
@@ -1015,7 +991,7 @@
 
 
 
-        const ShowData = new Vue({
+        var ShowData = new Vue({
             el: '#ShowData',
             data: {
                 DesignList: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號", "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true, "manicuristSalonPhone": "0923859697", "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試", "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459", "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計", "manicuristScore": 4.6 }],
@@ -1029,11 +1005,15 @@
                 TagFtxt: "",
                 TagStxt: "",
                 TagTtxt: "",
-                PutManicurist: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristIntro": "" }],
-                preview: false,
-                Editing: true,
+                PutManicurist: [{ "manicuristId": 2, "manicuristPic": "", "manicuristIntro": "" }],
+                preview: true,
+                Editing: false,
                 TagList: [{ "tagId": 1, "tagName": "純色" }, { "tagId": 2, "tagName": "漸層" }, { "tagId": 3, "tagName": "碎花" }, { "tagId": 4, "tagName": "幾何" }, { "tagId": 5, "tagName": "立體" }, { "tagId": 6, "tagName": "晶片" }, { "tagId": 7, "tagName": "鑽石" }, { "tagId": 8, "tagName": "可愛風" }, { "tagId": 9, "tagName": "知性風" }, { "tagId": 10, "tagName": "華麗風" }, { "tagId": 11, "tagName": "花磚" }, { "tagId": 12, "tagName": "大理石" }, { "tagId": 13, "tagName": "手繪美甲" }, { "tagId": 14, "tagName": "卡通人物" }, { "tagId": 15, "tagName": "乾燥玫瑰" }],
-                NineTag:[]
+                NineTag: [],
+                FixTag: [],
+                //DemoImgPath: [],
+                PostDemo: [{ "demoPic": "", "demoSetId": "" }, { "demoPic": "", "demoSetId": "" }, { "demoPic": "", "demoSetId": "" }],
+                //PostDemoSetID:"",
             },
             methods: {
                 InsertDemo: function () {
@@ -1043,9 +1023,6 @@
                     console.log(this.TagFtxt);
                     console.log(this.TagStxt);
                     console.log(this.TagTtxt);
-                    if (this.InsertDemoSet[0].demoSetTag1 == "自訂") {
-                        this.InsertDemoSet[0].demoSetTag1 = this.TagFtxt;
-                    }
                     if (this.InsertDemoSet[0].demoSetTag2 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag2 = this.TagStxt;
                     }
@@ -1055,16 +1032,41 @@
 
                     //$('form > input').text("");
 
+                    $.ajax({
+                        type: "post",
+                        //url: "api/path/" + this.InsertDemoSet.manicuristId,
+                        url: "/api/DemoSet/PostDemoSetTable",
+                        contentType: "application/json",
+                        data: JSON.stringify(this.InsertDemoSet[0]),
+                        success: function () {
+                            window.location = "/YiPLib/NailDesignerEdit.html";
+                        }
+                    })
+
                     //$.ajax({
-                    //    type: "post",
+                    //    type: "get",
                     //    //url: "api/path/" + this.InsertDemoSet.manicuristId,
-                    //    url: "/api/DemoSet/PostDataSetTable",
-                    //    contentType: "application/json",
-                    //    data: JSON.stringify(this.InsertDemoSet[0]),
-                    //    success: function () {
-                    //        window.location = "/YiPLib/NailDesignerEdit.html"
+                    //    url: "/api/DemoSet/GetPostDemoSetTable/2",
+                    //    success: function (e) {
+                    //        for (var b = 0; b < ShowData.PostDemo.length; b++)
+                    //            this.PostDemo[b].demoSetId = e.demoSetId;
                     //    }
                     //})
+
+                    //$.ajax({
+                    //    type: "post",
+                    //    //url: "api/path/" + this.InsertDemo.manicuristId,
+                    //    url: "/api/DemoSet/PostDemoTable",
+                    //    contentType: "application/json",
+                    //    data: JSON.stringify(this.PostDemo),
+                    //    success: function () {
+                    //        //window.location = "/YiPLib/NailDesignerEdit.html"
+                    //    }
+                    //})
+
+
+
+
                 },
                 Previewing: function () {
                     this.preview = true;
@@ -1073,6 +1075,21 @@
                 BackEdit: function () {
                     this.preview = false;
                     this.Editing = true;
+                    console.log(PostDemo[0].demoSetId);
+                    console.log("ID");
+                },
+                PutM: function () {
+                    
+                    $.ajax({
+                        type: "put",
+                        //url: "api/path/" + this.InsertDemoSet.manicuristId,
+                        url: "/api/Manicurist/2",
+                        contentType: "application/json",
+                        data: JSON.stringify(this.PutManicurist[0]),
+                        success: function () {
+                            window.location = "/YiPLib/NailDesigner.html"
+                        }
+                    })
                 }
              }
         })
@@ -1086,6 +1103,8 @@
                 PercantStar = e[0].manicuristScore;
                 FloatStar = (PercantStar * 20) + '%';
                 ShowData.width = FloatStar;
+                ShowData.PutManicurist[0].manicuristIntro = e[0].manicuristIntro;
+                ShowData.PutManicurist[0].manicuristPic = e[0].manicuristPic;
             }
         });
 
@@ -1130,23 +1149,26 @@
             type: "get",
             url: "/api/TagTable",
             success: function (e) {
-                console.log(e);
+                //console.log(e);
                 ShowData.TagList = e;
-
+                for (let p = 0; p < 9; p++) {
+                    ShowData.FixTag[p] = e[p].tagName;
+                    //console.log(e[p].tagName);
+                    //console.log(ShowData.FixTag);
+                }
                 var TagLenth = [];
                 var Gettag = [];
-                var Temp=0;
                 //Gettag[0] = Math.floor(Math.random() * e.length - 1) + 1;
                 for (let i = 0; i < e.length; i++) {
                     TagLenth[i] = i;
                 }
-                console.log(TagLenth);
+                //console.log(TagLenth);
                 while (Gettag.length != 9) {
                 //for (let x = 0; x < 10; x++) {
                     var Rd = Math.floor(Math.random() * e.length - 1) + 1;
                     var Posi = TagLenth.indexOf(Rd);
-                    console.log("亂數為：" + Rd + "位置為：" + Posi);
-                    console.log("現在陣列為" + TagLenth);
+                    //console.log("亂數為：" + Rd + "位置為：" + Posi);
+                    //console.log("現在陣列為" + TagLenth);
                     if (Posi == -1) {
                         //Temp = Temp + 1;
                         continue;
@@ -1166,7 +1188,7 @@
             }
         });
 
-        let inputfile;
+        var inputfile;
         async function Getfile(e) {
             let form = new FormData();
             form.append("file", e.files[0]);
@@ -1177,27 +1199,49 @@
             });
             inputfile = e.files[0].name;
             GetFileBtn();
+            //console.log("UploadFolder/" + e.files[0].name);
         }
         var GetFileBtn = function () {
             var FilePath = "UploadFolder/" + inputfile;
             $('#DesignerImg').prop('src', FilePath);
             console.log(FilePath);
-
+            ShowData.PutManicurist[0].manicuristPic = FilePath;
+            //console.log(ShowData.PutManicurist.manicuristPic);
         }
+
+        var inputCoverfile;
+        async function GetCoverfile(e) {
+            let Coverform = new FormData();
+            Coverform.append("file", e.files[0]);
+            console.log(e.files[0]);
+            await fetch('https://localhost:44308/api/File', {
+                method: 'POST',
+                body: Coverform
+            });
+            inputCoverfile = e.files[0].name;
+            GetCoverFileBtn();
+            //console.log("UploadFolder/" + e.files[0].name);
+        }
+        var GetCoverFileBtn = function () {
+            var CoverFilePath = "UploadFolder/" + inputCoverfile;
+            console.log(CoverFilePath);
+        }
+
+
         function cleartext() {
             document.getElementsByClassName('ExitEmpty').value = '';
         }
 
         let inputMorefile=[];
         async function GetMorefile(e) {
-            cleartext();
-            //console.log(e.files);
-            //console.log(e.files.length);
             let MoreFile = new FormData();
             for (var i = 0; i < e.files.length;i++) {
                 MoreFile.append("files", e.files[i], `${e.files[i].name}`);
                 inputMorefile[i] = e.files[i].name;
                 var CoverPath = `UploadFolder/${e.files[i].name}`;
+                //ShowData.PostDemo[i].demoSetId = ShowData.PostDemoSetID;
+                ShowData.PostDemo[i].demoPic = CoverPath;
+                //DemoImgPath[i] = CoverPath;
                 document.getElementById('UpFileText').innerHTML += `${e.files[i].name} \n`;
             }
             console.log(MoreFile);
