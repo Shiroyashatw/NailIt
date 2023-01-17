@@ -28,7 +28,7 @@ var showReportAction = async function () {
         return;
     }
     let reportRepresent = scop.reportCodeList.find(r => r.codeId == reportCodeId).codeRepresent;
-    // new report
+    // new report for reply
     let report = new ReportTable({
         ReportBuilder: scop.loginId,
         ReportTarget: scop.articleAuthorId,
@@ -37,34 +37,38 @@ var showReportAction = async function () {
         ReportReasonC: reportCodeId,
         ReportContent: reportRepresent
     });
-    // if it's article report
+    // if it's article report, change report content
     if (scop.replyId != 0) {
         let reply = scop.replies.find(r => r.reply.replyId == scop.replyId);
         report.ReportTarget = reply.reply.memberId;
         report.ReportItem = reply.reply.replyId;
-        report.ReportPlaceC = "D6";  
+        report.ReportPlaceC = "D6";
+    }
+    // if "其他", "G9"(reportCodeId) be chosen, get report reason from #reportOtherInput
+    if (reportCodeId == "G9") {
+        report.ReportContent = $("#reportOtherInput").val();
     }
     // call api
-    let result = await SocialService.postReply(report);
+    let result = await SocialService.postSocialReport(report);
     // check result
-    if (true) {
-        // clean OtherInput and close report modal
-        $("#reportOtherInput").val("");
+    if (result) {
+        // close report modal
         $("#reportModal").modal("hide");
         // hide the reply/article
-        if (scop.replyId != 0) { // article
-            // remove the article data-articleid
-            $(`div[data-articleid="${scop.articleId}"]`).remove();
+        if (scop.replyId == 0) { // article
+            // remove the article from display
+            renderRemoveArticle();
             // hide article modal
             $("#articleModal").modal("hide");
-        }else{ // reply
-            $(`div[data-replyid="${scop.replyId}"]`).remove();
-        }            
+        } else { // reply
+            // remove the reply from display. update reply area reply count. update the article reply count.
+            renderRemoveTheReply();            
+        }
         // snack bar inform complete
         showSnackbar("檢舉已完成!");
     }
 
- }
+}
 // Show report reason list, before confirm report
 var showReportModal = function (obj) {
     // fade articleModal
@@ -87,10 +91,8 @@ var showReportModal = function (obj) {
 var showDeleteReply = async function () {
     let result = await deleteReply(scop.replyId);
     if (result) {
-        // remove the reply
-        $(`div[data-replyid="${scop.replyId}"]`).remove();
-        currentArticle().article.articleReplyCount--;
-        renderTheArticle(currentArticle());
+        // remove the reply from display. update reply area reply count. update the article reply count.
+        renderRemoveTheReply();
         // snack bar inform complete
         showSnackbar("刪除已完成!");
     }
@@ -98,7 +100,7 @@ var showDeleteReply = async function () {
 // Show the new article in articles
 var showNewReply = async function () {
     let reply = new ReplyTable({
-        ArticleId: currentArticle().article.articleId,
+        ArticleId: scop.articleId,
         MemberId: scop.loginId,
         ReplyContent: $("#replyInput").val(),
     })
@@ -125,19 +127,14 @@ var showNewReply = async function () {
 }
 // Remove the article from articles
 var showDeleteArticle = async function () {
-    let articleId = currentArticle().article.articleId;
-    let result = await deleteArticle(articleId);
+    let result = await deleteArticle(scop.articleId);
     if (result) {
         // remove the article data-articleid
-        $(`div[data-articleid="${articleId}"]`).remove();
-        if (scop.articleCode == "My") {
-            scop.articles.articleCount--;
-            $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
-            // snack bar inform complete
-            showSnackbar("刪除已完成!");
-        }
+        renderRemoveArticle();
+        // snack bar inform complete
+        showSnackbar("刪除已完成!");
+        $("#articleModal").modal("hide");
     }
-    $("#articleModal").modal("hide");
 }
 // Show confirm Modal, if delete the article or reply.
 var showConfirmDelModal = function (obj) {
@@ -233,7 +230,7 @@ var showArticleLikeToggle = async function (likeObj) {
     let article = currentArticle();
     // build a like with articleId and memberId:scop.loginId
     let articleLike = new ArticleLikeTable({
-        ArticleId: article.article.articleId,
+        ArticleId: scop.articleId,
         MemberId: scop.loginId
     });
     // if like == false (create a like)
@@ -265,16 +262,11 @@ var showArticleLikeToggle = async function (likeObj) {
 }
 // show Modal
 var showModal = async function (articleId) {
-    let articles = scop.articles;
-    if (scop.articles.articleCount !== undefined) {
-        articles = scop.articles.reaultArticles;
-    }
-
     scop.articleId = articleId;
     let article = currentArticle();
     // call and show relies
     scop.articleAuthorId = article.article.articleAuthor;
-    await getReplies(article.article.articleId);
+    await getReplies(articleId);
     renderReplaies();
 
     // Modal show article data
@@ -337,6 +329,13 @@ var showMain = async function (code, name) {
 //#endregion
 
 //#region render updates
+// remove the reply from display. update reply area reply count. update the article reply count.
+var renderRemoveTheReply = function () {
+    $(`div[data-replyid="${scop.replyId}"]`).remove();
+    currentArticle().article.articleReplyCount--;
+    $("#ModalArticleReplyCount").html(`共${currentArticle().article.articleReplyCount}則留言`);
+    renderTheArticle(currentArticle());
+}
 var renderNewReply = function (reply) {
     let replyHTML = `
                 <div data-replyid="${reply.replyId}">
@@ -418,6 +417,13 @@ var renderArtiModDropdown = function () {
     }
     $("#ArtiModDropContent").html(dropContentHTML);
 };
+var renderRemoveArticle = function () {
+    $(`div[data-articleid="${scop.articleId}"]`).remove();
+    if (scop.articleCode == "My") {
+        scop.articles.articleCount--;
+        $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
+    }
+}
 var renderTheArticle = function (article) {
     let articleHTML = `
         <h4 class="m-0">${article.article.articleTitle}</h4>
@@ -566,16 +572,19 @@ var getArticles = async function () {
     return articles;
 }
 //#endregion
-
 var currentArticle = function () {
-    return scop.articles.find(a => a.article.articleId == scop.articleId)
+    let articles = scop.articles;
+    if (scop.articles.reaultArticles != undefined) {
+        articles = scop.articles.reaultArticles;
+    }
+    return articles.find(a => a.article.articleId == scop.articleId);
 }
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
-    $('#reportModal').modal({
-        show: true, // 預設開啟modal
-    })
+    // $('#reportModal').modal({
+    //     show: true, // 預設開啟modal
+    // })
 
     // 是否需要把backend的session設定到frontend ?
     scop.loginId = $("#loginId").val();
@@ -594,8 +603,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     //#region Event Binding
     // While report modal hide, show article Modal will come up.
     $("#reportModal").on("hide.bs.modal", function (e) {
-        $("input[name='reportOption']:checked").prop("checked", false);
         $("#articleModal").css("z-index", "1050");
+        // reset report modal
+        $("#reportOtherInput").val("");
+        $("#reportOtherInput").hide();
+        $("input[name='reportOption']:checked").prop("checked", false);
     });
     // While confirm modal hide, show article Modal will come up.
     $("#confirmModal").on("hide.bs.modal", function (e) {
@@ -631,11 +643,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     });
     // Show input of report other, if otherOption been chosen.
-    $("input[name='reportOption']").on("change",function(e){
+    $("input[name='reportOption']").on("change", function (e) {
         if (this.value == "G9") {
             $("#reportOtherInput").show();
-        }else{
-            $("#reportOtherInput").hide();            
+            $("#reportOtherInput").focus();
+        } else {
+            $("#reportOtherInput").hide();
         }
     });
     // Initial Modal show setting
