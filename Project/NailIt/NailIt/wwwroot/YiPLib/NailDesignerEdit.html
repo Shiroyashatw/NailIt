@@ -183,9 +183,9 @@
                 z-index: 99;
             }
 
-        .Seemore:hover > .Clickme {
+/*        .Seemore:hover > .Clickme {
             visibility: visible;
-        }
+        }*/
 
         .ratings {
             position: relative;
@@ -633,7 +633,7 @@
                 <!--<div class="d-flex justify-content-start" id="EdUp">-->
                 <div id="EdUp">
                     <div>
-                        <label id="Mylabel" >
+                        <label id="Mylabel">
                             <img id="editimg" />編輯
                             <input type="file" id="file-uploader" accept="image/*" onchange="Getfile(this)" />
                         </label>
@@ -649,12 +649,12 @@
                     <textarea id="Infotext" maxlength="200" class="mt-3" placeholder="自我介紹" v-if="Editing" v-model="PutManicurist[0].manicuristIntro"></textarea>
                 </form>
                 <!--<div id="Score">
-        <div class="ratings">
-            <div class="Emptystar">★★★★★</div>
-            <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
-        </div>
-        <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
-    </div>-->
+                <div class="ratings">
+                    <div class="Emptystar">★★★★★</div>
+                    <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
+                </div>
+                <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
+            </div>-->
             </div>
             <div class="col-2">
                 <!--<div style="height: 80%;"></div>-->
@@ -690,6 +690,7 @@
                     <div class="col-2"></div>
                     <div class="col-5">
                         <button id="Insertdemo" data-toggle="modal" data-target="#staticBackdrop">新增</button>
+                        <!--<button data-toggle="modal" data-target="#EditModal">新增</button>-->
                     </div>
                     <div class="col-4">
                         <form>
@@ -702,7 +703,7 @@
 
                 <!-- Modal -->
 
-                <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal fade" id="staticBackdrop" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog   ">
                         <form>
                             <div class="modal-content">
@@ -714,124 +715,124 @@
                                 </div>
                                 <div class="modal-body">
                                     <div>
-                                            <div class="py-2">
-                                                <label for="UpName">美甲造型款式名稱：</label>
-                                                <input v-model="InsertDemoSet[0].demoSetName" class="TxtStyle ExitEmpty" id="UpName" type="text" minlength="1" maxlength="20" required />
+                                        <div class="py-2">
+                                            <label for="UpName">美甲造型款式名稱：</label>
+                                            <input v-model="InsertDemoSet[0].demoSetName" class="TxtStyle ExitEmpty" id="UpName" type="text" minlength="1" maxlength="20" required />
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="UpContext">美甲造型款式內容：</label>
+                                            <br />
+                                            <textarea required v-model="InsertDemoSet[0].demoSetContent" class="ExitEmpty" id="UpInFo" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                                        </div>
+                                        <div>
+                                            <label for="UpFile">照片：</label>
+                                            <br />
+                                            <div class="d-flex align-items-center">
+                                                <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
+                                                <label id="UpFileLabel" class="align-items-center">
+                                                    上傳檔案
+                                                    <input id="UpFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
+                                                </label>
                                             </div>
-                                            <div class="py-2">
-                                                <label for="UpContext">美甲造型款式內容：</label>
-                                                <br />
-                                                <textarea required v-model="InsertDemoSet[0].demoSetContent" class="ExitEmpty" id="UpInFo" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-                                            </div>
-                                            <div>
-                                                <label for="UpFile">照片：</label>
-                                                <br />
-                                                <div class="d-flex align-items-center">
-                                                    <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
-                                                    <label id="UpFileLabel" class="align-items-center">
-                                                        上傳檔案
-                                                        <input id="UpFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="py-2">
-                                                <label for="UpC">施作部位：</label>
-                                                <select id="UpC" v-model="picked" required>
-                                                    <option value="none" selected disabled hidden>請選擇</option>
-                                                    <option value="C0">手</option>
-                                                    <option value="C1">腳</option>
-                                                    <option value="C2">手、腳</option>
-                                                </select>
-                                            </div>
-                                            <div class="py-2">
-                                                <label for="UpColor">主要顏色：</label>
-                                                <select id="UpColor" required>
-                                                    <option value="none" selected disabled hidden>請選擇</option>
-                                                    <option>紅色</option>
-                                                    <option>綠色</option>
-                                                    <option>黃色</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <div class="py-2 d-flex">
-                                                    <label for="UpTagF">標籤1：</label>
-                                                    <div id="tagF" >
-                                                        <select required v-model="InsertDemoSet[0].demoSetTag1">
-                                                            <option value="none" selected disabled hidden>請選擇</option>
-                                                            <option id="UpTagF" v-for="(Tag,Key) in FixTag" v-bind:value="FixTag[Key]">{{FixTag[Key]}}</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="py-2  d-flex">
-                                                    <label for="UpTagS">標籤2：</label>
-                                                    <div id="tagS">
-                                                        <div class="Tag">
-                                                            <input required class="ExitEmpty" type="radio" id="TagSF" name="UpTagS" v-bind:value="NineTag[3]" onclick="GetVal(this,'UpTagS')" />
-                                                            <label class="TagStyle RMClass" for="TagSF">{{NineTag[3]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagSS" name="UpTagS" v-bind:value="NineTag[4]" onclick="GetVal(this,'UpTagS')" />
-                                                            <label class="TagStyle RMClass" for="TagSS">{{NineTag[4]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagST" name="UpTagS" v-bind:value="NineTag[5]" onclick="GetVal(this,'UpTagS')" />
-                                                            <label class="TagStyle RMClass" for="TagST">{{NineTag[5]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagSL" name="UpTagS" value="自訂" onclick="GetVal(this,'UpTagS')" />
-                                                            <label class="TagStyle RMClass" for="TagSL">自訂</label>
-                                                            <input type="text" class=" OnTxt" name="UpTagS" v-model="TagStxt" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="py-2  d-flex">
-                                                    <label for="UpTagT">標籤3：</label>
-                                                    <div id="tagT">
-                                                        <div class="Tag">
-                                                            <input required class="ExitEmpty" type="radio" id="TagTF" name="UpTagT" v-bind:value="NineTag[6]" onclick="GetVal(this,'UpTagT')" />
-                                                            <label class="TagStyle RMClass" for="TagTF">{{NineTag[6]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagTS" name="UpTagT" v-bind:value="NineTag[7]" onclick="GetVal(this,'UpTagT')" />
-                                                            <label class="TagStyle RMClass" for="TagTS">{{NineTag[7]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagTT" name="UpTagT" v-bind:value="NineTag[8]" onclick="GetVal(this,'UpTagT')" />
-                                                            <label class="TagStyle RMClass" for="TagTT">{{NineTag[8]}}</label>
-                                                        </div>
-                                                        <div class="Tag">
-                                                            <input type="radio" id="TagTL" name="UpTagT" value="自訂" onclick="GetVal(this,'UpTagT')" />
-                                                            <label class="TagStyle RMClass" for="TagTL" >自訂</label>
-                                                            <input type="text" class=" OnTxt" name="UpTagT" v-model="TagTtxt" />
-                                                        </div>
-                                                    </div>
-
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="UpC">施作部位：</label>
+                                            <select id="UpC" v-model="picked" required>
+                                                <option value="none" selected disabled hidden>請選擇</option>
+                                                <option value="C0">手</option>
+                                                <option value="C1">腳</option>
+                                                <option value="C2">手、腳</option>
+                                            </select>
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="UpColor">主要顏色：</label>
+                                            <select id="UpColor" required>
+                                                <option value="none" selected disabled hidden>請選擇</option>
+                                                <option>紅色</option>
+                                                <option>綠色</option>
+                                                <option>黃色</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <div class="py-2 d-flex">
+                                                <label for="UpTagF">標籤1：</label>
+                                                <div id="tagF">
+                                                    <select required v-model="InsertDemoSet[0].demoSetTag1">
+                                                        <option value="none" selected disabled hidden>請選擇</option>
+                                                        <option id="UpTagF" v-for="(Tag,Key) in FixTag" v-bind:value="FixTag[Key]">{{FixTag[Key]}}</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="py-2  d-flex">
-                                                <label>主打：</label>
-                                                <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetMain" />
-                                                <div v-if="InsertDemoSet[0].demoSetMain">
-                                                    <label>期間</label>
-                                                    <input class="ExitEmpty" id="Startd" onchange="GetStDate(this)" type="date"/>
-                                                    <span>-</span>
-                                                    <input class="ExitEmpty" id="Endd" onchange="GetEdDate(this)" type="date" />
+                                                <label for="UpTagS">標籤2：</label>
+                                                <div id="tagS">
+                                                    <div class="Tag">
+                                                        <input required class="ExitEmpty" type="radio" id="TagSF" name="UpTagS" v-bind:value="NineTag[3]" onclick="GetVal(this,'UpTagS')" />
+                                                        <label class="TagStyle RMClass" for="TagSF">{{NineTag[3]}}</label>
+                                                    </div>
+                                                    <div class="Tag">
+                                                        <input type="radio" id="TagSS" name="UpTagS" v-bind:value="NineTag[4]" onclick="GetVal(this,'UpTagS')" />
+                                                        <label class="TagStyle RMClass" for="TagSS">{{NineTag[4]}}</label>
+                                                    </div>
+                                                    <div class="Tag">
+                                                        <input type="radio" id="TagST" name="UpTagS" v-bind:value="NineTag[5]" onclick="GetVal(this,'UpTagS')" />
+                                                        <label class="TagStyle RMClass" for="TagST">{{NineTag[5]}}</label>
+                                                    </div>
+                                                    <div class="Tag">
+                                                        <input type="radio" id="TagSL" name="UpTagS" value="自訂" onclick="GetVal(this,'UpTagS')" />
+                                                        <label class="TagStyle RMClass" for="TagSL">自訂</label>
+                                                        <input type="text" class=" OnTxt" name="UpTagS" v-model="TagStxt" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="py-2">
-                                                <span for="UpDeposit">預估金額：</span>
-                                                <label>$NT</label>
-                                                <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetPrice" />
+                                            <div class="py-2  d-flex">
+                                                <label for="UpTagT">標籤3：</label>
+                                                <div id="tagT">
+                                                    <div class="Tag">
+                                                        <input required class="ExitEmpty" type="radio" id="TagTF" name="UpTagT" v-bind:value="NineTag[6]" onclick="GetVal(this,'UpTagT')" />
+                                                        <label class="TagStyle RMClass" for="TagTF">{{NineTag[6]}}</label>
+                                                    </div>
+                                                    <div class="Tag">
+                                                        <input type="radio" id="TagTS" name="UpTagT" v-bind:value="NineTag[7]" onclick="GetVal(this,'UpTagT')" />
+                                                        <label class="TagStyle RMClass" for="TagTS">{{NineTag[7]}}</label>
+                                                    </div>
+                                                    <div class="Tag">
+                                                        <input type="radio" id="TagTT" name="UpTagT" v-bind:value="NineTag[8]" onclick="GetVal(this,'UpTagT')" />
+                                                        <label class="TagStyle RMClass" for="TagTT">{{NineTag[8]}}</label>
+                                                    </div>
+                                                    <div class="Tag">
+                                                        <input type="radio" id="TagTL" name="UpTagT" value="自訂" onclick="GetVal(this,'UpTagT')" />
+                                                        <label class="TagStyle RMClass" for="TagTL">自訂</label>
+                                                        <input type="text" class=" OnTxt" name="UpTagT" v-model="TagTtxt" />
+                                                    </div>
+                                                </div>
+
                                             </div>
-                                            <div class="py-2">
-                                                <span for="UpPrice">訂金：</span>
-                                                <label>$NT</label>
-                                                <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetDeposit" />
+                                        </div>
+                                        <div class="py-2  d-flex">
+                                            <label>主打：</label>
+                                            <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetMain" />
+                                            <div v-if="InsertDemoSet[0].demoSetMain">
+                                                <label>期間</label>
+                                                <input class="ExitEmpty" id="Startd" onchange="GetStDate(this)" type="date" />
+                                                <span>-</span>
+                                                <input class="ExitEmpty" id="Endd" onchange="GetEdDate(this)" type="date" />
                                             </div>
-                                            <div class="py-2">
-                                                <label for="UpMain">是否上架：</label>
-                                                <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetPublic" />
-                                            </div>
+                                        </div>
+                                        <div class="py-2">
+                                            <span for="UpDeposit">預估金額：</span>
+                                            <label>$NT</label>
+                                            <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetPrice" />
+                                        </div>
+                                        <div class="py-2">
+                                            <span for="UpPrice">訂金：</span>
+                                            <label>$NT</label>
+                                            <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetDeposit" />
+                                        </div>
+                                        <div class="py-2">
+                                            <label for="UpMain">是否上架：</label>
+                                            <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetPublic" />
+                                        </div>
                                     </div>
                                     <div>
 
@@ -843,7 +844,7 @@
                                 </div>
                             </div>
                         </form>
-                        
+
                     </div>
                 </div>
 
@@ -860,12 +861,12 @@
                 <div class="row">
                     <div class="col-1"></div>
                     <div class="col-10" id="Demo">
-                        <div v-for="(item,key) in DemoCover">
-                            <div class="Seemore my-0">
-                                <img class="Demoimg" v-bind:src="DemoCover[key].demoPic" alt="">
+                        <div v-for="(item,key) in DemoSetList">
+                            <div class="Seemore my-0" data-toggle="modal" data-target="#EditModal">
+                                <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover" alt="">
                             </div>
-                            <p style="font-weight: bold;" class="DemoGroup">{{DemoCover[key].demoSetName}}</p>
-                            <p class="DemoGroup">${{DemoCover[key].demoSetPrice}}</p>
+                            <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
+                            <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
                         </div>
                     </div>
                     <div class="col-1"></div>
@@ -901,6 +902,8 @@
                     <div class="col-10 EventDemo">
                         <div v-for="(item,key) in MainDemoCover">
                             <div class="Seemore my-0">
+                                <!--<button data-toggle="modal" data-target="#EditModal">編輯</button>-->
+                                <!--<button>編輯</button>-->
                                 <img class="Demoimg" v-bind:src="MainDemoCover[key].demoPic" alt="">
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{MainDemoCover[key].demoSetName}}</p>
@@ -910,7 +913,152 @@
                     <div class="col-1"></div>
                 </div>
             </div>
+        </div>
 
+        <!--EditModal-->
+        <div class="modal fade" id="EditModal" data-keyboard="false" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form>
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pb-0">
+                            <h5 class="modal-title" id="EditModalLabel">編輯造型款式</h5>
+                            <button class="close" data-dismiss="modal" aria-label="Close">
+                                <span onclick="cleartext()" aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <div class="py-2">
+                                    <label for="UpName">美甲造型款式名稱：</label>
+                                    <input v-model="PostDemoSet[0].demoSetName" class="TxtStyle ExitEmpty" id="UpName" type="text" minlength="1" maxlength="20" required />
+                                </div>
+                                <div class="py-2">
+                                    <label for="UpContext">美甲造型款式內容：</label>
+                                    <br />
+                                    <textarea required v-model="PostDemoSet[0].demoSetContent" class="ExitEmpty" id="UpInFo" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                                </div>
+                                <div>
+                                    <label for="UpFile">照片：</label>
+                                    <br />
+                                    <div class="d-flex align-items-center">
+                                        <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
+                                        <label id="UpFileLabel" class="align-items-center">
+                                            上傳檔案
+                                            <input id="UpFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="py-2">
+                                    <label for="UpC">施作部位：</label>
+                                    <select id="UpC" v-model="picked" required>
+                                        <option value="none" selected disabled hidden>請選擇</option>
+                                        <option value="C0">手</option>
+                                        <option value="C1">腳</option>
+                                        <option value="C2">手、腳</option>
+                                    </select>
+                                </div>
+                                <div class="py-2">
+                                    <label for="UpColor">主要顏色：</label>
+                                    <select id="UpColor" required>
+                                        <option value="none" selected disabled hidden>請選擇</option>
+                                        <option>紅色</option>
+                                        <option>綠色</option>
+                                        <option>黃色</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div class="py-2 d-flex">
+                                        <label for="UpTagF">標籤1：</label>
+                                        <div id="tagF">
+                                            <select required v-model="PostDemoSet[0].demoSetTag1">
+                                                <option value="none" selected disabled hidden>請選擇</option>
+                                                <option id="UpTagF" v-for="(Tag,Key) in FixTag" v-bind:value="FixTag[Key]">{{FixTag[Key]}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="py-2  d-flex">
+                                        <label for="UpTagS">標籤2：</label>
+                                        <div id="tagS">
+                                            <div class="Tag">
+                                                <input required class="ExitEmpty" type="radio" id="TagSF" name="UpTagS" v-bind:value="NineTag[3]" onclick="GetVal(this,'UpTagS')" />
+                                                <label class="TagStyle RMClass" for="TagSF">{{NineTag[3]}}</label>
+                                            </div>
+                                            <div class="Tag">
+                                                <input type="radio" id="TagSS" name="UpTagS" v-bind:value="NineTag[4]" onclick="GetVal(this,'UpTagS')" />
+                                                <label class="TagStyle RMClass" for="TagSS">{{NineTag[4]}}</label>
+                                            </div>
+                                            <div class="Tag">
+                                                <input type="radio" id="TagST" name="UpTagS" v-bind:value="NineTag[5]" onclick="GetVal(this,'UpTagS')" />
+                                                <label class="TagStyle RMClass" for="TagST">{{NineTag[5]}}</label>
+                                            </div>
+                                            <div class="Tag">
+                                                <input type="radio" id="TagSL" name="UpTagS" value="自訂" onclick="GetVal(this,'UpTagS')" />
+                                                <label class="TagStyle RMClass" for="TagSL">自訂</label>
+                                                <input type="text" class=" OnTxt" name="UpTagS" v-model="TagStxt" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="py-2  d-flex">
+                                        <label for="UpTagT">標籤3：</label>
+                                        <div id="tagT">
+                                            <div class="Tag">
+                                                <input required class="ExitEmpty" type="radio" id="TagTF" name="UpTagT" v-bind:value="NineTag[6]" onclick="GetVal(this,'UpTagT')" />
+                                                <label class="TagStyle RMClass" for="TagTF">{{NineTag[6]}}</label>
+                                            </div>
+                                            <div class="Tag">
+                                                <input type="radio" id="TagTS" name="UpTagT" v-bind:value="NineTag[7]" onclick="GetVal(this,'UpTagT')" />
+                                                <label class="TagStyle RMClass" for="TagTS">{{NineTag[7]}}</label>
+                                            </div>
+                                            <div class="Tag">
+                                                <input type="radio" id="TagTT" name="UpTagT" v-bind:value="NineTag[8]" onclick="GetVal(this,'UpTagT')" />
+                                                <label class="TagStyle RMClass" for="TagTT">{{NineTag[8]}}</label>
+                                            </div>
+                                            <div class="Tag">
+                                                <input type="radio" id="TagTL" name="UpTagT" value="自訂" onclick="GetVal(this,'UpTagT')" />
+                                                <label class="TagStyle RMClass" for="TagTL">自訂</label>
+                                                <input type="text" class=" OnTxt" name="UpTagT" v-model="TagTtxt" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="py-2  d-flex">
+                                    <label>主打：</label>
+                                    <input class="ExitEmpty" type="checkbox" v-model="PostDemoSet[0].demoSetMain" />
+                                    <div v-if="InsertDemoSet[0].demoSetMain">
+                                        <label>期間</label>
+                                        <input class="ExitEmpty" id="Startd" onchange="GetStDate(this)" type="date" />
+                                        <span>-</span>
+                                        <input class="ExitEmpty" id="Endd" onchange="GetEdDate(this)" type="date" />
+                                    </div>
+                                </div>
+                                <div class="py-2">
+                                    <span for="UpDeposit">預估金額：</span>
+                                    <label>$NT</label>
+                                    <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="PostDemoSet[0].demoSetPrice" />
+                                </div>
+                                <div class="py-2">
+                                    <span for="UpPrice">訂金：</span>
+                                    <label>$NT</label>
+                                    <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="PostDemoSet[0].demoSetDeposit" />
+                                </div>
+                                <div class="py-2">
+                                    <label for="UpMain">是否上架：</label>
+                                    <input class="ExitEmpty" type="checkbox" v-model="PostDemoSet[0].demoSetPublic" />
+                                </div>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0">
+                            <button onclick="cleartext()" class="Checkbtn" data-dismiss="modal">取消</button>
+                            <button v-on:click="InsertDemo" type="submit" class="Editbtn">新增</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
         </div>
     </div>
 
@@ -1014,6 +1162,7 @@
                 //DemoImgPath: [],
                 PostDemo: [{ "demoPic": "", "demoSetId": "" }, { "demoPic": "", "demoSetId": "" }, { "demoPic": "", "demoSetId": "" }],
                 //PostDemoSetID:"",
+                PostDemoSet: [{ "demoSetName": null, "demoSetCover": 1, "manicuristId": 2, "demoSetPartC": null, "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": null, "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
             },
             methods: {
                 InsertDemo: function () {
@@ -1098,7 +1247,7 @@
             type: "get",
             url: "/api/Manicurist/2",
             success: function (e) {
-                //console.log(e[0]);
+                console.log(e[0]);
                 ShowData.DesignList = e[0];
                 PercantStar = e[0].manicuristScore;
                 FloatStar = (PercantStar * 20) + '%';
@@ -1127,23 +1276,23 @@
             }
         });
 
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetDemoCover/2",
-            success: function (e) {
-                //console.log(e);
-                ShowData.DemoCover = e;
-            }
-        });
+        //$.ajax({
+        //    type: "get",
+        //    url: "/api/DemoSet/GetDemoCover/2",
+        //    success: function (e) {
+        //        //console.log(e);
+        //        ShowData.DemoCover = e;
+        //    }
+        //});
 
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetMainDemoCover/2",
-            success: function (e) {
-                //console.log(e);
-                ShowData.MainDemoCover = e;
-            }
-        });
+        //$.ajax({
+        //    type: "get",
+        //    url: "/api/DemoSet/GetMainDemoCover/2",
+        //    success: function (e) {
+        //        //console.log(e);
+        //        ShowData.MainDemoCover = e;
+        //    }
+        //});
 
         $.ajax({
             type: "get",
@@ -1251,7 +1400,6 @@
             });
             console.log(inputMorefile);
             //var FirstFilePath = "UploadFolder/" + inputMorefile[0];
-            
         }
 
 
