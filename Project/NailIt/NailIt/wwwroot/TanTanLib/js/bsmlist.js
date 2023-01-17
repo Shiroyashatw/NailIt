@@ -15,8 +15,6 @@ function bsmlist(evt, manageobj) {
   
 }
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
 
 
 // 檢舉項目Modal審核表 ----------------------------------------------------------------------
