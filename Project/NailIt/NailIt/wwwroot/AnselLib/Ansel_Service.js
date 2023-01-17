@@ -147,7 +147,7 @@ function initialDate(value) {
     return isUndefined(value) ? new Date() : value;
 }
 function initialBool(value) {
-    return isUndefined(value) ? new false : value;
+    return isUndefined(value) ? false : value;
 }
 
 class ArticleTable {
