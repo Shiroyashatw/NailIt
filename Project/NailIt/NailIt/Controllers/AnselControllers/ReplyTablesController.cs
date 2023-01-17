@@ -33,8 +33,18 @@ namespace NailIt.Controllers.AnselControllers
                 Where(r => r.ArticleId == ArticleId).
                 OrderByDescending(r => r.ReplyId).
                 ToListAsync();
+            
+            // remove the reply had been report by this user
+            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D6").ToList();
+            var leftJoinReport = (from reply in replies
+                                  join report in userArticleReport
+                                       on reply.ReplyId equals report.ReportItem into gj
+                                  from userReport in gj.DefaultIfEmpty()
+                                  where userReport?.ReportId == null
+                                  select reply
+                                 ).ToList();
 
-            var repliesJoinMember = replies.Join(
+            var repliesJoinMember = leftJoinReport.Join(
                 _context.MemberTables,
                 r => r.MemberId,
                 m => m.MemberId,

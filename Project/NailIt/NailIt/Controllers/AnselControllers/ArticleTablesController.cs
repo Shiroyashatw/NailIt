@@ -40,35 +40,61 @@ namespace NailIt.Controllers.AnselControllers
                 OrderByDescending(a => (order == "latest") ? a.ArticleId : a.ArticleLikesCount).
                 ThenByDescending(a => a.ArticleId).
                 ToListAsync();
-            if (searchValue != "")            
+            if (searchValue != "")
             {
                 articles = articles.
                 Where(a => a.ArticleTitle.Contains(searchValue)).
                 ToList();
             }
-            articles = articles.
+            // remove the article had been report by this user
+            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D5").ToList();
+            var leftJoinReport = (from article in articles
+                                  join report in userArticleReport
+                                       on article.ArticleId equals report.ReportItem into gj
+                                  from userReport in gj.DefaultIfEmpty()
+                                  where userReport?.ReportId == null
+                                  select article
+                                 ).ToList();
+            articles = leftJoinReport.
                 Skip(page * amountPerPage).
                 Take(amountPerPage).
                 ToList();
 
-            var articlesJoinMember = articles.Join(
-                _context.MemberTables,
-                a => a.ArticleAuthor,
-                m => m.MemberId,
-                (a, m) => new { article = a, m.MemberAccount, m.MemberNickname }).ToList();
+            // don't count those reply, which be report by user.
+            foreach (var article in articles)
+            {
+                var replyReport = _context.ReportTables.
+                    Where(r => r.ReportPlaceC == "D6").
+                    ToList();
+                var articleReplyReportCount = replyReport.
+                    Join(_context.ReplyTables,
+                        report => report.ReportItem,
+                        reply => reply.ReplyId,
+                        (report, reply) => new { articleId = reply.ArticleId }).
+                    Where(r => r.articleId == article.ArticleId).
+                    Count();
+                article.ArticleReplyCount -= articleReplyReportCount;
+            }
+
+            var articlesJoinMember = articles.
+                Join(_context.MemberTables,
+                    a => a.ArticleAuthor,
+                    m => m.MemberId,
+                    (a, m) => new { article = a, m.MemberAccount, m.MemberNickname }).
+                ToList();
 
             var userArticleLike = _context.ArticleLikeTables.Where(a => a.MemberId == HttpContext.Session.GetInt32("loginId")).ToList();
             var leftJoinLike = (from article in articlesJoinMember
-                               join like in userArticleLike
-                                    on article.article.ArticleId equals like.ArticleId into gj
-                               from userlike in gj.DefaultIfEmpty()
-                               select new
-                               {
-                                   article.article,
-                                   memberAccount = article.MemberAccount,
-                                   memberNickname = article.MemberNickname,
-                                   like = userlike?.ArticleLikeId == null ? false : true
-                               }).ToList();
+                                join like in userArticleLike
+                                     on article.article.ArticleId equals like.ArticleId into gj
+                                from userlike in gj.DefaultIfEmpty()
+                                select new
+                                {
+                                    article.article,
+                                    memberAccount = article.MemberAccount,
+                                    memberNickname = article.MemberNickname,
+                                    like = userlike?.ArticleLikeId == null ? false : true
+                                }).ToList();
 
 
             return Ok(leftJoinLike);
