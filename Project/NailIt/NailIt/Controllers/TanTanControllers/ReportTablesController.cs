@@ -26,43 +26,80 @@ namespace NailIt.Controllers.TanTanControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetReportTables()
         {
+            
             var newReportTables = from o in _context.ReportTables
-                                  join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
-                                  //where o.ReportBuildTime >= Convert.ToDateTime("2023-01-07")
+                              join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
+                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId
+                                  where o.ReportBuildTime >= Convert.ToDateTime("2023-01-07")
                                   //  && o.ReportBuildTime <= Convert.ToDateTime("2023-01-17")
                                     //&& o.ReportPlaceC == "D6"
                                     //&& o.ReportResult == true
                                   select new
                                   {
-                                    ReportId = o.ReportId,
-                                    ReportBuilder =o.ReportBuilder,
-                                    ReportTarget =o.ReportTarget,
-                                    ReportItem =o.ReportItem,
-                                    ReportPlaceC=o.ReportPlaceC,
-                                    ReportReasonC=o.ReportReasonC,
-                                    ReportContent=o.ReportContent,
-                                    ReportBuildTime= o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
-                                    ReportCheckTime=o.ReportCheckTime,
-                                    ManagerId=o.ManagerId,
-                                    ReportResult=o.ReportResult,
-                                    CodeUseIn=c.CodeId,
-                                    CodeRepresent=c.CodeRepresent
+                                      ReportId = o.ReportId,
+                                      ReportBuilder = o.ReportBuilder,
+                                      ReportTarget = o.ReportTarget,
+                                      ReportItem = o.ReportItem,
+                                      ReportPlaceC = o.ReportPlaceC,
+                                      ReportReasonC = o.ReportReasonC,
+                                      ReportContent = o.ReportContent,
+                                      ReportBuildTime = o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
+                                      ReportCheckTime = o.ReportCheckTime,
+                                      ManagerId = o.ManagerId,
+                                      ReportResult = o.ReportResult,
+                                      CodeUseIn = c.CodeId,
+                                      CodeRepresent = c.CodeRepresent,
+                                      memberName = m.MemberName
                                   };
             return await newReportTables.ToListAsync();
         }
 
+        ////GET: api/ReportTables/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<ReportTable>> GetReportTable(int id)
+        //{
+        //    var reportTable = await _context.ReportTables.FindAsync(id);
+
+        //    if (reportTable == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return reportTable;
+        //}
+
         // GET: api/ReportTables/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReportTable>> GetReportTable(int id)
+        public async Task<ActionResult<dynamic>> GetReportTable(int id)
         {
-            var reportTable = await _context.ReportTables.FindAsync(id);
+            var reportTable = from o in _context.ReportTables
+                              join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
+                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId
+                              where o.ReportId == id
+                              select new
+                              {
+                                  ReportId = o.ReportId,
+                                  ReportBuilder = o.ReportBuilder,
+                                  ReportTarget = o.ReportTarget,
+                                  ReportItem = o.ReportItem,
+                                  ReportPlaceC = o.ReportPlaceC,
+                                  ReportReasonC = o.ReportReasonC,
+                                  ReportContent = o.ReportContent,
+                                  ReportBuildTime = o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
+                                  ReportCheckTime = o.ReportCheckTime,
+                                  ManagerId = o.ManagerId,
+                                  ReportResult = o.ReportResult,
+                                  CodeUseIn = c.CodeId,
+                                  CodeRepresent = c.CodeRepresent,
+                                  memberName = m.MemberName
+                              };
 
             if (reportTable == null)
             {
                 return NotFound();
             }
 
-            return reportTable;
+            return await reportTable.ToListAsync();
         }
 
         // PUT: api/ReportTables/5
