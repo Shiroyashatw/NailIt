@@ -21,3 +21,4 @@ function bsmlist(evt, manageobj) {
 $('#myModal').on('shown.bs.modal', function () {
   $('#myInput').trigger('focus')
 })
+
