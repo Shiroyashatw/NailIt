@@ -8,8 +8,7 @@ var scop = {
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
     articleCode: "", // 目前所在的版別ex:"L0"
-    // articleName: "", // ex:"交流"
-    articleMode: "", // new or edit.
+    articleMode: "", // new or edit or save.目前編輯器是哪個狀態。
     newArticle: {}, // new article object for create a article.
     articles: [], // 目前帶出的list of article
     articleId: 0, // 現在選取的articleId, 給刪除/編輯/檢舉article以及新增reply使用
@@ -21,30 +20,50 @@ var scop = {
 
 //#region Function
 //#region Action
-var showSaveArticle = function () {
+var showSaveArticle = async function () {
+    if ($("#editModalArticleTitle").val().trim() == "" || $("#editModalArticleContent").html().trim().replace("<div>", "").replace("</div>", "").replace("<br>", "") == "") {
+        alert("貼文標題與貼文內容皆為必填!");
+        return;
+    }
     if (scop.articleMode == "new") {
         let article = scop.newArticle;
-        article.articleTitle = $("#editModalArticleTitle");
+        article.articleBoardC = $("#newArtiCodeList").val();
+        article.articleTitle = $("#editModalArticleTitle").val().trim();
         // save image, return url
-        let content = $("#editModalArticleContent").html()
+        let content = $("#editModalArticleContent").html();
+        content = await dataURLToLink(content);
         article.articleContent = content;
         article.articleBuildTime = new Date();
         article.articleLastEdit = new Date();
-
         // call api
-        scop.articleCode = $("#newArtiCodeList").val();
-        showMain();
-    } 
+        let result = await postArticle(article);
+        if (!!result) {
+            scop.articleMode = "save";
+            $("#editArticleModal").modal("hide");
+            // show the article code page
+            let articleCode = scop.articleCodeList.find(a => a.codeId == $("#newArtiCodeList").val());
+            showMain(articleCode.codeId, articleCode.codeRepresent);
+        }
+    }
     if (scop.articleMode == "edit") {
-        let article = currentArticle();
-        article.articleTitle = $("#editModalArticleTitle");
+        let article = currentArticle().article;
+        article.articleTitle = $("#editModalArticleTitle").val();
         // save image, return url
         let content = $("#editModalArticleContent").html()
+        content = await dataURLToLink(content);
         article.articleContent = content;
         article.articleLastEdit = new Date();
         // call api
-        ("#articleModal").modal("show");
-        renderTheArticle();
+        let result = await putArticle(article);
+        if (!!result) {
+            scop.articleMode = "save";
+            $("#editArticleModal").modal("hide");
+            // show article modal and render articles
+            $("#articleModal").modal("show");
+            renderTheArticle(currentArticle());
+            // show the article modal
+            $("#articleModal").modal("show");
+        }
     }
 }
 var showEditArticleModal = function () {
@@ -55,7 +74,7 @@ var showNewArticleModal = function () {
     scop.articleMode = "new";
     scop.newArticle = new ArticleTable({
         articleBoardC: scop.articleCode,
-        articleAuthor: scop.loginId,        
+        articleAuthor: scop.loginId,
     });
     $("#editArticleModal").modal("show");
 }
@@ -102,7 +121,7 @@ var showReportAction = async function () {
             $("#articleModal").modal("hide");
         } else { // reply
             // remove the reply from display. update reply area reply count. update the article reply count.
-            renderRemoveTheReply();            
+            renderRemoveTheReply();
         }
         // snack bar inform complete
         showSnackbar("檢舉已完成!");
@@ -145,7 +164,7 @@ var showNewReply = async function () {
         replyContent: $("#replyInput").val(),
     })
     let resultReply = await postReply(reply);
-    if (resultReply != {}) {
+    if (!!resultReply) {
         reply = {
             reply: resultReply,
             memberNickname: scop.loginNickname,
@@ -466,11 +485,20 @@ var renderRemoveArticle = function () {
 }
 var renderTheArticle = function (article) {
     let articleHTML = `
-        <h4 class="m-0">${article.article.articleTitle}</h4>
-        <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-        <span>${article.article.articleContent}</span><br>
-        <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
-        <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}`;
+        <div class="col-10 pr-0">
+            <h4 class="m-0">${article.article.articleTitle}</h4>
+            <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
+            <span>${shortContent(60, article.article.articleContent)}</span><br>
+            <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
+            <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
+        </div>`;
+    let firsImg = firstImg(article.article.articleContent);
+    if (firsImg != undefined) {
+        articleHTML += `
+            <div class="col-2 pl-0 d-flex align-items-center">
+                <img class="mw-100" src="${firsImg.src}" style="aspect-ratio:1;">
+            </div>`;
+    }
     $(`div[data-articleid="${article.article.articleId}"]`).html(articleHTML);
 }
 var renderArticles = function (articles) {
@@ -482,20 +510,20 @@ var renderArticles = function (articles) {
                 <div class="col-10 pr-0">
                     <h4 class="m-0">${article.article.articleTitle}</h4>
                     <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-                    <span>${shortContent(60,article.article.articleContent)}</span><br>
+                    <span>${shortContent(60, article.article.articleContent)}</span><br>
                     <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
                     <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
                 </div>`;
         let firsImg = firstImg(article.article.articleContent);
-        if (firsImg!=undefined) {
-            articlesHTML +=`
+        if (firsImg != undefined) {
+            articlesHTML += `
                 <div class="col-2 pl-0 d-flex align-items-center">
                     <img class="mw-100" src="${firsImg.src}" style="aspect-ratio:1;">
-                </div>`;            
+                </div>`;
         }
-        articlesHTML +=`
-            </div>`;   
-            
+        articlesHTML += `
+            </div>`;
+
     }
     if (scop.page == 0) $("#articles").empty();
     $("#articles").append(articlesHTML);
@@ -539,7 +567,7 @@ var uploadImage = async function (formdata) {
     let res = await SocialService.uploadImage(formdata);
     if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
     // return image url.
-    return res;
+    return res.imageURL;
 }
 var postReport = async function (report) {
     // call api get related data
@@ -553,6 +581,19 @@ var deleteArticle = async function (articleId) {
     if (!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
     return true;
 }
+var putArticle = async function (article) {
+    // call api get related data
+    let res = await ArticleService.putArticle(article.articleId, article);
+    if (!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    return true;
+}
+var postArticle = async function (article) {
+    // call api get related data
+    let res = await ArticleService.postArticle(article);
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    // return built model for displaying
+    return res;
+}
 var deleteReply = async function (replyId) {
     // call api get related data
     let res = await ReplyService.deleteReply(replyId);
@@ -562,7 +603,7 @@ var deleteReply = async function (replyId) {
 var postReply = async function (reply) {
     // call api get related data
     let res = await ReplyService.postReply(reply);
-    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return {}; }
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
     // return built model for displaying the reply
     return res;
 }
@@ -631,6 +672,34 @@ var getArticles = async function () {
     return articles;
 }
 //#endregion
+
+// Save dataURL image. Replace image src dataURL to url link.
+async function dataURLToLink(html) {
+    let divEltment = document.createElement("div");
+    divEltment.innerHTML = `<div>${html}</div>`;
+    let imgTags = divEltment.getElementsByTagName("img");
+    for (const imgTag of imgTags) {
+        // if it's base64.
+        if (imgTag.src.startsWith("data")) {
+            let file = await urlToFile(imgTag.src, 'lab.png', 'image/png');
+            let articlePic = new ArticlePicTable({
+                articleId: (scop.articleMode == "new") ? 0 : currentArticle().article.articleId
+            });
+            let formdata = new FormData();
+            formdata.append("file", file);
+            formdata.append("articlePic", JSON.stringify(articlePic));
+            // call api save image, return url
+            let result = await uploadImage(formdata);
+            if (!!result) {
+                let urlImg = document.createElement("img");
+                urlImg.src = apiServer + result;
+                imgTag.before(urlImg);
+                imgTag.remove();
+            }
+        }
+    }
+    return divEltment.childNodes[0].innerHTML;
+}
 var currentArticle = function () {
     let articles = scop.articles;
     if (scop.articles.reaultArticles != undefined) {
@@ -656,10 +725,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (scop.articleCodeList.status != undefined) alert(`[${scop.articleCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
     else {
         // Setup community menu and show first sort
-        renderMenu(); 
+        renderMenu();
         // Render new article Code List
-        renderSelect("newArtiCodeList",scop.articleCodeList,"codeRepresent", "codeId");
-    }    
+        renderSelect("newArtiCodeList", scop.articleCodeList, "codeRepresent", "codeId");
+    }
     scop.reportCodeList = await SocialService.getCodes("G");
     if (scop.reportCodeList.status != undefined) alert(`[${scop.reportCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
     else renderReport(); // Render report reason options
@@ -707,7 +776,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     $("#editArticleModal").on("hide.bs.modal", function (e) {
         // new mode, check is there any value
         if (scop.articleMode == "new") {
-            if ($("#editModalArticleTitle").val().trim() != "" || $("#editModalArticleContent").html().trim() != "") {
+            if ($("#editModalArticleTitle").val().trim() != "" || $("#editModalArticleContent").html().trim().replace("<div>", "").replace("</div>", "").replace("<br>", "") != "") {
                 if (!confirm("有新增內容尚未送出，離開將會遺失，是否確認離開?")) {
                     e.preventDefault();
                     return;
@@ -716,12 +785,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     $("#editModalArticleTitle").val("");
                     $("#editModalArticleContent").html("");
                 }
-            }            
+            }
         }
         // edit mode, check is there any change.
         if (scop.articleMode == "edit") {
-            if($("#editModalArticleTitle").val().trim() != currentArticle().article.articleTitle || 
-                $("#editModalArticleContent").html().trim() != currentArticle().article.articleContent){
+            if ($("#editModalArticleTitle").val().trim() != currentArticle().article.articleTitle ||
+                $("#editModalArticleContent").html().trim() != currentArticle().article.articleContent) {
                 if (!confirm("內容已有異動，離開將會遺失變更，是否確認離開?")) {
                     e.preventDefault();
                     return;
@@ -732,18 +801,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             }
             $("#articleModal").modal("show");
-        }        
+        }
     });
     // Initial Modal show setting
     $("#editArticleModal").on("show.bs.modal", function (e) {
         let article = scop.newArticle;
         $("#newArtiCodeList").removeAttr('disabled');
-        if(scop.articleMode == "edit") {
-            $("#newArtiCodeList").attr('disabled','disabled');
+        if (scop.articleMode == "edit") {
+            $("#newArtiCodeList").attr('disabled', 'disabled');
             $("#articleModal").modal("hide");
             article = currentArticle().article;
         }
-        console.log(article);
         $("#editModalAuthor").children()[0].innerText = scop.loginNickname;
         $("#editModalAuthor").children()[1].innerText = scop.loginAccount;
         $("#newArtiCodeList").val(scop.articleCode);

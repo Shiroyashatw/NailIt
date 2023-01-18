@@ -49,18 +49,26 @@ namespace NailIt.Controllers.AnselControllers
             if (frm.Files.Count > 0)
             {
                 // get data and files from formdata of request
-                var imageFile = frm.Files[0];
                 ArticlePicTable articlePic = JsonConvert.DeserializeObject<ArticlePicTable>(frm["articlePic"]);
+                var imageFile = frm.Files[0];
 
                 // lock DB
                 var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
 
                 // record image at ArticlePicTable
-                articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + imageFile.FileName;
+                if (articlePic.ArticleId == 0)
+                {   // new article havn't got a id.
+                    articlePic.ArticleId = _context.ArticleTables.OrderByDescending(a => a.ArticleId).FirstOrDefault().ArticleId + 1;
+                }
+                articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + "00.png";
                 _context.ArticlePicTables.Add(articlePic);
                 _context.SaveChanges();
 
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\AnselLib\\ArticleImage") + "\\" + imageFile.FileName; //檔案存放位置在wwwroot中的資料夾
+                var latestIageId = _context.ArticlePicTables.OrderByDescending(a => a.ArtclePicId).FirstOrDefault().ArtclePicId;
+                articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + latestIageId + ".png";
+                _context.SaveChanges();
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\AnselLib\\ArticleImage") + "\\" + latestIageId + ".png"; //檔案存放位置在wwwroot中的資料夾
 
                 using (var stream = System.IO.File.Create(filePath))
                 {
@@ -68,7 +76,7 @@ namespace NailIt.Controllers.AnselControllers
                 }
 
                 t.Commit();
-                return Ok($"/AnselLib/ArticleImage/{imageFile.FileName}");
+                return Ok(new {imageURL= $"/AnselLib/ArticleImage/{latestIageId}.png"});
             }
             return NotFound();
         }

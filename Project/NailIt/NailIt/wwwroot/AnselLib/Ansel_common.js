@@ -126,28 +126,4 @@ function downloadFileObject(file){
     link.click();
     document.body.removeChild(link)
 }
-// Save dataURL image. Replace image src dataURL to url link.
-async function dataURLToLink (html) {
-    let divEltment = document.createElement("div");
-    divEltment.innerHTML = `<div>${html}</div>`;
-    let imgTags = divEltment.getElementsByTagName("img");
-    for (const imgTag of imgTags) {
-        // if it's base64.
-        if (imgTag.src.startsWith("data")) {
-            let file = await urlToFile(imgTag.src, 'lab01.png','image/png')
-            // call api save image, return url
-            let result = await uploadImage(file)
-            if (!!result) {
-            // if (true) {
-                // pretend return url link
-                // result = "https://imgur.dcard.tw/Gjx7XsSl.jpg";
-                let urlImg = document.createElement("img");
-                urlImg.src = result;
-                imgTag.before(urlImg);
-                imgTag.remove();
-            }
-        }
-    }
-    return divEltment.childNodes[0].innerHTML;
-}
 //#endregion
