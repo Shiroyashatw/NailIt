@@ -122,7 +122,6 @@ namespace NailIt.Controllers.TanTanControllers
             var CertainReportTable = (from o in _context.ReportTables
                                       where o.ReportId == id
                                       select o).FirstOrDefault();
-
             CertainReportTable.ReportResult = reportTable.ReportResult;
             //CertainReportTable.ReportBuildTime = reportTable.ReportBuildTime;
             //CertainReportTable.ManagerId = reportTable.ManagerId;
