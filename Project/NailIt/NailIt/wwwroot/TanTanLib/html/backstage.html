@@ -597,13 +597,13 @@
                         <p>事由說明：{{onereport[0].reportContent}}</p>
                         <p>檢舉時間：{{onereport[0].reportBuildTime}}</p>
                         <p class="mb-1">狀態：</p>
-                        <input type="radio" id="OK" name="status" v-model="revche" value=true>
+                        <input type="radio" id="OK" name="status" onclick="BackVal(this)"  value="true">
                         <label for="OK">審核通過</label><br>
-                        <input type="radio" id="css" name="status" v-model="revche" value=false>
+                        <input type="radio" id="css" name="status" onclick="BackVal(this)"  value="false">
                         <label for="NO">審核不通過</label><br>
                     </div>
                     <div class="p-3 d-flex justify-content-end">
-                        <button type="button" class="mycancel mr-3" data-dismiss="modal">取消</button><button data-dismiss="modal" onclick="changereviewreport(this)" v-bind:value="onereport[0].reportId"  type="button" class="mysend">提交</button></div>
+                        <button type="button" class="mycancel mr-3" data-dismiss="modal">取消</button><button onclick="changereviewreport(this)" type="button" class="mysend">提交</button></div>
                     <!--v-on:click="reprevok"--> 
                 </div>
             </div>

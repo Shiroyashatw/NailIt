@@ -3,13 +3,14 @@ var mydata = new Vue({
     el: "#mydata",
     data: {
         report: [{}],
-        reportput: [{"reportResult": "", "reportId":"1"}],
+        //[{"reportId":1,"reportBuilder":1,"reportTarget":2,"reportItem":111012801,"reportPlaceC":"D3","reportReasonC":"G2","reportContent":"邪惡","reportBuildTime":"2023-01-18 20:28","reportCheckTime":"","managerId":null,"reportResult":null,"codeUseIn":"D3","codeRepresent":"設計師主頁","memberName":"田美麗","managerName":null}]
+        reportput: [{"reportResult": true, "reportId": 1 }],
         reportnum: "", reportpage: "",
         onereport: [{}],
         syscode: [{}],
         reportmodel: "",
         AAA: [],
-        revche:"NULL",
+        revche: "",
     },
  
 
@@ -110,17 +111,23 @@ function reviewreport1(e) {
     })
 
 };
-
+function BackVal(e) {
+    console.log(e);
+    console.log(e.value);
+    if (e.value = "true") {
+        mydata.reportput[0].reportResult = true;
+    } else if (e.value = "false") {
+        mydata.reportput[0].reportResult = false;
+    }
+}
 //PUT單一審核資料
 function changereviewreport(e) {
 
     //v2.只改兩筆
     /*var now = Date();*/
     console.log(e);
-
-    mydata.reportput[0].reportResult = mydata.revche;
-    console.log(mydata.revche);
-    mydata.reportput[0].reportId = e.value;
+    mydata.reportput[0].reportresultID = e.value;
+    //mydata.reportput[0].reportresultime = null;
     console.log(mydata.reportput[0]);
 //url: "/api/ReportTables/" + mydata.reportmodel,
 
@@ -129,15 +136,12 @@ function changereviewreport(e) {
         url: "/api/ReportTables/5",
         contentType: "application/json",
         data: JSON.stringify(mydata.reportput[0]),
-        success: function (e) {
-            alert("OK");
-           
-        },
-        error: function () {
-            alert("NO")
-
+        success: function () {
+            window.location = "/TanTanLib/html/backstage.html"
         }
+
     })
+
 }
     ////v1.想把所有東西丟回去
     ////console.log(e.value)
