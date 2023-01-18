@@ -145,10 +145,8 @@
                                             <td>{{report[key].reportResult}}</td>
                                             <td>{{report[key].reportBuildTime}}</td>
                                             <td style="width: 25%">
-                                            <button onclick="reviewreport(this)" v-bind:value="report[key].reportId" class="mr-3" data-toggle="modal" data-target="#reviewModal">
-                                                審 核
-                                            </button>
-                                            <button data-toggle="modal" data-target="#examineModal">查 看</button></td>
+                                                <button style="background-color: #FF6733" v-if="AAA[key]" onclick="reviewreport(this)" v-bind:value="report[key].reportId" class="mr-3" data-toggle="modal" data-target="#reviewModal">審 核</button> <button v-else="AAA[key]" id="vierep" onclick="reviewreport1(this)" v-bind:value="report[key].reportId" data-toggle="modal" data-target="#examineModal">查 看</button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -591,26 +589,22 @@
                     <div class="modal-body">
                         <b>檢舉編號：{{onereport[0].reportId}}</b>
                         <hr>
-                        <p>被檢舉ID 姓名：{{onereport[0].reportBuilder}}</p>
-                        <p>檢舉人ID 姓名：{{onereport[0].reportTarget}}</p>
-                        <p>檢舉類別：{{onereport[0].reportPlaceC}}</p>
-                        <p>檢舉原因：{{onereport[0].reportReasonC}}</p>
+                        <p>被檢舉：{{onereport[0].reportBuilder}}  {{onereport[0].memberName}}</p>
+                        <p>檢舉人：{{onereport[0].reportTarget}}  {{onereport[0].memberName}}</p>
+                        <p>檢舉類別：{{onereport[0].reportPlaceC}} {{onereport[0].codeRepresent}}</p>
+                        <p>檢舉原因：{{onereport[0].reportReasonC}} {{onereport[0].codeRepresent}}</p>
                         <p>檢舉編號：{{onereport[0].reportItem}}</p>
                         <p>事由說明：{{onereport[0].reportContent}}</p>
                         <p>檢舉時間：{{onereport[0].reportBuildTime}}</p>
-
                         <p class="mb-1">狀態：</p>
-                        <input type="radio" id="OK" name="status" value="1">
+                        <input type="radio" id="OK" name="status" v-model="revche" value="1">
                         <label for="OK">審核通過</label><br>
-                        <input type="radio" id="css" name="status" value="0">
+                        <input type="radio" id="css" name="status" v-model="revche" value="0">
                         <label for="NO">審核不通過</label><br>
-                        <p class="mb-1">原因：</p>
-                        <input type="text" class="searchTerm" style="width:100%;height:50px;" placeholder="">
                     </div>
                     <div class="p-3 d-flex justify-content-end">
-                        <button type="button" class="mycancel mr-3" data-dismiss="modal">取消</button>
-                        <button type="button" class="mysend">提交</button>
-                    </div>
+                        <button type="button" class="mycancel mr-3" data-dismiss="modal">取消</button><button onclick="changereviewreport(this)" v-bind:value="onereport[0].reportId"  type="button" class="mysend">提交</button></div>
+                    <!--v-on:click="reprevok"--> 
                 </div>
             </div>
         </div>
@@ -624,23 +618,21 @@
                         </button>
                     </div>
                     <div class="modal-body py-2">
-                        <b>檢舉編號：1</b>
+                        <b>檢舉編號：{{onereport[0].reportId}}</b>
                         <hr>
-                        <p>被檢舉ID：</p>
-                        <p>檢舉人ID：</p>
-                        <p>檢舉處代號：</p>
-                        <p>檢舉原因：</p>
-                        <p>代號：</p>
-                        <p>事由說明：</p>
-                        <p>檢舉時間：</p>
-                        <p>狀態：</p>
-                        <p class="mb-1">原因：</p>
-                        <input type="text" class="searchTerm mb-3" style="width:100%;height:50px;" placeholder="">
-                        <p>審核人員：</p>
-                        <p class="mb-0">審核時間：</p>
+                        <p>被檢舉：{{onereport[0].reportBuilder}}  {{onereport[0].memberName}}</p>
+                        <p>檢舉人：{{onereport[0].reportTarget}}  {{onereport[0].memberName}}</p>
+                        <p>檢舉類別：{{onereport[0].reportPlaceC}} {{onereport[0].codeRepresent}}</p>
+                        <p>檢舉原因：{{onereport[0].reportReasonC}} {{onereport[0].codeRepresent}}</p>
+                        <p>檢舉編號：{{onereport[0].reportItem}}</p>
+                        <p>事由說明：{{onereport[0].reportContent}}</p>
+                        <p>檢舉時間：{{onereport[0].reportBuildTime}}</p>
+                        <p>狀態：{{onereport[0].reportResult}}</p>
+                        <p>審核人員：{{onereport[0].managerId}}  {{onereport[0].managerName}}</p>
+                        <p class="mb-0" id="reptime" onchange="GetEdDate(this)">審核時間：{{onereport[0].reportCheckTime}}</p>
                     </div>
                     <div class="p-3 d-flex justify-content-end">
-                        <button type="button" class="mycancel">關閉</button>
+                        <button type="button" class="mycancel" data-dismiss="modal">關閉</button>
                     </div>
 
                 </div>
@@ -852,7 +844,7 @@
         </div>
     </div>
     <!-- 插入JS檔 -->
-    <script></script>
+
     <script src="../../TanTanLib/js/bsmlist.js"></script>
     <script src="../js/myajax.js"></script>
 </body>

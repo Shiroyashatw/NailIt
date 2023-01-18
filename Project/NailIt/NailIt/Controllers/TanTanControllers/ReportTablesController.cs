@@ -29,7 +29,7 @@ namespace NailIt.Controllers.TanTanControllers
             
             var newReportTables = from o in _context.ReportTables
                               join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
-                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId
+                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist from m in mlist.DefaultIfEmpty()
                                   where o.ReportBuildTime >= Convert.ToDateTime("2023-01-07")
                                   //  && o.ReportBuildTime <= Convert.ToDateTime("2023-01-17")
                                     //&& o.ReportPlaceC == "D6"
@@ -54,19 +54,6 @@ namespace NailIt.Controllers.TanTanControllers
             return await newReportTables.ToListAsync();
         }
 
-        ////GET: api/ReportTables/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ReportTable>> GetReportTable(int id)
-        //{
-        //    var reportTable = await _context.ReportTables.FindAsync(id);
-
-        //    if (reportTable == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return reportTable;
-        //}
 
         // GET: api/ReportTables/5
         [HttpGet("{id}")]
@@ -74,7 +61,8 @@ namespace NailIt.Controllers.TanTanControllers
         {
             var reportTable = from o in _context.ReportTables
                               join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
-                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId
+                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist from m in mlist.DefaultIfEmpty()
+                              join ma in _context.ManagerTables on o.ManagerId equals ma.ManagerId into malist from ma in malist.DefaultIfEmpty()
                               where o.ReportId == id
                               select new
                               {
@@ -86,33 +74,58 @@ namespace NailIt.Controllers.TanTanControllers
                                   ReportReasonC = o.ReportReasonC,
                                   ReportContent = o.ReportContent,
                                   ReportBuildTime = o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
-                                  ReportCheckTime = o.ReportCheckTime,
+                                  ReportCheckTime = o.ReportCheckTime == null ? "" : ((DateTime)o.ReportCheckTime).ToString("yyyy-MM-dd HH:mm"),
                                   ManagerId = o.ManagerId,
                                   ReportResult = o.ReportResult,
                                   CodeUseIn = c.CodeId,
                                   CodeRepresent = c.CodeRepresent,
-                                  memberName = m.MemberName
+                                  MemberName = m.MemberName,
+                                  ManagerName = ma.ManagerName
                               };
 
             if (reportTable == null)
             {
                 return NotFound();
-            }
+            };
 
             return await reportTable.ToListAsync();
         }
+
+        ////GET: api/ReportTables/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<ReportTable>> GetReportTable2(int id)
+        //{
+        //    var reportTable = await _context.ReportTables.FindAsync(id);
+
+        //    if (reportTable == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return reportTable;
+        //}
+
 
         // PUT: api/ReportTables/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReportTable(int id, ReportTable reportTable)
         {
+
             if (id != reportTable.ReportId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(reportTable).State = EntityState.Modified;
+            //_context.Entry(reportTable).State = EntityState.Modified;
+            //借鑑
+            var CertainReportTable = (from o in _context.ReportTables
+                                      where o.ReportId == id
+                                      select o).FirstOrDefault();
+
+            CertainReportTable.ReportResult = reportTable.ReportResult;
+            //CertainReportTable.ReportBuildTime = reportTable.ReportBuildTime;
+            //CertainReportTable.ManagerId = reportTable.ManagerId;
 
             try
             {
@@ -134,7 +147,7 @@ namespace NailIt.Controllers.TanTanControllers
         }
 
         // POST: api/ReportTables
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    
         [HttpPost]
         public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
         {
