@@ -75,7 +75,7 @@
                             <!--  檢舉 預約 -->
                             <div class="product-footer">
                                 <div class="reportbtn">
-                                    <button type="button">檢舉此商品</button>
+                                    <button type="button" id="reportbtn" onclick="repalertform()">檢舉此商品</button>
                                 </div>
                                 <div class="reservebtn">
                                     <button type="button" id="reservebtn" onclick="alertform()">預約</button>
@@ -314,6 +314,38 @@
         </div>
     </div>
 
+    <!-- 檢舉表單 -->
+    <div class="form-main">
+        <div id="rephohodiv" class="isHide"></div>
+        <!-- 彈出視窗 表單 -->
+        <div id="repalert_div" class="isHide">
+            <div class="alert_div-header">
+                <button type="button" onclick="repCloseform()"><i class="bi bi-x"></i></button>
+            </div>
+            <!-- 主要表單 -->
+            <div class="form-info">
+                <form id="reportform" action="" method="post">
+                    <!-- 檢舉人 -->
+                    <input type="text" name="ReportBuilder">
+                    <!-- 被檢舉人 -->
+                    <input type="text" name="ReportTarget">
+                    <!-- 檢舉編號 文章 商品 -->
+                    <input type="text" name="ReportItem">
+                    <!-- 檢舉位置 -->
+                    <input type="text" name="ReportPlaceC">
+                    <!-- 檢舉事由 -->
+                    <input type="text" name="ReportReasonC">
+                    <!-- 檢舉描述 -->
+                    <input type="text" name="ReportContent">
+                    <!-- 檢舉時間 -->
+                    <input type="text" name="ReportBuildTime">
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+
     <!-- <form action="">
         下訂會員編號。
         <input type="text" name="MemberId"> 寫死
@@ -389,7 +421,16 @@
         }
     </script>
 
-
+    <script>
+        function repalertform() {
+            document.getElementById("rephohodiv").className = "isShow";
+            document.getElementById("repalert_div").className = "isShow";
+        }
+        function repCloseform() {
+            document.getElementById("rephohodiv").className = "isHide";
+            document.getElementById("repalert_div").className = "isHide";
+        }
+    </script>
     <!-- /點擊小圖 大圖跟著切換 -->
     <script>
         function getsrc(whichpic) {

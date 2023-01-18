@@ -41,7 +41,14 @@ namespace NailIt.Models
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
 
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=NailitDB;Integrated Security=True;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -232,6 +239,8 @@ namespace NailIt.Models
 
                 entity.Property(e => e.DemoSetId).HasColumnName("demoSet_ID");
 
+                entity.Property(e => e.DemoSetColor).HasColumnName("demoSet_Color");
+
                 entity.Property(e => e.DemoSetContent)
                     .HasMaxLength(100)
                     .HasColumnName("demoSet_Content");
@@ -371,6 +380,18 @@ namespace NailIt.Models
                     .HasMaxLength(3)
                     .IsUnicode(false)
                     .HasColumnName("manicurist_BankCode");
+
+                entity.Property(e => e.ManicuristBankCompanyName)
+                    .HasMaxLength(20)
+                    .HasColumnName("manicurist_BankCompanyName");
+
+                entity.Property(e => e.ManicuristBankName)
+                    .HasMaxLength(20)
+                    .HasColumnName("manicurist_BankName");
+
+                entity.Property(e => e.ManicuristBankNameBranch)
+                    .HasMaxLength(20)
+                    .HasColumnName("manicurist_BankNameBranch");
 
                 entity.Property(e => e.ManicuristCounty)
                     .IsRequired()
