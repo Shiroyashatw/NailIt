@@ -1,5 +1,5 @@
 ﻿// only for testing. Should get data from backend.
-// sessionStorage.setItem("MemberId", "1");
+// sessionStorage.setItem("memberId", "1");
 
 var scop = {
     loginId: 0, // 目前登入者Id
@@ -9,6 +9,8 @@ var scop = {
     reportCodeList: [], // 檢舉項目清單
     articleCode: "", // 目前所在的版別ex:"L0"
     // articleName: "", // ex:"交流"
+    articleMode: "", // new or edit.
+    newArticle: {}, // new article object for create a article.
     articles: [], // 目前帶出的list of article
     articleId: 0, // 現在選取的articleId, 給刪除/編輯/檢舉article以及新增reply使用
     page: 0, // 目前頁數，給查詢/帶出更多使用
@@ -19,6 +21,44 @@ var scop = {
 
 //#region Function
 //#region Action
+var showSaveArticle = function () {
+    if (scop.articleMode == "new") {
+        let article = scop.newArticle;
+        article.articleTitle = $("#editModalArticleTitle");
+        // save image, return url
+        let content = $("#editModalArticleContent").html()
+        article.articleContent = content;
+        article.articleBuildTime = new Date();
+        article.articleLastEdit = new Date();
+
+        // call api
+        scop.articleCode = $("#newArtiCodeList").val();
+        showMain();
+    } 
+    if (scop.articleMode == "edit") {
+        let article = currentArticle();
+        article.articleTitle = $("#editModalArticleTitle");
+        // save image, return url
+        let content = $("#editModalArticleContent").html()
+        article.articleContent = content;
+        article.articleLastEdit = new Date();
+        // call api
+        ("#articleModal").modal("show");
+        renderTheArticle();
+    }
+}
+var showEditArticleModal = function () {
+    scop.articleMode = "edit";
+    $("#editArticleModal").modal("show");
+}
+var showNewArticleModal = function () {
+    scop.articleMode = "new";
+    scop.newArticle = new ArticleTable({
+        articleBoardC: scop.articleCode,
+        articleAuthor: scop.loginId,        
+    });
+    $("#editArticleModal").modal("show");
+}
 // Report article or reply, and the item disappear from display.
 var showReportAction = async function () {
     // check report value exist
@@ -30,23 +70,23 @@ var showReportAction = async function () {
     let reportRepresent = scop.reportCodeList.find(r => r.codeId == reportCodeId).codeRepresent;
     // new report for reply
     let report = new ReportTable({
-        ReportBuilder: scop.loginId,
+        reportBuilder: scop.loginId,
         ReportTarget: scop.articleAuthorId,
-        ReportItem: currentArticle().article.articleId,
-        ReportPlaceC: "D5",
-        ReportReasonC: reportCodeId,
-        ReportContent: reportRepresent
+        reportItem: currentArticle().article.articleId,
+        reportPlaceC: "D5",
+        reportReasonC: reportCodeId,
+        reportContent: reportRepresent
     });
     // if it's article report, change report content
     if (scop.replyId != 0) {
         let reply = scop.replies.find(r => r.reply.replyId == scop.replyId);
         report.ReportTarget = reply.reply.memberId;
-        report.ReportItem = reply.reply.replyId;
-        report.ReportPlaceC = "D6";
+        report.reportItem = reply.reply.replyId;
+        report.reportPlaceC = "D6";
     }
     // if "其他", "G9"(reportCodeId) be chosen, get report reason from #reportOtherInput
     if (reportCodeId == "G9") {
-        report.ReportContent = $("#reportOtherInput").val();
+        report.reportContent = $("#reportOtherInput").val();
     }
     // call api
     let result = await SocialService.postSocialReport(report);
@@ -100,9 +140,9 @@ var showDeleteReply = async function () {
 // Show the new article in articles
 var showNewReply = async function () {
     let reply = new ReplyTable({
-        ArticleId: scop.articleId,
-        MemberId: scop.loginId,
-        ReplyContent: $("#replyInput").val(),
+        articleId: scop.articleId,
+        memberId: scop.loginId,
+        replyContent: $("#replyInput").val(),
     })
     let resultReply = await postReply(reply);
     if (resultReply != {}) {
@@ -196,8 +236,8 @@ var showReplyLikeToggle = async function (likeObj) {
     let reply = scop.replies.find(r => r.reply.replyId == replyId);
     // build a like with replyId and memberId:scop.loginId
     let replyLike = new ReplyLikeTable({
-        ReplyId: replyId,
-        MemberId: scop.loginId
+        replyId: replyId,
+        memberId: scop.loginId
     })
     // if like == false (build a like)
     if (!reply.like) {
@@ -213,7 +253,7 @@ var showReplyLikeToggle = async function (likeObj) {
     // else (delete a like)
     else {
         // DELETE the like
-        let result = await deleteReplyLike(replyLike.ReplyId, replyLike.MemberId);
+        let result = await deleteReplyLike(replyLike.replyId, replyLike.memberId);
         // Check api success, like data of scop.articles change to false, and update display.
         if (result) {
             reply.like = false;
@@ -230,8 +270,8 @@ var showArticleLikeToggle = async function (likeObj) {
     let article = currentArticle();
     // build a like with articleId and memberId:scop.loginId
     let articleLike = new ArticleLikeTable({
-        ArticleId: scop.articleId,
-        MemberId: scop.loginId
+        articleId: scop.articleId,
+        memberId: scop.loginId
     });
     // if like == false (create a like)
     if (!article.like) {
@@ -247,7 +287,7 @@ var showArticleLikeToggle = async function (likeObj) {
     // else (delete a like)
     else {
         // DELETE the like
-        let result = await deleteArticleLike(articleLike.ArticleId, articleLike.MemberId);
+        let result = await deleteArticleLike(articleLike.articleId, articleLike.memberId);
         // Check api success, like data of scop.articles change to false, and update display.
         if (result) {
             article.like = false;
@@ -407,7 +447,7 @@ var renderArtiModDropdown = function () {
     // Can edit and delete own article
     if (scop.articleAuthorId == scop.loginId) {
         dropContentHTML = `
-            <a href="javascript:void(0)">編輯</a>
+            <a href="javascript:void(0)" onclick="showEditArticleModal()">編輯</a>
             <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal()">刪除</a>`;
     }
     // Only can report others reply
@@ -437,13 +477,25 @@ var renderArticles = function (articles) {
     let articlesHTML = "";
     for (const article of articles) {
         articlesHTML +=
-            `<div class="mb-4 bottomBorder cursor-pointer" onclick="showModal($(this).data('articleid'))" data-articleid="${article.article.articleId}">
-                <h4 class="m-0">${article.article.articleTitle}</h4>
-                <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-                <span>${article.article.articleContent}</span><br>
-                <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
-                <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
-            </div>`;
+            `<div class="pb-3 mb-3 bottomBorder cursor-pointer d-flex justify-content-between" onclick="showModal($(this).data('articleid'))" data-articleid="${article.article.articleId}">
+                
+                <div class="col-10 pr-0">
+                    <h4 class="m-0">${article.article.articleTitle}</h4>
+                    <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
+                    <span>${shortContent(60,article.article.articleContent)}</span><br>
+                    <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
+                    <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
+                </div>`;
+        let firsImg = firstImg(article.article.articleContent);
+        if (firsImg!=undefined) {
+            articlesHTML +=`
+                <div class="col-2 pl-0 d-flex align-items-center">
+                    <img class="mw-100" src="${firsImg.src}" style="aspect-ratio:1;">
+                </div>`;            
+        }
+        articlesHTML +=`
+            </div>`;   
+            
     }
     if (scop.page == 0) $("#articles").empty();
     $("#articles").append(articlesHTML);
@@ -482,6 +534,13 @@ var renderMenu = function () {
 //#endregion
 
 //#region call API
+var uploadImage = async function (formdata) {
+    // call api get related data
+    let res = await SocialService.uploadImage(formdata);
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    // return image url.
+    return res;
+}
 var postReport = async function (report) {
     // call api get related data
     let res = await SocialService.postReport(report);
@@ -582,20 +641,25 @@ var currentArticle = function () {
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
-    // $('#reportModal').modal({
+    // $('#editArticleModal').modal({
     //     show: true, // 預設開啟modal
     // })
 
     // 是否需要把backend的session設定到frontend ?
     scop.loginId = $("#loginId").val();
-    scop.loginName = $("#loginName").val();
+    scop.loginAccount = $("#loginAccount").val();
     scop.loginNickname = $("#loginNickname").val();
-    console.log(scop.loginId, scop.loginName, scop.loginNickname);
+    console.log(scop.loginId, scop.loginAccount, scop.loginNickname);
 
     // Initial data, menu list and report list
     scop.articleCodeList = await SocialService.getCodes("L");
     if (scop.articleCodeList.status != undefined) alert(`[${scop.articleCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
-    else renderMenu(); // Setup community menu and show first sort
+    else {
+        // Setup community menu and show first sort
+        renderMenu(); 
+        // Render new article Code List
+        renderSelect("newArtiCodeList",scop.articleCodeList,"codeRepresent", "codeId");
+    }    
     scop.reportCodeList = await SocialService.getCodes("G");
     if (scop.reportCodeList.status != undefined) alert(`[${scop.reportCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
     else renderReport(); // Render report reason options
@@ -630,6 +694,62 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         }
     }
+    // Show input of report other, if otherOption been chosen.
+    $("input[name='reportOption']").on("change", function (e) {
+        if (this.value == "G9") {
+            $("#reportOtherInput").show();
+            $("#reportOtherInput").focus();
+        } else {
+            $("#reportOtherInput").hide();
+        }
+    });
+    // If #Title and #Content have value, check user don't want to reply it, and ready to loose it, while closing #articleModal.
+    $("#editArticleModal").on("hide.bs.modal", function (e) {
+        // new mode, check is there any value
+        if (scop.articleMode == "new") {
+            if ($("#editModalArticleTitle").val().trim() != "" || $("#editModalArticleContent").html().trim() != "") {
+                if (!confirm("有新增內容尚未送出，離開將會遺失，是否確認離開?")) {
+                    e.preventDefault();
+                    return;
+                } else {
+                    // remove draft
+                    $("#editModalArticleTitle").val("");
+                    $("#editModalArticleContent").html("");
+                }
+            }            
+        }
+        // edit mode, check is there any change.
+        if (scop.articleMode == "edit") {
+            if($("#editModalArticleTitle").val().trim() != currentArticle().article.articleTitle || 
+                $("#editModalArticleContent").html().trim() != currentArticle().article.articleContent){
+                if (!confirm("內容已有異動，離開將會遺失變更，是否確認離開?")) {
+                    e.preventDefault();
+                    return;
+                } else {
+                    // remove draft
+                    $("#editModalArticleTitle").val("");
+                    $("#editModalArticleContent").html("");
+                }
+            }
+            $("#articleModal").modal("show");
+        }        
+    });
+    // Initial Modal show setting
+    $("#editArticleModal").on("show.bs.modal", function (e) {
+        let article = scop.newArticle;
+        $("#newArtiCodeList").removeAttr('disabled');
+        if(scop.articleMode == "edit") {
+            $("#newArtiCodeList").attr('disabled','disabled');
+            $("#articleModal").modal("hide");
+            article = currentArticle().article;
+        }
+        console.log(article);
+        $("#editModalAuthor").children()[0].innerText = scop.loginNickname;
+        $("#editModalAuthor").children()[1].innerText = scop.loginAccount;
+        $("#newArtiCodeList").val(scop.articleCode);
+        $("#editModalArticleTitle").val(article.articleTitle);
+        $("#editModalArticleContent").html(article.articleContent);
+    });
     // If #replyInput have value, check user don't want to reply it, and ready to loose it, while closing #articleModal.
     $("#articleModal").on("hide.bs.modal", function (e) {
         // check if the replyInput has a value
@@ -640,15 +760,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 // remove draft reply
                 $("#replyInput").val("");
             }
-        }
-    });
-    // Show input of report other, if otherOption been chosen.
-    $("input[name='reportOption']").on("change", function (e) {
-        if (this.value == "G9") {
-            $("#reportOtherInput").show();
-            $("#reportOtherInput").focus();
-        } else {
-            $("#reportOtherInput").hide();
         }
     });
     // Initial Modal show setting
@@ -662,10 +773,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         else $("#ModelArticleLike").css("color", "rgb(108, 117, 125)");
         $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
         $("#ModalArticleTitle").children()[0].innerText = article.article.articleTitle;
-        $("#ModalArticleTitle").children()[1].innerText = new Date(article.article.articleLastEdit);
+        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.YYYYMMDD();
+        if (article.article.articleLastEdit != article.article.articleBuildTime)
+            $("#ModalArticleTitle").children()[1].innerText += "(已編輯)";
         $("#ModalArticleContent").html(article.article.articleContent);
         $("#ModalArticleReplyCount").html(`共${article.article.articleReplyCount}則留言`);
-        // Render nodal dropdown
+        // Render modal dropdown
         renderArtiModDropdown();
     });
     // Show articles when press 'Enter' at searchinput 
