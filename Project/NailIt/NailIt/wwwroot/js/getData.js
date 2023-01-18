@@ -13,7 +13,7 @@ var url = new URL(getUrlString);
 DSETID = url.searchParams.get('id');
 
 // 訂單類型 0=>自訂 1=>固定項目
-var OrderType
+var OrderType = $('input[name="OrderType"]')
 
 // 抓取施作部位的Val 後續去資料庫撈值 施作項目 以及 造型
 var OpartC = $('select[name="OrderPartC"]')
@@ -244,6 +244,9 @@ function postOrder() {
             if (formdata[i]['value'] == "true") {
                 returnArray[formdata[i]['name']] = true;
             }
+            else if (formdata[i]['value'] == "false"){
+                returnArray[formdata[i]['name']] = false;
+            }
         }
         console.log(JSON.stringify(returnArray));
         // console.log(returnArray)
@@ -293,18 +296,15 @@ function getManicuristData() {
 function getOrderPartC() {
     $('#Sendbtn').on('click', function () {
         OpartCval = OpartC.val();
-        
         getDemosetData()
         getOrderItem()
+        
     })
     OpartC.change(function () {
-        demoSprice.text("")
-        demoSde.text("")
-        inputOprice.val("");
-        inputOde.val("");
         OpartCval = OpartC.val();
         getDemosetData()
         getOrderItem()
+        
     })
 }
 
@@ -323,12 +323,22 @@ function getDemosetData() {
             //OrderItem.empty();
             OrderItemName.empty();
             //console.log(res[0]['demoSetId'])
-            
+
             for (i = 0; i < res.length; i++) {
                 var DRes = res[i]
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
                 OrderItemName.append(`<option value="${DRes['demoSetName']}" price="${DRes['demoSetPrice']}" deposit="${DRes['demoSetDeposit']}">${DRes['demoSetName']}</option>`)
             }
+            OrderItemName.show();
+            var price = OrderItemName.find("option:selected").attr('price')
+            var deposit = OrderItemName.find("option:selected").attr('deposit')
+            
+            demoSprice.text("預估金額:NT$" + price)
+            demoSde.text("訂金:NT$" + deposit)
+            inputOprice.val(price);
+            inputOde.val(deposit);
+            // console.log(price)
+            // console.log(deposit)
         },
         error: err => {
             console.log(err)
@@ -353,18 +363,22 @@ function getOrderItem() {
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
                 OrderItem.append(`<option value="${Sres['serviceId']}" price="${Sres['servicePrice']}" deposit="${Sres['seriveDeposit']}">${Sres['serviceName']}</option>`)
             }
+            var price
+            var deposit
             // 當施作項目 變更時 不是選擇固定項目的選項時 隱藏造型選項
             OrderItem.change(function () {
                 var itemName = OrderItem.find("option:selected").text();
                 if (OrderItem.find("option:selected").attr("type") != "fix") {
+                    OrderType.val(false)
+
                     OrderItemName.hide();
 
                     OrderItemName.empty();
 
                     OrderItemName.append(new Option(itemName, itemName));
 
-                    var price = OrderItem.find("option:selected").attr('price')
-                    var deposit = OrderItem.find("option:selected").attr('deposit')
+                    price = OrderItem.find("option:selected").attr('price')
+                    deposit = OrderItem.find("option:selected").attr('deposit')
 
                     demoSprice.text("預估金額:NT$" + price)
                     demoSde.text("訂金:NT$" + deposit)
@@ -372,13 +386,19 @@ function getOrderItem() {
                     inputOde.val(deposit);
                 }
                 else {
+                    OrderType.val(true)
                     getDemosetData()
                     OrderItemName.show();
 
-                    demoSprice.text("")
-                    demoSde.text("")
-                    inputOprice.val("");
-                    inputOde.val("");
+                    // price = OrderItemName.find("option:selected").attr('price')
+                    // deposit = OrderItemName.find("option:selected").attr('deposit')
+                    // console.log(OrderItemName.attr('price'))
+                    // console.log(price)
+                    // console.log(deposit)
+                    // demoSprice.text("預估金額:NT$" + price)
+                    // demoSde.text("訂金:NT$" + deposit)
+                    // inputOprice.val(price);
+                    // inputOde.val(deposit);
                 }
             })
 

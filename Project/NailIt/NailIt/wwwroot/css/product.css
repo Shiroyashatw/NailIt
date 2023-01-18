@@ -110,7 +110,7 @@
   font-size: 18px;
 }
 
-#alert_div {
+#alert_div, #repalert_div {
   position: fixed;
   top: 10%;
   left: 20%;
@@ -141,7 +141,7 @@
     top: 10%;
   }
 }
-#hohodiv {
+#hohodiv, #rephohodiv {
   position: fixed;
   -webkit-backdrop-filter: blur(2px);
           backdrop-filter: blur(2px);

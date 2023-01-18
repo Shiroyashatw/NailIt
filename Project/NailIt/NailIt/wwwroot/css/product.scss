@@ -160,7 +160,7 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
 
 
 // 彈出視窗 設計 
-#alert_div {
+#alert_div,#repalert_div {
     position: fixed;
     top: 10%;
     left: 20%;
@@ -183,7 +183,7 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
 }
 
 // 背後灰色遮照
-#hohodiv {
+#hohodiv,#rephohodiv {
     position: fixed;
     backdrop-filter: blur(2px);
     background: rgba(128, 128, 128, 0.329);
