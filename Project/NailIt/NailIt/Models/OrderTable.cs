@@ -23,5 +23,6 @@ namespace NailIt.Models
         public DateTime? OrderDoneTime { get; set; }
         public DateTime? OrderCompleteTime { get; set; }
         public string OrderStateC { get; set; }
+        public DateTime? OrderCancelTime { get; set; }
     }
 }

@@ -180,8 +180,8 @@
                     <input type="checkbox" name="check" id="isdetil">
                     <label for="isdetil">地址只顯示縣市和鄉鎮</label>
                     <div class="input-group mb-3">
-                        <select class="custom-select" onchange="change(this)"  name="city" id="city"></select><label for="city">縣市</label>
-                        <select class="custom-select" name="hometown" id="hometown"></select><label for="hometown">鄉鎮</label>
+                        <select class="custom-select" onchange="change(this)" v-model="shoplist.manicuristCounty"  name="city" id="city"></select><label for="city">縣市</label>
+                        <select class="custom-select" name="hometown" v-model="shoplist.manicuristTownship" id="hometown"></select><label for="hometown">鄉鎮</label>
 
                     </div>
                     <input type="text" class="form-control" maxlength="20" id="address">
@@ -231,7 +231,7 @@
                         </pre>
                                                 </h6>
                                             </div>
-                                        </div>
+                                        </div> 
                                         <div class="card-Classification">
                                             <h6>卡片詳情</h6>
                                             <img class="Classification" src="./img/VISA.ICON.png" alt="">
@@ -239,29 +239,34 @@
                                             <img class="Classification" src="./img/JCB.ICON.png" alt="">
                                         </div>
                                         <div class="card-number">
-                                            <input type="text" placeholder="信用卡號碼" class="form-control" name="" id="input-card-number" required>
+                                            <input type="text"  placeholder="信用卡號碼" v-model="creditlist[0].creditCardNumber" class="form-control" name="" id="input-card-number" required>
                                         </div>
+                                            <span id="creditnumwarn" style="color:red;font-size:11px;" ></span>
                                         <br>
                                         <div class="input-group-prepend">
-                                            <input type="text" placeholder="到期日(MM/YY)" class="form-control">
+                                            <input type="text" id="creditenddate" placeholder="到期日MM/YY" class="form-control">
                                             <input type="text" placeholder="安全驗證碼" class="form-control">
                                             <BUtton type="button" class="btn btn-light" data-toggle="tooltip" data-placement="right" id="btn-tool"><img style="height: 20px;" src="./img/help_FILL0_wght400_GRAD0_opsz48.png" alt=""></BUtton>
                                         </div>
+                                            <span id="creditdate" style="color:red;font-size:11px;"></span>
                                         <br>
                                         <div class="card-name">
-                                            <input type="text" placeholder="持卡者名字" class="form-control">
+                                            <input type="text" v-model="creditlist[0].creditCardHolder" id="creditholdername" placeholder="持卡者名字" class="form-control">
                                         </div>
+                                            <span id="creditname" style="color:red;font-size:11px;"></span>
                                         <br>
                                         <div>
                                             <h5 style="font-size: 11px;" class="bill-address-text">帳單地址</h5>
                                             <div class="bill-address">
-                                                <input class="form-control" placeholder="信用卡帳單地址" type="text">
+                                                <input class="form-control" id="addresscredit" v-model="creditlist[0].creditCardBilladdress" placeholder="信用卡帳單地址" type="text">
                                             </div>
                                         </div>
+                                                <span id="creditaddress" style="color:red;font-size:11px;"></span>
                                         <br>
                                         <div class="bill-Postal-code">
-                                            <input type="text" placeholder="郵遞區號" class="form-control">
+                                            <input type="text" id="postcode" v-model="creditlist[0].creditCardPostalCode" placeholder="郵遞區號" class="form-control">
                                         </div>
+                                            <span id="creditpostcode" style="color:red;font-size:11px;"></span>
                                         <br>
                                         <div>
                                             <pre><h6 style="font-size: 11px;">新增信用卡時，Nail it將會取得一次1元的授權紀錄，以驗證您的卡號資訊，此筆
@@ -272,14 +277,14 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light" data-dismiss="modal">取消</button>
-                                        <button type="button" id="btn-input" class="btn" >送出</button>
+                                        <button type="button" id="btn-input" class="btn" v-on:click="btninsertcard">送出</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-1">
-                        <img src="./img/visa.png" class="card-1-1"> <h5 class="card-1-1">VISA</h5> <h5 class="card-1-1" style="color:red;">  (已過期)</h5> <h5 id="card-1-1-number" class="card-1-1">**** **** **** 2352</h5>
+                        <img src="./img/visa.png" class="card-1-1"> <h5 class="card-1-1">VISA</h5> <h5 class="card-1-1" style="color:red;" id="iscreditdate"></h5> <h5 id="card-1-1-number" class="card-1-1"></h5>
                     </div>
                     <div class="counnt-div">
                         <h5 id="counnt">銀行帳號</h5> <button type="button" id="counnt" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal2" value="newcounnt">+ 新增銀行帳號</button>
@@ -823,17 +828,28 @@
                     "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計",
                     "manicuristScore": 4.6
 
+                }],creditlist: [{
+                    "creditCardOwner": 1, "creditCardNumber": null, "creditCardExpirationdateYear": null, "creditCardExpirationdateMon":null
+                    , "creditCardHolder": null, "creditCardBilladdress": null, "creditCardPostalCode": null
                 }]
             },
-            methods: {
+            methods: { //會員資料修改
                 btnmodifmember: function () {
                     var new1 = $("#newword1").val();
                     var new2 = $("#newword2").val();
-                    if ((new1 != null) || (new2 != null)) {
+                    if ((new1 != "") || (new2 != "")) {
                         var span = $("#newPwd2span");
                         if (new1 != new2) {
                             span.html("兩次輸入不一樣，請重新輸入")
                         } else {
+                            app.memberlist.memberPassword = $("#newword2").val();
+                            //if ($("#inputGroupSelect01").val() == 0) {
+                            //    app.memberlist.memberGender == true;
+                            //} else {
+                            //    app.memberlist.memberGender == false;
+                            //}
+                            console.log(new1);
+
                             $.ajax({
                                 type: "put",
                                 url: "/api/MemberTables/1",
@@ -841,10 +857,27 @@
                                 data: JSON.stringify(this.memberlist),
                                 success: function () {
                                     window.location = "/tedLb/tedmember.html";
-
+                                    alert("資料修改成功");
                                 } })
                         }
                     } else {
+                        //if ($("#inputGroupSelect01").val() == 0) {
+                        //    app.memberlist.memberGender = true;
+                        //} else {
+                        //    app.memberlist.memberGender = false;
+                        //    console.log("有喔");
+                        //}
+                        var year = $("#year").val();
+                        var mon = $("#inputGroupSelect02").val();
+                        if (mon.length == 1) {
+                            mon = "0" + mon; 
+                        }
+                        var day = $("#inputGroupSelect03").val();
+                        if (day.length == 1) {
+                            day = "0" + day;
+                        }
+                        app.memberlist.memberBirth = year + "-" + mon + "-" + day+" " + "00:00:00";
+                        console.log(year + "-" + mon + "-" + day+" "+"00:00:00");
                         $.ajax({
                             type: "put",
                             url: "/api/MemberTables/1",
@@ -856,8 +889,9 @@
                             }
                         })
                     }
-                },
+                },//店家資料修改
                 btnshopmodif: function () {
+                    app.shoplist.manicuristAddress = $("#city").val() + $("#hometown").val() + $("#address").val();
                     $.ajax({
                         type: "put",
                         url: "/api/ManicuristTables/1",
@@ -868,11 +902,68 @@
                             alert("資料修改成功");
                         }
                     })
+                },
+                 // 新增信用卡 
+                btninsertcard: function () {
+                    var flag = true;
+                    if ($("#input-card-number").val() == "") {
+                        $("#creditnumwarn").html(" 信用卡號碼欄位不能為空值");
+                        flag = false;
+                    }
+                    if ($("#creditenddate").val() == "") {
+                        $("#creditdate").html("欄位為空值或是格式錯誤");
+                        flag = false;
+                    }
+                    if ($("#creditholdername").val() == "") {
+                        $("#creditname").html("名字欄位不能為空值");
+                        flag = false;
+                    }
+                    if ($("#addresscredit").val() == "") {
+                        $("#creditaddress").html("帳單地址不能為空值");
+                        flag = false;
+                    }
+                    if ($("#postcode").val() == "") {
+                        $("#creditpostcode").html("郵遞區號不能為空值");
+                        flag = false;
+                    }
+                   
+                    if (flag == true) {
+                        app.creditlist[0].creditCardExpirationdateYear = ($("#creditenddate").val()).substr(3, 2);
+                        app.creditlist[0].creditCardExpirationdateMon = ($("#creditenddate").val()).substr(0, 2);
+                        $.ajax({
+                        type: "post",
+                        url: "/api/CreditCardTables",
+                        contentType: "application/json",
+                        data: JSON.stringify(app.creditlist[0]),
+                
+                        success: function () {
+                            window.location = "/tedLb/tedmember.html";
+                            alert("信用卡新增成功");
+                        }
+                    })
+                    }
                 }
             }
 
         })
-           
+        //$.ajax({
+        //    type: "get",
+        //    url: "/api/CreditCardTables/1",
+        //    success: function (e) {
+        //        app.creditlist = e;
+        //        var today = new Date();
+        //        if ("20"+e.creditCardExpirationdateYear < today.getFullYear) {
+        //            $("#iscreditdate").html = "(已過期)";
+        //        } else if (("20"+e.creditCardExpirationdateYear) == today.getFullYear()) {
+        //            if (e.creditCardExpirationdateMon <= (today.getMonth() + 1)) {
+        //                $("#iscreditdate").html = "(已過期)";
+        //            }
+        //        }
+        //        console.log(e.creditCardNumber);
+        //        $("#card-1-1-number").html("**** "+"**** "+"****　"+(e.creditCardNumber).substr(12, 4));
+        //    }
+        //})
+        
             
         
         //會員修改判斷

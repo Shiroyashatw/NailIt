@@ -138,7 +138,7 @@ function change(x){
     var name = x.value;
     document.getElementById("hometown").options.length = 0;
    for(var i=0;i<area_data[name].length;i++){
-        document.getElementById("hometown").add(new Option(area_data[name][i],i))
+       document.getElementById("hometown").add(new Option(area_data[name][i], area_data[name][i]))
    }
     
 }
