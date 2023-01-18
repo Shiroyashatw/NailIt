@@ -152,62 +152,62 @@ function initialBool(value) {
 
 class ArticleTable {
     constructor(data) {
-        this.ArticleId = initialNum(data.ArticleId);
-        this.ArticleBoardC = initialStr(data.ArticleBoardC);
-        this.ArticleAuthor = initialNum(data.ArticleAuthor);
-        this.ArticleTitle = initialStr(data.ArticleTitle);
-        this.ArticleReplyCount = initialNum(data.ArticleReplyCount);
-        this.ArticleLikesCount = initialNum(data.ArticleLikesCount);
-        this.ArticleBuildTime = initialDate(data.ArticleBuildTime);
-        this.ArticleLastEdit = initialDate(data.ArticleLastEdit);
-        this.ArticleContent = initialStr(data.ArticleContent);
+        this.articleId = initialNum(data.articleId);
+        this.articleBoardC = initialStr(data.articleBoardC);
+        this.articleAuthor = initialNum(data.articleAuthor);
+        this.articleTitle = initialStr(data.articleTitle);
+        this.articleReplyCount = initialNum(data.articleReplyCount);
+        this.articleLikesCount = initialNum(data.articleLikesCount);
+        this.articleBuildTime = initialDate(data.articleBuildTime);
+        this.articleLastEdit = initialDate(data.articleLastEdit);
+        this.articleContent = initialStr(data.articleContent);
     }
 }
 class ArticleLikeTable {
     constructor(data) {
-        this.ArticleLikeId = initialNum(data.ArticleLikeId);
-        this.ArticleId = initialNum(data.ArticleId);
-        this.MemberId = initialNum(data.MemberId);
+        this.articleLikeId = initialNum(data.articleLikeId);
+        this.articleId = initialNum(data.articleId);
+        this.memberId = initialNum(data.memberId);
     }
 }
 class ArticlePicTable {
     constructor(data) {
-        this.ArtclePicId = initialNum(data.ArtclePicId);
-        this.ArticleId = initialNum(data.ArticleId);
-        this.ArticlePicPath = initialStr(data.ArticlePicPath);
+        this.artclePicId = initialNum(data.artclePicId);
+        this.articleId = initialNum(data.articleId);
+        this.articlePicPath = initialStr(data.articlePicPath);
     }
 }
 class ReplyTable {
     constructor(data) {
-        this.ReplyId = initialNum(data.ReplyId);
-        this.ArticleId = initialNum(data.ArticleId);
-        this.MemberId = initialNum(data.MemberId);
-        this.ReplyContent = initialStr(data.ReplyContent);
-        this.ReplyBuildTime = initialDate(data.ReplyBuildTime);
-        this.ReplyLastEdit = initialDate(data.ReplyLastEdit);
-        this.ReplyLikesCount = initialNum(data.ReplyLikesCount);
+        this.replyId = initialNum(data.replyId);
+        this.articleId = initialNum(data.articleId);
+        this.memberId = initialNum(data.memberId);
+        this.replyContent = initialStr(data.replyContent);
+        this.replyBuildTime = initialDate(data.replyBuildTime);
+        this.replyLastEdit = initialDate(data.replyLastEdit);
+        this.replyLikesCount = initialNum(data.replyLikesCount);
     }
 }
 class ReplyLikeTable {
     constructor(data) {
-        this.ReplyLikeId = initialNum(data.ReplyLikeId);
-        this.ReplyId = initialNum(data.ReplyId);
-        this.MemberId = initialNum(data.MemberId);
+        this.replyLikeId = initialNum(data.replyLikeId);
+        this.replyId = initialNum(data.replyId);
+        this.memberId = initialNum(data.memberId);
     }
 }
 class ReportTable {
     constructor(data) {
-        this.ReportId = initialNum(data.ReportId);
-        this.ReportBuilder = initialNum(data.ReportBuilder);
-        this.ReportTarget = initialNum(data.ReportTarget);
-        this.ReportItem = initialNum(data.ReportItem);
-        this.ReportPlaceC = initialStr(data.ReportPlaceC);
-        this.ReportReasonC = initialStr(data.ReportReasonC);
-        this.ReportContent = initialStr(data.ReportContent);
-        this.ReportBuildTime = initialDate(data.ReportBuildTime);
-        this.ReportCheckTime = initialDate(data.ReportCheckTime);
-        this.ManagerId = initialNum(data.ManagerId);
-        this.ReportResult = initialBool(data.ReportResult);
+        this.reportId = initialNum(data.reportId);
+        this.reportBuilder = initialNum(data.reportBuilder);
+        this.reportTarget = initialNum(data.reportTarget);
+        this.reportItem = initialNum(data.reportItem);
+        this.reportPlaceC = initialStr(data.reportPlaceC);
+        this.reportReasonC = initialStr(data.reportReasonC);
+        this.reportContent = initialStr(data.reportContent);
+        this.reportBuildTime = initialDate(data.reportBuildTime);
+        this.reportCheckTime = initialDate(data.reportCheckTime);
+        this.managerId = initialNum(data.managerId);
+        this.reportResult = initialBool(data.reportResult);
     }
 }
 //#endregion
