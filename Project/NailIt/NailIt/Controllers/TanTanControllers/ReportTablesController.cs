@@ -26,14 +26,15 @@ namespace NailIt.Controllers.TanTanControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetReportTables()
         {
-            
+
             var newReportTables = from o in _context.ReportTables
-                              join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
-                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist from m in mlist.DefaultIfEmpty()
-                                  where o.ReportBuildTime >= Convert.ToDateTime("2023-01-07")
-                                  //  && o.ReportBuildTime <= Convert.ToDateTime("2023-01-17")
-                                    //&& o.ReportPlaceC == "D6"
-                                    //&& o.ReportResult == true
+                                  join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
+                                  join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist
+                                  from m in mlist.DefaultIfEmpty()
+                                  join n in _context.MemberTables on o.ReportTarget equals n.MemberId into nlist
+                                  from n in nlist.DefaultIfEmpty()
+                                  join ma in _context.ManagerTables on o.ManagerId equals ma.ManagerId into malist
+                                  from ma in malist.DefaultIfEmpty()
                                   select new
                                   {
                                       ReportId = o.ReportId,
@@ -44,12 +45,14 @@ namespace NailIt.Controllers.TanTanControllers
                                       ReportReasonC = o.ReportReasonC,
                                       ReportContent = o.ReportContent,
                                       ReportBuildTime = o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
-                                      ReportCheckTime = o.ReportCheckTime,
+                                      ReportCheckTime = o.ReportCheckTime == null ? "" : ((DateTime)o.ReportCheckTime).ToString("yyyy-MM-dd HH:mm"),
                                       ManagerId = o.ManagerId,
                                       ReportResult = o.ReportResult,
                                       CodeUseIn = c.CodeId,
                                       CodeRepresent = c.CodeRepresent,
-                                      memberName = m.MemberName
+                                      BuilderMemberName = m.MemberName,
+                                      TargetMemberName = n.MemberName,
+                                      ManagerName = ma.ManagerName
                                   };
             return await newReportTables.ToListAsync();
         }
@@ -58,31 +61,35 @@ namespace NailIt.Controllers.TanTanControllers
         [HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetProductCondition(string dateS, string dateE, string reportP, bool? reportR)
         {
-            var query =   from o in _context.ReportTables
-                          join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
-                          join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist
-                          from m in mlist.DefaultIfEmpty()
-                          where o.ReportBuildTime >= Convert.ToDateTime(dateS)
-                          && o.ReportBuildTime <= Convert.ToDateTime(dateE)
-                          && o.ReportPlaceC == reportP
-                          && o.ReportResult == reportR
-                          select new
-                          {
-                              ReportId = o.ReportId,
-                              ReportBuilder = o.ReportBuilder,
-                              ReportTarget = o.ReportTarget,
-                              ReportItem = o.ReportItem,
-                              ReportPlaceC = o.ReportPlaceC,
-                              ReportReasonC = o.ReportReasonC,
-                              ReportContent = o.ReportContent,
-                              ReportBuildTime = o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
-                              ReportCheckTime = o.ReportCheckTime,
-                              ManagerId = o.ManagerId,
-                              ReportResult = o.ReportResult,
-                              CodeUseIn = c.CodeId,
-                              CodeRepresent = c.CodeRepresent,
-                              memberName = m.MemberName
-                          };
+            var date1 = DateTime.Parse(dateS);
+            var date2 = DateTime.Parse(dateE);
+            
+
+
+            var query = from o in _context.ReportTables
+                        join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
+                        join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist
+                        from m in mlist.DefaultIfEmpty()
+                        where o.ReportBuildTime >= Convert.ToDateTime(date1)
+                        && o.ReportBuildTime <= Convert.ToDateTime(date2).AddMinutes(1439)
+                        && o.ReportPlaceC == reportP
+                        //&& o.ReportResult == 
+                        select new
+                        {
+                            ReportId = o.ReportId,
+                            ReportBuilder = o.ReportBuilder,
+                            ReportTarget = o.ReportTarget,
+                            ReportItem = o.ReportItem,
+                            ReportPlaceC = o.ReportPlaceC,
+                            ReportReasonC = o.ReportReasonC,
+                            ReportContent = o.ReportContent,
+                            ReportBuildTime = o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
+                            ReportCheckTime = o.ReportCheckTime,
+                            ManagerId = o.ManagerId,
+                            ReportResult = o.ReportResult,
+                            CodeUseIn = c.CodeId,
+                            CodeRepresent = c.CodeRepresent,
+                        };
 
             return await query.ToListAsync();
         }
@@ -93,8 +100,12 @@ namespace NailIt.Controllers.TanTanControllers
         {
             var reportTable = from o in _context.ReportTables
                               join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
-                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist from m in mlist.DefaultIfEmpty()
-                              join ma in _context.ManagerTables on o.ManagerId equals ma.ManagerId into malist from ma in malist.DefaultIfEmpty()
+                              join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist
+                              from m in mlist.DefaultIfEmpty()
+                              join a in _context.MemberTables on o.ReportTarget equals a.MemberId into alist
+                              from a in alist.DefaultIfEmpty()
+                              join ma in _context.ManagerTables on o.ManagerId equals ma.ManagerId into malist
+                              from ma in malist.DefaultIfEmpty()
                               where o.ReportId == id
                               select new
                               {
@@ -111,7 +122,8 @@ namespace NailIt.Controllers.TanTanControllers
                                   ReportResult = o.ReportResult,
                                   CodeUseIn = c.CodeId,
                                   CodeRepresent = c.CodeRepresent,
-                                  MemberName = m.MemberName,
+                                  BuilderMemberName = m.MemberName,
+                                  TargetMemberName = a.MemberName,
                                   ManagerName = ma.ManagerName
                               };
 
@@ -155,8 +167,8 @@ namespace NailIt.Controllers.TanTanControllers
                                       where o.ReportId == id
                                       select o).FirstOrDefault();
             CertainReportTable.ReportResult = reportTable.ReportResult;
-            //CertainReportTable.ReportBuildTime = reportTable.ReportBuildTime;
-            //CertainReportTable.ManagerId = reportTable.ManagerId;
+            CertainReportTable.ReportCheckTime = reportTable.ReportCheckTime;
+            CertainReportTable.ManagerId = reportTable.ManagerId;
 
             try
             {
@@ -178,7 +190,7 @@ namespace NailIt.Controllers.TanTanControllers
         }
 
         // POST: api/ReportTables
-    
+
         [HttpPost]
         public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
         {

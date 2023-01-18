@@ -599,7 +599,7 @@
                         <p class="mb-1">狀態：</p>
                         <input type="radio" id="OK" name="status" onclick="BackVal(this)"  value="true">
                         <label for="OK">審核通過</label><br>
-                        <input type="radio" id="css" name="status" onclick="BackVal(this)"  value="false">
+                        <input type="radio" id="NO" name="status" onclick="BackVal(this)"  value="false">
                         <label for="NO">審核不通過</label><br>
                     </div>
                     <div class="p-3 d-flex justify-content-end">
@@ -620,8 +620,8 @@
                     <div class="modal-body py-2">
                         <b>檢舉編號：{{onereport[0].reportId}}</b>
                         <hr>
-                        <p>被檢舉：{{onereport[0].reportBuilder}}  {{onereport[0].memberName}}</p>
-                        <p>檢舉人：{{onereport[0].reportTarget}}  {{onereport[0].memberName}}</p>
+                        <p>被檢舉：{{onereport[0].reportBuilder}}  {{onereport[0].builderMemberName}}</p>
+                        <p>檢舉人：{{onereport[0].reportTarget}}  {{onereport[0].targetMemberName}}</p>
                         <p>檢舉類別：{{onereport[0].reportPlaceC}} {{onereport[0].codeRepresent}}</p>
                         <p>檢舉原因：{{onereport[0].reportReasonC}} {{onereport[0].codeRepresent}}</p>
                         <p>檢舉編號：{{onereport[0].reportItem}}</p>
@@ -629,7 +629,7 @@
                         <p>檢舉時間：{{onereport[0].reportBuildTime}}</p>
                         <p>狀態：{{onereport[0].reportResult}}</p>
                         <p>審核人員：{{onereport[0].managerId}}  {{onereport[0].managerName}}</p>
-                        <p class="mb-0" id="reptime" onchange="GetEdDate(this)">審核時間：{{onereport[0].reportCheckTime}}</p>
+                        <p class="mb-0" id="reptime">審核時間：{{onereport[0].reportCheckTime}}</p>
                     </div>
                     <div class="p-3 d-flex justify-content-end">
                         <button type="button" class="mycancel" data-dismiss="modal">關閉</button>

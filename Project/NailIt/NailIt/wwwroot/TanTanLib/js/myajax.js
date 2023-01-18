@@ -4,30 +4,17 @@ var mydata = new Vue({
     data: {
         report: [{}],
         //[{"reportId":1,"reportBuilder":1,"reportTarget":2,"reportItem":111012801,"reportPlaceC":"D3","reportReasonC":"G2","reportContent":"邪惡","reportBuildTime":"2023-01-18 20:28","reportCheckTime":"","managerId":null,"reportResult":null,"codeUseIn":"D3","codeRepresent":"設計師主頁","memberName":"田美麗","managerName":null}]
-        reportput: [{"reportResult": true, "reportId": 1 }],
+        reportput: [{ "reportResult": true, "reportId": "", "reportCheckTime":"", "managerId":"1"}],
         reportnum: "", reportpage: "",
         onereport: [{}],
         syscode: [{}],
         reportmodel: "",
         AAA: [],
-        revche: "",
+        
     },
  
 
 })
-
-//"reportresultime": "NULL"
-
-//methods: {
-//    seaselrep: function (){
-//        mydata.selectreport[0].redatestart = $("#datestart").val();
-//        mydata.selectreport[0].redatestart = $("#dateend").val();
-//        mydata.selectreport[0].redatestart = $("#reptype").val();
-//        mydata.selectreport[0].redatestart = $("#repres").val();
-
-//    }
-//},
-
 
 //GET審核資料表
 $.ajax({
@@ -69,10 +56,12 @@ $.ajax({
 //    type: "get",
 //    url: "api/ReportTables/condition",
 //    success: function (e) {
-        
+
 
 //    }
 //})
+
+
 
 //GET單一審核資料
 function reviewreport(e) {
@@ -89,6 +78,7 @@ function reviewreport(e) {
     })
 
 };
+
 //GET單一審核資料
 function reviewreport1(e) {
     //console.log(e.value)
@@ -96,7 +86,7 @@ function reviewreport1(e) {
 
     $.ajax({
         type: "get",
-        url: "/api/ReportTables/1" ,
+        url: "/api/ReportTables/" + mydata.reportmodel,
         success: function (e) {
             mydata.onereport = e;
             //< !--審核狀態NULL=待審核, TRUE = 審核通過, FLASE = 審核不通-- >
@@ -111,6 +101,8 @@ function reviewreport1(e) {
     })
 
 };
+
+//為了PUT的function
 function BackVal(e) {
     console.log(e);
     console.log(e.value);
@@ -120,20 +112,19 @@ function BackVal(e) {
         mydata.reportput[0].reportResult = false;
     }
 }
+
 //PUT單一審核資料
 function changereviewreport(e) {
 
-    //v2.只改兩筆
-    /*var now = Date();*/
-    console.log(e);
-    mydata.reportput[0].reportresultID = e.value;
-    //mydata.reportput[0].reportresultime = null;
+    var now = new Date().toISOString(); //待改進 要加八小時 台灣時間
+    console.log(now);
+    mydata.reportput[0].reportId = mydata.reportmodel;
+    mydata.reportput[0].reportCheckTime = now; 
+    mydata.reportput[0].managerId = 9;  
     console.log(mydata.reportput[0]);
-//url: "/api/ReportTables/" + mydata.reportmodel,
-
     $.ajax({
         type: "put",
-        url: "/api/ReportTables/5",
+        url: "/api/ReportTables/" + mydata.reportmodel,
         contentType: "application/json",
         data: JSON.stringify(mydata.reportput[0]),
         success: function () {
@@ -143,31 +134,6 @@ function changereviewreport(e) {
     })
 
 }
-    ////v1.想把所有東西丟回去
-    ////console.log(e.value)
-    //mydata.reportmodel = e.value;
-    ////console.log(mydata.revche);
-    //mydata.report[mydata.reportmodel].reportResult = mydata.revche;
-    //console.log(mydata.report[mydata.reportmodel].reportResult)
-    //console.log(JSON.stringify(mydata.report[mydata.reportmodel]))
-    //if (mydata.onereport[0].reportResult == "審核通過") {
-    //    mydata.onereport[0].reportResult = true;
-    //} else if (e.reportResult == "審核不通過") {
-    //    mydata.onereport[0].reportResult = false
-    //} else {
-    //    mydata.onereport[0].reportResult = "NULL"
-    //}
-
-    //mydata.reportput[0].reportId
-    //mydata.reportmodel = e.value
-    //mydata.reportput[0].reportID = e.value;
-    //mydata.reportput[0].reportresult = mydata.revche;
-    ////mydata.reportput[0].reportresultime = now;
-    //mydata.reportput[0].managerID = "0000";
-    
-
-    //console.log(JSON.stringify(mydata.reportput))
-
 
 //GET 代號資料表
 $.ajax({
