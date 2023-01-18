@@ -110,11 +110,10 @@ function changereviewreport(e) {
     mydata.reportput[0].reportresultID = e.value;
     //mydata.reportput[0].reportresultime = null;
     console.log(mydata.reportput[0]);
-
+//url: "/api/ReportTables/" + mydata.reportmodel,
 
     $.ajax({
         type: "put",
-        //url: "/api/ReportTables/" + mydata.reportmodel,
         url: "/api/ReportTables/1",
         contentType: "application/json",
         data: JSON.stringify(mydata.reportput[0]),
@@ -123,6 +122,7 @@ function changereviewreport(e) {
         },
         error: function () {
             alert("NO")
+
         }
     })
 }

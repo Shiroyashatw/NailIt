@@ -157,21 +157,21 @@ namespace NailIt.Controllers.TanTanControllers
             return CreatedAtAction("GetReportTable", new { id = reportTable.ReportId }, reportTable);
         }
 
-        // DELETE: api/ReportTables/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReportTable(int id)
-        {
-            var reportTable = await _context.ReportTables.FindAsync(id);
-            if (reportTable == null)
-            {
-                return NotFound();
-            }
+        //// DELETE: api/ReportTables/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteReportTable(int id)
+        //{
+        //    var reportTable = await _context.ReportTables.FindAsync(id);
+        //    if (reportTable == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.ReportTables.Remove(reportTable);
-            await _context.SaveChangesAsync();
+        //    _context.ReportTables.Remove(reportTable);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         private bool ReportTableExists(int id)
         {
