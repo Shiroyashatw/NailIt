@@ -1,17 +1,17 @@
 
-
 var mydata = new Vue({
     el: "#mydata",
     data: {
         report: [{}],
-        reportput: [{"reportresultID": "", "reportId":"1"}],
+        reportput: [{"reportResult": "", "reportId":"1"}],
         reportnum: "", reportpage: "",
         onereport: [{}],
         syscode: [{}],
         reportmodel: "",
         AAA: [],
-        revche:"",
+        revche:"NULL",
     },
+ 
 
 })
 
@@ -63,6 +63,16 @@ $.ajax({
 
 })
 
+//GET條件審核資料
+//$.ajax({
+//    type: "get",
+//    url: "api/ReportTables/condition",
+//    success: function (e) {
+        
+
+//    }
+//})
+
 //GET單一審核資料
 function reviewreport(e) {
     mydata.reportmodel = e.value;
@@ -107,18 +117,21 @@ function changereviewreport(e) {
     //v2.只改兩筆
     /*var now = Date();*/
     console.log(e);
-    mydata.reportput[0].reportresultID = e.value;
-    //mydata.reportput[0].reportresultime = null;
+
+    mydata.reportput[0].reportResult = mydata.revche;
+    console.log(mydata.revche);
+    mydata.reportput[0].reportId = e.value;
     console.log(mydata.reportput[0]);
 //url: "/api/ReportTables/" + mydata.reportmodel,
 
     $.ajax({
         type: "put",
-        url: "/api/ReportTables/1",
+        url: "/api/ReportTables/5",
         contentType: "application/json",
         data: JSON.stringify(mydata.reportput[0]),
         success: function (e) {
-            alert("OK")
+            alert("OK");
+           
         },
         error: function () {
             alert("NO")

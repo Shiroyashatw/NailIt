@@ -54,6 +54,38 @@ namespace NailIt.Controllers.TanTanControllers
             return await newReportTables.ToListAsync();
         }
 
+        // GET: api/ReportTables/condition
+        [HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProductCondition(string dateS, string dateE, string reportP, bool? reportR)
+        {
+            var query =   from o in _context.ReportTables
+                          join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
+                          join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist
+                          from m in mlist.DefaultIfEmpty()
+                          where o.ReportBuildTime >= Convert.ToDateTime(dateS)
+                          && o.ReportBuildTime <= Convert.ToDateTime(dateE)
+                          && o.ReportPlaceC == reportP
+                          && o.ReportResult == reportR
+                          select new
+                          {
+                              ReportId = o.ReportId,
+                              ReportBuilder = o.ReportBuilder,
+                              ReportTarget = o.ReportTarget,
+                              ReportItem = o.ReportItem,
+                              ReportPlaceC = o.ReportPlaceC,
+                              ReportReasonC = o.ReportReasonC,
+                              ReportContent = o.ReportContent,
+                              ReportBuildTime = o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
+                              ReportCheckTime = o.ReportCheckTime,
+                              ManagerId = o.ManagerId,
+                              ReportResult = o.ReportResult,
+                              CodeUseIn = c.CodeId,
+                              CodeRepresent = c.CodeRepresent,
+                              memberName = m.MemberName
+                          };
+
+            return await query.ToListAsync();
+        }
 
         // GET: api/ReportTables/5
         [HttpGet("{id}")]
@@ -153,7 +185,6 @@ namespace NailIt.Controllers.TanTanControllers
         {
             _context.ReportTables.Add(reportTable);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetReportTable", new { id = reportTable.ReportId }, reportTable);
         }
 
