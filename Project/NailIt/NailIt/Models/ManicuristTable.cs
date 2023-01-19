@@ -20,5 +20,8 @@ namespace NailIt.Models
         public string ManicuristBankAccount { get; set; }
         public string ManicuristIntro { get; set; }
         public double? ManicuristScore { get; set; }
+        public string ManicuristBankName { get; set; }
+        public string ManicuristBankNameBranch { get; set; }
+        public string ManicuristBankCompanyName { get; set; }
     }
 }
