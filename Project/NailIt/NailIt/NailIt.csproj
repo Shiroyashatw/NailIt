@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\YueyueControllers\**" />
+    <Content Remove="Controllers\YueyueControllers\**" />
+    <EmbeddedResource Remove="Controllers\YueyueControllers\**" />
+    <None Remove="Controllers\YueyueControllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Models\News.cs" />
   </ItemGroup>
 
@@ -18,10 +25,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\YiPLib\" />
   </ItemGroup>
 
   <ItemGroup>

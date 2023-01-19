@@ -159,7 +159,7 @@
             object-position: center;
         }
 
-/*        .Seemore:hover {
+        /*        .Seemore:hover {
             filter: grayscale(60%);
         }*/
 
@@ -183,7 +183,7 @@
                 z-index: 99;
             }
 
-/*        .Seemore:hover > .Clickme {
+        /*        .Seemore:hover > .Clickme {
             visibility: visible;
         }*/
 
@@ -434,13 +434,14 @@
             border-bottom: 1px solid black;
         }
 
-        .TxtStyle:focus {
+            .TxtStyle:focus {
                 outline: none;
+            }
+
+        .TxtWid {
+            width: 80px;
         }
 
-        .TxtWid{
-            width:80px;
-        }
         .PrideWid {
             width: 50px;
         }
@@ -458,15 +459,15 @@
             resize: none;
         }
 
-        #UpContext:focus, #UpDemoText:focus {
-            outline: none;
-        }
+            #UpContext:focus, #UpDemoText:focus {
+                outline: none;
+            }
 
         #UpFile, #UpDemo, #UpDemoFile {
             display: none;
         }
 
-        #UpFileLabel, #UpDemoLabel {
+        #UpFileLabel {
             background-color: #7F7F7F;
             color: white;
             margin-left: 15px;
@@ -476,13 +477,24 @@
             padding-right: 15px;
         }
 
+        #UpDemoLabel {
+            background-color: #7F7F7F;
+            color: white;
+            height: 35px;
+            margin-left: 15px;
+            padding-top: 5px;
+            /*padding-bottom: 5px;*/
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
             #UpFileLabel:hover, #UpDemoLabel:hover {
                 background-color: #D0CECE;
             }
 
         .OnTxt {
-            margin-top:4px;
-            margin-left:80px;
+            margin-top: 4px;
+            margin-left: 80px;
             border: none;
             border-bottom: 1px solid black;
             width: 80px;
@@ -498,12 +510,13 @@
             border-radius: 10px;
             background-color: white;
         }
+
         .TagFullColor {
             background-color: #FF6733;
-            color:white;
+            color: white;
         }
 
-/*        .valid {
+        /*        .valid {
             border-bottom: 1px solid green;
         }
 
@@ -529,27 +542,27 @@
                 bottom: 0;
             }
 
-                .Tag input[type="radio"] {
-                    opacity: 0.011;
-                    z-index: 100;
-                }
+            .Tag input[type="radio"] {
+                opacity: 0.011;
+                z-index: 100;
+            }
 
-                    .Tag input[type="radio"]:checked + label {
-                        background-color: #FF6733;
-                        color: white;
-                    }
+                .Tag input[type="radio"]:checked + label {
+                    background-color: #FF6733;
+                    color: white;
+                }
 
             .Tag label {
                 cursor: pointer;
                 z-index: 90;
                 line-height: 1.8em;
-                text-align:center;
+                text-align: center;
             }
 
         #SalonN {
             border: none;
             border-bottom: 1px solid black;
-            width:100%;
+            width: 100%;
         }
 
             #SalonN:focus {
@@ -576,7 +589,7 @@
         }
 
         .EDDSbtn {
-            display:flex;
+            display: flex;
         }
 
         .EditDS {
@@ -603,7 +616,6 @@
             padding-bottom: 5px;
             padding-left: 10px;
             padding-right: 10px;
-
         }
 
         .UploadDemo {
@@ -635,14 +647,28 @@
             border-bottom: 1px solid black;
         }
 
-            .Puttag:focus{
+            .Puttag:focus {
                 outline: none;
             }
+
         #PutTagS, #PutTagT {
             text-align: center;
         }
 
+        #Previewphoto {
+            height: 200px;
+            /*max-width: 200px;*/
+            width: 200px;
+            object-fit: cover;
+        }
 
+        .itemloop {
+            border-top: solid 1pt black;
+        }
+
+        #DemolistTable {
+            width: 250px;
+        }
     </style>
 </head>
 
@@ -715,12 +741,12 @@
                     <textarea id="Infotext" maxlength="200" class="mt-3" placeholder="自我介紹" v-if="Editing" v-model="PutManicurist[0].manicuristIntro"></textarea>
                 </form>
                 <!--<div id="Score">
-                <div class="ratings">
-                    <div class="Emptystar">★★★★★</div>
-                    <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
-                </div>
-                <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
-            </div>-->
+                    <div class="ratings">
+                        <div class="Emptystar">★★★★★</div>
+                        <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
+                    </div>
+                    <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
+                </div>-->
             </div>
             <div class="col-2">
                 <!--<div style="height: 80%;"></div>-->
@@ -760,9 +786,9 @@
                     </div>
                     <div class="col-4">
                         <!--<form>
-                <input class="Searchbar" type="text" placeholder="作品,標籤">
-                <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-            </form>-->
+                            <input class="Searchbar" type="text" placeholder="作品,標籤">
+                            <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
+                        </form>-->
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -901,7 +927,7 @@
                                 </div>
                                 <div class="modal-footer border-0">
                                     <button onclick="cleartext()" class="Checkbtn" data-dismiss="modal">取消</button>
-                                    <button v-on:click="InsertDemo" type="submit" class="Editbtn">新增</button>
+                                    <a v-on:click="InsertDemo" type="submit" class="Editbtn">新增</a>
                                 </div>
                             </div>
                         </form>
@@ -930,7 +956,7 @@
                                 </div>
                                 <!--<img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover" v-bind:alt="[key]" data-toggle="modal" data-target="#EditModal" onclick="GetDemoinfo(this)">-->
                                 <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover">
-                                <button v-bind:value="[key]" data-toggle="modal" data-target="#PostPicModal" class="UploadDemo" onclick="GetDemoinfo(this)">上傳</button>
+                                <button v-bind:value="[key]" data-toggle="modal" data-target="#PostPicModal" class="UploadDemo" onclick="GetCertainDemo(this)">相片</button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
                             <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
@@ -957,16 +983,16 @@
                                                         <textarea required v-model="ThisFormData[0].demoSetContent" class="ExitEmpty" id="PutInFo" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                                                     </div>
                                                     <!--<div>
-                                <label for="UpDemoFile">照片：</label>
-                                <br />
-                                <div class="d-flex align-items-center">
-                                    <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
-                                    <label id="UpFileLabel" class="align-items-center">
-                                        上傳檔案
-                                        <input id="UpDemoFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
-                                    </label>
-                                </div>
-                            </div>-->
+                                                        <label for="UpDemoFile">照片：</label>
+                                                        <br />
+                                                        <div class="d-flex align-items-center">
+                                                            <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
+                                                            <label id="UpFileLabel" class="align-items-center">
+                                                                上傳檔案
+                                                                <input id="UpDemoFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
+                                                            </label>
+                                                        </div>
+                                                    </div>-->
                                                     <div class="py-2">
                                                         <label for="PutC">施作部位：</label>
                                                         <select id="PutC" v-model="ThisFormData[0].demoSetPartC" required>
@@ -1064,7 +1090,7 @@
                                             </div>
                                             <div class="modal-footer border-0">
                                                 <button class="Checkbtn" data-dismiss="modal">取消</button>
-                                                <button v-on:click="DeleteDemo()"  type="submit" class="Editbtn">刪除</button>
+                                                <button v-on:click="DeleteDemo()" type="submit" class="Editbtn">刪除</button>
                                             </div>
                                         </div>
                                     </form>
@@ -1078,28 +1104,72 @@
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
-                                                <h5 class="modal-title" id="PostPicModalLabel">管理{{ThisFormData[0].demoSetName}}相片</h5>
+                                                <h5 class="modal-title" id="PostPicModalLabel">管理{{GetUpList[0].demoSetName}}相片</h5>
                                                 <button class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span onclick="cleartext()" aria-hidden="true">&times;</span>
+                                                    <span onclick="ReplayPhoto()" aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
                                                 <div>
-                                                    <label for="UpDemo">照片：</label>
-                                                    <br />
-                                                    <div class="d-flex align-items-center">
-                                                        <textarea id="UpDemoText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
-                                                        <label id="UpDemoLabel" class="align-items-center">
-                                                            上傳檔案
-                                                            <input id="UpDemo" class="ExitEmpty" type="file" accept="image/*" onchange="GetMorefile(this)" multiple="multiple" />
-                                                        </label>
+                                                    <div class="d-flex">
+                                                        <div class="d-block">
+
+
+                                                            <table id="DemolistTable">
+                                                                <tr>
+                                                                    <th class="text-center">項次</th>
+                                                                    <th class="text-center" colspan="2">操作</th>
+                                                                </tr>
+                                                                <tr class="itemloop text-center">
+                                                                    <td>封面</td>
+                                                                    <td>
+                                                                        <label>
+                                                                            查看
+                                                                            <input type="radio" style="display:none" onclick="Checkthiscover()" />
+                                                                        </label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label class="text-center">
+                                                                            修改
+                                                                            <input id="PutCover" style="display:none" type="file" accept="image/*" onchange="PutCoverfile(this)" />
+                                                                        </label>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr v-for="(item,key) in DemoList" class="itemloop">
+                                                                    <td class="text-center">{{key+1}}</td>
+                                                                    <td class="text-center">
+                                                                        <label>
+                                                                            查看
+                                                                            <input type="radio" style="display:none" v-bind:value="[key]" onclick="ShowDemo(this)" />
+                                                                        </label>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <label>
+                                                                            刪除
+                                                                            <input type="radio" style="display:none" v-bind:value="[key]" onclick="DeleteDemo(this)" />
+                                                                        </label>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="mx-3">
+                                                            <img id="Previewphoto" src="UploadFolder/upload.png" />
+                                                        </div>
                                                     </div>
+                                                </div>
+                                                <hr />
+                                                <div class="d-flex">
+                                                    <textarea id="UpDemoText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly">尚未選擇</textarea>
+                                                    <label id="UpDemoLabel" class="mt-3">
+                                                        新增相片
+                                                        <input id="UpDemo" type="file" accept="image/*" onchange="GetMorefile(this)" multiple="multiple" />
+                                                    </label>
                                                 </div>
 
                                             </div>
                                             <div class="modal-footer border-0">
                                                 <button class="Checkbtn" data-dismiss="modal">取消</button>
-                                                <a v-on:click="PostDemoimg()" type="submit" class="Editbtn">新增</a>
+                                                <button v-on:click="PostDemoimg()" type="submit" class="Editbtn">新增</button>
                                             </div>
                                         </div>
                                     </form>
@@ -1194,7 +1264,7 @@
             //var NowGroup = `input[name=${e.name}]`
             var NowGroup = `label[name=${e.name}]`
             $(NowGroup).removeClass('TagFullColor');
-            
+
             //var Nowtxt = `input[type=text][name=${e.name}]`
             var Nowtxt = `input[type=text][name=${e.name}]`
             if (e.value == "自訂") {
@@ -1210,11 +1280,11 @@
             console.log(e.value);
 
             if (e.name == 'UpTagS') {
-                    ShowData.InsertDemoSet[0].demoSetTag2 = e.value;
+                ShowData.InsertDemoSet[0].demoSetTag2 = e.value;
             }
 
             if (e.name == 'UpTagT') {
-                    ShowData.InsertDemoSet[0].demoSetTag3 = e.value;
+                ShowData.InsertDemoSet[0].demoSetTag3 = e.value;
 
             }
         }
@@ -1249,7 +1319,6 @@
 
         function GetDemoinfo(e) {
             console.log(e.value);
-            ShowData.ThisFormDataID = e.value;
             ShowData.ThisFormData[0].demoSetId = ShowData.DemoSetList[e.value].demoSetId;
             ShowData.ThisFormData[0].demoSetName = ShowData.DemoSetList[e.value].demoSetName;
             //ShowData.ThisFormData[0].demoSetCover = ShowData.DemoSetList[e.value].demoSetCover;
@@ -1284,17 +1353,79 @@
             }
             ShowData.ThisFormData[0].demoSetColor = ShowData.DemoSetList[e.value].demoSetColor;
 
-                    //$.ajax({
-                    //    type: "get",
-                    //    //url: "api/path/" + this.InsertDemoSet.manicuristId,
-                    //    url: "/api/DemoSet/GetPostDemoSetTable/2",
-                    //    success: function (e) {
-                    //        for (var b = 0; b < ShowData.PostDemo.length; b++)
-                    //            this.PostDemo[b].demoSetId = e.demoSetId;
-                    //    }
-                    //})
+            //$.ajax({
+            //    type: "get",
+            //    //url: "api/path/" + this.InsertDemoSet.manicuristId,
+            //    url: "/api/DemoSet/GetPostDemoSetTable/2",
+            //    success: function (e) {
+            //        for (var b = 0; b < ShowData.PostDemo.length; b++)
+            //            this.PostDemo[b].demoSetId = e.demoSetId;
+            //    }
+            //})
         }
 
+        async function GetCertainDemo(e) {
+            console.log(e);
+            GetCertainDemoKey = e.value;
+            ShowData.GetUpList[0].demoSetName = ShowData.DemoSetList[e.value].demoSetName;
+            ShowData.GetUpList[0].demoSetId = ShowData.DemoSetList[e.value].demoSetId;
+            ShowData.PutUpCover[0].demoSetId = ShowData.DemoSetList[e.value].demoSetId;
+            ShowData.PutUpCover[0].demoSetCover = ShowData.DemoSetList[e.value].demoSetCover;
+            //console.log(ShowData.GetUpList[0].demoSetId);
+            // console.log(ShowData.GetUpList[0].demoSetID);
+            // console.log(ShowData.DemoSetList[e.value].demoSetID);
+
+            await $.ajax({
+                type: "get",
+                url: "/api/Demo/" + ShowData.GetUpList[0].demoSetId,
+                success: function (e) {
+                    //console.log(e);
+                    ShowData.DemoList = e;
+                }
+            });
+
+        }
+
+        function ShowDemo(e) {
+            console.log(e.value);
+            var edemopic = ShowData.DemoList[e.value].demoPic;
+            //console.log(ShowData.DemoList[e.value].demoPic);
+            //console.log(ShowData.DemoList[e.value].demoPic);
+            $('#Previewphoto').attr('src', edemopic);
+        }
+        async function DeleteDemo(e) {
+            console.log(ShowData.DemoList[e.value].demoId);
+
+            await $.ajax({
+                type: "delete",
+                url: "/api/Demo/" + ShowData.DemoList[e.value].demoId,
+                success: function () {
+                    window.location = "/YiPLib/NailDesignerEdit.html";
+                }
+            });
+
+        }
+
+        function Checkthiscover() {
+            var edemocover = ShowData.PutUpCover[0].demoSetCover;
+
+            console.log(ShowData.PutUpCover[0].demoSetCover);
+            $('#Previewphoto').attr('src', edemocover);
+
+        }
+
+        function ShowPostDemo(e) {
+            $('#Previewphoto').attr('src', e.value);
+        }
+
+        function DeletePostDemo(e) {
+            var DeleteD = e.value;
+            DeleteD.demoPic = null;
+        }
+
+        function ReplayPhoto() {
+            $('#Previewphoto').attr('src', 'UploadFolder/upload.png');
+        }
 
 
         var ShowData = new Vue({
@@ -1303,7 +1434,7 @@
                 DesignList: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號", "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true, "manicuristSalonPhone": "0923859697", "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試", "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459", "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計", "manicuristScore": 4.6 }],
                 DemoSetList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoSetCover": "UploadFolder/Oneone.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是今年最流行的珍珠音調粉色系呦", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "碎花", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 1 }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoSetCover": "UploadFolder/Onetwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是彩色手手", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "造型", "demoSetTag2": "知性風", "demoSetTag3": "幾何", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 2 }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoSetCover": "UploadFolder/Onethree.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "造型腳腳", "demoSetPrice": 1200.0000, "demoSetDeposit": 600.0000, "demoSetTag1": "造型", "demoSetTag2": "漸層", "demoSetTag3": "可愛風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 3 }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoSetCover": "UploadFolder/Twoone.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "這紫色手手", "demoSetPrice": 999.0000, "demoSetDeposit": 400.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "華麗風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 4 }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoSetCover": "UploadFolder/Twotwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "喝咖啡最適合的美甲", "demoSetPrice": 850.0000, "demoSetDeposit": 100.0000, "demoSetTag1": "純色", "demoSetTag2": "立體", "demoSetTag3": "晶片", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 5 }, { "demoSetId": 7, "demoSetName": "我是珍珠", "demoSetCover": "UploadFolder/Twothree.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "超級大隻豬", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "可愛", "demoSetTag2": "碎花", "demoSetTag3": "漸層", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-14T00:00:00", "demoSetMainEndTime": "2023-01-31T23:59:59", "demoSetColor": 6 }, { "demoSetId": 8, "demoSetName": "", "demoSetCover": "UploadFolder/Threeone.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 7 }, { "demoSetId": 9, "demoSetName": "卡比獸美甲", "demoSetCover": "UploadFolder/Threetwo.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "我愛卡比獸", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "可愛風", "demoSetTag2": "漸層", "demoSetTag3": "立體", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 8 }],
                 DemoCover: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Oneone.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onetwo.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onethree.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twoone.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twotwo.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twothree.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threeone.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threetwo.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threethree.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourone.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourtwo.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourthree.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fiveone.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivetwo.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivethree.png" }],
-                DemoList: [{ "demoPic": "UploadFolder/Oneone.png" }, { "demoPic": "UploadFolder/Twotwo.png" }, { "demoPic": "UploadFolder/Threetwo.png" }, { "demoPic": "UploadFolder/Fourthree.png" }, { "demoPic": "UploadFolder/Fivethree.png" }],
+                DemoList: [{ "demoId": 1, "demoSetId": 2, "demoPic": "UploadFolder/Oneone.png" }],
                 MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
                 width: "",
                 InsertDemoSet: [{ "demoSetName": null, "demoSetCover": "尚未選擇", "manicuristId": 2, "demoSetPartC": "none", "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "none", "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": "none" }],
@@ -1318,21 +1449,22 @@
                 NineTag: [],
                 FixTag: [],
                 PostthisDemo: [{ "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }],
+                //PostthisDemo: [{ "demoPic": "", "demoSetId": null }],
+                //PostthisDemo: [],
                 //PostDemoSetID:"",
                 FixColor: [{ "colorId": 1, "colorName": "灰色", "colorCss": "#5D5D5D" }, { "colorId": 2, "colorName": "黑色", "colorCss": "#000000" }, { "colorId": 3, "colorName": "淺褐咖啡色", "colorCss": "#754E43" }, { "colorId": 4, "colorName": "奶茶色", "colorCss": "#E1C9B1" }, { "colorId": 5, "colorName": "白色", "colorCss": "#F2F2F2" }, { "colorId": 6, "colorName": "粉色", "colorCss": "#DFBCB6" }, { "colorId": 7, "colorName": "紫色", "colorCss": "#875D73" }, { "colorId": 8, "colorName": "藍色", "colorCss": "#2B497B" }, { "colorId": 9, "colorName": "綠色", "colorCss": "#A0C2AA" }, { "colorId": 10, "colorName": "黃色", "colorCss": "#FFE590" }, { "colorId": 11, "colorName": "橘色", "colorCss": "#E29466" }, { "colorId": 12, "colorName": "紅色", "colorCss": "#B65F4B" }, { "colorId": 13, "colorName": "漸層色", "colorCss": null }, { "colorId": 14, "colorName": "透明色", "colorCss": "#FFFFFF" }],
-                ThisFormDataID: 1,
+                GetUpList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調" }],
+                PutUpCover: [{ "demoSetId": 2, "demoSetCover": "" }],
                 PostDemoSet: [{ "demoSetName": null, "demoSetCover": "", "manicuristId": 2, "demoSetPartC": null, "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": null, "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
                 ThisFormData: [{ "demoSetId": 2, "demoSetName": "", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "", "demoSetPrice": 900, "demoSetDeposit": 500, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetPublic": true, "demoSetMain": true, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
                 StartDate: "",
-                EndDate:"",
+                EndDate: "",
+                GetCertainDemoKey: "",
             },
             methods: {
                 InsertDemo: function () {
                     this.InsertDemoSet[0].manicuristId = 2;
                     console.log(this.InsertDemoSet[0]);
-                    console.log(this.TagFtxt);
-                    console.log(this.TagStxt);
-                    console.log(this.TagTtxt);
                     if (this.InsertDemoSet[0].demoSetTag2 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag2 = this.TagStxt;
                     }
@@ -1344,7 +1476,6 @@
 
                     $.ajax({
                         type: "post",
-                        //url: "api/path/" + this.InsertDemoSet.manicuristId,
                         url: "/api/DemoSet/PostDemoSetTable",
                         contentType: "application/json",
                         data: JSON.stringify(this.InsertDemoSet[0]),
@@ -1432,21 +1563,40 @@
                 },
 
                 PostDemoimg: function () {
+                    console.log(this.PutUpCover[0].demoSetId);
+
+                    if (this.GetUpList[0].demoSetCover != this.DemoSetList[GetCertainDemoKey].demoSetCover) {
+                        $.ajax({
+                            type: "put",
+                            url: "/api/DemoSet/PutDemoSetCover/" + this.PutUpCover[0].demoSetId,
+                            contentType: "application/json",
+                            data: JSON.stringify(this.PutUpCover[0]),
+                            success: function () {
+                                window.location = "/YiPLib/NailDesignerEdit.html"
+                            }
+                        });
+                    }
+
                     console.log(this.PostthisDemo);
 
-                    $.ajax({
-                        type: "post",
-                        //url: "api/path/" + this.InsertDemo.manicuristId,
-                        url: "/api/Demo",
-                        contentType: "application/json",
-                        data: JSON.stringify(this.PostthisDemo),
-                        success: function () {
-                            window.location = "/YiPLib/NailDesignerEdit.html"
-                        }
-                    })
+                    if (this.PostthisDemo[0].demoSetId != null) {
+                        $.ajax({
+                            type: "post",
+                            //url: "api/path/" + this.InsertDemo.manicuristId,
+                            url: "/api/Demo",
+                            contentType: "application/json",
+                            data: JSON.stringify(this.PostthisDemo),
+                            success: function () {
+                                //window.location = "/YiPLib/NailDesignerEdit.html"
+                            }
+                        })
+                    }
+
+
+
                 },
 
-             }
+            }
         })
 
         $.ajax({
@@ -1473,14 +1623,7 @@
             }
         });
 
-        $.ajax({
-            type: "get",
-            url: "/api/Demo/2",
-            success: function (e) {
-                //console.log(e);
-                ShowData.DemoList = e;
-            }
-        });
+
 
         //$.ajax({
         //    type: "get",
@@ -1519,7 +1662,7 @@
                 }
                 //console.log(TagLenth);
                 while (Gettag.length != 9) {
-                //for (let x = 0; x < 10; x++) {
+                    //for (let x = 0; x < 10; x++) {
                     var Rd = Math.floor(Math.random() * e.length - 1) + 1;
                     var Posi = TagLenth.indexOf(Rd);
                     //console.log("亂數為：" + Rd + "位置為：" + Posi);
@@ -1609,16 +1752,16 @@
             document.getElementsByClassName('ExitEmpty').value = '';
         }
 
-        var inputMorefile=[];
+        var inputMorefile = [];
         async function GetMorefile(e) {
             var MoreFile = new FormData();
-            for (var i = 0; i < e.files.length;i++) {
+            for (var i = 0; i < e.files.length; i++) {
                 MoreFile.append("files", e.files[i], `${e.files[i].name}`);
                 inputMorefile[i] = e.files[i].name;
                 var CoverPath = `UploadFolder/${e.files[i].name}`;
                 //console.log("POST" +ShowData.PostDemo[i].demoSetId);
                 //console.log("THIS" + ShowData.ThisFormData[0].demoSetId);
-                ShowData.PostthisDemo[i].demoSetId = ShowData.ThisFormData[0].demoSetId;
+                ShowData.PostthisDemo[i].demoSetId = ShowData.PutUpCover[0].demoSetId;
                 ShowData.PostthisDemo[i].demoPic = CoverPath;
                 //DemoImgPath[i] = CoverPath;
 
@@ -1633,6 +1776,28 @@
             //var FirstFilePath = "UploadFolder/" + inputMorefile[0];
         }
 
+        //var inputCoverfile;
+        var PutCoverimg;
+        async function PutCoverfile(e) {
+            //let Coverform = new FormData();
+            let Coverimg = new FormData();
+            Coverimg.append("file", e.files[0]);
+            console.log(e.files[0]);
+            await fetch('https://localhost:44308/api/File', {
+                method: 'POST',
+                body: Coverimg
+            });
+            PutCoverimg = e.files[0].name;
+            //var CoverFilePath = "UploadFolder/" + PutCoverimg;
+            var CoverimgPath = "UploadFolder/" + PutCoverimg;
+            console.log(CoverimgPath);
+            $('#Previewphoto').attr('src', CoverimgPath);
+            ShowData.PutUpCover[0].demoSetCover = CoverimgPath;
+            //ShowData.InsertDemoSet[0].demoSetCover = CoverimgPath;
+            //$('#UpFileText').text(PutCoverimg);
+            //GetCoverFileBtn();
+            //console.log("UploadFolder/" + e.files[0].name);
+        }
 
 
 
