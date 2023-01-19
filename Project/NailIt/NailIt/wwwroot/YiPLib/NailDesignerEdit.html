@@ -452,24 +452,21 @@
             overflow: hidden;
         }
 
-        #UpFileText {
+        #UpFileText, #UpDemoText {
             width: 60%;
             height: 60px;
             resize: none;
         }
 
-        #UpContext:focus {
+        #UpContext:focus, #UpDemoText:focus {
             outline: none;
         }
 
-        #UpFile{
-            display:none;
-        }
-        #UpDemoFile {
+        #UpFile, #UpDemo, #UpDemoFile {
             display: none;
         }
 
-        #UpFileLabel {
+        #UpFileLabel, #UpDemoLabel {
             background-color: #7F7F7F;
             color: white;
             margin-left: 15px;
@@ -479,7 +476,7 @@
             padding-right: 15px;
         }
 
-            #UpFileLabel:hover {
+            #UpFileLabel:hover, #UpDemoLabel:hover {
                 background-color: #D0CECE;
             }
 
@@ -641,6 +638,9 @@
             .Puttag:focus{
                 outline: none;
             }
+        #PutTagS, #PutTagT {
+            text-align: center;
+        }
 
 
     </style>
@@ -871,8 +871,8 @@
                                             </div>
                                         </div>
                                         <div class="py-2  d-flex">
-                                            <label>主打：</label>
-                                            <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetMain" />
+                                            <label for="Postmain">主打：</label>
+                                            <input id="Postmain" class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetMain" />
                                             <div v-if="InsertDemoSet[0].demoSetMain">
                                                 <label>期間</label>
                                                 <input class="ExitEmpty" id="Startd" onchange="GetStDate(this)" type="date" />
@@ -883,16 +883,16 @@
                                         <div class="py-2">
                                             <span for="UpDeposit">預估金額：</span>
                                             <label>$NT</label>
-                                            <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetPrice" />
+                                            <input id="UpDeposit" required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetPrice" />
                                         </div>
                                         <div class="py-2">
                                             <span for="UpPrice">訂金：</span>
                                             <label>$NT</label>
-                                            <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetDeposit" />
+                                            <input id="UpPrice" required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="InsertDemoSet[0].demoSetDeposit" />
                                         </div>
                                         <div class="py-2">
                                             <label for="UpMain">是否上架：</label>
-                                            <input class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetPublic" />
+                                            <input id="UpMain" class="ExitEmpty" type="checkbox" v-model="InsertDemoSet[0].demoSetPublic" />
                                         </div>
                                     </div>
                                     <div>
@@ -926,11 +926,11 @@
                             <div class="Seemore my-0">
                                 <div class="EDDSbtn">
                                     <button v-bind:value="[key]" data-toggle="modal" data-target="#EditModal" onclick="GetDemoinfo(this)" class="EditDS">編輯</button>
-                                    <button class="DeleDS">刪除</button>
+                                    <button v-bind:value="[key]" class="DeleDS" data-toggle="modal" onclick="GetDemoinfo(this)" data-target="#DeleteModal">刪除</button>
                                 </div>
                                 <!--<img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover" v-bind:alt="[key]" data-toggle="modal" data-target="#EditModal" onclick="GetDemoinfo(this)">-->
                                 <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover">
-                                <button class="UploadDemo">上傳</button>
+                                <button v-bind:value="[key]" data-toggle="modal" data-target="#PostPicModal" class="UploadDemo" onclick="GetDemoinfo(this)">上傳</button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
                             <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
@@ -957,16 +957,16 @@
                                                         <textarea required v-model="ThisFormData[0].demoSetContent" class="ExitEmpty" id="PutInFo" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                                                     </div>
                                                     <!--<div>
-                                                        <label for="UpDemoFile">照片：</label>
-                                                        <br />
-                                                        <div class="d-flex align-items-center">
-                                                            <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
-                                                            <label id="UpFileLabel" class="align-items-center">
-                                                                上傳檔案
-                                                                <input id="UpDemoFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
-                                                            </label>
-                                                        </div>
-                                                    </div>-->
+                                <label for="UpDemoFile">照片：</label>
+                                <br />
+                                <div class="d-flex align-items-center">
+                                    <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
+                                    <label id="UpFileLabel" class="align-items-center">
+                                        上傳檔案
+                                        <input id="UpDemoFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
+                                    </label>
+                                </div>
+                            </div>-->
                                                     <div class="py-2">
                                                         <label for="PutC">施作部位：</label>
                                                         <select id="PutC" v-model="ThisFormData[0].demoSetPartC" required>
@@ -995,7 +995,7 @@
                                                             <label for="PutTagS">標籤2：</label>
                                                             <div>
                                                                 <div class="Tag">
-                                                                    <input type="text" class="Puttag" name="PutTagS" v-model="ThisFormData[0].demoSetTag2" />
+                                                                    <input type="text" class="Puttag" id="PutTagS" maxlength="4" minlength="1" v-model="ThisFormData[0].demoSetTag2" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1003,35 +1003,35 @@
                                                             <label for="PutTagT">標籤3：</label>
                                                             <div>
                                                                 <div class="Tag">
-                                                                    <input type="text" class="Puttag" name="PutTagT" v-model="ThisFormData[0].demoSetTag3" />
+                                                                    <input type="text" class="Puttag" id="PutTagT" maxlength="4" minlength="1" v-model="ThisFormData[0].demoSetTag3" />
                                                                 </div>
                                                             </div>
 
                                                         </div>
                                                     </div>
                                                     <div class="py-2  d-flex">
-                                                        <label>主打：</label>
-                                                        <input class="ExitEmpty" type="checkbox" v-model="ThisFormData[0].demoSetMain" />
+                                                        <label for="Putmain">主打：</label>
+                                                        <input id="Putmain" class="ExitEmpty" type="checkbox" v-model="ThisFormData[0].demoSetMain" />
                                                         <div v-if="ThisFormData[0].demoSetMain">
                                                             <label>期間</label>
-                                                            <input class="ExitEmpty" v-bind:value="ThisFormData[0].demoSetMainStartTime" onchange="PostStDate(this)" type="date" />
+                                                            <input class="ExitEmpty" v-bind:value="StartDate" onchange="PostStDate(this)" type="date" />
                                                             <span>-</span>
-                                                            <input class="ExitEmpty" v-bind:value="ThisFormData[0].demoSetMainEndTime" onchange="PostEdDate(this)" type="date" />
+                                                            <input class="ExitEmpty" v-bind:value="EndDate" onchange="PostEdDate(this)" type="date" />
                                                         </div>
                                                     </div>
                                                     <div class="py-2">
-                                                        <span for="UpDeposit">預估金額：</span>
+                                                        <span for="PutDeposit">預估金額：</span>
                                                         <label>$NT</label>
-                                                        <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="ThisFormData[0].demoSetPrice" />
+                                                        <input required id="PutDeposit" class="TxtStyle PrideWid ExitEmpty" type="text" v-model="ThisFormData[0].demoSetPrice" />
                                                     </div>
                                                     <div class="py-2">
-                                                        <span for="UpPrice">訂金：</span>
+                                                        <span for="PutPrice">訂金：</span>
                                                         <label>$NT</label>
-                                                        <input required class="TxtStyle PrideWid ExitEmpty" type="text" v-model="ThisFormData[0].demoSetDeposit" />
+                                                        <input required id="PutPrice" class="TxtStyle PrideWid ExitEmpty" type="text" v-model="ThisFormData[0].demoSetDeposit" />
                                                     </div>
                                                     <div class="py-2">
-                                                        <label for="UpMain">是否上架：</label>
-                                                        <input class="ExitEmpty" type="checkbox" v-model="ThisFormData[0].demoSetPublic" />
+                                                        <label for="PutMain">是否上架：</label>
+                                                        <input class="ExitEmpty" id="PutMain" type="checkbox" v-model="ThisFormData[0].demoSetPublic" />
                                                     </div>
                                                 </div>
                                                 <div>
@@ -1040,7 +1040,7 @@
                                             </div>
                                             <div class="modal-footer border-0">
                                                 <button onclick="cleartext()" class="Checkbtn" data-dismiss="modal">取消</button>
-                                                <button v-on:click="PutDemo()" type="submit" class="Editbtn">新增</button>
+                                                <button v-on:click="PutDemo()" id="editit" type="submit" class="Editbtn">修改</button>
                                             </div>
                                         </div>
                                     </form>
@@ -1048,6 +1048,65 @@
                                 </div>
                             </div>
                             <!--EditModalEnd-->
+                            <!--DeleteModal-->
+                            <div class="modal fade" id="DeleteModal" data-keyboard="false" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form>
+                                        <div class="modal-content">
+                                            <div class="modal-header border-0 pb-0">
+                                                <h5 class="modal-title" id="DeleteModalLabel">刪除造型款式</h5>
+                                                <button class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span onclick="cleartext()" aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>確定要刪除「{{ThisFormData[0].demoSetName}}」嗎？</p>
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <button class="Checkbtn" data-dismiss="modal">取消</button>
+                                                <button v-on:click="DeleteDemo()"  type="submit" class="Editbtn">刪除</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                            <!--DeleteModal End-->
+                            <!--PostPicModal-->
+                            <div class="modal fade" id="PostPicModal" data-keyboard="false" tabindex="-1" aria-labelledby="PostPicModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form>
+                                        <div class="modal-content">
+                                            <div class="modal-header border-0 pb-0">
+                                                <h5 class="modal-title" id="PostPicModalLabel">管理{{ThisFormData[0].demoSetName}}相片</h5>
+                                                <button class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span onclick="cleartext()" aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div>
+                                                    <label for="UpDemo">照片：</label>
+                                                    <br />
+                                                    <div class="d-flex align-items-center">
+                                                        <textarea id="UpDemoText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
+                                                        <label id="UpDemoLabel" class="align-items-center">
+                                                            上傳檔案
+                                                            <input id="UpDemo" class="ExitEmpty" type="file" accept="image/*" onchange="GetMorefile(this)" multiple="multiple" />
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <button class="Checkbtn" data-dismiss="modal">取消</button>
+                                                <a v-on:click="PostDemoimg()" type="submit" class="Editbtn">新增</a>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                            <!--PostPicModal End-->
                         </div>
                     </div>
                     <div class="col-1"></div>
@@ -1193,7 +1252,7 @@
             ShowData.ThisFormDataID = e.value;
             ShowData.ThisFormData[0].demoSetId = ShowData.DemoSetList[e.value].demoSetId;
             ShowData.ThisFormData[0].demoSetName = ShowData.DemoSetList[e.value].demoSetName;
-            ShowData.ThisFormData[0].demoSetCover = ShowData.DemoSetList[e.value].demoSetCover;
+            //ShowData.ThisFormData[0].demoSetCover = ShowData.DemoSetList[e.value].demoSetCover;
             ShowData.ThisFormData[0].demoSetPartC = ShowData.DemoSetList[e.value].demoSetPartC;
             ShowData.ThisFormData[0].demoSetContent = ShowData.DemoSetList[e.value].demoSetContent;
             ShowData.ThisFormData[0].demoSetPrice = ShowData.DemoSetList[e.value].demoSetPrice;
@@ -1203,13 +1262,26 @@
             console.log(ShowData.ThisFormData[0].demoSetTag1);
             ShowData.ThisFormData[0].demoSetTag2 = ShowData.DemoSetList[e.value].demoSetTag2;
             ShowData.ThisFormData[0].demoSetTag3 = ShowData.DemoSetList[e.value].demoSetTag3;
-            ShowData.ThisFormData[0].demoSetTag4 = ShowData.DemoSetList[e.value].demoSetTag4;
+            //ShowData.ThisFormData[0].demoSetTag4 = ShowData.DemoSetList[e.value].demoSetTag4;
             ShowData.ThisFormData[0].demoSetPublic = ShowData.DemoSetList[e.value].demoSetPublic;
             ShowData.ThisFormData[0].demoSetMain = ShowData.DemoSetList[e.value].demoSetMain;
-            ShowData.ThisFormData[0].demoSetCount = ShowData.DemoSetList[e.value].demoSetCount;
-            ShowData.ThisFormData[0].demoSetMainStartTime = ShowData.DemoSetList[e.value].demoSetMainStartTime.slice(0, 10);
-            console.log(ShowData.DemoSetList[e.value].demoSetMainStartTime.slice(0,10));
-            ShowData.ThisFormData[0].demoSetMainEndTime = ShowData.DemoSetList[e.value].demoSetMainEndTime.slice(0, 10);
+            //ShowData.ThisFormData[0].demoSetCount = ShowData.DemoSetList[e.value].demoSetCount;
+            if (ShowData.DemoSetList[e.value].demoSetMainStartTime != null) {
+                ShowData.ThisFormData[0].demoSetMainStartTime = ShowData.DemoSetList[e.value].demoSetMainStartTime;
+                ShowData.StartDate = ShowData.DemoSetList[e.value].demoSetMainStartTime.slice(0, 10);
+            } else {
+                ShowData.StartDate = null;
+                ShowData.ThisFormData[0].demoSetMainStartTime = null;
+            }
+            //console.log(ShowData.DemoSetList[e.value].demoSetMainStartTime.slice(0, 10));
+            if (ShowData.DemoSetList[e.value].demoSetMainEndTime != null) {
+                ShowData.ThisFormData[0].demoSetMainEndTime = ShowData.DemoSetList[e.value].demoSetMainEndTime;
+                ShowData.EndDate = ShowData.DemoSetList[e.value].demoSetMainEndTime.slice(0, 10);
+            } else {
+                ShowData.EndDate = null;
+                ShowData.ThisFormData[0].demoSetMainEndTime = null;
+
+            }
             ShowData.ThisFormData[0].demoSetColor = ShowData.DemoSetList[e.value].demoSetColor;
 
                     //$.ajax({
@@ -1229,7 +1301,7 @@
             el: '#ShowData',
             data: {
                 DesignList: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號", "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true, "manicuristSalonPhone": "0923859697", "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試", "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459", "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計", "manicuristScore": 4.6 }],
-                DemoSetList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoSetCover": "UploadFolder/Oneone.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是今年最流行的珍珠音調粉色系呦", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "碎花", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-01-31T00:00:00", "demoSetColor": 1 }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoSetCover": "UploadFolder/Onetwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是彩色手手", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "造型", "demoSetTag2": "知性風", "demoSetTag3": "幾何", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-01-31T00:00:00", "demoSetColor": 2 }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoSetCover": "UploadFolder/Onethree.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "造型腳腳", "demoSetPrice": 1200.0000, "demoSetDeposit": 600.0000, "demoSetTag1": "造型", "demoSetTag2": "漸層", "demoSetTag3": "可愛風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 3 }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoSetCover": "UploadFolder/Twoone.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "這紫色手手", "demoSetPrice": 999.0000, "demoSetDeposit": 400.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "華麗風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-02-21T23:59:59", "demoSetColor": 4 }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoSetCover": "UploadFolder/Twotwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "喝咖啡最適合的美甲", "demoSetPrice": 850.0000, "demoSetDeposit": 100.0000, "demoSetTag1": "純色", "demoSetTag2": "立體", "demoSetTag3": "晶片", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 5 }, { "demoSetId": 7, "demoSetName": "我是珍珠", "demoSetCover": "UploadFolder/Twothree.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "超級大隻豬", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "可愛", "demoSetTag2": "碎花", "demoSetTag3": "漸層", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-14T00:00:00", "demoSetMainEndTime": "2023-01-31T23:59:59", "demoSetColor": 6 }, { "demoSetId": 8, "demoSetName": "", "demoSetCover": "UploadFolder/Threeone.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 7 }, { "demoSetId": 9, "demoSetName": "卡比獸美甲", "demoSetCover": "UploadFolder/Threetwo.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "我愛卡比獸", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "可愛風", "demoSetTag2": "漸層", "demoSetTag3": "立體", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 8 }],
+                DemoSetList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoSetCover": "UploadFolder/Oneone.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是今年最流行的珍珠音調粉色系呦", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "碎花", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 1 }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoSetCover": "UploadFolder/Onetwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是彩色手手", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "造型", "demoSetTag2": "知性風", "demoSetTag3": "幾何", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 2 }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoSetCover": "UploadFolder/Onethree.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "造型腳腳", "demoSetPrice": 1200.0000, "demoSetDeposit": 600.0000, "demoSetTag1": "造型", "demoSetTag2": "漸層", "demoSetTag3": "可愛風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 3 }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoSetCover": "UploadFolder/Twoone.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "這紫色手手", "demoSetPrice": 999.0000, "demoSetDeposit": 400.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "華麗風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 4 }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoSetCover": "UploadFolder/Twotwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "喝咖啡最適合的美甲", "demoSetPrice": 850.0000, "demoSetDeposit": 100.0000, "demoSetTag1": "純色", "demoSetTag2": "立體", "demoSetTag3": "晶片", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 5 }, { "demoSetId": 7, "demoSetName": "我是珍珠", "demoSetCover": "UploadFolder/Twothree.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "超級大隻豬", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "可愛", "demoSetTag2": "碎花", "demoSetTag3": "漸層", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-14T00:00:00", "demoSetMainEndTime": "2023-01-31T23:59:59", "demoSetColor": 6 }, { "demoSetId": 8, "demoSetName": "", "demoSetCover": "UploadFolder/Threeone.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 7 }, { "demoSetId": 9, "demoSetName": "卡比獸美甲", "demoSetCover": "UploadFolder/Threetwo.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "我愛卡比獸", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "可愛風", "demoSetTag2": "漸層", "demoSetTag3": "立體", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 8 }],
                 DemoCover: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Oneone.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onetwo.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onethree.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twoone.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twotwo.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twothree.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threeone.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threetwo.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threethree.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourone.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourtwo.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourthree.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fiveone.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivetwo.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivethree.png" }],
                 DemoList: [{ "demoPic": "UploadFolder/Oneone.png" }, { "demoPic": "UploadFolder/Twotwo.png" }, { "demoPic": "UploadFolder/Threetwo.png" }, { "demoPic": "UploadFolder/Fourthree.png" }, { "demoPic": "UploadFolder/Fivethree.png" }],
                 MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
@@ -1245,13 +1317,14 @@
                 TagList: [{ "tagId": 1, "tagName": "純色" }, { "tagId": 2, "tagName": "漸層" }, { "tagId": 3, "tagName": "碎花" }, { "tagId": 4, "tagName": "幾何" }, { "tagId": 5, "tagName": "立體" }, { "tagId": 6, "tagName": "晶片" }, { "tagId": 7, "tagName": "鑽石" }, { "tagId": 8, "tagName": "可愛風" }, { "tagId": 9, "tagName": "知性風" }, { "tagId": 10, "tagName": "華麗風" }, { "tagId": 11, "tagName": "花磚" }, { "tagId": 12, "tagName": "大理石" }, { "tagId": 13, "tagName": "手繪美甲" }, { "tagId": 14, "tagName": "卡通人物" }, { "tagId": 15, "tagName": "乾燥玫瑰" }],
                 NineTag: [],
                 FixTag: [],
-                //DemoImgPath: [],
-                PostDemo: [{ "demoPic": "", "demoSetId": "" }, { "demoPic": "", "demoSetId": "" }, { "demoPic": "", "demoSetId": "" }],
+                PostthisDemo: [{ "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }],
                 //PostDemoSetID:"",
-                FixColor:[{ "colorId": 1, "colorName": "灰色", "colorCss": "#5D5D5D" }, { "colorId": 2, "colorName": "黑色", "colorCss": "#000000" }, { "colorId": 3, "colorName": "淺褐咖啡色", "colorCss": "#754E43" }, { "colorId": 4, "colorName": "奶茶色", "colorCss": "#E1C9B1" }, { "colorId": 5, "colorName": "白色", "colorCss": "#F2F2F2" }, { "colorId": 6, "colorName": "粉色", "colorCss": "#DFBCB6" }, { "colorId": 7, "colorName": "紫色", "colorCss": "#875D73" }, { "colorId": 8, "colorName": "藍色", "colorCss": "#2B497B" }, { "colorId": 9, "colorName": "綠色", "colorCss": "#A0C2AA" }, { "colorId": 10, "colorName": "黃色", "colorCss": "#FFE590" }, { "colorId": 11, "colorName": "橘色", "colorCss": "#E29466" }, { "colorId": 12, "colorName": "紅色", "colorCss": "#B65F4B" }, { "colorId": 13, "colorName": "漸層色", "colorCss": null }, { "colorId": 14, "colorName": "透明色", "colorCss": "#FFFFFF" }],
-                ThisFormDataID:1,
+                FixColor: [{ "colorId": 1, "colorName": "灰色", "colorCss": "#5D5D5D" }, { "colorId": 2, "colorName": "黑色", "colorCss": "#000000" }, { "colorId": 3, "colorName": "淺褐咖啡色", "colorCss": "#754E43" }, { "colorId": 4, "colorName": "奶茶色", "colorCss": "#E1C9B1" }, { "colorId": 5, "colorName": "白色", "colorCss": "#F2F2F2" }, { "colorId": 6, "colorName": "粉色", "colorCss": "#DFBCB6" }, { "colorId": 7, "colorName": "紫色", "colorCss": "#875D73" }, { "colorId": 8, "colorName": "藍色", "colorCss": "#2B497B" }, { "colorId": 9, "colorName": "綠色", "colorCss": "#A0C2AA" }, { "colorId": 10, "colorName": "黃色", "colorCss": "#FFE590" }, { "colorId": 11, "colorName": "橘色", "colorCss": "#E29466" }, { "colorId": 12, "colorName": "紅色", "colorCss": "#B65F4B" }, { "colorId": 13, "colorName": "漸層色", "colorCss": null }, { "colorId": 14, "colorName": "透明色", "colorCss": "#FFFFFF" }],
+                ThisFormDataID: 1,
                 PostDemoSet: [{ "demoSetName": null, "demoSetCover": "", "manicuristId": 2, "demoSetPartC": null, "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": null, "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
-                ThisFormData: [{ "demoSetId": 2, "demoSetName": "", "demoSetCover": "", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "", "demoSetPrice": 900, "demoSetDeposit": 500, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }]
+                ThisFormData: [{ "demoSetId": 2, "demoSetName": "", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "", "demoSetPrice": 900, "demoSetDeposit": 500, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetPublic": true, "demoSetMain": true, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
+                StartDate: "",
+                EndDate:"",
             },
             methods: {
                 InsertDemo: function () {
@@ -1331,6 +1404,46 @@
 
                 PutDemo: function () {
                     console.log(this.ThisFormData[0]);
+                    $.ajax({
+                        type: "put",
+                        //url: "api/path/" + this.InsertDemoSet.manicuristId,
+                        url: "/api/DemoSet/PutDemoSetTable/2",
+                        contentType: "application/json",
+                        data: JSON.stringify(this.ThisFormData[0]),
+                        success: function () {
+                            window.location = "/YiPLib/NailDesignerEdit.html"
+                        }
+                    })
+
+                },
+
+                DeleteDemo: function () {
+                    console.log(this.ThisFormData[0].demoSetId);
+                    $.ajax({
+                        type: "delete",
+                        //url: "api/path/" + this.InsertDemoSet.manicuristId,
+                        url: "/api/DemoSet/DeleteDemoSetTable/" + this.ThisFormData[0].demoSetId,
+                        //contentType: "application/json",
+                        //data: JSON.stringify(this.ThisFormData[0]),
+                        success: function () {
+                            window.location = "/YiPLib/NailDesignerEdit.html"
+                        }
+                    })
+                },
+
+                PostDemoimg: function () {
+                    console.log(this.PostthisDemo);
+
+                    $.ajax({
+                        type: "post",
+                        //url: "api/path/" + this.InsertDemo.manicuristId,
+                        url: "/api/Demo",
+                        contentType: "application/json",
+                        data: JSON.stringify(this.PostthisDemo),
+                        success: function () {
+                            window.location = "/YiPLib/NailDesignerEdit.html"
+                        }
+                    })
                 },
 
              }
@@ -1496,17 +1609,20 @@
             document.getElementsByClassName('ExitEmpty').value = '';
         }
 
-        let inputMorefile=[];
+        var inputMorefile=[];
         async function GetMorefile(e) {
-            let MoreFile = new FormData();
+            var MoreFile = new FormData();
             for (var i = 0; i < e.files.length;i++) {
                 MoreFile.append("files", e.files[i], `${e.files[i].name}`);
                 inputMorefile[i] = e.files[i].name;
                 var CoverPath = `UploadFolder/${e.files[i].name}`;
-                //ShowData.PostDemo[i].demoSetId = ShowData.PostDemoSetID;
-                ShowData.PostDemo[i].demoPic = CoverPath;
+                //console.log("POST" +ShowData.PostDemo[i].demoSetId);
+                //console.log("THIS" + ShowData.ThisFormData[0].demoSetId);
+                ShowData.PostthisDemo[i].demoSetId = ShowData.ThisFormData[0].demoSetId;
+                ShowData.PostthisDemo[i].demoPic = CoverPath;
                 //DemoImgPath[i] = CoverPath;
-                document.getElementById('UpFileText').innerHTML += `${e.files[i].name} \n`;
+
+                document.getElementById('UpDemoText').innerHTML += `${e.files[i].name} \n`;
             }
             console.log(MoreFile);
             await fetch('https://localhost:44308/api/Files', {

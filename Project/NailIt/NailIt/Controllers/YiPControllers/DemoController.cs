@@ -36,11 +36,19 @@ namespace NailIt.Controllers.YiPControllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<DemoSetTable>> PostDemoTable(DemoTable DemoTable)
+        public async Task<ActionResult<DemoSetTable>> PostDemoTable(List<DemoTable> DemoTable)
         {
-            Context.DemoTables.Add(DemoTable);
+            List<DemoTable> DemoTables = new List<DemoTable>();
+            //DemoTables.AddRange(DemoTable);
+            foreach (var DemoS in DemoTable)
+            {
+                Context.DemoTables.Add(DemoS);
+            }
+            //Context.DemoTables.Add(DemoTables);
+
             await Context.SaveChangesAsync();
-            return CreatedAtAction("GetDemotTable", new { id = DemoTable.DemoSetId }, DemoTable);
+            //return CreatedAtAction("GetDemotTable", new { id = DemoTable.DemoSetId }, DemoTable);
+            return Ok();
         }
     }
 }
