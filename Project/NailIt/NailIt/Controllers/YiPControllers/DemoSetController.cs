@@ -6,6 +6,7 @@ using NailIt.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace NailIt.Controllers.YiPControllers
 {
@@ -45,11 +46,48 @@ namespace NailIt.Controllers.YiPControllers
         {
             //傳入DemoSet 美甲師id 找到最後一筆 回傳 demoset ID
             var query = await (from User in Context.DemoSetTables
-                         where User.ManicuristId == id
-                         orderby User.DemoSetId
-                         select User).LastOrDefaultAsync();
+                               where User.ManicuristId == id
+                               orderby User.DemoSetId
+                               select User).LastOrDefaultAsync();
 
             return Ok(new { query });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutDemoSetTable(int id, DemoSetTable DemoSetTable)
+        {
+            var CertainDemoSet = (from o in Context.DemoSetTables
+                                  where o.ManicuristId == id && o.DemoSetId == DemoSetTable.DemoSetId
+                                  select o).FirstOrDefault();
+
+            CertainDemoSet.DemoSetName = DemoSetTable.DemoSetName;
+            CertainDemoSet.DemoSetPartC = DemoSetTable.DemoSetPartC;
+            CertainDemoSet.DemoSetContent = DemoSetTable.DemoSetContent;
+            CertainDemoSet.DemoSetPrice = DemoSetTable.DemoSetPrice;
+            CertainDemoSet.DemoSetDeposit = DemoSetTable.DemoSetDeposit;
+            CertainDemoSet.DemoSetTag1 = DemoSetTable.DemoSetTag1;
+            CertainDemoSet.DemoSetTag2 = DemoSetTable.DemoSetTag2;
+            CertainDemoSet.DemoSetTag3 = DemoSetTable.DemoSetTag3;
+            CertainDemoSet.DemoSetPublic = DemoSetTable.DemoSetPublic;
+            CertainDemoSet.DemoSetMain = DemoSetTable.DemoSetMain;
+            CertainDemoSet.DemoSetMainStartTime = DemoSetTable.DemoSetMainStartTime;
+            CertainDemoSet.DemoSetMainEndTime = DemoSetTable.DemoSetMainEndTime;
+            CertainDemoSet.DemoSetColor = DemoSetTable.DemoSetColor;
+
+            await Context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteDemoSetTable(int id)
+        {
+            var DemoSetTable = await Context.DemoSetTables.FindAsync(id);
+            //var DeleteCertainDemoSet = (from o in Context.DemoSetTables
+            //                      where o.DemoSetId == id
+            //                      select o).FirstOrDefault();
+            Context.DemoSetTables.Remove(DemoSetTable);
+            await Context.SaveChangesAsync();
+            return Ok();
         }
 
     }

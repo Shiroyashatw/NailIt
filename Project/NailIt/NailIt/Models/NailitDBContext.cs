@@ -231,6 +231,8 @@ namespace NailIt.Models
 
                 entity.Property(e => e.DemoSetId).HasColumnName("demoSet_ID");
 
+                entity.Property(e => e.DemoSetColor).HasColumnName("demoSet_Color");
+
                 entity.Property(e => e.DemoSetContent)
                     .HasMaxLength(100)
                     .HasColumnName("demoSet_Content");
