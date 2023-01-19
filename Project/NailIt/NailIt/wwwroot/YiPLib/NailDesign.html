@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -110,7 +110,7 @@
 
         #Context {
             /*height: 70%;*/
-            height:150px;
+            height: 150px;
             white-space: pre-wrap;
             word-wrap: break-word;
         }
@@ -386,6 +386,7 @@
             margin-left: 30px;
             margin-bottom: 30px;
         }
+
         [v-cloak] {
             display: none;
         }
@@ -425,13 +426,13 @@
         </div>
 
 
-        <div class="row">
+        <!--<div class="row">
             <div class="col-4"></div>
             <div class="col-3" id="EdChBt">
                 <button id="Editbtn" v-on:click="GoToEdit">編輯</button>
             </div>
             <div class="col-5"></div>
-        </div>
+        </div>-->
 
 
         <div class="row">
@@ -451,13 +452,13 @@
                             <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
                         </div>
                     </div>
-                            <p class="d-flex mb-0 mt-3 ml-2" id="Scorefloat">{{DesignList.manicuristScore}}</p>
+                    <p class="d-flex mb-0 mt-3 ml-2" id="Scorefloat">{{DesignList.manicuristScore}}</p>
                     <!--class="mb-0 mt-3 ml-2"-->
                 </div>
             </div>
             <div class="col-2">
                 <div style="height: 80%;"></div>
-                <!--<button id="Sendbtn">預約</button>-->
+                <button id="Sendbtn">預約</button>
             </div>
             <div class="col-1">
             </div>
@@ -492,10 +493,10 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                        <!--<form>
+                        <form>
                             <input class="Searchbar" type="text" placeholder="作品,標籤">
                             <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>-->
+                        </form>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -532,10 +533,10 @@
                     <div class="col-6">
                     </div>
                     <div class="col-4">
-                        <!--<form>
+                        <form>
                             <input class="Searchbar" type="text" placeholder="作品,標籤">
                             <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>-->
+                        </form>
                     </div>
                     <div class="col-1"></div>
                 </div>
