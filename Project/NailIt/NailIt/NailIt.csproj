@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\YiPLib\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\TanTanLib\js\bsmlist.js" />
   </ItemGroup>
 

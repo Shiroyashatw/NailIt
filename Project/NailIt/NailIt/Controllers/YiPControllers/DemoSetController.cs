@@ -37,8 +37,7 @@ namespace NailIt.Controllers.YiPControllers
         {
             Context.DemoSetTables.Add(DemoSetTable);
             await Context.SaveChangesAsync();
-            //return CreatedAtAction("GetDataSetTable", new { id = DemoSetTable.DemoSetId }, DemoSetTable);
-            return Ok();
+            return CreatedAtAction("GetDataSetTable", new { id = DemoSetTable.DemoSetId }, DemoSetTable);
         }
 
 
@@ -74,19 +73,6 @@ namespace NailIt.Controllers.YiPControllers
             CertainDemoSet.DemoSetMainStartTime = DemoSetTable.DemoSetMainStartTime;
             CertainDemoSet.DemoSetMainEndTime = DemoSetTable.DemoSetMainEndTime;
             CertainDemoSet.DemoSetColor = DemoSetTable.DemoSetColor;
-
-            await Context.SaveChangesAsync();
-            return Ok();
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDemoSetCover(int id, DemoSetTable DemoSetTable)
-        {
-            var CertainDemoSet = (from o in Context.DemoSetTables
-                                  where o.DemoSetId == id
-                                  select o).FirstOrDefault();
-
-            CertainDemoSet.DemoSetCover = DemoSetTable.DemoSetCover;
 
             await Context.SaveChangesAsync();
             return Ok();
