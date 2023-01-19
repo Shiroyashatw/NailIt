@@ -90,6 +90,7 @@ button[value=newcard]:hover{
     background-color:#fc8158;
 }
 .card-1{
+    visibility:hidden;
     padding-top: 5%;
     height: 170px;
 }
@@ -108,7 +109,7 @@ button[value=newcard]:hover{
 #card-1-1-number{
    padding-left: 40%;
 }
-#counnt{
+#counnt,#counnt1{
     display: inline;
 }
 button[value=newcounnt]{
@@ -354,3 +355,36 @@ button[value=newcounnt]:hover{
     height: 80px;
     flex: 1;
 }
+.delectcard {
+    border: none;
+    background-color: gray;
+    color: white;
+    float: right;
+}
+
+    .delectcard:hover {
+        background-color: #fc8158;
+    }
+.bankaccount {
+    padding: 72px;
+    display: inline;
+}
+
+.bankaccount-div {
+    padding-top: 50px;
+    visibility:hidden
+}
+
+#btndelete, #deletecard {
+    float: right;
+    background-color: gray;
+    color: white;
+}
+
+    #btndelete:hover {
+        background-color: rgb(187, 183, 183);
+    }
+
+    #deletecard:hover {
+        background-color: rgb(187, 183, 183);
+    }

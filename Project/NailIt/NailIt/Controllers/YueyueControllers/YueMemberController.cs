@@ -12,11 +12,11 @@ namespace NailIt.Controllers.YueyueControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MemberController : ControllerBase
+    public class YueMemberController : ControllerBase
     {
         private readonly NailitDBContext _context;
 
-        public MemberController(NailitDBContext context)
+        public YueMemberController(NailitDBContext context)
         {
             _context = context;
         }

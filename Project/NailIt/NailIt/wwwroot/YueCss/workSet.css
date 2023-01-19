@@ -9,9 +9,22 @@
 	cursor: pointer;
 }
 dialog {
-	border: none;
+	border: none;	
 	box-shadow: 0 2px 6px #ccc;
 	border-radius: 10px;
-	width: 55%;
-	height: 70%;
+	width: 30%;
+	height: 57%;
+	position:fixed;
+}
+
+.detailItem {
+	margin-top: 2%;
+	display: inline-block
+}
+#Xpng:hover {
+	cursor:pointer
+}
+
+.fa:hover {
+	cursor: pointer;
 }

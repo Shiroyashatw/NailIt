@@ -13,11 +13,11 @@ namespace NailIt.Controllers.YueyueControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LogoutController : ControllerBase
+    public class YueLogoutController : ControllerBase
     {
         private readonly NailitDBContext _context;
 
-        public LogoutController(NailitDBContext context)
+        public YueLogoutController(NailitDBContext context)
         {
             _context = context;
         }

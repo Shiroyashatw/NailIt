@@ -90,7 +90,7 @@ namespace NailIt.Models
                     .IsRequired()
                     .HasMaxLength(2)
                     .IsUnicode(false)
-                    .HasColumnName("article_Board_C")
+                    .HasColumnName("article_BoardC")
                     .IsFixedLength(true);
 
                 entity.Property(e => e.ArticleBuildTime)
@@ -145,7 +145,7 @@ namespace NailIt.Models
             modelBuilder.Entity<ColorTable>(entity =>
             {
                 entity.HasKey(e => e.ColorId)
-                    .HasName("PK__Color_Ta__795F1D747055E1F2");
+                    .HasName("PK__Color_Ta__795F1D741816687F");
 
                 entity.ToTable("Color_Table");
 
@@ -251,11 +251,11 @@ namespace NailIt.Models
 
                 entity.Property(e => e.DemoSetMainEndTime)
                     .HasColumnType("datetime")
-                    .HasColumnName("demoSet_MainEndTime");
+                    .HasColumnName("DemoSet_MainEndTime");
 
                 entity.Property(e => e.DemoSetMainStartTime)
                     .HasColumnType("datetime")
-                    .HasColumnName("demoSet_MainStartTime");
+                    .HasColumnName("DemoSet_MainStartTime");
 
                 entity.Property(e => e.DemoSetName)
                     .IsRequired()

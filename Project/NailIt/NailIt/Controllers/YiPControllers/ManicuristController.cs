@@ -37,6 +37,7 @@ namespace NailIt.Controllers.YiPControllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutManicuristTable(int id, ManicuristTable manicuristTable)
         {
+      
             if (id != manicuristTable.ManicuristId)
             {
                 return BadRequest();
@@ -50,6 +51,7 @@ namespace NailIt.Controllers.YiPControllers
 
             try
             {
+
                 await Context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
