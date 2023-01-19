@@ -9,7 +9,7 @@ namespace NailIt.Models
     {
         public int DemoSetId { get; set; }
         public string DemoSetName { get; set; }
-        public int DemoSetCover { get; set; }
+        public string DemoSetCover { get; set; }
         public int ManicuristId { get; set; }
         public string DemoSetPartC { get; set; }
         public string DemoSetContent { get; set; }

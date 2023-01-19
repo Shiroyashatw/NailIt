@@ -5,12 +5,12 @@
     "\\Project\\NailIt",
     "\\Project\\NailIt\\NailIt",
     "\\Project\\NailIt\\NailIt\\Controllers",
-    "\\Project\\NailIt\\NailIt\\Controllers\\AnselControllers",
     "\\Project\\NailIt\\NailIt\\Controllers\\YueyueControllers",
     "\\Project\\NailIt\\NailIt\\Models",
     "\\Project\\NailIt\\NailIt\\Views",
-    "\\Project\\NailIt\\NailIt\\wwwroot"
+    "\\Project\\NailIt\\NailIt\\wwwroot",
+    "\\Project\\NailIt\\NailIt\\wwwroot\\YueJs"
   ],
-  "SelectedNode": "\\Project\\NailIt\\NailIt\\Controllers\\YueyueControllers\\MemberController.cs",
+  "SelectedNode": "\\Project\\NailIt\\NailIt.sln",
   "PreviewInSolutionExplorer": false
 }
