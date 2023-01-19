@@ -71,6 +71,10 @@ p{
     
 }
 
+.table th,
+.table td {
+    vertical-align: middle;
+}
 
 .mycon{
     margin-top: 90px;
@@ -113,14 +117,6 @@ p{
 
 
 
-#serbut{
-    font-weight: bold;
-    border:none;
-    background-color:#FF6733;
-    color: white;
-    width:90px;
-    height:35px;
-}
 
 #addmes{
     font-weight: bold;
@@ -161,5 +157,14 @@ td>button{
     color: white;
     width:90px;
     height:35px;
+}
+
+.serbut{
+    font-weight: bold;
+    border: none;
+    background-color: #FF6733;
+    color: white;
+    width: 90px;
+    height: 35px;
 }
 

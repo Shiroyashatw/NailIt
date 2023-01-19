@@ -1,5 +1,5 @@
 ﻿// only for testing. Should get data from backend.
-// sessionStorage.setItem("MemberId", "1");
+// sessionStorage.setItem("memberId", "1");
 
 var scop = {
     loginId: 0, // 目前登入者Id
@@ -8,7 +8,8 @@ var scop = {
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
     articleCode: "", // 目前所在的版別ex:"L0"
-    // articleName: "", // ex:"交流"
+    articleMode: "", // new or edit or save.目前編輯器是哪個狀態。
+    newArticle: {}, // new article object for create a article.
     articles: [], // 目前帶出的list of article
     articleId: 0, // 現在選取的articleId, 給刪除/編輯/檢舉article以及新增reply使用
     page: 0, // 目前頁數，給查詢/帶出更多使用
@@ -19,6 +20,64 @@ var scop = {
 
 //#region Function
 //#region Action
+var showSaveArticle = async function () {
+    if ($("#editModalArticleTitle").val().trim() == "" || $("#editModalArticleContent").html().trim().replace("<div>", "").replace("</div>", "").replace("<br>", "") == "") {
+        alert("貼文標題與貼文內容皆為必填!");
+        return;
+    }
+    if (scop.articleMode == "new") {
+        let article = scop.newArticle;
+        article.articleBoardC = $("#newArtiCodeList").val();
+        article.articleTitle = $("#editModalArticleTitle").val().trim();
+        // save image, return url
+        let content = $("#editModalArticleContent").html();
+        content = await dataURLToLink(content);
+        article.articleContent = content;
+        article.articleBuildTime = new Date();
+        article.articleLastEdit = new Date();
+        // call api
+        let result = await postArticle(article);
+        if (!!result) {
+            scop.articleMode = "save";
+            $("#editArticleModal").modal("hide");
+            // show the article code page
+            let articleCode = scop.articleCodeList.find(a => a.codeId == $("#newArtiCodeList").val());
+            showMain(articleCode.codeId, articleCode.codeRepresent);
+        }
+    }
+    if (scop.articleMode == "edit") {
+        let article = currentArticle().article;
+        article.articleTitle = $("#editModalArticleTitle").val();
+        // save image, return url
+        let content = $("#editModalArticleContent").html()
+        content = await dataURLToLink(content);
+        article.articleContent = content;
+        article.articleLastEdit = new Date();
+        // call api
+        let result = await putArticle(article);
+        if (!!result) {
+            scop.articleMode = "save";
+            $("#editArticleModal").modal("hide");
+            // show article modal and render articles
+            $("#articleModal").modal("show");
+            renderTheArticle(currentArticle());
+            // show the article modal
+            $("#articleModal").modal("show");
+        }
+    }
+}
+var showEditArticleModal = function () {
+    scop.articleMode = "edit";
+    $("#editArticleModal").modal("show");
+}
+var showNewArticleModal = function () {
+    scop.articleMode = "new";
+    scop.newArticle = new ArticleTable({
+        articleBoardC: scop.articleCode,
+        articleAuthor: scop.loginId,
+    });
+    $("#editArticleModal").modal("show");
+}
 // Report article or reply, and the item disappear from display.
 var showReportAction = async function () {
     // check report value exist
@@ -28,43 +87,47 @@ var showReportAction = async function () {
         return;
     }
     let reportRepresent = scop.reportCodeList.find(r => r.codeId == reportCodeId).codeRepresent;
-    // new report
+    // new report for reply
     let report = new ReportTable({
-        ReportBuilder: scop.loginId,
+        reportBuilder: scop.loginId,
         ReportTarget: scop.articleAuthorId,
-        ReportItem: currentArticle().article.articleId,
-        ReportPlaceC: "D5",
-        ReportReasonC: reportCodeId,
-        ReportContent: reportRepresent
+        reportItem: currentArticle().article.articleId,
+        reportPlaceC: "D5",
+        reportReasonC: reportCodeId,
+        reportContent: reportRepresent
     });
-    // if it's article report
+    // if it's article report, change report content
     if (scop.replyId != 0) {
         let reply = scop.replies.find(r => r.reply.replyId == scop.replyId);
         report.ReportTarget = reply.reply.memberId;
-        report.ReportItem = reply.reply.replyId;
-        report.ReportPlaceC = "D6";  
+        report.reportItem = reply.reply.replyId;
+        report.reportPlaceC = "D6";
+    }
+    // if "其他", "G9"(reportCodeId) be chosen, get report reason from #reportOtherInput
+    if (reportCodeId == "G9") {
+        report.reportContent = $("#reportOtherInput").val();
     }
     // call api
-    let result = await SocialService.postReply(report);
+    let result = await SocialService.postSocialReport(report);
     // check result
-    if (true) {
-        // clean OtherInput and close report modal
-        $("#reportOtherInput").val("");
+    if (result) {
+        // close report modal
         $("#reportModal").modal("hide");
         // hide the reply/article
-        if (scop.replyId != 0) { // article
-            // remove the article data-articleid
-            $(`div[data-articleid="${scop.articleId}"]`).remove();
+        if (scop.replyId == 0) { // article
+            // remove the article from display
+            renderRemoveArticle();
             // hide article modal
             $("#articleModal").modal("hide");
-        }else{ // reply
-            $(`div[data-replyid="${scop.replyId}"]`).remove();
-        }            
+        } else { // reply
+            // remove the reply from display. update reply area reply count. update the article reply count.
+            renderRemoveTheReply();
+        }
         // snack bar inform complete
         showSnackbar("檢舉已完成!");
     }
 
- }
+}
 // Show report reason list, before confirm report
 var showReportModal = function (obj) {
     // fade articleModal
@@ -87,10 +150,8 @@ var showReportModal = function (obj) {
 var showDeleteReply = async function () {
     let result = await deleteReply(scop.replyId);
     if (result) {
-        // remove the reply
-        $(`div[data-replyid="${scop.replyId}"]`).remove();
-        currentArticle().article.articleReplyCount--;
-        renderTheArticle(currentArticle());
+        // remove the reply from display. update reply area reply count. update the article reply count.
+        renderRemoveTheReply();
         // snack bar inform complete
         showSnackbar("刪除已完成!");
     }
@@ -98,12 +159,12 @@ var showDeleteReply = async function () {
 // Show the new article in articles
 var showNewReply = async function () {
     let reply = new ReplyTable({
-        ArticleId: currentArticle().article.articleId,
-        MemberId: scop.loginId,
-        ReplyContent: $("#replyInput").val(),
+        articleId: scop.articleId,
+        memberId: scop.loginId,
+        replyContent: $("#replyInput").val(),
     })
     let resultReply = await postReply(reply);
-    if (resultReply != {}) {
+    if (!!resultReply) {
         reply = {
             reply: resultReply,
             memberNickname: scop.loginNickname,
@@ -125,19 +186,14 @@ var showNewReply = async function () {
 }
 // Remove the article from articles
 var showDeleteArticle = async function () {
-    let articleId = currentArticle().article.articleId;
-    let result = await deleteArticle(articleId);
+    let result = await deleteArticle(scop.articleId);
     if (result) {
         // remove the article data-articleid
-        $(`div[data-articleid="${articleId}"]`).remove();
-        if (scop.articleCode == "My") {
-            scop.articles.articleCount--;
-            $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
-            // snack bar inform complete
-            showSnackbar("刪除已完成!");
-        }
+        renderRemoveArticle();
+        // snack bar inform complete
+        showSnackbar("刪除已完成!");
+        $("#articleModal").modal("hide");
     }
-    $("#articleModal").modal("hide");
 }
 // Show confirm Modal, if delete the article or reply.
 var showConfirmDelModal = function (obj) {
@@ -199,8 +255,8 @@ var showReplyLikeToggle = async function (likeObj) {
     let reply = scop.replies.find(r => r.reply.replyId == replyId);
     // build a like with replyId and memberId:scop.loginId
     let replyLike = new ReplyLikeTable({
-        ReplyId: replyId,
-        MemberId: scop.loginId
+        replyId: replyId,
+        memberId: scop.loginId
     })
     // if like == false (build a like)
     if (!reply.like) {
@@ -216,7 +272,7 @@ var showReplyLikeToggle = async function (likeObj) {
     // else (delete a like)
     else {
         // DELETE the like
-        let result = await deleteReplyLike(replyLike.ReplyId, replyLike.MemberId);
+        let result = await deleteReplyLike(replyLike.replyId, replyLike.memberId);
         // Check api success, like data of scop.articles change to false, and update display.
         if (result) {
             reply.like = false;
@@ -233,8 +289,8 @@ var showArticleLikeToggle = async function (likeObj) {
     let article = currentArticle();
     // build a like with articleId and memberId:scop.loginId
     let articleLike = new ArticleLikeTable({
-        ArticleId: article.article.articleId,
-        MemberId: scop.loginId
+        articleId: scop.articleId,
+        memberId: scop.loginId
     });
     // if like == false (create a like)
     if (!article.like) {
@@ -250,7 +306,7 @@ var showArticleLikeToggle = async function (likeObj) {
     // else (delete a like)
     else {
         // DELETE the like
-        let result = await deleteArticleLike(articleLike.ArticleId, articleLike.MemberId);
+        let result = await deleteArticleLike(articleLike.articleId, articleLike.memberId);
         // Check api success, like data of scop.articles change to false, and update display.
         if (result) {
             article.like = false;
@@ -265,16 +321,11 @@ var showArticleLikeToggle = async function (likeObj) {
 }
 // show Modal
 var showModal = async function (articleId) {
-    let articles = scop.articles;
-    if (scop.articles.articleCount !== undefined) {
-        articles = scop.articles.reaultArticles;
-    }
-
     scop.articleId = articleId;
     let article = currentArticle();
     // call and show relies
     scop.articleAuthorId = article.article.articleAuthor;
-    await getReplies(article.article.articleId);
+    await getReplies(articleId);
     renderReplaies();
 
     // Modal show article data
@@ -337,6 +388,13 @@ var showMain = async function (code, name) {
 //#endregion
 
 //#region render updates
+// remove the reply from display. update reply area reply count. update the article reply count.
+var renderRemoveTheReply = function () {
+    $(`div[data-replyid="${scop.replyId}"]`).remove();
+    currentArticle().article.articleReplyCount--;
+    $("#ModalArticleReplyCount").html(`共${currentArticle().article.articleReplyCount}則留言`);
+    renderTheArticle(currentArticle());
+}
 var renderNewReply = function (reply) {
     let replyHTML = `
                 <div data-replyid="${reply.replyId}">
@@ -408,7 +466,7 @@ var renderArtiModDropdown = function () {
     // Can edit and delete own article
     if (scop.articleAuthorId == scop.loginId) {
         dropContentHTML = `
-            <a href="javascript:void(0)">編輯</a>
+            <a href="javascript:void(0)" onclick="showEditArticleModal()">編輯</a>
             <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal()">刪除</a>`;
     }
     // Only can report others reply
@@ -418,26 +476,54 @@ var renderArtiModDropdown = function () {
     }
     $("#ArtiModDropContent").html(dropContentHTML);
 };
+var renderRemoveArticle = function () {
+    $(`div[data-articleid="${scop.articleId}"]`).remove();
+    if (scop.articleCode == "My") {
+        scop.articles.articleCount--;
+        $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
+    }
+}
 var renderTheArticle = function (article) {
     let articleHTML = `
-        <h4 class="m-0">${article.article.articleTitle}</h4>
-        <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-        <span>${article.article.articleContent}</span><br>
-        <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
-        <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}`;
+        <div class="col-10 pr-0">
+            <h4 class="m-0">${article.article.articleTitle}</h4>
+            <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
+            <span>${shortContent(60, article.article.articleContent)}</span><br>
+            <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
+            <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
+        </div>`;
+    let firsImg = firstImg(article.article.articleContent);
+    if (firsImg != undefined) {
+        articleHTML += `
+            <div class="col-2 pl-0 d-flex align-items-center">
+                <img class="mw-100" src="${firsImg.src}" style="aspect-ratio:1;">
+            </div>`;
+    }
     $(`div[data-articleid="${article.article.articleId}"]`).html(articleHTML);
 }
 var renderArticles = function (articles) {
     let articlesHTML = "";
     for (const article of articles) {
         articlesHTML +=
-            `<div class="mb-4 bottomBorder cursor-pointer" onclick="showModal($(this).data('articleid'))" data-articleid="${article.article.articleId}">
-                <h4 class="m-0">${article.article.articleTitle}</h4>
-                <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-                <span>${article.article.articleContent}</span><br>
-                <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
-                <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
+            `<div class="pb-3 mb-3 bottomBorder cursor-pointer d-flex justify-content-between" onclick="showModal($(this).data('articleid'))" data-articleid="${article.article.articleId}">
+                
+                <div class="col-10 pr-0">
+                    <h4 class="m-0">${article.article.articleTitle}</h4>
+                    <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
+                    <span>${shortContent(60, article.article.articleContent)}</span><br>
+                    <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
+                    <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
+                </div>`;
+        let firsImg = firstImg(article.article.articleContent);
+        if (firsImg != undefined) {
+            articlesHTML += `
+                <div class="col-2 pl-0 d-flex align-items-center">
+                    <img class="mw-100" src="${firsImg.src}" style="aspect-ratio:1;">
+                </div>`;
+        }
+        articlesHTML += `
             </div>`;
+
     }
     if (scop.page == 0) $("#articles").empty();
     $("#articles").append(articlesHTML);
@@ -476,6 +562,13 @@ var renderMenu = function () {
 //#endregion
 
 //#region call API
+var uploadImage = async function (formdata) {
+    // call api get related data
+    let res = await SocialService.uploadImage(formdata);
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    // return list of image url.
+    return res;
+}
 var postReport = async function (report) {
     // call api get related data
     let res = await SocialService.postReport(report);
@@ -488,6 +581,19 @@ var deleteArticle = async function (articleId) {
     if (!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
     return true;
 }
+var putArticle = async function (article) {
+    // call api get related data
+    let res = await ArticleService.putArticle(article.articleId, article);
+    if (!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    return true;
+}
+var postArticle = async function (article) {
+    // call api get related data
+    let res = await ArticleService.postArticle(article);
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    // return built model for displaying
+    return res;
+}
 var deleteReply = async function (replyId) {
     // call api get related data
     let res = await ReplyService.deleteReply(replyId);
@@ -497,7 +603,7 @@ var deleteReply = async function (replyId) {
 var postReply = async function (reply) {
     // call api get related data
     let res = await ReplyService.postReply(reply);
-    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return {}; }
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
     // return built model for displaying the reply
     return res;
 }
@@ -567,26 +673,80 @@ var getArticles = async function () {
 }
 //#endregion
 
+// Save dataURL image. Replace image src dataURL to url link.
+async function dataURLToLink(html) {
+    let divEltment = document.createElement("div");
+    divEltment.innerHTML = `<div>${html}</div>`;
+    let imgTags = divEltment.getElementsByTagName("img");
+
+    let imageURLs = []; // 回復的image url link
+    let index = 0;
+    let articlePic = new ArticlePicTable({
+        articleId: (scop.articleMode == "new") ? 0 : currentArticle().article.articleId
+    });
+    let formdata = new FormData();
+    formdata.append("articlePic", JSON.stringify(articlePic));
+
+    // create image file with base64 which in article content.
+    for (const imgTag of imgTags) {
+        // if it's base64.
+        if (imgTag.src.startsWith("data")) {
+            let file = await urlToFile(imgTag.src, `lab.png${index}`, 'image/png');
+            formdata.append(`file${index}`, file);
+            index++;
+        }
+    }
+    if (index > 0) {
+        index = 0;
+        // call api save image, return url
+        let result = await uploadImage(formdata);
+        if (!!result) {
+            console.log(result);
+            imageURLs = result;
+        }
+        // html <img> change base64 to backend link.
+        for (const imgTag of imgTags) {
+            if (imgTag.src.startsWith("data")) {
+                let urlImg = document.createElement("img");
+                urlImg.src = apiServer + imageURLs[index];
+                imgTag.before(urlImg);
+                imgTag.remove();
+                index++;
+            }
+        }
+    }
+
+    return divEltment.childNodes[0].innerHTML;
+}
 var currentArticle = function () {
-    return scop.articles.find(a => a.article.articleId == scop.articleId)
+    let articles = scop.articles;
+    if (scop.articles.reaultArticles != undefined) {
+        articles = scop.articles.reaultArticles;
+    }
+    return articles.find(a => a.article.articleId == scop.articleId);
 }
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
-    $('#reportModal').modal({
-        show: true, // 預設開啟modal
-    })
+    // $('#editArticleModal').modal({
+    //     show: true, // 預設開啟modal
+    // })
 
     // 是否需要把backend的session設定到frontend ?
     scop.loginId = $("#loginId").val();
-    scop.loginName = $("#loginName").val();
+    scop.loginAccount = $("#loginAccount").val();
     scop.loginNickname = $("#loginNickname").val();
-    console.log(scop.loginId, scop.loginName, scop.loginNickname);
+    console.log(scop.loginId, scop.loginAccount, scop.loginNickname);
 
     // Initial data, menu list and report list
     scop.articleCodeList = await SocialService.getCodes("L");
     if (scop.articleCodeList.status != undefined) alert(`[${scop.articleCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
-    else renderMenu(); // Setup community menu and show first sort
+    else {
+        // Setup community menu and show first sort
+        renderMenu();
+        // Render new article Code List
+        renderSelect("newArtiCodeList", scop.articleCodeList, "codeRepresent", "codeId");
+    }
     scop.reportCodeList = await SocialService.getCodes("G");
     if (scop.reportCodeList.status != undefined) alert(`[${scop.reportCodeList.status}]後端執行異常，請聯絡系統人員，感謝!`);
     else renderReport(); // Render report reason options
@@ -594,8 +754,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     //#region Event Binding
     // While report modal hide, show article Modal will come up.
     $("#reportModal").on("hide.bs.modal", function (e) {
-        $("input[name='reportOption']:checked").prop("checked", false);
         $("#articleModal").css("z-index", "1050");
+        // reset report modal
+        $("#reportOtherInput").val("");
+        $("#reportOtherInput").hide();
+        $("input[name='reportOption']:checked").prop("checked", false);
     });
     // While confirm modal hide, show article Modal will come up.
     $("#confirmModal").on("hide.bs.modal", function (e) {
@@ -618,6 +781,61 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         }
     }
+    // Show input of report other, if otherOption been chosen.
+    $("input[name='reportOption']").on("change", function (e) {
+        if (this.value == "G9") {
+            $("#reportOtherInput").show();
+            $("#reportOtherInput").focus();
+        } else {
+            $("#reportOtherInput").hide();
+        }
+    });
+    // If #Title and #Content have value, check user don't want to reply it, and ready to loose it, while closing #articleModal.
+    $("#editArticleModal").on("hide.bs.modal", function (e) {
+        // new mode, check is there any value
+        if (scop.articleMode == "new") {
+            if ($("#editModalArticleTitle").val().trim() != "" || $("#editModalArticleContent").html().trim().replace("<div>", "").replace("</div>", "").replace("<br>", "") != "") {
+                if (!confirm("有新增內容尚未送出，離開將會遺失，是否確認離開?")) {
+                    e.preventDefault();
+                    return;
+                } else {
+                    // remove draft
+                    $("#editModalArticleTitle").val("");
+                    $("#editModalArticleContent").html("");
+                }
+            }
+        }
+        // edit mode, check is there any change.
+        if (scop.articleMode == "edit") {
+            if ($("#editModalArticleTitle").val().trim() != currentArticle().article.articleTitle ||
+                $("#editModalArticleContent").html().trim() != currentArticle().article.articleContent) {
+                if (!confirm("內容已有異動，離開將會遺失變更，是否確認離開?")) {
+                    e.preventDefault();
+                    return;
+                } else {
+                    // remove draft
+                    $("#editModalArticleTitle").val("");
+                    $("#editModalArticleContent").html("");
+                }
+            }
+            $("#articleModal").modal("show");
+        }
+    });
+    // Initial Modal show setting
+    $("#editArticleModal").on("show.bs.modal", function (e) {
+        let article = scop.newArticle;
+        $("#newArtiCodeList").removeAttr('disabled');
+        if (scop.articleMode == "edit") {
+            $("#newArtiCodeList").attr('disabled', 'disabled');
+            $("#articleModal").modal("hide");
+            article = currentArticle().article;
+        }
+        $("#editModalAuthor").children()[0].innerText = scop.loginNickname;
+        $("#editModalAuthor").children()[1].innerText = scop.loginAccount;
+        $("#newArtiCodeList").val(scop.articleCode);
+        $("#editModalArticleTitle").val(article.articleTitle);
+        $("#editModalArticleContent").html(article.articleContent);
+    });
     // If #replyInput have value, check user don't want to reply it, and ready to loose it, while closing #articleModal.
     $("#articleModal").on("hide.bs.modal", function (e) {
         // check if the replyInput has a value
@@ -628,14 +846,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 // remove draft reply
                 $("#replyInput").val("");
             }
-        }
-    });
-    // Show input of report other, if otherOption been chosen.
-    $("input[name='reportOption']").on("change",function(e){
-        if (this.value == "G9") {
-            $("#reportOtherInput").show();
-        }else{
-            $("#reportOtherInput").hide();            
         }
     });
     // Initial Modal show setting
@@ -649,10 +859,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         else $("#ModelArticleLike").css("color", "rgb(108, 117, 125)");
         $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
         $("#ModalArticleTitle").children()[0].innerText = article.article.articleTitle;
-        $("#ModalArticleTitle").children()[1].innerText = new Date(article.article.articleLastEdit);
+        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.YYYYMMDD();
+        if (article.article.articleLastEdit != article.article.articleBuildTime)
+            $("#ModalArticleTitle").children()[1].innerText += "(已編輯)";
         $("#ModalArticleContent").html(article.article.articleContent);
         $("#ModalArticleReplyCount").html(`共${article.article.articleReplyCount}則留言`);
-        // Render nodal dropdown
+        // Render modal dropdown
         renderArtiModDropdown();
     });
     // Show articles when press 'Enter' at searchinput 

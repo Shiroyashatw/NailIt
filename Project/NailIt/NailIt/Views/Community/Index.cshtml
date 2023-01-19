@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "美甲小天地";
     int loginId = hca.HttpContext.Session.GetInt32("loginId") ?? 0;
-    string loginName = hca.HttpContext.Session.GetString("loginName") ?? "Guest";
+    string loginAccount = hca.HttpContext.Session.GetString("loginAccount") ?? "Guest";
     string loginNickname = hca.HttpContext.Session.GetString("loginNickname") ?? "Guest";
 }
 @section Head{
@@ -14,6 +14,7 @@
     <!-- Custom js -->
     <script src="~/AnselLib/Ansel_Service.js"></script>
     <script src="~/AnselLib/Ansel_Community.js"></script>
+    <script src="~/AnselLib/Ansel_Common.js"></script>
     
     <link rel="stylesheet" href="~/AnselLib/Ansel_Community.css">
     <style></style>
@@ -22,7 +23,7 @@
 
 @* invisible infornation *@
 <input id="loginId" type="text" value="@loginId" class="d-none">
-<input id="loginName" type="text" value="@loginName" class="d-none">
+<input id="loginAccount" type="text" value="@loginAccount" class="d-none">
 <input id="loginNickname" type="text" value="@loginNickname" class="d-none">
 
 <div class="">
@@ -80,6 +81,8 @@
     </div>
 </div>
 
+<i id="btnNewArticle" class="fa-solid fa-circle-plus cursor-pointer" onclick="showNewArticleModal()"></i>
+
 <!-- The Modal articleModal -->
 <div class="modal fade" id="articleModal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -87,7 +90,7 @@
             <!-- Header -->
             <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
                 <div id="ModalAuthorInfo" class="d-flex align-items-center cursor-pointer" data-dismiss="modal" onclick="showMyMain()">
-                    <div id="avatar" class="bg-secondary d-flex align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;">
+                    <div class="bg-secondary d-flex align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;">
                         <div>
                             Avatarrr
                         </div>
@@ -97,21 +100,15 @@
                         <div>Author Username</div>
                     </div>
                 </div>
-                <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
-                <div class="d-flex align-items-start flex-column">
-                    <button type="button" class="close mb-auto" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <div class="row">
-                        <i id="ModelArticleLike" class="fa-solid fa-heart cursor-pointer" onclick="showArticleLikeToggle(this)" style="color:rgb(108, 117, 125);"></i>
-                        <span id="ModelArticleLikesCount">0</span>
-                        <div class="dropdown">
-                            <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis"></i>
-                            <div id="ArtiModDropContent" class="dropdown-content">
-                                <a href="javascript:void(0)">編輯</a>
-                                <a href="javascript:void(0)" class="text-danger">刪除</a>
-                                <a href="javascript:void(0)" class="text-danger">檢舉</a>
-                            </div>
+                <div class="">
+                    <i id="ModelArticleLike" class="fa-solid fa-heart cursor-pointer" onclick="showArticleLikeToggle(this)" style="color:rgb(108, 117, 125);"></i>
+                    <span id="ModelArticleLikesCount">0</span>
+                    <div class="dropdown">
+                        <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis"></i>
+                        <div id="ArtiModDropContent" class="dropdown-content">
+                            <a href="javascript:void(0)">編輯</a>
+                            <a href="javascript:void(0)" class="text-danger">刪除</a>
+                            <a href="javascript:void(0)" class="text-danger">檢舉</a>
                         </div>
                     </div>
                 </div>
@@ -139,6 +136,46 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- The Modal articleEditModal -->
+<div class="modal fade" id="editArticleModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
+                <div id="editModalAuthorInfo" class="d-flex align-items-center">
+                    <div class="bg-secondary d-flex align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;">
+                        <div>
+                            Avatarrr
+                        </div>
+                    </div>
+                    <div id="editModalAuthor">
+                        <div>Author Nickname</div>
+                        <div>Author Username</div>
+                    </div>
+                    <div>
+                        <label for="newArtiCodeList">選擇看板:</label>
+                        <select name="newArtiCodeList" id="newArtiCodeList"></select>
+                    </div>
+                </div>
+                <div class="d-flex align-items-start flex-column">
+                    <div class="row">
+                        <button data-dismiss="modal">取消</button>
+                        <button onclick="showSaveArticle()">發布</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Body -->
+            <div class="modal-body" style="max-height: calc(100vh - 190px); overflow-y: auto;">
+                <div>
+                    <input type="text" id="editModalArticleTitle" style="font-size:24px;" class="editable titleArea mb-1 mb-sm-2" placeholder="請輸入標題"/>
+                    <article id="editModalArticleContent" class="editable contentArea" contenteditable="true" placeholder="請輸入貼文內容"></article>
+                </div>
             </div>
         </div>
     </div>

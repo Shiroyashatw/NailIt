@@ -21,6 +21,7 @@ namespace NailIt.Models
         public virtual DbSet<ArticlePicTable> ArticlePicTables { get; set; }
         public virtual DbSet<ArticleTable> ArticleTables { get; set; }
         public virtual DbSet<CodeTable> CodeTables { get; set; }
+        public virtual DbSet<ColorTable> ColorTables { get; set; }
         public virtual DbSet<CommentTable> CommentTables { get; set; }
         public virtual DbSet<CreditCardTable> CreditCardTables { get; set; }
         public virtual DbSet<DemoSetTable> DemoSetTables { get; set; }
@@ -39,7 +40,6 @@ namespace NailIt.Models
         public virtual DbSet<ServiceTable> ServiceTables { get; set; }
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
-
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -142,6 +142,25 @@ namespace NailIt.Models
                     .IsFixedLength(true);
             });
 
+            modelBuilder.Entity<ColorTable>(entity =>
+            {
+                entity.HasKey(e => e.ColorId)
+                    .HasName("PK__Color_Ta__795F1D747055E1F2");
+
+                entity.ToTable("Color_Table");
+
+                entity.Property(e => e.ColorId).HasColumnName("Color_ID");
+
+                entity.Property(e => e.ColorCss)
+                    .HasMaxLength(7)
+                    .HasColumnName("Color_css");
+
+                entity.Property(e => e.ColorName)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .HasColumnName("Color_Name");
+            });
+
             modelBuilder.Entity<CommentTable>(entity =>
             {
                 entity.HasKey(e => e.CommentId);
@@ -212,13 +231,17 @@ namespace NailIt.Models
 
                 entity.Property(e => e.DemoSetId).HasColumnName("demoSet_ID");
 
+                entity.Property(e => e.DemoSetColor).HasColumnName("demoSet_Color");
+
                 entity.Property(e => e.DemoSetContent)
                     .HasMaxLength(100)
                     .HasColumnName("demoSet_Content");
 
                 entity.Property(e => e.DemoSetCount).HasColumnName("demoSet_Count");
 
-                entity.Property(e => e.DemoSetCover).HasColumnName("demoSet_Cover");
+                entity.Property(e => e.DemoSetCover)
+                    .HasMaxLength(50)
+                    .HasColumnName("demoSet_Cover");
 
                 entity.Property(e => e.DemoSetDeposit)
                     .HasColumnType("money")
@@ -349,6 +372,18 @@ namespace NailIt.Models
                     .HasMaxLength(3)
                     .IsUnicode(false)
                     .HasColumnName("manicurist_BankCode");
+
+                entity.Property(e => e.ManicuristBankCompanyName)
+                    .HasMaxLength(20)
+                    .HasColumnName("manicurist_BankCompanyName");
+
+                entity.Property(e => e.ManicuristBankName)
+                    .HasMaxLength(20)
+                    .HasColumnName("manicurist_BankName");
+
+                entity.Property(e => e.ManicuristBankNameBranch)
+                    .HasMaxLength(20)
+                    .HasColumnName("manicurist_BankNameBranch");
 
                 entity.Property(e => e.ManicuristCounty)
                     .IsRequired()
@@ -553,6 +588,10 @@ namespace NailIt.Models
                 entity.Property(e => e.OrderAcceptTime)
                     .HasColumnType("datetime")
                     .HasColumnName("order_AcceptTime");
+
+                entity.Property(e => e.OrderCancelTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("order_CancelTime");
 
                 entity.Property(e => e.OrderCompleteTime)
                     .HasColumnType("datetime")

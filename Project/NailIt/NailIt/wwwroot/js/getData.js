@@ -1,6 +1,8 @@
 // 全域變數
 var MID; // 設計師ID
 var DSETID // 作品集ID
+var SerRes // 服務資料表 res
+var DsetRes // 作品集 res
 
 // 讀取當前網址 
 var getUrlString = location.href;
@@ -10,6 +12,8 @@ var url = new URL(getUrlString);
 // 根據前面網址抓取 撈後面參數資料 demoSet ID 進行設定
 DSETID = url.searchParams.get('id');
 
+// 訂單類型 0=>自訂 1=>固定項目
+var OrderType = $('input[name="OrderType"]')
 
 // 抓取施作部位的Val 後續去資料庫撈值 施作項目 以及 造型
 var OpartC = $('select[name="OrderPartC"]')
@@ -18,6 +22,12 @@ var OpartCval
 var OrderItem = $('select[name="OrderItem"]')
 // 施作名稱
 var OrderItemName = $('select[name="OrderItemName"]')
+
+// 預估金額 訂金
+var demoSprice = $('.demoSetPrice')
+var demoSde = $('.demoSetDeposit')
+var inputOprice = $('input[name="OrderPrice"]')
+var inputOde = $('input[name="OrderDeposit"]')
 // 讀取基本資料 設計師資料 demoset資料 demo資料 再顯示在畫面上
 function getbasicinfo() {
     $.ajax({
@@ -67,10 +77,11 @@ function getbasicinfo() {
             $('#botmanicuristSalonName').text("店家/設計師名稱:" + Ores['manicuristSalonName'])
             $('.botphone').text("電話:" + Ores['manicuristSalonPhone'])
             $('#botadress').text("地址:" + Ores['manicuristAddress'])
-            $('.demoSetPrice').text("預估金額:" + Demosetres['demoSetPrice']);
-            $('input[name="OrderPrice"]').val(Demosetres['demoSetPrice']);
-            $('.demoSetDeposit').text("訂金:NT$" + Demosetres['demoSetDeposit'])
-            $('input[name="OrderDeposit"]').val(Demosetres['demoSetDeposit']);
+
+            demoSprice.text("預估金額:" + Demosetres['demoSetPrice']);
+            inputOprice.val(Demosetres['demoSetPrice']);
+            demoSde.text("訂金:NT$" + Demosetres['demoSetDeposit'])
+            inputOde.val(Demosetres['demoSetDeposit']);
             // 放入圖片
             $('#show_big_photo').attr("src", res[0]['demo']['demoPic'])
             var demo1 = res[0]['demo']['demoPic']
@@ -233,6 +244,9 @@ function postOrder() {
             if (formdata[i]['value'] == "true") {
                 returnArray[formdata[i]['name']] = true;
             }
+            else if (formdata[i]['value'] == "false"){
+                returnArray[formdata[i]['name']] = false;
+            }
         }
         console.log(JSON.stringify(returnArray));
         // console.log(returnArray)
@@ -280,69 +294,121 @@ function getManicuristData() {
 }
 
 function getOrderPartC() {
-
-
     $('#Sendbtn').on('click', function () {
         OpartCval = OpartC.val();
-        $.ajax({
-            url: `api/product/MID/service/${MID}/${OpartCval}`,
-            method: "GET",
-            dataType: "json",
-            async: true,
-            success: res => {
-                // 先清空 施作項目 選項
-                OrderItem.empty();
-                OrderItem.append(new Option("固定項目", ""));
-                // 循環帶入 該設計師ID有提供的 施作項目 服務
-                for (i = 0; i < res.length; i++) {
-                    var Sres = res[i]
-                    OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
-                }
-                // 當施作項目 變更時 不是選擇固定項目的選項時 隱藏造型選項
-                OrderItem.change(function () {
-                    var itemName = OrderItem.find("option:selected").text();
-                    if (OrderItem.val() != "") {
-                        OrderItemName.hide();
-
-                        OrderItemName.empty();
-
-                        OrderItemName.append(new Option(itemName, itemName));
-                    }
-                    else {
-                        OrderItemName.empty();
-                        OrderItemName.show();
-                    }
-                })
-
-                // OrderItemName.change(function(){
-                //     console.log("SSS")
-                // })
-            },
-            error: res => {
-
-            }
-        })
+        getDemosetData()
+        getOrderItem()
+        
     })
     OpartC.change(function () {
         OpartCval = OpartC.val();
+        getDemosetData()
+        getOrderItem()
+        
     })
 }
 
+// DemoSet 資料 為了撈 固定項目的造型
 function getDemosetData() {
-    $('#Sendbtn').on('click', function () {
-        OpartCval = OpartC.val();
-        $.ajax({
-            url: `api/product/MID/dset/${MID}/${OpartCval}`,
-            method: "GET",
-            dataType: "json",
-            async: true,
-            success: res => {
-                console.log("S")
-            },
-            error: err => {
-                console.log(err)
-            },
-        })
-    })
+    $.ajax({
+        url: `api/product/MID/dset/${MID}/${OpartCval}`,
+        method: "GET",
+        dataType: "json",
+        async: true,
+        success: res => {
+            DsetRes = res;
+            // console.log(res)
+            // console.log(DsetRes)
+            // 先清空 施作項目 造型 選項
+            //OrderItem.empty();
+            OrderItemName.empty();
+            //console.log(res[0]['demoSetId'])
 
+            for (i = 0; i < res.length; i++) {
+                var DRes = res[i]
+                // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
+                OrderItemName.append(`<option value="${DRes['demoSetName']}" price="${DRes['demoSetPrice']}" deposit="${DRes['demoSetDeposit']}">${DRes['demoSetName']}</option>`)
+            }
+            OrderItemName.show();
+            var price = OrderItemName.find("option:selected").attr('price')
+            var deposit = OrderItemName.find("option:selected").attr('deposit')
+            
+            demoSprice.text("預估金額:NT$" + price)
+            demoSde.text("訂金:NT$" + deposit)
+            inputOprice.val(price);
+            inputOde.val(deposit);
+            // console.log(price)
+            // console.log(deposit)
+        },
+        error: err => {
+            console.log(err)
+        },
+    })
 }
+
+function getOrderItem() {
+    $.ajax({
+        url: `api/product/MID/service/${MID}/${OpartCval}`,
+        method: "GET",
+        dataType: "json",
+        async: true,
+        success: res => {
+            OrderItem.empty();
+            //OrderItem.append(`<option value="" type="fix">固定造型</option>`)
+            // 預設固定項目的 value 為 抓出來的第一筆 demosetID
+            OrderItem.append(`<option value="${DsetRes[0]['demoSetId']}" type="fix">固定造型</option>`)
+            // 循環帶入 該設計師ID有提供的 施作項目 服務
+            for (i = 0; i < res.length; i++) {
+                var Sres = res[i]
+                // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
+                OrderItem.append(`<option value="${Sres['serviceId']}" price="${Sres['servicePrice']}" deposit="${Sres['seriveDeposit']}">${Sres['serviceName']}</option>`)
+            }
+            var price
+            var deposit
+            // 當施作項目 變更時 不是選擇固定項目的選項時 隱藏造型選項
+            OrderItem.change(function () {
+                var itemName = OrderItem.find("option:selected").text();
+                if (OrderItem.find("option:selected").attr("type") != "fix") {
+                    OrderType.val(false)
+
+                    OrderItemName.hide();
+
+                    OrderItemName.empty();
+
+                    OrderItemName.append(new Option(itemName, itemName));
+
+                    price = OrderItem.find("option:selected").attr('price')
+                    deposit = OrderItem.find("option:selected").attr('deposit')
+
+                    demoSprice.text("預估金額:NT$" + price)
+                    demoSde.text("訂金:NT$" + deposit)
+                    inputOprice.val(price);
+                    inputOde.val(deposit);
+                }
+                else {
+                    OrderType.val(true)
+                    getDemosetData()
+                    OrderItemName.show();
+
+                    // price = OrderItemName.find("option:selected").attr('price')
+                    // deposit = OrderItemName.find("option:selected").attr('deposit')
+                    // console.log(OrderItemName.attr('price'))
+                    // console.log(price)
+                    // console.log(deposit)
+                    // demoSprice.text("預估金額:NT$" + price)
+                    // demoSde.text("訂金:NT$" + deposit)
+                    // inputOprice.val(price);
+                    // inputOde.val(deposit);
+                }
+            })
+
+            // OrderItemName.change(function(){
+            //     console.log("SSS")
+            // })
+        },
+        error: err => {
+            console.log(err)
+        }
+    })
+}
+

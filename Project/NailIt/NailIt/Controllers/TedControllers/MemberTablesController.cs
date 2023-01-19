@@ -74,30 +74,30 @@ namespace NailIt.Controllers.TedControllers
 
         // POST: api/MemberTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<MemberTable>> PostMemberTable(MemberTable memberTable)
-        {
-            _context.MemberTables.Add(memberTable);
-            await _context.SaveChangesAsync();
+        //[HttpPost]
+        //public async Task<ActionResult<MemberTable>> PostMemberTable(MemberTable memberTable)
+        //{
+        //    _context.MemberTables.Add(memberTable);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMemberTable", new { id = memberTable.MemberId }, memberTable);
-        }
+        //    return CreatedAtAction("GetMemberTable", new { id = memberTable.MemberId }, memberTable);
+        //}
 
         // DELETE: api/MemberTables/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMemberTable(int id)
-        {
-            var memberTable = await _context.MemberTables.FindAsync(id);
-            if (memberTable == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteMemberTable(int id)
+        //{
+        //    var memberTable = await _context.MemberTables.FindAsync(id);
+        //    if (memberTable == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.MemberTables.Remove(memberTable);
-            await _context.SaveChangesAsync();
+        //    _context.MemberTables.Remove(memberTable);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         private bool MemberTableExists(int id)
         {
