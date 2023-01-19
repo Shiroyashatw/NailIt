@@ -24,6 +24,7 @@ namespace NailIt.Controllers.TedControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CreditCardTable>>> GetCreditCardTables()
         {
+
             return await _context.CreditCardTables.ToListAsync();
         }
 
@@ -31,7 +32,8 @@ namespace NailIt.Controllers.TedControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CreditCardTable>> GetCreditCardTable(int id)
         {
-            var creditCardTable = await _context.CreditCardTables.FindAsync(id);
+            var query = from user in _context.CreditCardTables where user.CreditCardOwner == id select user;
+            var creditCardTable = await _context.CreditCardTables.FindAsync(query);
 
             if (creditCardTable == null)
             {
@@ -87,7 +89,8 @@ namespace NailIt.Controllers.TedControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCreditCardTable(int id)
         {
-            var creditCardTable = await _context.CreditCardTables.FindAsync(id);
+            var query = from user in _context.CreditCardTables where user.CreditCardOwner == id select user;
+            var creditCardTable = await _context.CreditCardTables.FindAsync(query);
             if (creditCardTable == null)
             {
                 return NotFound();

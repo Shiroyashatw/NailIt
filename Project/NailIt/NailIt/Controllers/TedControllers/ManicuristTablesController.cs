@@ -46,6 +46,7 @@ namespace NailIt.Controllers.TedControllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutManicuristTable(int id, ManicuristTable manicuristTable)
         {
+
             if (id != manicuristTable.ManicuristId)
             {
                 return BadRequest();
