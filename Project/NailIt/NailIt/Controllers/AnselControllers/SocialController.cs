@@ -44,13 +44,13 @@ namespace NailIt.Controllers.AnselControllers
         /// <returns></returns>
         // POST:/api/Social/UploadImage
         [HttpPost]
-        public ActionResult UploadImage(IFormCollection frm)
+        public async Task<IActionResult> UploadImage(IFormCollection frm)
         {
             if (frm.Files.Count > 0)
             {
                 // get data and files from formdata of request
                 ArticlePicTable articlePic = JsonConvert.DeserializeObject<ArticlePicTable>(frm["articlePic"]);
-                var imageFile = frm.Files[0];
+                List<string> imageUrls = new List<string>();
 
                 // lock DB
                 var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
@@ -60,25 +60,37 @@ namespace NailIt.Controllers.AnselControllers
                 {   // new article havn't got a id.
                     articlePic.ArticleId = _context.ArticleTables.OrderByDescending(a => a.ArticleId).FirstOrDefault().ArticleId + 1;
                 }
-                articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + "00.png";
-                _context.ArticlePicTables.Add(articlePic);
-                _context.SaveChanges();
-
-                var latestIageId = _context.ArticlePicTables.OrderByDescending(a => a.ArtclePicId).FirstOrDefault().ArtclePicId;
-                articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + latestIageId + ".png";
-                _context.SaveChanges();
-
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\AnselLib\\ArticleImage") + "\\" + latestIageId + ".png"; //檔案存放位置在wwwroot中的資料夾
-
-                using (var stream = System.IO.File.Create(filePath))
+                foreach (var imageFile in frm.Files)
                 {
-                    imageFile.CopyToAsync(stream);
+                    articlePic.ArtclePicId = 0;
+                    string imageUrl = await saveImage(articlePic ,imageFile);
+                    imageUrls.Add(imageUrl);
                 }
 
                 t.Commit();
-                return Ok(new {imageURL= $"/AnselLib/ArticleImage/{latestIageId}.png"});
+                return Ok(imageUrls);
             }
             return NotFound();
+        }
+
+        private async Task<string> saveImage(ArticlePicTable articlePic,IFormFile imageFile)
+        {
+            articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + "00.png";
+            _context.ArticlePicTables.Add(articlePic);
+            _context.SaveChanges();
+
+            var latestIageId = _context.ArticlePicTables.OrderByDescending(a => a.ArtclePicId).FirstOrDefault().ArtclePicId;
+            articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + latestIageId + ".png";
+            _context.SaveChanges();
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\AnselLib\\ArticleImage") + "\\" + latestIageId + ".png"; //檔案存放位置在wwwroot中的資料夾
+
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            return $"/AnselLib/ArticleImage/{latestIageId}.png";
         }
 
 

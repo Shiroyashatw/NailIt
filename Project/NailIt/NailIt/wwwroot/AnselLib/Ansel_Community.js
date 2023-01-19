@@ -566,8 +566,8 @@ var uploadImage = async function (formdata) {
     // call api get related data
     let res = await SocialService.uploadImage(formdata);
     if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
-    // return image url.
-    return res.imageURL;
+    // return list of image url.
+    return res;
 }
 var postReport = async function (report) {
     // call api get related data
@@ -678,26 +678,44 @@ async function dataURLToLink(html) {
     let divEltment = document.createElement("div");
     divEltment.innerHTML = `<div>${html}</div>`;
     let imgTags = divEltment.getElementsByTagName("img");
+
+    let imageURLs = []; // 回復的image url link
+    let index = 0;
+    let articlePic = new ArticlePicTable({
+        articleId: (scop.articleMode == "new") ? 0 : currentArticle().article.articleId
+    });
+    let formdata = new FormData();
+    formdata.append("articlePic", JSON.stringify(articlePic));
+
+    // create image file with base64 which in article content.
     for (const imgTag of imgTags) {
         // if it's base64.
         if (imgTag.src.startsWith("data")) {
-            let file = await urlToFile(imgTag.src, 'lab.png', 'image/png');
-            let articlePic = new ArticlePicTable({
-                articleId: (scop.articleMode == "new") ? 0 : currentArticle().article.articleId
-            });
-            let formdata = new FormData();
-            formdata.append("file", file);
-            formdata.append("articlePic", JSON.stringify(articlePic));
-            // call api save image, return url
-            let result = await uploadImage(formdata);
-            if (!!result) {
+            let file = await urlToFile(imgTag.src, `lab.png${index}`, 'image/png');
+            formdata.append(`file${index}`, file);
+            index++;
+        }
+    }
+    if (index > 0) {
+        index = 0;
+        // call api save image, return url
+        let result = await uploadImage(formdata);
+        if (!!result) {
+            console.log(result);
+            imageURLs = result;
+        }
+        // html <img> change base64 to backend link.
+        for (const imgTag of imgTags) {
+            if (imgTag.src.startsWith("data")) {
                 let urlImg = document.createElement("img");
-                urlImg.src = apiServer + result;
+                urlImg.src = apiServer + imageURLs[index];
                 imgTag.before(urlImg);
                 imgTag.remove();
+                index++;
             }
         }
     }
+
     return divEltment.childNodes[0].innerHTML;
 }
 var currentArticle = function () {

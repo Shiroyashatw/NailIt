@@ -62,7 +62,10 @@ Date.prototype.YYYYMMDD = function () {
 function HTMLToText (html) {
     let divEltment = document.createElement("div");
     divEltment.innerHTML = `<div>${html}</div>`;
-    return divEltment.innerText.replace(/\s/g,""); // remove space in text
+    console.log(divEltment.innerHTML)
+    divEltment.childNodes[0].innerHTML = divEltment.childNodes[0].innerHTML.split('<div>').join(' ');
+    console.log(divEltment.innerHTML)
+    return divEltment.innerText; // remove space in text
 }
 // Get short version of HTML content. If content is longer than input length, add "..." at the end.
 function shortContent(length,contentHTML) {
