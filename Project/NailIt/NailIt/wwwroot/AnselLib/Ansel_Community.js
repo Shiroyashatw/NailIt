@@ -20,6 +20,17 @@ var scop = {
 
 //#region Function
 //#region Action
+// Edit article upload image(jpg/png) file change event 
+var showInsertImage = async function (obj) {
+    var file  = $(obj).prop('files')[0];
+    var reader  = new FileReader();
+
+    reader.addEventListener("load", function () {
+            document.execCommand('insertImage', false, reader.result);
+        }, false);
+
+    if (file) reader.readAsDataURL(file);
+}
 var showSaveArticle = async function () {
     if ($("#editModalArticleTitle").val().trim() == "" || $("#editModalArticleContent").html().trim().replace("<div>", "").replace("</div>", "").replace("<br>", "") == "") {
         alert("貼文標題與貼文內容皆為必填!");
@@ -701,7 +712,6 @@ async function dataURLToLink(html) {
         // call api save image, return url
         let result = await uploadImage(formdata);
         if (!!result) {
-            console.log(result);
             imageURLs = result;
         }
         // html <img> change base64 to backend link.
@@ -718,6 +728,7 @@ async function dataURLToLink(html) {
 
     return divEltment.childNodes[0].innerHTML;
 }
+// Get current article info
 var currentArticle = function () {
     let articles = scop.articles;
     if (scop.articles.reaultArticles != undefined) {
@@ -752,6 +763,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     else renderReport(); // Render report reason options
 
     //#region Event Binding
+    // Mousedown insert image at article editor. Don't preventDefault focus, or upload file can't find the plase to insert. 
+    // Don't use onclick, focus already set on mouse down.
+    $("#btnInsertImg").on("mousedown", function (e) {
+        document.getElementById('editArtiInsertImg').click();
+        e.preventDefault();
+    })
     // While report modal hide, show article Modal will come up.
     $("#reportModal").on("hide.bs.modal", function (e) {
         $("#articleModal").css("z-index", "1050");

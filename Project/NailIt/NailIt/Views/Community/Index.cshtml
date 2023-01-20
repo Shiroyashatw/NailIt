@@ -114,7 +114,7 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="modal-body" style="max-height: calc(100vh - 190px); overflow-y: auto;">
+            <div class="modal-body" style="max-height: calc(100vh - 180px); overflow-y: auto;">
                 <div class="bottomBorder">
                     <div id="ModalArticleTitle" class="mb-1 mb-sm-2">
                         <h4 class="mb-0">Article Title</h4>
@@ -171,11 +171,15 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="modal-body" style="max-height: calc(100vh - 190px); overflow-y: auto;">
+            <div class="modal-body pb-0" style="max-height: calc(100vh - 180px); overflow-y: auto;">
                 <div>
                     <input type="text" id="editModalArticleTitle" style="font-size:24px;" class="editable titleArea mb-1 mb-sm-2" placeholder="請輸入標題"/>
                     <article id="editModalArticleContent" class="editable contentArea" contenteditable="true" placeholder="請輸入貼文內容"></article>
                 </div>
+            </div>
+            <div class="px-3 pb-2">
+                <i id="btnInsertImg" class="fa-solid fa-image cursor-pointer"></i>
+                <input type='file' id="editArtiInsertImg" onchange="showInsertImage(this)" accept="image/jpeg, image/png" style="display: none;" />
             </div>
         </div>
     </div>
