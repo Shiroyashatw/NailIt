@@ -22,12 +22,12 @@ var scop = {
 //#region Action
 // Edit article upload image(jpg/png) file change event 
 var showInsertImage = async function (obj) {
-    var file  = $(obj).prop('files')[0];
-    var reader  = new FileReader();
+    var file = $(obj).prop('files')[0];
+    var reader = new FileReader();
 
     reader.addEventListener("load", function () {
-            document.execCommand('insertImage', false, reader.result);
-        }, false);
+        document.execCommand('insertImage', false, reader.result);
+    }, false);
 
     if (file) reader.readAsDataURL(file);
 }
@@ -42,7 +42,7 @@ var showSaveArticle = async function () {
         article.articleTitle = $("#editModalArticleTitle").val().trim();
         // save image, return url
         let content = $("#editModalArticleContent").html();
-        content = await dataURLToLink(content);
+        content = await elmDataURLToLink(content);
         article.articleContent = content;
         article.articleBuildTime = new Date();
         article.articleLastEdit = new Date();
@@ -61,7 +61,7 @@ var showSaveArticle = async function () {
         article.articleTitle = $("#editModalArticleTitle").val();
         // save image, return url
         let content = $("#editModalArticleContent").html()
-        content = await dataURLToLink(content);
+        content = await elmDataURLToLink(content);
         article.articleContent = content;
         article.articleLastEdit = new Date();
         // call api
@@ -82,6 +82,7 @@ var showEditArticleModal = function () {
     $("#editArticleModal").modal("show");
 }
 var showNewArticleModal = function () {
+    if (!checkLogin()) return;
     scop.articleMode = "new";
     scop.newArticle = new ArticleTable({
         articleBoardC: scop.articleCode,
@@ -141,6 +142,7 @@ var showReportAction = async function () {
 }
 // Show report reason list, before confirm report
 var showReportModal = function (obj) {
+    if (!checkLogin()) return;
     // fade articleModal
     $("#articleModal").css("z-index", "1040");
     let replyId = $(obj).parent().parent().parent().parent().data("replyid");
@@ -169,6 +171,7 @@ var showDeleteReply = async function () {
 }
 // Show the new article in articles
 var showNewReply = async function () {
+    if (!checkLogin()) return;
     let reply = new ReplyTable({
         articleId: scop.articleId,
         memberId: scop.loginId,
@@ -261,6 +264,7 @@ var showDropdown = function (obj) {
 }
 // show reply like status change
 var showReplyLikeToggle = async function (likeObj) {
+    if (!checkLogin()) return;
     // get the reply (like status)
     let replyId = $(likeObj).parent().parent().data("replyid")
     let reply = scop.replies.find(r => r.reply.replyId == replyId);
@@ -296,6 +300,7 @@ var showReplyLikeToggle = async function (likeObj) {
 }
 // show article like status change
 var showArticleLikeToggle = async function (likeObj) {
+    if (!checkLogin()) return;
     // get like status
     let article = currentArticle();
     // build a like with articleId and memberId:scop.loginId
@@ -344,6 +349,11 @@ var showModal = async function (articleId) {
 }
 // search button show articles
 var showSearch = async function () {
+    // Check if user Login
+    if ($("#mainTitle").html() == "我的") if (!checkLogin()) {
+        $("#order").val(($("#order").val() == "latest") ? "like" : "latest");
+        return;
+    }
     scop.page = 0;
     $("#btnMoreArticle").removeAttr("disabled");
     // show articles
@@ -357,6 +367,8 @@ var showSearch = async function () {
 }
 // load more 10 articles
 var showMoreArticle = async function () {
+    // Check if user Login
+    if ($("#mainTitle").html() == "我的") if (!checkLogin()) return;
     scop.page++;
     // call and show 10 more articles
     let moreArticles = [];
@@ -366,8 +378,12 @@ var showMoreArticle = async function () {
 }
 // show articles of one person (my or other)
 var showMyMain = async function (own) {
+    if (own) if (!checkLogin()) return;
     scop.articleCode = "My";
     scop.page = 0;
+    // initial search condition
+    $('#searchInput').val("");
+    $('#order').val("latest");
     // update main area
     if (own) {
         $("#mainTitle").html("我的");
@@ -386,6 +402,9 @@ var showMyMain = async function (own) {
 var showMain = async function (code, name) {
     scop.articleCode = code;
     scop.page = 0;
+    // initial search condition
+    $('#searchInput').val("");
+    $('#order').val("latest");
     // update main area
     $("#mainTitle").html(name);
     $("#mainTitle").show();
@@ -684,8 +703,16 @@ var getArticles = async function () {
 }
 //#endregion
 
+// Check if login ?
+var checkLogin = function () {
+    if (scop.loginId == 0) {
+        alert("請先登入!");
+        return false;
+    }
+    return true;
+}
 // Save dataURL image. Replace image src dataURL to url link.
-async function dataURLToLink(html) {
+async function elmDataURLToLink(html) {
     let divEltment = document.createElement("div");
     divEltment.innerHTML = `<div>${html}</div>`;
     let imgTags = divEltment.getElementsByTagName("img");
