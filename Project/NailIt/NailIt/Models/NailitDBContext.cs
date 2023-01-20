@@ -41,6 +41,14 @@ namespace NailIt.Models
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=NailitDB;Integrated Security=True;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -90,7 +98,7 @@ namespace NailIt.Models
                     .IsRequired()
                     .HasMaxLength(2)
                     .IsUnicode(false)
-                    .HasColumnName("article_BoardC")
+                    .HasColumnName("article_Board_C")
                     .IsFixedLength(true);
 
                 entity.Property(e => e.ArticleBuildTime)
@@ -145,7 +153,7 @@ namespace NailIt.Models
             modelBuilder.Entity<ColorTable>(entity =>
             {
                 entity.HasKey(e => e.ColorId)
-                    .HasName("PK__Color_Ta__795F1D741816687F");
+                    .HasName("PK__Color_Ta__795F1D747055E1F2");
 
                 entity.ToTable("Color_Table");
 
@@ -180,6 +188,8 @@ namespace NailIt.Models
                     .HasMaxLength(200)
                     .HasColumnName("comment_Content")
                     .HasDefaultValueSql("('評論內容未填')");
+
+                entity.Property(e => e.CommentOrderId).HasColumnName("comment_OrderID");
 
                 entity.Property(e => e.CommentScore)
                     .HasColumnName("comment_Score")
@@ -251,11 +261,11 @@ namespace NailIt.Models
 
                 entity.Property(e => e.DemoSetMainEndTime)
                     .HasColumnType("datetime")
-                    .HasColumnName("DemoSet_MainEndTime");
+                    .HasColumnName("demoSet_MainEndTime");
 
                 entity.Property(e => e.DemoSetMainStartTime)
                     .HasColumnType("datetime")
-                    .HasColumnName("DemoSet_MainStartTime");
+                    .HasColumnName("demoSet_MainStartTime");
 
                 entity.Property(e => e.DemoSetName)
                     .IsRequired()

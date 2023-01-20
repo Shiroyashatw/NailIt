@@ -822,7 +822,7 @@
                                                 <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly">尚未選擇</textarea>
                                                 <label id="UpFileLabel" class="align-items-center">
                                                     上傳檔案
-                                                    <input id="UpFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
+                                                    <input required id="UpFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
                                                 </label>
                                             </div>
                                         </div>
@@ -927,7 +927,7 @@
                                 </div>
                                 <div class="modal-footer border-0">
                                     <button onclick="cleartext()" class="Checkbtn" data-dismiss="modal">取消</button>
-                                    <a v-on:click="InsertDemo" type="submit" class="Editbtn">新增</a>
+                                    <button v-on:click="InsertDemo" type="submit" class="Editbtn">新增</button>
                                 </div>
                             </div>
                         </form>
@@ -1437,7 +1437,7 @@
                 DemoList: [{ "demoId": 1, "demoSetId": 2, "demoPic": "UploadFolder/Oneone.png" }],
                 MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
                 width: "",
-                InsertDemoSet: [{ "demoSetName": null, "demoSetCover": "尚未選擇", "manicuristId": 2, "demoSetPartC": "none", "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "none", "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": "none" }],
+                InsertDemoSet: [{ "demoSetName": null, "demoSetCover": "尚未選擇", "manicuristId": 2, "demoSetPartC": "none", "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "none", "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": false, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": "none" }],
                 TagFtxt: "",
                 TagStxt: "",
                 TagTtxt: "",
@@ -1472,6 +1472,7 @@
                         this.InsertDemoSet[0].demoSetTag3 = this.TagTtxt;
                     }
 
+
                     //$('form > input').text("");
 
                     $.ajax({
@@ -1483,30 +1484,6 @@
                             window.location = "/YiPLib/NailDesignerEdit.html";
                         }
                     })
-
-                    //$.ajax({
-                    //    type: "get",
-                    //    //url: "api/path/" + this.InsertDemoSet.manicuristId,
-                    //    url: "/api/DemoSet/GetPostDemoSetTable/2",
-                    //    success: function (e) {
-                    //        for (var b = 0; b < ShowData.PostDemo.length; b++)
-                    //            this.PostDemo[b].demoSetId = e.demoSetId;
-                    //    }
-                    //})
-
-                    //$.ajax({
-                    //    type: "post",
-                    //    //url: "api/path/" + this.InsertDemo.manicuristId,
-                    //    url: "/api/DemoSet/PostDemoTable",
-                    //    contentType: "application/json",
-                    //    data: JSON.stringify(this.PostDemo),
-                    //    success: function () {
-                    //        //window.location = "/YiPLib/NailDesignerEdit.html"
-                    //    }
-                    //})
-
-
-
 
                 },
                 Previewing: function () {

@@ -678,6 +678,7 @@
                     MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
                     width: "",
                     MainDemoCoverLenth: "",
+                    Comment:[],
                 }
             },
             methods: {
@@ -721,24 +722,14 @@
             }
         });
 
-            //$.ajax({
-            //    type: "get",
-            //    url: "/api/DemoSet/GetDemoCover/2",
-            //    success: function (e) {
-            //        //console.log(e);
-            //        ShowData.DemoCover = e;
-            //        ShowData.MainDemoCoverLenth = e.length;
-            //    }
-            //});
-
-            //$.ajax({
-            //    type: "get",
-            //    url: "/api/DemoSet/GetMainDemoCover/2",
-            //    success: function (e) {
-            //        //console.log(e);
-            //        ShowData.MainDemoCover = e;
-            //    }
-            //});
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/2",
+            success: function (e) {
+                console.log(e);
+                ShowData.Comment = e;
+            }
+        });
 
 
 
