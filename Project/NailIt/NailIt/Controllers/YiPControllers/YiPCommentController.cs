@@ -18,11 +18,21 @@ namespace NailIt.Controllers.YiPControllers
             Context = PContext;
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<CommentTable>>> GetManicuristComment(int id)
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetManicuristComment(int id)
         {
+            // membernickname
             var query = from User in Context.CommentTables
+                            join member in Context.MemberTables
+                              on User.CommentBuilder equals member.MemberId
                         where User.CommentTarget == id && User.CommentType == false
-                        select User;
+                        select new {
+                            MemberNickname = member.MemberNickname,
+                            CommentId = User.CommentId,
+                            CommentTarget = User.CommentTarget,
+                            CommentScore = User.CommentScore,
+                            CommentContent = User.CommentContent,
+                            CommentBuildTime = User.CommentBuildTime
+                        };
 
             return await query.ToListAsync();
         }
