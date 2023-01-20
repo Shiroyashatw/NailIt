@@ -4,7 +4,8 @@ var mydata = new Vue({
     data: {
         report: [{}],
         //[{"reportId":1,"reportBuilder":1,"reportTarget":2,"reportItem":111012801,"reportPlaceC":"D3","reportReasonC":"G2","reportContent":"邪惡","reportBuildTime":"2023-01-18 20:28","reportCheckTime":"","managerId":null,"reportResult":null,"codeUseIn":"D3","codeRepresent":"設計師主頁","memberName":"田美麗","managerName":null}]
-        reportput: [{ "reportResult": true, "reportId": "", "reportCheckTime":"", "managerId":"1"}],
+        reportput: [{ "reportResult": true, "reportId": "", "reportCheckTime": "", "managerId": "1" }],
+        repertget: [{ "dateS": "2023-01-01", "dateE":"2023-01-09","reportP":"D3","reportR":null}],
         reportnum: "", reportpage: "",
         onereport: [{}],
         syscode: [{}],
@@ -22,6 +23,8 @@ $.ajax({
     url: "/api/ReportTables",
     success: function (e) {
         mydata.report = e;
+        console.log(e);
+
         //< !--審核狀態NULL=待審核, TRUE = 審核通過, FLASE = 審核不通-- >
         for (let i = 0; i < e.length; i++) {
             if (e[i].reportResult == 1) {
@@ -52,14 +55,50 @@ $.ajax({
 })
 
 //GET條件審核資料
-//$.ajax({
-//    type: "get",
-//    url: "api/ReportTables/condition",
-//    success: function (e) {
 
+function seaselrep() {
+//repertget: [{ "dateS": "2023-01-01", "dateE": "2023-01-09", "reportP": "D3", "reportR": true }],
+    //var urlresult = mydata.repertget[0].reportP;  //成功
+    //var urlresult = mydata.repertget[0].reportR; //null各種傳各種不行
+    var urlresult = mydata.repertget[0].dateS + "/" + mydata.repertget[0].dateE;
+    
+    
+$.ajax({
+    type: "get",
+    url: "/api/ReportTables/condition/" + urlresult,
+    //url: "api/ReportTables/condition/{dateS}/{dateE}/{reportP}/{reportR}",
+    //url:  mydata.repertget[0].dateS + "/" + mydata.repertget[0].dateE + "/" + mydata.repertget[0].reportP + "/" + mydata.repertget[0].reportR,
+    success: function (e) {
+        //把資料填回去
+        mydata.report = e;
+        console.log(e);
+  
+        for (let i = 0; i < e.length; i++) {
+            if (e[i].reportResult == 1) {
+                mydata.report[i].reportResult = "審核通過";
+                mydata.AAA[i] = false;
 
-//    }
-//})
+            } else if (e[i].reportResult == 0) {
+                mydata.report[i].reportResult = "審核不通過";
+                mydata.AAA[i] = false;
+
+            } else {
+                mydata.report[i].reportResult = "待審核";
+                mydata.AAA[i] = true;
+            }
+
+        };
+        mydata.reportnum = e.length;
+        if (mydata.reportnum >= 5) {
+            mydata.reportpage = Math.ceil(mydata.reportnum / 5)
+        } else {
+            mydata.reportpage = 1
+        };
+    }
+
+})
+
+}
 
 
 

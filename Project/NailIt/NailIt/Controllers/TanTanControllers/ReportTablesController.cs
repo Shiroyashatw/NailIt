@@ -25,7 +25,7 @@ namespace NailIt.Controllers.TanTanControllers
         // GET: api/ReportTables
         [HttpGet]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetReportTables()
-        {
+        {           
 
             var newReportTables = from o in _context.ReportTables
                                   join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
@@ -57,9 +57,14 @@ namespace NailIt.Controllers.TanTanControllers
             return await newReportTables.ToListAsync();
         }
 
-        // GET: api/ReportTables/condition
-        [HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetProductCondition(string dateS, string dateE, string reportP, bool? reportR)
+        // GET: api/ReportTables/condition 條件
+        //[HttpGet("condition/{reportR}")]
+        //[HttpGet("condition/{reportP}/{reportR}")]
+        [HttpGet("condition/{dateS}/{dateE}")]
+        //[HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}")]
+        //[HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportRN}")]  // ReportResult is null的情況 待審核
+
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProductCondition(string dateS, string dateE, string reportP, bool? reportR , string reportRN)
         {
             var date1 = DateTime.Parse(dateS);
             var date2 = DateTime.Parse(dateE);
@@ -70,10 +75,11 @@ namespace NailIt.Controllers.TanTanControllers
                         join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
                         join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist
                         from m in mlist.DefaultIfEmpty()
-                        where o.ReportBuildTime >= Convert.ToDateTime(date1)
-                        && o.ReportBuildTime <= Convert.ToDateTime(date2).AddMinutes(1439)
-                        && o.ReportPlaceC == reportP
-                        //&& o.ReportResult == 
+                        where
+                           o.ReportBuildTime >= Convert.ToDateTime(date1)
+                           && o.ReportBuildTime <= Convert.ToDateTime(date2)
+                           //o.ReportPlaceC == reportP
+                        //&& o.ReportResult == (bool?)reportR
                         select new
                         {
                             ReportId = o.ReportId,
@@ -84,12 +90,14 @@ namespace NailIt.Controllers.TanTanControllers
                             ReportReasonC = o.ReportReasonC,
                             ReportContent = o.ReportContent,
                             ReportBuildTime = o.ReportBuildTime.ToString("yyyy-MM-dd HH:mm"),
-                            ReportCheckTime = o.ReportCheckTime,
+                            ReportCheckTime =  o.ReportCheckTime == null ? "" : ((DateTime)o.ReportCheckTime).ToString("yyyy-MM-dd HH:mm"),
                             ManagerId = o.ManagerId,
                             ReportResult = o.ReportResult,
                             CodeUseIn = c.CodeId,
                             CodeRepresent = c.CodeRepresent,
                         };
+
+            //if else query在下where條件!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
 
             return await query.ToListAsync();
         }
