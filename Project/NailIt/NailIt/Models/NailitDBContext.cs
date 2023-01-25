@@ -20,6 +20,7 @@ namespace NailIt.Models
         public virtual DbSet<ArticleLikeTable> ArticleLikeTables { get; set; }
         public virtual DbSet<ArticlePicTable> ArticlePicTables { get; set; }
         public virtual DbSet<ArticleTable> ArticleTables { get; set; }
+        public virtual DbSet<MessageBlacklistTable> MessageBlacklistTables { get; set; }
         public virtual DbSet<CodeTable> CodeTables { get; set; }
         public virtual DbSet<ColorTable> ColorTables { get; set; }
         public virtual DbSet<CommentTable> CommentTables { get; set; }
@@ -41,14 +42,14 @@ namespace NailIt.Models
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=NailitDB;Integrated Security=True;");
-            }
-        }
+//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//         {
+//             if (!optionsBuilder.IsConfigured)
+//             {
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                 optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=NailitDB;Integrated Security=True;");
+//             }
+//         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -123,6 +124,19 @@ namespace NailIt.Models
                     .HasMaxLength(30)
                     .HasColumnName("article_Title")
                     .HasDefaultValueSql("('文章標題未填')");
+            });
+
+            modelBuilder.Entity<MessageBlacklistTable>(entity =>
+            {
+                entity.HasKey(e => e.BlacklistId);
+
+                entity.ToTable("MessageBlacklist_Table");
+
+                entity.Property(e => e.BlacklistId).HasColumnName("blacklist_ID");
+
+                entity.Property(e => e.BlacklistBuilder).HasColumnName("blacklist_Builder");
+
+                entity.Property(e => e.BlacklistTarget).HasColumnName("blacklist_Target");
             });
 
             modelBuilder.Entity<CodeTable>(entity =>
@@ -527,6 +541,8 @@ namespace NailIt.Models
                 entity.Property(e => e.MessageTime)
                     .HasColumnType("datetime")
                     .HasColumnName("message_Time");
+                
+                entity.Property(e => e.MessageRead).HasColumnName("message_Read");
             });
 
             modelBuilder.Entity<NoticeReadTable>(entity =>
