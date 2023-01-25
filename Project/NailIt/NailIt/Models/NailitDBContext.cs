@@ -573,6 +573,8 @@ namespace NailIt.Models
                     .HasMaxLength(50)
                     .HasColumnName("notice_Title")
                     .HasDefaultValueSql("('TITLE沒進')");
+
+                entity.Property(e => e.NoticeManagerId).HasColumnName("notice_manager_ID");
             });
 
             modelBuilder.Entity<OrderTable>(entity =>

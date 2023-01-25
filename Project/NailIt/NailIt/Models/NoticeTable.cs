@@ -14,5 +14,6 @@ namespace NailIt.Models
         public DateTime NoticeBuildTime { get; set; }
         public DateTime NoticePushTime { get; set; }
         public bool? NoticeState { get; set; }
+        public int NoticeManagerId { get; set; }
     }
 }

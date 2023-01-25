@@ -248,15 +248,15 @@ namespace NailIt.Controllers.TanTanControllers
             return NoContent();
         }
 
-        // POST: api/ReportTables
+        //// POST: api/ReportTables
 
-        [HttpPost]
-        public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
-        {
-            _context.ReportTables.Add(reportTable);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetReportTable", new { id = reportTable.ReportId }, reportTable);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
+        //{
+        //    _context.ReportTables.Add(reportTable);
+        //    await _context.SaveChangesAsync();
+        //    return CreatedAtAction("GetReportTable", new { id = reportTable.ReportId }, reportTable);
+        //}
 
         //// DELETE: api/ReportTables/5
         //[HttpDelete("{id}")]

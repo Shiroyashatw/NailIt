@@ -6,7 +6,7 @@ var mydata = new Vue({
         report: [{}],
         //[{"reportId":1,"reportBuilder":1,"reportTarget":2,"reportItem":111012801,"reportPlaceC":"D3","reportReasonC":"G2","reportContent":"邪惡","reportBuildTime":"2023-01-18 20:28","reportCheckTime":"","managerId":null,"reportResult":null,"codeUseIn":"D3","codeRepresent":"設計師主頁","memberName":"田美麗","managerName":null}]
         reportput: [{ "reportResult": true, "reportId": "", "reportCheckTime": "", "managerId": "1" }],
-        repertget: [{ "dateS": "1900-01-01", "dateE": "3000-01-01", "reportP": "X0", "reportR": true,"reportRN":"nu"}],
+        repertget: [{ "dateS": "1900-01-01", "dateE": "3000-01-01", "reportP": "X0", "reportR": true, "reportRN": "nu" }],
         reportnum: "", reportpage: "",
         onereport: [{}],
         syscode: [{}],
@@ -15,7 +15,19 @@ var mydata = new Vue({
         //通知
         notice: [{}],
         //{ "noticeId": 1, "noticeScope": 2, "noticeTitle": "聖誕節快樂！", "noticeContent": "祝全體會員聖誕節快樂！", "noticeBuildTime": "2023-01-25T11:44:59.453", "noticePushTime": "2023-01-25T11:44:59.453", "noticeState": true },
+        onenotice: [{}],
         noticenum: "", noticepage: "",
+        noticemodel: "",
+        //新增通知
+        noticetitle: [],
+        noticetext: [],
+        noticescope: [],
+        noticetime: [],
+        //增加通知
+        noticepost: [{
+            "noticeScope":9, "noticeTitle": "HAHAHA", "noticeContent": "HAHAHA",
+            "noticeBuildTime": "2023-01-25T15:41:38.329Z", "noticePushTime": "2023-01-25T15:4","noticeState": false, "noticeManagerId": 1
+        }],
     },
  
 
@@ -229,7 +241,7 @@ $.ajax({
     mydata.repertget[0].reportRN = "nu";
 }
 
-//GET單一審核資料
+////GET單一審核資料  
 function reviewreport(e) {
     mydata.reportmodel = e.value;
     //console.log(e);
@@ -245,7 +257,7 @@ function reviewreport(e) {
 
 };
 
-//GET單一審核資料
+//GET單一審核資料 //reviewreport1
 function reviewreport1(e) {
     //console.log(e.value)
     mydata.reportmodel = e.value;
@@ -294,7 +306,10 @@ function changereviewreport(e) {
         contentType: "application/json",
         data: JSON.stringify(mydata.reportput[0]),
         success: function () {
-            window.location = "/TanTanLib/html/backstage.html"
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabcontent[0].style.display = "block";
         }
 
     })
@@ -311,8 +326,8 @@ $.ajax({
     }
 })
 
-
-//GET系統通知資料表
+////系統通知--------------------------------------------------------------------------------------------------------------------------------
+//GET 系統通知資料表
 $.ajax({
     type: "get",
     url: "/api/NoticeTables",
@@ -320,7 +335,7 @@ $.ajax({
         mydata.notice = e;
         console.log(e);
 
-        ////< !--通知狀態NULL=待審核, TRUE = 審核通過, FLASE = 審核不通-- >
+        ////< !--通知狀態-- >
         for (let i = 0; i < e.length; i++) {
             if (e[i].noticeState == true) {
                 mydata.notice[i].noticeState = "已通知";
@@ -331,7 +346,7 @@ $.ajax({
             }
 
         };
-        ////< !--通知狀態NULL=待審核, TRUE = 審核通過, FLASE = 審核不通-- >
+        ////< !--通知對象 >
         for (let i = 0; i < e.length; i++) {
             if (e[i].noticeScope == 0) {
                 mydata.notice[i].noticeScope = "一般會員";
@@ -356,3 +371,104 @@ $.ajax({
     }
 
 })
+
+//DELETE 系統通知資料表
+function delnotice(e) {
+    mydata.noticemodel = e.value;
+    $.ajax({
+    type: "delete",
+    url: "/api/NoticeTables/delete/" + mydata.noticemodel,
+    success: function () {
+        window.location = "/TanTanLib/html/backstage.html"
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tabcontent[1].style.display = "block";
+        
+        alert("OK");
+    }
+})
+}
+
+//GET 系統通知單一系統通知資料 //reviewnotice
+function reviewnotice(e) {
+    //console.log(e.value)
+    mydata.noticemodel = e.value;
+
+    $.ajax({
+        type: "get",
+        url: "/api/NoticeTables/" + mydata.noticemodel,
+        success: function (e) {
+            mydata.onenotice = e;
+            ////< !--通知狀態-- >
+            for (let i = 0; i < e.length; i++) {
+                if (e[0].noticeState == true) {
+                    mydata.onenotice[0].noticeState = "已通知";
+
+                } else if (e[0].noticeState == false) {
+                    mydata.onenotice[0].noticeState = "未通知";
+
+                }
+
+            };
+            ////< !--通知對象 >
+            for (let i = 0; i < e.length; i++) {
+                if (e[0].noticeScope == 0) {
+                    mydata.onenotice[0].noticeScope = "一般會員";
+
+                } else if (e[0].noticeScope == 1) {
+                    mydata.onenotice[0].noticeScope = "店家 / 美甲師";
+
+                } else if (e[0].noticeScope == 2) {
+                    mydata.onenotice[0].noticeScope = "全體會員";
+                }
+
+            };
+           
+       } 
+    })
+
+};
+
+//ADD  系統通知單一系統通知建立時間
+var addnotdate = new Date();
+var notdate = addnotdate.getFullYear() + "-" + addnotdate.getMonth() + 1 + "-" + addnotdate.getDate() + " " + addnotdate.getHours() + ":" + addnotdate.getMinutes();
+function addnoticedate() {
+
+    $("#adddate").prop('value', notdate);
+
+}
+
+//POST 系統通知單一系統通知資料
+function savenotice() {
+    var addnotdate = new Date();
+    mydata.noticepost[0].noticeScope = mydata.noticeScope;
+    mydata.noticepost[0].noticeTitle = mydata.noticetitle;
+    mydata.noticepost[0].noticeContent = mydata.noticetext;
+    mydata.noticepost[0].noticeBuildTime = addnotdate;
+    mydata.noticepost[0].noticePushTime = mydata.noticetime + ":00.000";
+    mydata.noticepost[0].noticeState = false;
+    mydata.noticepost[0].noticeManagerId = 1;
+
+    $.ajax({
+        type: "post",
+        url: "/api/NoticeTables/post",
+        contentType: "application/json",
+        data: JSON.stringify(mydata.noticepost[0]),
+        success: function () {
+
+            alert("OK");
+            //window.location = "/TanTanLib/html/backstage.html"
+            //for (i = 0; i < tabcontent.length; i++) {
+            //    tabcontent[i].style.display = "none";
+            //}
+            //tabcontent[1].style.display = "block";
+
+            //alert("OK");
+
+        }
+    })
+};
+
+//NoticeRead_Table
+

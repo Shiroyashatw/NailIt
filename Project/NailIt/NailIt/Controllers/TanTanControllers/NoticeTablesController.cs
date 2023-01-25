@@ -31,25 +31,42 @@ namespace NailIt.Controllers.TanTanControllers
                                       NoticeScope=o.NoticeScope,
                                       NoticeTitle=o.NoticeTitle,
                                       NoticeContent=o.NoticeContent,
-                                      NoticeBuildTime = o.NoticeBuildTime.ToString("yyyy-MM-dd HH:mm"),
+                                      NoticeBuildTime = o.NoticeBuildTime,
                                       NoticePushTime = o.NoticePushTime.ToString("yyyy-MM-dd HH:mm"),
                                       NoticeState=o.NoticeState,
+                                      NoticeManagerId = o.NoticeManagerId,
                                   };
             return await newNoticeTables.ToListAsync();
         }
 
         // GET: api/NoticeTables/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<NoticeTable>> GetNoticeTable(int id)
+        public async Task<ActionResult<dynamic>> GetNoticeTable(int id)
         {
-            var noticeTable = await _context.NoticeTables.FindAsync(id);
+            var noticeTable = from o in _context.NoticeTables
+                              join ma in _context.ManagerTables on o.NoticeManagerId equals ma.ManagerId into malist
+                              from ma in malist.DefaultIfEmpty()
+                              where o.NoticeId == id
+                              select new
+                                  {
+                                      NoticeId = o.NoticeId,
+                                      NoticeScope = o.NoticeScope,
+                                      NoticeTitle = o.NoticeTitle,
+                                      NoticeContent = o.NoticeContent,
+                                      NoticeBuildTime = o.NoticeBuildTime.ToString("yyyy-MM-dd HH:mm"),
+                                      NoticePushTime = o.NoticePushTime.ToString("yyyy-MM-dd HH:mm"),
+                                      NoticeState = o.NoticeState,
+                                      NoticeManagerId = o.NoticeManagerId,
+                                      NoticeManagerName = ma.ManagerName
+                              };
+
 
             if (noticeTable == null)
             {
                 return NotFound();
             }
 
-            return noticeTable;
+            return await noticeTable.ToListAsync();
         }
 
         //// PUT: api/NoticeTables/5
@@ -85,30 +102,30 @@ namespace NailIt.Controllers.TanTanControllers
 
         //// POST: api/NoticeTables
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<NoticeTable>> PostNoticeTable(NoticeTable noticeTable)
-        //{
-        //    _context.NoticeTables.Add(noticeTable);
-        //    await _context.SaveChangesAsync();
+        [HttpPost("post")]
+        public async Task<ActionResult<NoticeTable>> PostNoticeTable(NoticeTable noticeTable)
+        {
+            _context.NoticeTables.Add(noticeTable);
+            await _context.SaveChangesAsync();
 
-        //    return CreatedAtAction("GetNoticeTable", new { id = noticeTable.NoticeId }, noticeTable);
-        //}
+            return CreatedAtAction("GetNoticeTable", new { id = noticeTable.NoticeId }, noticeTable);
+        }
 
-        //// DELETE: api/NoticeTables/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteNoticeTable(int id)
-        //{
-        //    var noticeTable = await _context.NoticeTables.FindAsync(id);
-        //    if (noticeTable == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // DELETE: api/NoticeTables/delete
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteNoticeTable(int id)
+        {
+            var noticeTable = await _context.NoticeTables.FindAsync(id);
+            if (noticeTable == null)
+            {
+                return NotFound();
+            }
 
-        //    _context.NoticeTables.Remove(noticeTable);
-        //    await _context.SaveChangesAsync();
+            _context.NoticeTables.Remove(noticeTable);
+            await _context.SaveChangesAsync();
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         private bool NoticeTableExists(int id)
         {
