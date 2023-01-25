@@ -55,7 +55,7 @@
                     <div class="px-0 col-7 mycon">
                         <!-- 1審核------------------------------------------------------------------------------ -->
                         <div id="report" class="tabcontent">
-                            <b id="rigtil">後臺管理 ＞ 審核檢舉</b>
+                            <b id="rigtil">後臺管理 ＞ <u>審核檢舉</u></b>
                             <!-- 檢舉條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
                                 <div class="d-flex align-items-start justify-content-start">
@@ -65,10 +65,10 @@
                                     <div class="d-flex align-items-start flex-column">
                                         <div class="d-flex align-items-center justify-content-start">
                                             <p class="my-0">檢舉時間：</p>
-                                            <input id="datestart" type="date" value="帶今天">
+                                            <input id="datestart" type="date" value="">
 
                                             <b class="mx-4">-</b>
-                                            <input id="dateend" type="date" value="帶今天">
+                                            <input id="dateend" type="date" value="">
                                         </div>
                                         <div class="my-4 d-flex align-items-center  justify-content-start">
                                             <div class="d-flex align-items-center  justify-content-start">
@@ -154,7 +154,7 @@
                         </div>
                         <!-- 2通知------------------------------------------------------------------------------- -->
                         <div id="sysmes" class="tabcontent" style="display:none">
-                            <b id="rigtil">後臺管理 ＞ 系統通知</b>
+                            <b id="rigtil">後臺管理 ＞ <u>系統通知</u></b>
                             <!-- 通知條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
                                 <div class="d-flex align-items-start justify-content-start">
@@ -164,21 +164,21 @@
                                     <div class="d-flex align-items-start flex-column">
                                         <div class="d-flex align-items-center justify-content-start">
                                             <p class="my-0">通知時間：</p>
-                                            <input id="datestart" type="date" value="帶今天">
+                                            <input id="datestart" type="date" value="">
                                             <b class="mx-4">-</b>
-                                            <input id="datestart" type="date" value="帶今天">
+                                            <input id="datestart" type="date" value="">
                                         </div>
                                         <div class="my-4 d-flex align-items-center  justify-content-start">
                                             <div class="d-flex align-items-center  justify-content-start">
                                                 <div>
                                                     <p class="my-0">通知對象：</p>
                                                 </div>
-
+                                                <!--0只對會員，1只對美甲師，2對所有用戶。-->
                                                 <div>
                                                     <select name="type" style="width: 130px;height:30px;">
                                                         <option value="" selected>請選擇對象</option>
-                                                        <option value="M0">店家／設計師</option>
-                                                        <option value="M1">一般會員</option>
+                                                        <option value="0">一般會員</option>
+                                                        <option value="1">店家／設計師</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -189,12 +189,10 @@
                                                 <div>
                                                     <select name="type" style="width: 130px;height:30px;">
                                                         <option value="" selected>請選擇狀態</option>
-                                                        <option value="NULL">待審核</option>
-                                                        <option value="1">審核通過</option>
-                                                        <option value="0">審核不通過</option>
+                                                        <option value="0">未通知</option>
+                                                        <option value="1">已通知</option>
                                                     </select>
                                                 </div>
-                                                <!-- 審核狀態NULL=待審核,TRUE=審核通過,FLASE=審核不通 -->
                                             </div>
                                         </div>
                                     </div>
@@ -224,7 +222,6 @@
                                     </p>
                                 </div>
                             </div>
-
                             <!-- 通知項目欄位表------------------------------------------------------------------------------------------- -->
                             <div class="my-2">
                                 <table class="table table-striped">
@@ -234,25 +231,19 @@
                                             <th scope="col">通知對象</th>
                                             <th scope="col">通知標題</th>
                                             <th scope="col">通知日期</th>
+                                            <th scope="col">通知狀態</th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody v-for="(item,key) in notice">
                                         <tr>
-                                            <th scope="row">0</th>
-                                            <td>店家／設計師</td>
-                                            <td>聖誕節快樂</td>
-                                            <td>未通知</td>
-                                            <td>-</td>
-                                            <td><button data-toggle="modal" data-target="#revmesModal">查 閱</button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>一般會員</td>
-                                            <td>萬聖節快樂</td>
-                                            <td>已通知</td>
-                                            <td>2022-10-11 13:35</td>
-                                            <td><button>查 閱</button></td>
+                                            <th scope="row"> {{notice[key].noticeId}}</th>
+                                            <td>{{notice[key].noticeScope}}</td>
+                                            <td style="max-width:200px;" class="text-truncate">{{notice[key].noticeTitle}}</td>
+                                            <td>{{notice[key].noticePushTime}}</td>
+                                            <td>{{notice[key].noticeState}}</td>
+                                            <td><button data-toggle="modal" data-target="#revmesModal" >查 看</button><button  style="background-color: #7F7F7F" class="ml-2"data-toggle="modal">刪除</button></td>
+                                           
                                         </tr>
                                     </tbody>
                                 </table>
@@ -299,9 +290,9 @@
                                         <div>
                                             <div class="my-4 d-flex align-items-center justify-content-start">
                                                 <p class="my-0">訂單時間：</p>
-                                                <input id="datestart" type="date" value="帶今天">
+                                                <input id="datestart" type="date" value="">
                                                 <b class="mx-4">-</b>
-                                                <input id="datestart" type="date" value="帶今天">
+                                                <input id="datestart" type="date" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -310,18 +301,15 @@
                                     <button class="serbut">查詢</button>
                                 </div>
                             </div>
-
                             <!-- 訂單項目標籤+上下頁------------------------------------------------------------------------------------------- -->
                             <div id="tabtitle" class="py-2 my-3 d-flex justify-content-between align-items-center">
                                 <div>
                                     <b class="my-0 ml-2">通知項目</b>
                                 </div>
-
                                 <div id="infopage" class="d-flex align-items-center justify-content-end">
                                     <p class="my-0 mr-2">共計</p>
                                     <p class="my-0 mr-2">2個項</p>
                                     <p class="my-0 mr-1">頁數</p>
-
                                     <input class=" my-1 mr-1" type="" name="" id="" style="width:10%;height:100%;">
                                     <p class="my-0 mr-2">/ 1 </p>
                                     <a class="mr-2" href="">上一頁</a>
@@ -329,7 +317,6 @@
                                     </p>
                                 </div>
                             </div>
-
                             <!-- 訂單項目欄位表------------------------------------------------------------------------------------------- -->
                             <div class="my-2">
                                 <table class="table table-striped">
@@ -410,18 +397,15 @@
                                     <button class="serbut">查詢</button>
                                 </div>
                             </div>
-
                             <!-- 會員項目標籤+上下頁------------------------------------------------------------------------------------------- -->
                             <div id="tabtitle" class="py-2 my-3 d-flex justify-content-between align-items-center">
                                 <div>
                                     <b class="my-0 ml-2">會員</b>
                                 </div>
-
                                 <div id="infopage" class="d-flex align-items-center justify-content-end">
                                     <p class="my-0 mr-2">共計</p>
                                     <p class="my-0 mr-2">2個項</p>
                                     <p class="my-0 mr-1">頁數</p>
-
                                     <input class=" my-1 mr-1" type="" name="" id="" style="width:10%;height:100%;">
                                     <p class="my-0 mr-2">/ 1 </p>
                                     <a class="mr-2" href="">上一頁</a>
@@ -429,7 +413,6 @@
                                     </p>
                                 </div>
                             </div>
-
                             <!-- 會員項目欄位表------------------------------------------------------------------------------------------- -->
                             <div class="my-2">
                                 <table class="table table-striped">
@@ -505,13 +488,11 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="mr-1 d-flex justify-content-end align-items-center">
                                     <button class="serbut">查詢</button>
                                 </div>
                             </div>
-
                             <!-- 員工項目標籤+上下頁------------------------------------------------------------------------------------------- -->
                             <div id="tabtitle" class="py-2 my-3 d-flex justify-content-between align-items-center">
                                 <div>
@@ -524,7 +505,6 @@
                                     <p class="my-0 mr-2">共計</p>
                                     <p class="my-0 mr-2">3個員工</p>
                                     <p class="my-0 mr-1">頁數</p>
-
                                     <input class=" my-1 mr-1" type="" name="" id="" style="width:10%;height:100%;">
                                     <p class="my-0 mr-2">/ 1 </p>
                                     <a class="mr-2" href="">上一頁</a>
@@ -532,7 +512,6 @@
                                     </p>
                                 </div>
                             </div>
-
                             <!-- 員工項目欄位表------------------------------------------------------------------------------------------- -->
                             <div class="my-2">
                                 <table class="table table-striped">
@@ -571,7 +550,6 @@
                                 </table>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -587,24 +565,26 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <b>檢舉編號：{{onereport[0].reportId}}</b>
-                        <hr>
-                        <p>被檢舉：{{onereport[0].reportBuilder}}  {{onereport[0].memberName}}</p>
-                        <p>檢舉人：{{onereport[0].reportTarget}}  {{onereport[0].memberName}}</p>
-                        <p>檢舉類別：{{onereport[0].reportPlaceC}} {{onereport[0].codeRepresent}}</p>
-                        <p>檢舉原因：{{onereport[0].reportReasonC}} {{onereport[0].codeRepresent}}</p>
-                        <p>檢舉編號：{{onereport[0].reportItem}}</p>
-                        <p>事由說明：{{onereport[0].reportContent}}</p>
-                        <p>檢舉時間：{{onereport[0].reportBuildTime}}</p>
-                        <p class="mb-1">狀態：</p>
-                        <input type="radio" id="OK" name="status" onclick="BackVal(this)"  value="true">
-                        <label for="OK">審核通過</label><br>
-                        <input type="radio" id="NO" name="status" onclick="BackVal(this)"  value="false">
-                        <label for="NO">審核不通過</label><br>
-                    </div>
+                        <b>檢舉編號：{{onereport[0].reportId
+                                                }}</b>
+                                                <hr>
+                                                <p>被檢舉：{{onereport[0].reportBuilder}}  {{onereport[0].memberName}}</p>
+                                                <p>檢舉人：{{onereport[0].reportTarget}}  {{onereport[0].memberName}}</p>
+                                                <p>檢舉類別：{{onereport[0].reportPlaceC}} {{onereport[0].codeRepresent}}</p>
+                                                <p>檢舉原因：{{onereport[0].reportReasonC}} {{onereport[0].codeRepresent}}</p>
+                                                <p>檢舉編號：{{onereport[0].reportItem}}</p>
+                                                <p>事由說明：{{onereport[0].reportContent}}</p>
+                                                <p>檢舉時間：{{onereport[0].reportBuildTime}}</p>
+                                                <p class="mb-1">狀態：</p>
+                                                <input type="radio" id="OK" name="status" onclick="BackVal(this)" value="true">
+                                                <label for="OK">審核通過</label><br>
+                                                <input type="radio" id="NO" name="status" onclick="BackVal(this)" value="false">
+                                                <label for="NO">審核不通過</label><br>
+</div>
                     <div class="p-3 d-flex justify-content-end">
-                        <button type="button" class="mycancel mr-3" data-dismiss="modal">取消</button><button onclick="changereviewreport(this)" type="button" class="mysend">提交</button></div>
-                    <!--v-on:click="reprevok"--> 
+                        <button type="button" class="mycancel mr-3" data-dismiss="modal">取消</button><button onclick="changereviewreport(this)" type="button" class="mysend">提交</button>
+                    </div>
+                    <!--v-on:click="reprevok"-->
                 </div>
             </div>
         </div>
@@ -657,15 +637,17 @@
                         <p class="mb-1">通知對象：</p>
                         <select class="mb-2" name="type" style="width: 130px;height:30px;">
                             <option value="" selected>請選擇對象</option>
-                            <option value="M0">店家／設計師</option>
-                            <option value="M1">一般會員</option>
+                            <option value="0">一般會員</option>
+                            <option value="1">店家／設計師</option>
+                            <option value="2">所有用戶</option>
+
                         </select>
                         <p class="mb-1">通知時間：</p>
                         <input id="datestart" class="mb-2" type="datetime-local" value="">
                         <p class="mb-1">通知管理人員：</p>
                         <input class="mb-2" type="text" value="員工名稱">
                         <p class="mb-1">通知建日日期：</p>
-                        <input class="mb-2" type="datetime" value="帶今天">
+                        <input class="mb-2" type="datetime" value="">
 
                     </div>
                     <div class="p-3 d-flex justify-content-end">
@@ -766,7 +748,7 @@
                 </div>
             </div>
         </div>
-        <!-- 會員新增Modal ------------------------------------------------------------------------------------------------>
+        <!-- 系統人員新增Modal ------------------------------------------------------------------------------------------------>
         <div class="modal fade" id="addmemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
@@ -794,7 +776,7 @@
                             <option value="2">最高管理員</option>
                         </select>
                         <p class="mb-1">建日日期：</p>
-                        <input class="mb-2" type="datetime" value="帶今天">
+                        <input class="mb-2" type="datetime" value="">
 
                     </div>
                     <div class="p-3 d-flex justify-content-end">
@@ -804,7 +786,7 @@
                 </div>
             </div>
         </div>
-        <!-- 會員新增Modal ------------------------------------------------------------------------------------------------>
+        <!-- 系統人員新增Modal ------------------------------------------------------------------------------------------------>
         <div class="modal fade" id="editmemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
@@ -832,7 +814,7 @@
                             <option value="2">最高管理員</option>
                         </select>
                         <p class="mb-1">建日日期：</p>
-                        <input class="mb-2" type="datetime" value="帶今天">
+                        <input class="mb-2" type="datetime" value="">
 
                     </div>
                     <div class="p-3 d-flex justify-content-end">
@@ -846,7 +828,7 @@
     <!-- 插入JS檔 -->
 
     <script src="../../TanTanLib/js/bsmlist.js"></script>
-    <script src="../js/myajax.js"></script>
+    <script src="/TanTanLib/js/myajax.js"></script>
 </body>
 
 </html>
