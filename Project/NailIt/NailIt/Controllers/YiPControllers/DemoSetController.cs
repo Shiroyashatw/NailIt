@@ -20,6 +20,12 @@ namespace NailIt.Controllers.YiPControllers
             Context = PContext;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetDemoSet()
+        {
+            return await Context.DemoSetTables.ToListAsync();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetDemoSetTable(int id)
         {
