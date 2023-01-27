@@ -34,5 +34,19 @@ namespace NailIt.Controllers
             return View();
         }
 
+        // GET: Chat
+        public IActionResult Chat(int? id)
+        {
+            // setup login user info
+            HttpContext.Session.SetInt32("loginId", 1);
+            HttpContext.Session.SetString("loginAccount", "Ansel Siao");
+            HttpContext.Session.SetString("loginNickname", "Larryyy");
+
+            // if comes with memberId which user want to talk to
+            ViewBag.FindMemberId = (id != null) ? id : -1;
+
+            return View();
+        }
+
     }
 }
