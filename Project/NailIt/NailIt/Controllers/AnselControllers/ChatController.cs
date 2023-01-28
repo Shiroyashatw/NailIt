@@ -92,7 +92,8 @@ namespace NailIt.Controllers.AnselControllers
 
         // Exclude those be placed on blacklist
         // Get list of chatting with members with latest message content, sent time and message unreadCount
-        private List<dynamic> getCattingList(List<AllMessage> messages, int? loginId){
+        private List<dynamic> getCattingList(List<AllMessage> messages, int? loginId)
+        {
             var blacklist = _context.MessageBlacklistTables.Where(m => m.BlacklistBuilder == loginId).ToList();
             var removeBlack = (from m in messages
                                from black in blacklist.
@@ -158,8 +159,8 @@ namespace NailIt.Controllers.AnselControllers
         }
 
         // GET: api/Chat/GetSingleMemberMsg/1
-        [HttpGet("{MemberId}")]
-        public async Task<ActionResult> GetSingleMemberMsg(int MemberId)
+        [HttpGet("{memberId}")]
+        public async Task<ActionResult> GetSingleMemberMsg(int memberId)
         {
             var loginId = HttpContext.Session.GetInt32("loginId");
 
@@ -169,8 +170,8 @@ namespace NailIt.Controllers.AnselControllers
             // Get read latest 100 history message
             var latest100history = allMessage.
                     Where(m => m.MessageRead == true &&
-                            ((m.MessageSender == loginId && m.MessageReceiver == MemberId) ||
-                            (m.MessageSender == MemberId && m.MessageReceiver == loginId))).
+                            ((m.MessageSender == loginId && m.MessageReceiver == memberId) ||
+                            (m.MessageSender == memberId && m.MessageReceiver == loginId))).
                     OrderByDescending(m => m.MessageTime).
                     Take(100).
                     ToList();
@@ -178,9 +179,9 @@ namespace NailIt.Controllers.AnselControllers
             return Ok(latest100history.OrderBy(m => m.MessageTime).ToList());
         }
 
-        // POST: api/Chat/CheckNewMsg
-        [HttpPost]
-        public async Task<ActionResult> CheckNewMsg(DateTime updateTime)
+        // GET: api/Chat/CheckNewMsg
+        [HttpGet("{updateTime}")]
+        public async Task<ActionResult> GetNewMsg(DateTime updateTime)
         {
             var loginId = HttpContext.Session.GetInt32("loginId");
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
@@ -197,77 +198,6 @@ namespace NailIt.Controllers.AnselControllers
             }
 
             return Ok(newMessages);
-        }
-
-        // PUT: api/Chat/PutMsgRevoke/1
-        [HttpPut("{id}")]
-        public async Task<ActionResult> PutMsgRevoke(int id)
-        {
-            var message = _context.MessageTables.FirstOrDefault(m => m.MessageId == id);
-            if (message != null)
-            {
-                message.MessageContent = "訊息已收回";
-                message.MessageRead = true;
-            }
-            // lock DB
-            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
-            await _context.SaveChangesAsync();
-            t.Commit();
-            return NoContent();
-        }
-
-        // POST: api/Chat/PostMessage
-        [HttpPost]
-        public async Task<ActionResult> PostMessage(MessageTable message)
-        {
-            // lock DB
-            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
-
-            _context.MessageTables.Add(message);
-            await _context.SaveChangesAsync();
-
-            t.Commit();
-            return CreatedAtAction("GetMessageTable", new { id = message.MessageId }, message);
-        }
-
-        // POST: api/Chat/PostMsgImage
-        [HttpPost]
-        public async Task<ActionResult> PostMsgImage(IFormCollection frm)
-        {
-            if (frm.Files.Count > 0)
-            {                
-                string baseUri = $"{Request.Scheme}://{Request.Host}";
-                // var uri = "https://localhost:5001";
-                // var uri = "https://localhost:44308";
-                MessageTable message = JsonConvert.DeserializeObject<MessageTable>(frm["message"]);
-                // lock DB
-                var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
-                // save Image message
-                _context.MessageTables.Add(message);
-                await _context.SaveChangesAsync();
-                for (int i = 0; i < frm.Files.Count; i++)
-                {
-                    // use messageId be image name
-                    string imageName = $"{message.MessageId}-{i + 1}.png";
-                    message.MessageContent += $"<img class='mw-100' src='{baseUri}/AnselLib/ChatImage/{imageName}'>";
-                    chatSaveImage(imageName, frm.Files[i]);
-                }
-                await _context.SaveChangesAsync();
-
-                t.Commit();
-                return CreatedAtAction("GetMessageTable", new { id = message.MessageId }, message);
-            }
-            return NotFound();
-        }
-
-        private async void chatSaveImage(string imageName, IFormFile imageFile)
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\AnselLib\\ChatImage") + "\\" + imageName; //檔案存放位置在wwwroot中的資料夾
-
-            using (var stream = System.IO.File.Create(filePath))
-            {
-                await imageFile.CopyToAsync(stream);
-            }
         }
 
         // PUT: api/Chat/PutMsgRead/1
@@ -320,6 +250,77 @@ namespace NailIt.Controllers.AnselControllers
             }
 
             return Ok(unreadMessage.OrderBy(r => r.MessageTime));
+        }
+
+        // PUT: api/Chat/PutMsgRevoke/1
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutMsgRevoke(int id)
+        {
+            var message = _context.MessageTables.FirstOrDefault(m => m.MessageId == id);
+            if (message != null)
+            {
+                message.MessageContent = "訊息已收回";
+                message.MessageRead = true;
+            }
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+            await _context.SaveChangesAsync();
+            t.Commit();
+            return NoContent();
+        }
+
+        // POST: api/Chat/PostMessage
+        [HttpPost]
+        public async Task<ActionResult> PostMessage(MessageTable message)
+        {
+            // lock DB
+            var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
+            _context.MessageTables.Add(message);
+            await _context.SaveChangesAsync();
+
+            t.Commit();
+            return CreatedAtAction("GetMessageTable", new { id = message.MessageId }, message);
+        }
+
+        // POST: api/Chat/PostMsgImage
+        [HttpPost]
+        public async Task<ActionResult> PostMsgImage(IFormCollection frm)
+        {
+            if (frm.Files.Count > 0)
+            {
+                string baseUri = $"{Request.Scheme}://{Request.Host}";
+                // var uri = "https://localhost:5001";
+                // var uri = "https://localhost:44308";
+                MessageTable message = JsonConvert.DeserializeObject<MessageTable>(frm["message"]);
+                // lock DB
+                var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+                // save Image message
+                _context.MessageTables.Add(message);
+                await _context.SaveChangesAsync();
+                for (int i = 0; i < frm.Files.Count; i++)
+                {
+                    // use messageId be image name
+                    string imageName = $"{message.MessageId}-{i + 1}.png";
+                    message.MessageContent += $"<img class='mw-100' src='{baseUri}/AnselLib/ChatImage/{imageName}'>";
+                    chatSaveImage(imageName, frm.Files[i]);
+                }
+                await _context.SaveChangesAsync();
+
+                t.Commit();
+                return CreatedAtAction("GetMessageTable", new { id = message.MessageId }, message);
+            }
+            return NotFound();
+        }
+
+        private async void chatSaveImage(string imageName, IFormFile imageFile)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\AnselLib\\ChatImage") + "\\" + imageName; //檔案存放位置在wwwroot中的資料夾
+
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
         }
     }
 }
