@@ -37,7 +37,7 @@ namespace NailIt.Controllers.YueyueControllers
            join Plan in _context.PlanTables on Order.PlanId equals Plan.PlanId
            join Code in _context.CodeTables on Order.OrderPartC equals Code.CodeId
            join Code2 in _context.CodeTables on Order.OrderRemovalC equals Code2.CodeId
-           join Comment in _context.CommentTables on Order.OrderId equals Comment.comment_OrderID
+           join Comment in _context.CommentTables on Order.OrderId equals Comment.CommentOrderId
            join DemoSet in _context.DemoSetTables on Order.OrderItem equals DemoSet.DemoSetId into t1
            from subDemoSet in t1.DefaultIfEmpty()
            join Manicurist in _context.ManicuristTables on Order.ManicuristId equals Manicurist.ManicuristId into t2
@@ -56,7 +56,7 @@ namespace NailIt.Controllers.YueyueControllers
                order_AcceptTime = Order.OrderAcceptTime,
                order_CompleteTime = Order.OrderCompleteTime,
                order_DoneTime = Order.OrderDoneTime,
-               order_CancelTime = Order.order_CancelTime,
+               order_CancelTime = Order.OrderCancelTime,
                member_Nickname = Member.MemberNickname,
                plan_StartTime = Plan.PlanStartTime,
                plan_Remark = Plan.PlanRemark,
@@ -66,7 +66,8 @@ namespace NailIt.Controllers.YueyueControllers
                order_Cover = Order.OrderType == true ? subDemoSet.DemoSetCover : subMamicurist.ManicuristPic,
                comment_Score=Comment.CommentScore,
                comment_Content=Comment.CommentContent,
-               comment_BuildTime=Comment.CommentBuildTime
+               comment_BuildTime=Comment.CommentBuildTime,
+               manicurist_SalonName= subMamicurist.ManicuristSalonName,
            };
 
 

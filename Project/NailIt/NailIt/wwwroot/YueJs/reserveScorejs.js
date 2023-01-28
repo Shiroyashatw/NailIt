@@ -1,6 +1,9 @@
-﻿var scoreData;
-var nowStar;
-var myComment;
+﻿var myScoreResult;//get到的資料轉換前
+var scoreData;//待評價頁面所get到的資料陣列
+var nowStar;//星星使用的參數
+var mySearchStart="";
+var mySearchEnd="";
+//網頁從送出get api開始
 function reserveScoreSendGet() {
 
 	var requestOptions = {
@@ -10,24 +13,28 @@ function reserveScoreSendGet() {
 
 	fetch("https://localhost:44308/api/YueOrderTables/" + 2 + "/" + "A5" + "/", requestOptions)
 		.then(response => response.text())
-		.then(result => reserveScore(result))
+		.then(function (result) {
+			myScoreResult = result;
+			reserveScore();
+		})
 		.catch(error => console.log('error', error));
+	
 }
-
-function reserveScore(result)
+//生成頁面內容
+function reserveScore(search=false)
 {
-	scoreData = JSON.parse(result);
+	scoreData = JSON.parse(myScoreResult);	
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
-					>訂單成立時間&nbsp&nbsp&nbsp&nbsp&nbsp</label
+					>訂單完成時間&nbsp&nbsp&nbsp&nbsp&nbsp</label
 				>
-				<input type="date" />
+				<input id="searchStart" type="date"  />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
-				<input type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" />
+				<input id="searchEnd" type="date"  />
+				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveScore(true)" />
 				<br />
-				<div
+				<div	
 					id="removeNaildiv"
 					class="tag"
 					
@@ -40,16 +47,33 @@ function reserveScore(result)
 				<div id="itemSetdiv" class="tag" style="border-bottom: solid black 2px" onclick="reserveScoreSendGet()">待評中</div>
 				<div id="itemSetdiv" class="tag" onclick="reserveDoneSendGet()">已評價</div>
 				<hr style="border-color: black; margin-top: 0%" />`
-		+ scoreLoop(scoreData);
+		+ scoreLoop(search);
+	searchStart.value = mySearchStart;
+	searchEnd.value = mySearchEnd;
 }
-
-function scoreLoop(scoreData)
+//生成訂單內容
+function scoreLoop(search=false)
 {
+	if (scoreData.length == 0) return `<br /><span style="padding-left:5%">目前無待評價訂單</span>`;
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
-	var thisOrderTime = "";
-	for (var x of scoreData) {		
+	for (var x of scoreData) {
+		if (search) {
+			if (searchStart.value == "" || searchEnd.value == "") {	
+				let myDate = new Date();
+				let myMonth = myDate.getMonth() + 1;
+				searchStart.value = "1999-01-01";
+				searchEnd.value = myDate.getFullYear() + "-" + (myMonth.length > 1 ? myMonth : "0" + myMonth) + "-" + myDate.getDate();
+				
+			}
+				mySearchStart = searchStart.value;
+			mySearchEnd = searchEnd.value;
+			if (x.order_AcceptTime < mySearchStart || x.order_AcceptTime > searchEnd.value.substring(0, 8) + (Number(searchEnd.value.substring(8)) + 1)) {
+				i++;
+				continue;
+			}
+		}
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 		thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
 		thisCompleteTime = x.order_CompleteTime.substring(0, 10) + " " + x.order_CompleteTime.substring(11, 19);
@@ -98,18 +122,17 @@ function scoreLoop(scoreData)
 						/>
 					</div>
 				</div>`;
-	i++;
+		i++;
 	}
 	return answer;
 }
-
+//點開訂單詳情
 function getScoreDetail(i)
 {
 	var x = scoreData[i];
 	var thisOrderId = "";
 	var thisOrderTime = "";
 	var thisStartTime = "";
-	var myTitle = "";
 	thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 	thisOrderTime = x.order_AcceptTime.substring(0, 10) + " " + x.order_AcceptTime.substring(11, 19);
 	thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
@@ -153,11 +176,10 @@ function getScoreDetail(i)
 			</div>`;
 	infoModal.showModal();
 }
-
+//送出comment
 function reserveScoreGo(i)
 {
 	var x = scoreData[i];
-	console.log(x);
 	var thisOrderId = "";
 	var thisCompleteTime = "";
 	var thisStartTime = "";
@@ -202,7 +224,7 @@ function reserveScoreGo(i)
 								bottom:3%;
 								position:absolute;
 							" 
-								onclick="reserveScoreSendPost(`+ i+`)"		
+								onclick="reserveScoreSendPost(`+ i +`)"		
 								value="確定送出">
 					<input
 							style="
@@ -222,7 +244,7 @@ function reserveScoreGo(i)
 	infoModal.style.height = "55%";
 	infoModal.showModal();
 }
-
+//滑動星星小功能
 function starChange(i)
 {
 	var target;
@@ -239,7 +261,7 @@ function starChange(i)
 		target.style.color = "black";	
 	}
 }
-
+//設定分數功能
 function starSet(i)
 {
 	var target;
@@ -257,7 +279,7 @@ function starSet(i)
 	}
 	nowStar = i;
 }
-
+//Post到comment表
 function reserveScoreSendPost(i)
 {
 	var postData = scoreData[i];
@@ -271,7 +293,7 @@ function reserveScoreSendPost(i)
 		"CommentContent": textCommentContent.value,
 		"CommentType": true,
 		"CommentBuildTime": "2023-01-19T18:16:15",
-		"comment_OrderID": postData.order_ID
+		"CommentOrderId": postData.order_ID
 	});
 	var requestOptions = {
 		method: 'POST',
@@ -293,6 +315,7 @@ function reserveScoreSendPost(i)
 		.catch(error => console.log('error', error));
 
 }
+//put到order表
 function reserveScoreSendPut(thisOrderID)
 {
 	var raw = "";

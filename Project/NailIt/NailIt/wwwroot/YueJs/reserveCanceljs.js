@@ -1,4 +1,5 @@
-﻿var cancelData;
+﻿var myCancelResult;
+var cancelData;
 function reserveCancelSendGet() {
 	var requestOptions = {
 		method: 'GET',
@@ -8,23 +9,26 @@ function reserveCancelSendGet() {
 
 	fetch("https://localhost:44308/api/YueOrderTables/" + 2 + "/" + "A7" + "/", requestOptions)
 		.then(response => response.text())
-		.then(result => reserveCancel(result))
+		.then(function (result) {
+			myCancelResult = result;
+			reserveCancel();
+		})
 		.catch(error => console.log('error', error));
 }
 
 
 
-function reserveCancel(result) {
-	cancelData = JSON.parse(result);
+function reserveCancel(search = false) {
+	cancelData = JSON.parse(myCancelResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
-					>訂單成立時間&nbsp&nbsp&nbsp&nbsp&nbsp</label
+					>訂單取消時間&nbsp&nbsp&nbsp&nbsp&nbsp</label
 				>
-				<input type="date" />
+				<input  id="searchStart" type="date" />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
-				<input type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" />
+				<input   id="searchEnd" type="date" />
+				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCancel(true)" />
 				<br />
 				<div
 					id="removeNaildiv"
@@ -39,16 +43,33 @@ function reserveCancel(result) {
 				<div id="itemSetdiv" class="tag" onclick="reserveScoreSendGet()">待評中</div>
 				<div id="itemSetdiv" class="tag" onclick="reserveDoneSendGet()">已評價</div>
 				<hr style="border-color: black; margin-top: 0%" />
-				`+ cancelLoop(cancelData);
+				`+ cancelLoop(search);
+	searchStart.value = mySearchStart;
+	searchEnd.value = mySearchEnd;
+	
 }
 
-function cancelLoop(cancelData) {
+function cancelLoop(search=false) {
+	if (cancelData.length == 0) return `<br /><span style="padding-left:5%">目前無已取消訂單</span>`;
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
 	var thisOrderTime = ""
 	for (var x of cancelData) {
-		console.log(x);
+		if (search) {
+			if (searchStart.value == "" || searchEnd.value == "") {
+				let myDate = new Date();
+				let myMonth = myDate.getMonth() + 1;
+				searchStart.value = "1999-01-01";
+				searchEnd.value = myDate.getFullYear() + "-" + (myMonth.length > 1 ? myMonth : "0" + myMonth) + "-" + myDate.getDate();
+			}
+			mySearchStart = searchStart.value;
+			mySearchEnd = searchEnd.value;
+			if (x.order_CancelTime < searchStart.value || x.order_CancelTime > searchEnd.value.substring(0, 8) + (Number(searchEnd.value.substring(8)) + 1)) {
+				i++;
+				continue;
+			}
+		}
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 		thisOrderTime = x.order_CancelTime.substring(0, 10) + " " + x.order_CancelTime.substring(11, 19);
 		answer +=`<div class="row" style="margin-top: 3%">
@@ -59,8 +80,10 @@ function cancelLoop(cancelData) {
 						<span style="font-size: 120%"><b>`+ x.order_ItemName +`</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content+`</span>
-						<br /><br /><br />
+						<br /><br />
 						<span>訂單編號：`+ thisOrderId +`</span>
+						<br />
+						<span>預約客戶：`+ x.member_Nickname +`</span>
 						<br />
 						<span>取消時間：`+ thisOrderTime +`</span>
 					</div>

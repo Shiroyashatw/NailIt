@@ -1,4 +1,5 @@
-﻿var checkData;
+﻿var myCheckResult;//get到的資料轉換前
+var checkData;
 reserveCheckSendGet();
 function reserveCheckSendGet() {
 	var requestOptions = {
@@ -8,21 +9,24 @@ function reserveCheckSendGet() {
 
 	fetch("https://localhost:44308/api/YueOrderTables/" + 2 + "/" + "A0" + "/", requestOptions)//2要改為token(controller也要改)
 		.then(response => response.text())
-		.then(result => reserveCheck(result))
+		.then(function (result) {
+			myCheckResult = result;
+			reserveCheck();
+		})
 		.catch(error => console.log('error', error));
 }
 
-function reserveCheck(result) {
-	checkData = JSON.parse(result);
+function reserveCheck(search = false) {
+	checkData = JSON.parse(myCheckResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
-					>訂單成立時間&nbsp&nbsp&nbsp&nbsp&nbsp</label
+					>訂單預約時間&nbsp&nbsp&nbsp&nbsp&nbsp</label
 				>
-				<input type="date" />
+				<input id="searchStart" type="date" />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
-				<input type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" />
+				<input id="searchEnd"	 type="date" />
+				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCheck(true)" />
 				<br />
 				<div
 					id="removeNaildiv"
@@ -37,19 +41,33 @@ function reserveCheck(result) {
 				<div id="itemSetdiv" class="tag" onclick="reserveScoreSendGet()">待評中</div>
 				<div id="itemSetdiv" class="tag" onclick="reserveDoneSendGet()">已評價</div>
 				<hr style="border-color: black; margin-top: 0%" />`+
-		checkLoop(checkData);
+		checkLoop(search);
+	searchStart.value = mySearchStart;
+	searchEnd.value = mySearchEnd;
 }
 
-function checkLoop(checkData) {
+function checkLoop(search = false) {
+	if (checkData.length == 0) return `<br /><span style="padding-left:5%">目前無預約中訂單</span>`;
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
-	var thisOrderTime = ""
 	for (var x of checkData) {
+		if (search) {
+			if (searchStart.value == "" || searchEnd.value == "") {
+				let myDate = new Date();
+				let myMonth = myDate.getMonth() + 1;
+				searchStart.value = "1999-01-01";
+				searchEnd.value = myDate.getFullYear() + "-" + (myMonth.length > 1 ? myMonth : "0" + myMonth) + "-" + myDate.getDate();
+			}
+			mySearchStart = searchStart.value;
+			mySearchEnd = searchEnd.value;
+			if (x.order_OrderTime < searchStart.value || x.order_OrderTime > searchEnd.value.substring(0, 8) + (Number(searchEnd.value.substring(8)) + 1)) {
+				i++;
+				continue;
+			}
+		}
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
-		thisOrderTime = x.order_OrderTime.substring(0, 10) + " " + x.order_OrderTime.substring(11, 19)
 		thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
-
 		answer +=`<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 20% ; height:170px">
 						<img src="`+ x.order_Cover+`" width="90%" height="90%" style="margin-left: 3%" />
@@ -61,7 +79,7 @@ function checkLoop(checkData) {
 						<br /><br />
 						<span>訂單編號：`+ thisOrderId +`</span>
 						<br />
-						<span>預約時間：`+ thisOrderTime +`</span>
+						<span>預約客戶：`+ x.member_Nickname +`</span>
 						<br />
 						<span>施作時間：`+ thisStartTime +`</span>
 					</div>

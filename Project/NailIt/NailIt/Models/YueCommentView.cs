@@ -26,5 +26,6 @@ namespace NailIt.Models
         public double comment_Score { get; set; }
         public string comment_Content { get; set; }
         public DateTime comment_BuildTime { get; set; }
+        public string manicurist_SalonName { get; set; }
     }
 }

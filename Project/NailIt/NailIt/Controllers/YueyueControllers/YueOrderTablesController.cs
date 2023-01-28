@@ -50,7 +50,7 @@ namespace NailIt.Controllers.YueyueControllers
                 order_AcceptTime = Order.OrderAcceptTime,
                 order_CompleteTime = Order.OrderCompleteTime,
                 order_DoneTime = Order.OrderDoneTime,
-                order_CancelTime = Order.order_CancelTime,
+                order_CancelTime = Order.OrderCancelTime,
                 member_Nickname = Member.MemberNickname,
                 plan_StartTime = Plan.PlanStartTime,
                 plan_Remark = Plan.PlanRemark,
@@ -83,7 +83,7 @@ namespace NailIt.Controllers.YueyueControllers
             if (state == "A1")
                 myOrder.OrderAcceptTime = DateTime.Now;
             else if (state == "A7")
-                myOrder.order_CancelTime = DateTime.Now;
+                myOrder.OrderCancelTime = DateTime.Now;
             else if (state == "A2")
                 myOrder.OrderCompleteTime = DateTime.Now;
             else if (state == "A6")
