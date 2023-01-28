@@ -453,41 +453,6 @@ function addnoticedate() {
 
     $("#adddate").prop('value', notdate);
 
-
-}
-
-//POST 系統通知單一系統通知資料
-function savenotice() {
-    //1.回傳到noticetable
-    var addnotdate = new Date();
-    mydata.noticepost[0].noticeScope = mydata.noticescope;
-    mydata.noticepost[0].noticeTitle = mydata.noticetitle;
-    mydata.noticepost[0].noticeContent = mydata.noticetext;
-    mydata.noticepost[0].noticeBuildTime = addnotdate;
-    mydata.noticepost[0].noticePushTime = mydata.noticetime + ":00.000";
-    mydata.noticepost[0].noticeState = false;
-    mydata.noticepost[0].noticeManagerId = 1;
-
-    $.ajax({
-        type: "post",
-        async: false,
-        url: "/api/NoticeTables/post",
-        contentType: "application/json",
-        data: JSON.stringify(mydata.noticepost[0]),
-        success: function () {
-            
-            var tabcontent;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (var i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tabcontent[1].style.display = "block";
-
-            alert("OK");
-
-        }
-    })
-
     //2. 回傳到noticeread
     //前期提要
     //noticereadpost: [{ "notice_ID": "", "noticeRead_Member": "", "noticeRead_Read": 0 }],
@@ -498,12 +463,10 @@ function savenotice() {
     //            2         1                1                0
     //2-0. noticeRead_ID：不用進去
     //2-1. notice_ID：獲得最新的noticeId+1
+
     var noticedata = mydata.notice;
     var nownoticId = mydata.notice[(noticedata.length - 1)].noticeId;
     console.log(nownoticId);
-    //var noticedata = mydata.notice;
-    //var nownoticId = mydata.notice[(noticedata.length - 1)].noticeId;
-    //console.log(nownoticId);
 
     //2-3. noticeRead_Read：固定都是"0";一開始設定好了不用設定。
 
@@ -518,8 +481,8 @@ function savenotice() {
         async: false,
         url: "/api/MemberTables2/nocheck",
         success: function (e) {
-
-            console.log('mydata.nocheckmember OK');
+            mydata.nocheckmember = e;
+            console.log(mydata.nocheckmember[0].memberId);
         }
     });
     //獲得美甲師
@@ -528,73 +491,104 @@ function savenotice() {
         async: false,
         url: "/api/MemberTables2/check",
         success: function (e) {
-            console.log('mydata.checkmember OK');
+            mydata.checkmember = e;
+            console.log(mydata.checkmember[0].memberId);
         }
     });
-    console.log(mydata.noticepost[0])
+
     if (mydata.noticepost[0].noticeScope == 0) {
-        for (var i = 0; i < mydata.nocheckmember.length; i++) {
-            mydata.noticereadpost[0].noticeId = nownoticId+1;
-            mydata.noticereadpost[0].noticeReadMember = mydata.nocheckmember[i].memberId;
-            console.log(mydata.noticereadpost[0])
-            $.ajax({
-                type: "post",
-                url: "/api/NoticeReadTables",
-                contentType: "application/json",
-                data: JSON.stringify(mydata.noticereadpost[0]),
-                success: function () {
-                    window.location = "/TanTanLib/html/backstage.html"
-                }
-            })
-        }
+        mydata.noticereadpost[0].noticeId = nownoticId;
+        mydata.noticereadpost[0].noticeReadMember = mydata.nocheckmember[0].memberId;
+        console.log(mydata.noticereadpost[0])
+        $.ajax({
+            type: "post",
+            url: "/api/NoticeReadTables",
+            contentType: "application/json",
+            data: JSON.stringify(mydata.noticereadpost[0]),
+            success: function () {
+                alert("OK");
+            }
+        })
 
     }
-    else if (mydata.noticepost[0].noticeScope == 1) {
-        for (var i = 0; i < mydata.checkmember.length; i++) {
-            mydata.noticereadpost[0].noticeId = nownoticId + 1;
-            mydata.noticereadpost[0].noticeReadMember = mydata.checkmember[i].memberId;
-            console.log(mydata.noticereadpost[0])
-            $.ajax({
-                type: "post",
-                url: "/api/NoticeReadTables",
-                contentType: "application/json",
-                data: JSON.stringify(mydata.noticereadpost[0]),
-                success: function () {
-                    window.location = "/TanTanLib/html/backstage.html"
-                }
-            })
+}
+
+//POST 系統通知單一系統通知資料
+function savenotice() {
+    //1.回傳到noticetable
+    var addnotdate = new Date();
+    mydata.noticepost[0].noticeScope = mydata.noticeScope;
+    mydata.noticepost[0].noticeTitle = mydata.noticetitle;
+    mydata.noticepost[0].noticeContent = mydata.noticetext;
+    mydata.noticepost[0].noticeBuildTime = addnotdate;
+    mydata.noticepost[0].noticePushTime = mydata.noticetime + ":00.000";
+    mydata.noticepost[0].noticeState = false;
+    mydata.noticepost[0].noticeManagerId = 1;
+
+    $.ajax({
+        type: "post",
+        async: false,
+        url: "/api/NoticeTables/post",
+        contentType: "application/json",
+        data: JSON.stringify(mydata.noticepost[0]),
+        success: function () {
+            window.location = "/TanTanLib/html/backstage.html"
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabcontent[1].style.display = "block";
+
+            alert("OK");
+
         }
-    }
-    else if (mydata.noticepost[0].noticeScope == 2) {
-        for (var i = 0; i < mydata.nocheckmember.length; i++) {
-            mydata.noticereadpost[0].noticeId = nownoticId + 1;
-            mydata.noticereadpost[0].noticeReadMember = mydata.nocheckmember[i].memberId;
-            console.log(mydata.noticereadpost[0])
-            $.ajax({
-                type: "post",
-                url: "/api/NoticeReadTables",
-                contentType: "application/json",
-                data: JSON.stringify(mydata.noticereadpost[0]),
-                success: function () {
-                    window.location = "/TanTanLib/html/backstage.html"
-                }
-            })
-        }
-        for (var i = 0; i < mydata.checkmember.length; i++) {
-            mydata.noticereadpost[0].noticeId = nownoticId + 1;
-            mydata.noticereadpost[0].noticeReadMember = mydata.checkmember[i].memberId;
-            console.log(mydata.noticereadpost[0])
-            $.ajax({
-                type: "post",
-                url: "/api/NoticeReadTables",
-                contentType: "application/json",
-                data: JSON.stringify(mydata.noticereadpost[0]),
-                success: function () {
-                    window.location = "/TanTanLib/html/backstage.html"
-                }
-            })
-        }
-    };
+    })
+
+
+    //else if (mydata.noticepost[0].noticeScope == 1) {
+    //    for (var i = 0; i < mydata.nocheckmember.length; i++) {
+    //        mydata.noticereadpost[0].notice_id = nownoticid+1;
+    //        mydata.noticereadpost[0].noticeread_member = mydata.checkmember[i].memberId;
+    //        mydata.noticereadpost[0].noticeread_read = 0;
+    //        $.ajax({
+    //            type: "post",
+    //            url: "/api/NoticeReadTable/post",
+    //            contentType: "application/json",
+    //            data: JSON.stringify(mydata.noticereadpost[0]),
+    //            success: function () {
+    //                alert("OK");
+    //            }
+    //        })
+    //    }
+    //} else {
+    //    for (var i = 0; i < mydata.nocheckmember.length; i++) {
+    //        mydata.noticereadpost[0].notice_id = nownoticid+1;
+    //        mydata.noticereadpost[0].noticeread_member = mydata.nocheckmember[i].memberId;
+    //        mydata.noticereadpost[0].noticeread_read = 0;
+    //        $.ajax({
+    //            type: "post",
+    //            url: "/api/NoticeReadTable/post",
+    //            contentType: "application/json",
+    //            data: JSON.stringify(mydata.noticereadpost[0]),
+    //            success: function () {
+    //                alert("OK");
+    //            }
+    //        })
+    //    }
+    //    for (var i = 0; i < mydata.nocheckmember.length; i++) {
+    //        mydata.noticereadpost[0].notice_id = nownoticid+1;
+    //        mydata.noticereadpost[0].noticeread_member = mydata.checkmember[i];
+    //        mydata.noticereadpost[0].noticeread_read = 0;
+    //        $.ajax({
+    //            type: "post",
+    //            url: "/api/NoticeReadTable/post",
+    //            contentType: "application/json",
+    //            data: JSON.stringify(mydata.noticereadpost[0]),
+    //            success: function () {
+    //                alert("OK");
+    //            }
+    //        })
+    //    }
+    //}  
 
 };
 
