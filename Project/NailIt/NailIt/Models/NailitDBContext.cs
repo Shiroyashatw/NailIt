@@ -836,6 +836,20 @@ namespace NailIt.Models
                     .HasColumnName("tag_Name");
             });
 
+            modelBuilder.Entity<RemovalPriceTable>(entity =>
+            {
+                entity.HasKey(e => e.RemovalPriceManicuristID);
+
+                entity.ToTable("RemovalPrice_Table");
+
+                entity.Property(e => e.RemovalPriceManicuristID).HasColumnName("removalPrice_manicuristID");
+                entity.Property(e => e.RemovalPriceB0).HasColumnType("money").HasColumnName("removalPrice_B0").HasDefaultValueSql("((0))");
+                entity.Property(e => e.RemovalPriceB1).HasColumnType("money").HasColumnName("removalPrice_B1").HasDefaultValueSql("((0))");
+                entity.Property(e => e.RemovalPriceB2).HasColumnType("money").HasColumnName("removalPrice_B2").HasDefaultValueSql("((0))");
+                entity.Property(e => e.RemovalPriceB3).HasColumnType("money").HasColumnName("removalPrice_B3").HasDefaultValueSql("((0))");
+
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
