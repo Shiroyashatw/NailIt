@@ -266,7 +266,7 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">上一步</button>
-                                        <button class="stepbtn" type="button" onclick="step4()">下一步</button>
+                                        <button id="btnsend" class="stepbtn" type="button" onclick="step4()">預約</button>
                                     </div>
                                 </div>
                             </div>
@@ -277,25 +277,14 @@
                     <div id="step4" class="container step4-res isHide">
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
-                                <p>預約成功: 訂單編號: SA11111102</p>
-                                <p>預約日期:2023-1-1 13:00</p>
-                                <p>
-                                    施作部位:
-                                </p>
-                                <p>
-                                    卸甲:
-                                </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                <p>預約成功，請耐心等待預約設計師回覆</p>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
-                                        <button class="stepbtn" type="button" onclick="step3()">上一步</button>
-                                        <button id="btnsend" class="stepbtn" type="button" onclick="">送出</button>
+                                        <button  class="stepbtn" type="button" onclick="Closeform()">完成</button>
                                     </div>
                                 </div>
                             </div>
@@ -315,7 +304,7 @@
         <form id="cashform" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="post">
             <input type="hidden" name="MerchantID" value="3002607">
             <br />
-            <input type="text" name="MerchantTradeNo" value="DX20230127114112152C">
+            <input type="hidden" name="MerchantTradeNo" value="DX20230127114112152C">
             <br />
             <!-- Naillt20230127114112
             DX20230127114112152C -->
@@ -339,7 +328,7 @@
             <br />
             <input type="hidden" id="" name="EncryptType" value="1">
             <br />
-            <button type="button" id="btnCashSend">送出</button>
+            <!-- <button type="button" id="btnCashSend">送出</button> -->
 
         </form>
     </div>
@@ -427,6 +416,12 @@
         function alertform() {
             document.getElementById("hohodiv").className = "isShow";
             document.getElementById("alert_div").className = "isShow";
+
+            $('.Progress .line:nth-child(1) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
         }
         function Closeform() {
             document.getElementById("alert_div").className = "isHide";
@@ -435,12 +430,32 @@
         function step1() {
             document.getElementById("step1").className = "isShow";
             document.getElementById("step2").className = "isHide";
+
+            $('.Progress .line:nth-child(2) .step').css({
+                "background-color": "#fff",
+                "color": "#3498db",
+                "transition": ".3s"
+            })
+            
         }
         function step2() {
             document.getElementById("step1").className = "isHide";
             document.getElementById("step2").className = "isShow";
             document.getElementById("step3").className = "isHide";
             document.getElementById("step4").className = "isHide";
+
+            $('.Progress .line:nth-child(2) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
+
+            $('.Progress .line:nth-child(3) .step').css({
+                "background-color": "#fff",
+                "color": "#3498db",
+                "transition": ".3s"
+            })
+
         }
         function step3() {
             var checktime = $('input[name="planId"]').prop('checked')
@@ -454,7 +469,14 @@
                 document.getElementById("step2").className = "isHide";
                 document.getElementById("step3").className = "isShow";
                 document.getElementById("step4").className = "isHide";
+
+                $('.Progress .line:nth-child(3) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
             }
+            
 
         }
         function step4() {
@@ -462,6 +484,12 @@
             document.getElementById("step2").className = "isHide";
             document.getElementById("step3").className = "isHide";
             document.getElementById("step4").className = "isShow";
+
+            $('.Progress .line:nth-child(4) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
         }
     </script>
 

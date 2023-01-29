@@ -266,7 +266,17 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
                     z-index: -1;
                 }
             }
+            
         }
+        // .line:nth-child(1) .step {
+        //     background-color: #FF6733;
+        //     color: #333;
+        //     transition: .5s;
+        //     &::after {
+        //         background: #FF6733;
+        //         transition: .5s;
+        //     }
+        // }
         .line:nth-child(4) .step::after {
             content: none;
         }

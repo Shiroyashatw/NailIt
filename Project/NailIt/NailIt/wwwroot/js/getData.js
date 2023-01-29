@@ -2,7 +2,7 @@
 var MID; // 設計師ID
 var DSETID // 作品集ID
 var SerRes // 服務資料表 res
-var DsetRes // 作品集 res
+let DsetRes // 作品集 res
 
 // 讀取當前網址 
 var getUrlString = location.href;
@@ -289,8 +289,8 @@ function postOrder() {
             data: JSON.stringify(returnArray),
 
             success: res => {
-                alert('訂單送出成功')
-                Closeform()
+                // alert('訂單送出成功')
+                // Closeform()
             },
             error: err => {
                 console.log("N")
@@ -325,13 +325,13 @@ function getManicuristData() {
 
 function getOrderPartC() {
     $('#Sendbtn').on('click', function () {
-        OpartCval = OpartC.val();
+        OpartCval = OpartC.find("option:selected").val();
         getDemosetData()
         getOrderItem()
 
     })
     OpartC.change(function () {
-        OpartCval = OpartC.val();
+        OpartCval = OpartC.find("option:selected").val();
         getDemosetData()
         getOrderItem()
 
@@ -348,7 +348,7 @@ function getDemosetData() {
         success: res => {
             DsetRes = res;
             // console.log(res)
-            // console.log(DsetRes)
+            console.log(DsetRes)
             // 先清空 施作項目 造型 選項
             //OrderItem.empty();
             OrderItemName.empty();
@@ -384,6 +384,7 @@ function getOrderItem() {
         async: true,
         success: res => {
             OrderItem.empty();
+            console.log(DsetRes)
             //OrderItem.append(`<option value="" type="fix">固定造型</option>`)
             // 預設固定項目的 value 為 抓出來的第一筆 demosetID
             OrderItem.append(`<option value="${DsetRes[0]['demoSetId']}" type="fix">固定造型</option>`)
