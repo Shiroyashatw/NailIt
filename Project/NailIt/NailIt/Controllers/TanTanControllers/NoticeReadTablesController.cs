@@ -71,10 +71,9 @@ namespace NailIt.Controllers.TanTanControllers
 
         //    return NoContent();
         //}
-
+        [HttpPost]
         // POST: api/NoticeReadTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
         public async Task<ActionResult<NoticeReadTable>> PostNoticeReadTable(NoticeReadTable noticeReadTable)
         {
             _context.NoticeReadTables.Add(noticeReadTable);

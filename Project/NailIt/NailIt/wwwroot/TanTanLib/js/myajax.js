@@ -25,11 +25,19 @@ var mydata = new Vue({
         noticetime: [],
         //增加通知
         noticepost: [{
-            "noticeScope":9, "noticeTitle": "HAHAHA", "noticeContent": "HAHAHA",
-            "noticeBuildTime": "2023-01-25T15:41:38.329Z", "noticePushTime": "2023-01-25T15:4","noticeState": false, "noticeManagerId": 1
+            "noticeScope": 0, "noticeTitle": "HAHAHA", "noticeContent": "HAHAHA",
+            "noticeBuildTime": "2023-01-25T15:41:38.329Z", "noticePushTime": "2023-01-25T15:4", "noticeState": false, "noticeManagerId": 1
         }],
+        //增加通知是否read那TABLE
+        noticereadpost: [{ "noticeId": 5, "noticeReadMember": 2, "noticeReadRead": false }],
+        //普通會員有哪些 memberId member_Manicurist ==0 是沒開通
+        //memberId
+        nocheckmember: [{}],
+        //美甲師會員有哪些 member_ID member_Manicurist == 1是開通 
+        checkmember: [{}],
+
     },
- 
+
 
 })
 
@@ -83,7 +91,7 @@ function seaselrep() {
     console.log(reportP);
     console.log(reportR);
     console.log(reportRN);
-    
+
 
     if (reportR == "0") {
         mydata.repertget[0].reportR = false;
@@ -91,7 +99,7 @@ function seaselrep() {
     } else if (reportR == "1") {
         mydata.repertget[0].reportR = true;
         mydata.repertget[0].reportRN = "nuu";
-    } else if (reportR =="NULL") { 
+    } else if (reportR == "NULL") {
         mydata.repertget[0].reportRN = "wait";
         reportRN = "wait";
     }
@@ -103,7 +111,7 @@ function seaselrep() {
     //[HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}/{reportRN}")]
 
     //沒條件
-    if (dataS == "" && dataE == "" && reportP == "" && reportR =="" && reportRN == "nu") {
+    if (dataS == "" && dataE == "" && reportP == "" && reportR == "" && reportRN == "nu") {
 
         var urlresult = mydata.repertget[0].dateS + "/" + mydata.repertget[0].dateE + "/" + mydata.repertget[0].reportP + "/" + mydata.repertget[0].reportR + "/" + mydata.repertget[0].reportRN;
 
@@ -113,7 +121,7 @@ function seaselrep() {
 
     ////1-a.有檢舉時間 | 檢舉類型 | 審核狀態
     //[HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}")]  2023-01-01/2023-01-23/D0/true
-    if (dataS.length > 0 && dataE.length > 0 && reportP.length > 1 && reportR.length ==1) {
+    if (dataS.length > 0 && dataE.length > 0 && reportP.length > 1 && reportR.length == 1) {
         mydata.repertget[0].dateS = dataS;
         mydata.repertget[0].dateE = dataE;
         mydata.repertget[0].reportP = reportP;
@@ -195,44 +203,44 @@ function seaselrep() {
 
     console.log(urlresult);
 
-$.ajax({
-    type: "get",
-    url: "/api/ReportTables/condition/" + urlresult,
-    //url: "api/ReportTables/condition/{dateS}/{dateE}/{reportP}/{reportR}",
-    //url:  mydata.repertget[0].dateS + "/" + mydata.repertget[0].dateE + "/" + mydata.repertget[0].reportP + "/" + mydata.repertget[0].reportR,
-    success: function (e) {
-        //把資料填回去
-        mydata.report = e;
-        console.log(e);
+    $.ajax({
+        type: "get",
+        url: "/api/ReportTables/condition/" + urlresult,
+        //url: "api/ReportTables/condition/{dateS}/{dateE}/{reportP}/{reportR}",
+        //url:  mydata.repertget[0].dateS + "/" + mydata.repertget[0].dateE + "/" + mydata.repertget[0].reportP + "/" + mydata.repertget[0].reportR,
+        success: function (e) {
+            //把資料填回去
+            mydata.report = e;
+            console.log(e);
 
-        for (let i = 0; i < e.length; i++) {
-            if (e[i].reportResult == 1) {
-                mydata.report[i].reportResult = "審核通過";
-                mydata.AAA[i] = false;
+            for (let i = 0; i < e.length; i++) {
+                if (e[i].reportResult == 1) {
+                    mydata.report[i].reportResult = "審核通過";
+                    mydata.AAA[i] = false;
 
-            } else if (e[i].reportResult == 0) {
-                mydata.report[i].reportResult = "審核不通過";
-                mydata.AAA[i] = false;
+                } else if (e[i].reportResult == 0) {
+                    mydata.report[i].reportResult = "審核不通過";
+                    mydata.AAA[i] = false;
 
+                } else {
+                    mydata.report[i].reportResult = "待審核";
+                    mydata.AAA[i] = true;
+                }
+
+            };
+
+            mydata.reportnum = e.length;
+            if (mydata.reportnum >= 5) {
+                mydata.reportpage = Math.ceil(mydata.reportnum / 5)
             } else {
-                mydata.report[i].reportResult = "待審核";
-                mydata.AAA[i] = true;
-            }
-
-        };
-
-        mydata.reportnum = e.length;
-        if (mydata.reportnum >= 5) {
-            mydata.reportpage = Math.ceil(mydata.reportnum / 5)
-        } else {
-            mydata.reportpage = 1
-        };
+                mydata.reportpage = 1
+            };
 
 
 
-    }
+        }
 
-})
+    })
 
     mydata.repertget[0].dateS = "1900-01-01";
     mydata.repertget[0].dateE = "3000-01-01";
@@ -297,8 +305,8 @@ function changereviewreport(e) {
     var now = new Date().toISOString(); //待改進 要加八小時 台灣時間
     console.log(now);
     mydata.reportput[0].reportId = mydata.reportmodel;
-    mydata.reportput[0].reportCheckTime = now; 
-    mydata.reportput[0].managerId = 9;  
+    mydata.reportput[0].reportCheckTime = now;
+    mydata.reportput[0].managerId = 9;
     console.log(mydata.reportput[0]);
     $.ajax({
         type: "put",
@@ -376,18 +384,18 @@ $.ajax({
 function delnotice(e) {
     mydata.noticemodel = e.value;
     $.ajax({
-    type: "delete",
-    url: "/api/NoticeTables/delete/" + mydata.noticemodel,
-    success: function () {
-        window.location = "/TanTanLib/html/backstage.html"
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+        type: "delete",
+        url: "/api/NoticeTables/delete/" + mydata.noticemodel,
+        success: function () {
+            window.location = "/TanTanLib/html/backstage.html"
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabcontent[1].style.display = "block";
+
+            alert("OK");
         }
-        tabcontent[1].style.display = "block";
-        
-        alert("OK");
-    }
-})
+    })
 }
 
 //GET 系統通知單一系統通知資料 //reviewnotice
@@ -424,25 +432,35 @@ function reviewnotice(e) {
                 }
 
             };
-           
-       } 
+
+        }
     })
 
 };
 
 //ADD  系統通知單一系統通知建立時間
 var addnotdate = new Date();
-var notdate = addnotdate.getFullYear() + "-" + addnotdate.getMonth() + 1 + "-" + addnotdate.getDate() + " " + addnotdate.getHours() + ":" + addnotdate.getMinutes();
+if (addnotdate.getHours().length == 2) {
+    var notdatehours = addnotdate.getHours();
+} else { var notdatehours = addnotdate.getHours().toString().padStart(2, '0') }
+if (addnotdate.getMinutes().length == 2) {
+    var notdatemin = addnotdate.getMinutes();
+} else { var notdatemin = addnotdate.getMinutes().toString().padStart(2, '0') }
+
+var notdate = addnotdate.getFullYear() + "-" + addnotdate.getMonth() + 1 + "-" + addnotdate.getDate() + " " + notdatehours + ":" + notdatemin;
+
 function addnoticedate() {
 
     $("#adddate").prop('value', notdate);
+
 
 }
 
 //POST 系統通知單一系統通知資料
 function savenotice() {
+    //1.回傳到noticetable
     var addnotdate = new Date();
-    mydata.noticepost[0].noticeScope = mydata.noticeScope;
+    mydata.noticepost[0].noticeScope = mydata.noticescope;
     mydata.noticepost[0].noticeTitle = mydata.noticetitle;
     mydata.noticepost[0].noticeContent = mydata.noticetext;
     mydata.noticepost[0].noticeBuildTime = addnotdate;
@@ -452,23 +470,143 @@ function savenotice() {
 
     $.ajax({
         type: "post",
+        async: false,
         url: "/api/NoticeTables/post",
         contentType: "application/json",
         data: JSON.stringify(mydata.noticepost[0]),
         success: function () {
+            
+            var tabcontent;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabcontent[1].style.display = "block";
 
             alert("OK");
-            //window.location = "/TanTanLib/html/backstage.html"
-            //for (i = 0; i < tabcontent.length; i++) {
-            //    tabcontent[i].style.display = "none";
-            //}
-            //tabcontent[1].style.display = "block";
-
-            //alert("OK");
 
         }
     })
+
+    //2. 回傳到noticeread
+    //前期提要
+    //noticereadpost: [{ "notice_ID": "", "noticeRead_Member": "", "noticeRead_Read": 0 }],
+
+    //NoticeRead_Table
+    //noticeRead_ID notice_ID noticeRead_Member noticeRead_Read(0已讀 )
+    //            1         1                0                0
+    //            2         1                1                0
+    //2-0. noticeRead_ID：不用進去
+    //2-1. notice_ID：獲得最新的noticeId+1
+    var noticedata = mydata.notice;
+    var nownoticId = mydata.notice[(noticedata.length - 1)].noticeId;
+    console.log(nownoticId);
+    //var noticedata = mydata.notice;
+    //var nownoticId = mydata.notice[(noticedata.length - 1)].noticeId;
+    //console.log(nownoticId);
+
+    //2-3. noticeRead_Read：固定都是"0";一開始設定好了不用設定。
+
+    //for 迴圈獲得member 看mydata.noticepost[0].noticeScope 是選哪個 where就要哪個
+    //noticeScope 0只對會員，1只對美甲師，2對所有用戶。
+    //for迴圈裡面包POST NOTICE READ
+
+    //2-2. noticeRead_Member
+    //獲得會員
+    $.ajax({
+        type: "get",
+        async: false,
+        url: "/api/MemberTables2/nocheck",
+        success: function (e) {
+
+            console.log('mydata.nocheckmember OK');
+        }
+    });
+    //獲得美甲師
+    $.ajax({
+        type: "get",
+        async: false,
+        url: "/api/MemberTables2/check",
+        success: function (e) {
+            console.log('mydata.checkmember OK');
+        }
+    });
+    console.log(mydata.noticepost[0])
+    if (mydata.noticepost[0].noticeScope == 0) {
+        for (var i = 0; i < mydata.nocheckmember.length; i++) {
+            mydata.noticereadpost[0].noticeId = nownoticId+1;
+            mydata.noticereadpost[0].noticeReadMember = mydata.nocheckmember[i].memberId;
+            console.log(mydata.noticereadpost[0])
+            $.ajax({
+                type: "post",
+                url: "/api/NoticeReadTables",
+                contentType: "application/json",
+                data: JSON.stringify(mydata.noticereadpost[0]),
+                success: function () {
+                    window.location = "/TanTanLib/html/backstage.html"
+                }
+            })
+        }
+
+    }
+    else if (mydata.noticepost[0].noticeScope == 1) {
+        for (var i = 0; i < mydata.checkmember.length; i++) {
+            mydata.noticereadpost[0].noticeId = nownoticId + 1;
+            mydata.noticereadpost[0].noticeReadMember = mydata.checkmember[i].memberId;
+            console.log(mydata.noticereadpost[0])
+            $.ajax({
+                type: "post",
+                url: "/api/NoticeReadTables",
+                contentType: "application/json",
+                data: JSON.stringify(mydata.noticereadpost[0]),
+                success: function () {
+                    window.location = "/TanTanLib/html/backstage.html"
+                }
+            })
+        }
+    }
+    else if (mydata.noticepost[0].noticeScope == 2) {
+        for (var i = 0; i < mydata.nocheckmember.length; i++) {
+            mydata.noticereadpost[0].noticeId = nownoticId + 1;
+            mydata.noticereadpost[0].noticeReadMember = mydata.nocheckmember[i].memberId;
+            console.log(mydata.noticereadpost[0])
+            $.ajax({
+                type: "post",
+                url: "/api/NoticeReadTables",
+                contentType: "application/json",
+                data: JSON.stringify(mydata.noticereadpost[0]),
+                success: function () {
+                    window.location = "/TanTanLib/html/backstage.html"
+                }
+            })
+        }
+        for (var i = 0; i < mydata.checkmember.length; i++) {
+            mydata.noticereadpost[0].noticeId = nownoticId + 1;
+            mydata.noticereadpost[0].noticeReadMember = mydata.checkmember[i].memberId;
+            console.log(mydata.noticereadpost[0])
+            $.ajax({
+                type: "post",
+                url: "/api/NoticeReadTables",
+                contentType: "application/json",
+                data: JSON.stringify(mydata.noticereadpost[0]),
+                success: function () {
+                    window.location = "/TanTanLib/html/backstage.html"
+                }
+            })
+        }
+    };
+
 };
 
-//NoticeRead_Table
+
+
+
+
+
+
+
+
+
+
+
 

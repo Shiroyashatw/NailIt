@@ -18,6 +18,7 @@ namespace NailIt.Controllers.YiPControllers
             Context = PContext;
         }
 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetThisDemoTable(int id)
         {

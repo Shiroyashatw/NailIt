@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NailIt.Models;
 
 namespace NailIt.Controllers.TanTanControllers
@@ -20,24 +24,29 @@ namespace NailIt.Controllers.TanTanControllers
             _context = context;
         }
 
+
         // GET: api/NoticeTables
         [HttpGet]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetNoticeTables()
         {
+
             var newNoticeTables = from o in _context.NoticeTables
                                   select new
                                   {
-                                      NoticeId=o.NoticeId,
-                                      NoticeScope=o.NoticeScope,
-                                      NoticeTitle=o.NoticeTitle,
-                                      NoticeContent=o.NoticeContent,
+                                      NowNoticeId = o.NoticeId,
+                                      NoticeId = o.NoticeId,
+                                      NoticeScope = o.NoticeScope,
+                                      NoticeTitle = o.NoticeTitle,
+                                      NoticeContent = o.NoticeContent,
                                       NoticeBuildTime = o.NoticeBuildTime,
                                       NoticePushTime = o.NoticePushTime.ToString("yyyy-MM-dd HH:mm"),
-                                      NoticeState=o.NoticeState,
+                                      NoticeState = o.NoticeState,
                                       NoticeManagerId = o.NoticeManagerId,
                                   };
+
             return await newNoticeTables.ToListAsync();
         }
+
 
         // GET: api/NoticeTables/5
         [HttpGet("{id}")]
