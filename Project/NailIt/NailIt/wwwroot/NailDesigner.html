@@ -653,13 +653,12 @@
         <button id="Sendbtn" onclick="alertform()">預約</button>
     </div>
 
-    <!-- 預約表單 Sendbtn 按鈕 -->
     <div class="form-main">
         <div id="hohodiv" class="isHide"></div>
         <!-- 彈出視窗 表單 -->
         <div id="alert_div" class="isHide">
             <div class="alert_div-header">
-                <button type="button" onclick="Closeform()"><i class="bi bi-x"></i></button>
+                <button type="button" id="btncancel" onclick="Closeform()"><i class="bi bi-x"></i></button>
             </div>
             <!-- 主要表單 -->
             <div class="form-info">
@@ -960,6 +959,8 @@
 
     <!-- 表單頁面切換 -->
     <script>
+
+        
         function alertform() {
             document.getElementById("hohodiv").className = "isShow";
             document.getElementById("alert_div").className = "isShow";
