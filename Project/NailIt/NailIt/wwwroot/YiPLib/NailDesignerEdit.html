@@ -1708,7 +1708,8 @@
             let form = new FormData();
             form.append("file", e.files[0]);
             console.log(e.files[0]);
-            await fetch('https://localhost:44308/api/File', {
+            //await fetch('https://localhost:44308/api/File', {
+            await fetch('/api/File', {
                 method: 'POST',
                 body: form
             });
@@ -1729,7 +1730,8 @@
             let Coverform = new FormData();
             Coverform.append("file", e.files[0]);
             console.log(e.files[0]);
-            await fetch('https://localhost:44308/api/File', {
+            //await fetch('https://localhost:44308/api/File', {
+            await fetch('/api/File', {
                 method: 'POST',
                 body: Coverform
             });
@@ -1769,7 +1771,8 @@
                 //document.getElementById('UpDemoText').innerHTML += `${e.files[i].name} \n`;
             }
             console.log(MoreFile);
-            await fetch('https://localhost:44308/api/Files', {
+            //await fetch('https://localhost:44308/api/Files', {
+            await fetch('/api/Files', {
                 method: 'POST',
                 body: MoreFile
             });
@@ -1784,7 +1787,8 @@
             let Coverimg = new FormData();
             Coverimg.append("file", e.files[0]);
             console.log(e.files[0]);
-            await fetch('https://localhost:44308/api/File', {
+            //await fetch('https://localhost:44308/api/File', {
+            await fetch('/api/File', {
                 method: 'POST',
                 body: Coverimg
             });

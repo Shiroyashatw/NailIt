@@ -35,11 +35,26 @@ namespace NailIt.Controllers.DogeControllers
                         select new { o, demoset, demo };
             return await query.ToListAsync();
         }
+        // 傳送預約表單
         [HttpPost]
         public async Task<ActionResult<OrderTable>> insertOrder(OrderTable orderTable)
         {
             
+            var plan = _db.PlanTables.FirstOrDefault(p => p.PlanId == orderTable.PlanId);
+
             _db.OrderTables.Add(orderTable);
+            await _db.SaveChangesAsync();
+
+            var res = _db.OrderTables.FirstOrDefault(r => r.PlanId == orderTable.PlanId );
+            plan.OrderId = res.OrderId;
+            await _db.SaveChangesAsync();
+            return Content("OK");
+        }
+        [HttpPost]
+        [Route("report")]
+        public async Task<ActionResult<ReportTable>> Report(ReportTable reportTable)
+        {
+            _db.ReportTables.Add(reportTable);
             await _db.SaveChangesAsync();
             return Content("OK");
         }
