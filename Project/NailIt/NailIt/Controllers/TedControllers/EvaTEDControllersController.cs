@@ -1,85 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
 using NailIt.Models;
 
 namespace NailIt.Controllers.TedControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderTEDController : ControllerBase
+    public class EvaTEDControllersController : ControllerBase
     {
         private readonly NailitDBContext _context;
 
-        public OrderTEDController(NailitDBContext context)
+        public EvaTEDControllersController(NailitDBContext context)
         {
             _context = context;
         }
 
-        // GET: api/OrderTED
+        // GET: api/EvaTEDControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderTable>>> GetOrderTables()
         {
             return await _context.OrderTables.ToListAsync();
         }
 
-        // GET: api/OrderTED/5
+        // GET: api/EvaTEDControllers/5
         [HttpGet("{id}")]
-        public async Task<List<Orderappointment>> GetOrderTables(int id)
+        public async Task<List<Evaorder>> GetOrderTable(int id)
         {
-
             var order = from o in _context.OrderTables
+                        join e in _context.CommentTables on o.OrderId equals e.CommentOrderId
                         join m in _context.ManicuristTables on o.ManicuristId equals m.ManicuristId
                         join p in _context.PlanTables on o.PlanId equals p.PlanId
                         join c in _context.CodeTables on o.OrderPartC equals c.CodeId
                         join d in _context.DemoSetTables on o.OrderItem equals d.DemoSetId
-                        into groupjoin from a in groupjoin.DefaultIfEmpty()
+                        into groupjoin
+                        from a in groupjoin.DefaultIfEmpty()
                         where o.MemberId == id
-                        select new Orderappointment()
+                        select new Evaorder()
                         {
-                            MemberId =o.MemberId,
-                            ManicuristId =o.ManicuristId,
+                            CommentScore=e.CommentScore,
+                            CommentContent=e.CommentContent,
+                            CommentBuildTime=e.CommentBuildTime,
                             OrderPartC = o.OrderPartC,
                             OrderId = o.OrderId,
-                          ManicuristAddress= m.ManicuristAddress,
-                          ManicuristSalonName= m.ManicuristSalonName,
-                          ManicuristPublic= m.ManicuristPublic,
-                          OrderItemName= o.OrderItemName,
-                            ManicuristPic = o.OrderType == true ?  null: m.ManicuristPic,
-                            OrderOrderTime=  o.OrderOrderTime,
-                            OrderAcceptTime= o.OrderAcceptTime,
-                            OrderDoneTime= o.OrderDoneTime,
-                            OrderCancelTime= o.OrderCancelTime,
-                            OrderCompleteTime= o.OrderCompleteTime,
-                            OrderStateC= o.OrderStateC,
-                            OrderPrice= o.OrderPrice,
-                            OrderDeposit= o.OrderDeposit,
-                            OrderRemovalC= o.OrderRemovalC,
+                            ManicuristAddress = m.ManicuristAddress,
+                            ManicuristSalonName = m.ManicuristSalonName,
+                            ManicuristPublic = m.ManicuristPublic,
+                            OrderItemName = o.OrderItemName,
+                            ManicuristPic = o.OrderType == true ? null : m.ManicuristPic,
+                            OrderOrderTime = o.OrderOrderTime,
+                            OrderAcceptTime = o.OrderAcceptTime,
+                            OrderDoneTime = o.OrderDoneTime,
+                            OrderCancelTime = o.OrderCancelTime,
+                            OrderCompleteTime = o.OrderCompleteTime,
+                            OrderStateC = o.OrderStateC,
+                            OrderPrice = o.OrderPrice,
+                            OrderDeposit = o.OrderDeposit,
+                            OrderRemovalC = o.OrderRemovalC,
                             DemoSetContent = o.OrderType == true ? a.DemoSetContent : null,
-                            DemoSetCover = o.OrderType == true ? a.DemoSetCover: null,
+                            DemoSetCover = o.OrderType == true ? a.DemoSetCover : null,
                         };
             var orderlist = await order.ToListAsync();
-
             return orderlist;
-
         }
 
-        // PUT: api/OrderTED/5
+        // PUT: api/EvaTEDControllers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderTable(int id, string stat)
+        public async Task<IActionResult> PutOrderTable(int id, OrderTable orderTable)
         {
-            var orderTable = await _context.OrderTables.FindAsync(id);
-            orderTable.OrderStateC ="A6";
-            orderTable.OrderCancelTime = DateTime.Now;
+            if (id != orderTable.OrderId)
+            {
+                return BadRequest();
+            }
 
+            _context.Entry(orderTable).State = EntityState.Modified;
 
             try
             {
@@ -100,7 +99,7 @@ namespace NailIt.Controllers.TedControllers
             return NoContent();
         }
 
-        // POST: api/OrderTED
+        // POST: api/EvaTEDControllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<OrderTable>> PostOrderTable(OrderTable orderTable)
@@ -111,7 +110,7 @@ namespace NailIt.Controllers.TedControllers
             return CreatedAtAction("GetOrderTable", new { id = orderTable.OrderId }, orderTable);
         }
 
-        // DELETE: api/OrderTED/5
+        // DELETE: api/EvaTEDControllers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrderTable(int id)
         {
