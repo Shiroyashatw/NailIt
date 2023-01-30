@@ -790,10 +790,8 @@
                         <!--<button data-toggle="modal" data-target="#EditModal">新增</button>-->
                     </div>
                     <div class="col-4">
-                        <form>
-                            <input class="Searchbar" type="text" placeholder="作品,標籤">
-                            <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>
+                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1450,8 +1448,24 @@
             var insertimg = ShowData.PostthisDemo[e.value].demoPic;
             $('#Previewphoto').attr('src', insertimg);
         }
+
         function Deleteinsert(e) {
             ShowData.PostthisDemo.splice(e.value, 1);
+        }
+
+        function Searchit() {
+            console.log(ShowData.SearchString);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetSearchTable/" + ManicuristID + "?search=" + ShowData.SearchString,
+                success: function (e) {
+                    ShowData.DemoSetList = [];
+                    for (DS in e) {
+                        ShowData.DemoSetList.push(e[DS]);
+                    }
+                }
+            });
+            console.log(ShowData.DemoSetList);
         }
 
 
@@ -1484,6 +1498,7 @@
                 StartDate: "",
                 EndDate: "",
                 GetCertainDemoKey: "",
+                SearchString: "",
             },
             methods: {
                 InsertDemo: function () {

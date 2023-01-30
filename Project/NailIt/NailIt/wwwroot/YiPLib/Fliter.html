@@ -26,12 +26,11 @@
         }
 
         .DisplayCircle:hover {
-        /*border:2px black solid;*/
         border-radius: 0%;
              width: 25px;
              height: 25px;
              transition: 1s;
-        /*display: flex;*/
+        cursor:pointer;
         }
         .TagLabel {
             border: solid gray 1px;
@@ -92,7 +91,7 @@
         input[type="number"]{
             color:#8a8383;
             border:none;
-            width:50px;
+            width:60px;
         }
 
         input[type=number]::-webkit-inner-spin-button,
@@ -110,15 +109,13 @@
             background-color:#C6C6C6;
         }
 
-        #FromSlider{
-            height:0;
-            z-index:1;
+        #FromSlider {
+            height: 0;
+            z-index: 1;
         }
         /*range-end-*/
 
         .heart{
-            /*margin-left:2px;*/
-            /*margin-right:1px;*/
             font-size:13px;
             position:absolute;
             color:red;
@@ -137,18 +134,43 @@
         .Coverdiv {
             display: flex;
             flex-wrap: wrap;
-            margin-top:16px;
-            margin-left:30px;
+            margin-top: 16px;
+            /*margin-left: 90px;*/
+            margin-left: 25px;
         }
 
         .Cover {
-            /*margin-left: 30px;*/
-            margin-right: 50px;
+            /*margin-right: 70px;*/
+            margin-right: 30px;
             height: 180px;
             width: 180px;
             object-fit: cover;
             object-position: center;
         }
+
+        .Searchbar {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid grey;
+            float: left;
+            width: 80%;
+        }
+
+        .Searchbtn {
+            background-color: black;
+            float: left;
+            width: 10%;
+            padding: 7px;
+            color: white;
+            font-size: 20px;
+            border: 1px solid black;
+            border-left: none;
+            cursor: pointer;
+        }
+
+            .Searchbtn:hover {
+                background: #D0CECE;
+            }
 
 
     </style>
@@ -164,30 +186,31 @@
                 <div>
                     <a>首頁</a>
                     <span>></span>
-                    <a>美甲查詢</a>
+                    <a href="Fliter.html">美甲查詢</a>
                 </div>
                 <div class="mt-3">
                     <label>地區</label>
                     <div>
                         <div>
-                            <select v-model="SelectedCity" onchange="ShowArea(this)">
+                            <select v-model="SelectedCity" onchange="ShowCountry(this)">
                                 <option value="none" selected disabled hidden>請選擇縣市</option>
                                 <option v-for="(item,key) in City" v-bind:value="[key]">{{City[key]}}</option>
                             </select>
                         </div>
                         <div class="mt-2">
-                            <select v-model="SelectedArea" v-if="ShowAreas">
+                            <select v-model="SelectedArea" v-if="ShowAreas" onchange="ShowArea(this)">
                                 <option value="none" selected disabled hidden>請選擇地區</option>
-                                <option v-if="Area" v-for="(item,key) in Area">{{item}}</option>
+                                <option v-if="Area" v-for="(item,key) in Area" v-bind:value="Area[key]">{{item}}</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div>
+                <div class="mt-2">
                     <label>色彩</label>
-                        <div>
-                            <label class="DisplayCircle mx-1" v-for="(item,key) in Colors" v-bind:value="[key]" v-bind:style="ColorStyle[key]">
-                                <input class="ColorsRadio" type="radio" />
+                    <br />
+                        <div v-for="(item,key) in Colors" class="d-inline-flex">
+                            <label class="DisplayCircle mx-1"  v-bind:style="ColorStyle[key]" >
+                                <input class="ColorsRadio" type="radio" v-bind:value="Colors[key].colorId" onclick="ShowColor(this)"/>
                             </label>
                         </div>
                 </div>
@@ -196,7 +219,7 @@
                     <div>
                         <label class="px-3  mx-1 TagLabel" v-for="(item,key) in Tag">
                             {{Tag[key].tagName}}
-                            <input class="TagRadio" type="radio" />
+                            <input class="TagRadio" type="radio" v-bind:value="Tag[key].tagName" onclick="ShowTag(this)" />
                         </label>
                     </div>
                 </div>
@@ -204,27 +227,36 @@
                     <label>價格</label>
                     <div class="RangeContainer">
                         <div class="SliderControl">
-                            <input id="FromSlider" type="range" value="10" min="0" max="100" />
-                            <input id="ToSlider" type="range" value="40" min="0" max="100" />
+                            <!--<input id="FromSlider" type="range" v-bind:value="MinPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice" />-->
+                            <input id="FromSlider" type="range" v-model="SearchMin" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                            <!--<input id="ToSlider" type="range" v-bind:value="MaxPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice" />-->
+                            <input id="ToSlider" type="range" v-model="SearchMax" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
                         </div>
                         <div class="FromControl">
                             <div class="ControlContainer">
                                 <div class="FromLabel">Min</div>
-                                <input id="Frommininput" class="Frominput" type="number" value="10" min="0" max="100"/>
+                                <!--<input id="Frommininput" class="Frominput" type="number" value="10" min="0" max="100" />-->
+                                <!--<input id="Frommininput" class="Frominput" type="number" v-bind:value="MinPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice"/>-->
+                                <input id="Frommininput" class="Frominput" type="number" v-model="SearchMin" v-bind:min="MinPrice" v-bind:max="MaxPrice"/>
                             </div>
                             <div class="ControlContainer">
                                 <div class="FromLabel">Max</div>
-                                <input id="Frommaxinput" class="FromMaxinput" type="number" value="40" min="0" max="100" />
+                                <!--<input id="Frommaxinput" class="FromMaxinput" type="number" value="40" min="0" max="100" />-->
+                                <!--<input id="Frommaxinput" class="FromMaxinput" type="number" v-bind:value="MaxPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice"/>-->
+                                <input id="Frommaxinput" class="FromMaxinput" type="number" v-model="SearchMax" v-bind:min="MinPrice" v-bind:max="MaxPrice"/>
                             </div>
                         </div>
                     </div>
+                    <!--<div>
+                        <button onclick="SeachPrice()">範圍查詢</button>
+                    </div>-->
                 </div>
-                <div>
+                <div class="mt-2">
                     <label>施作部位</label>
                     <div>
                         <label class="px-3  mx-1 TagLabel" v-for="(item,key) in CCode">
                             {{CCode[key].codeRepresent}}
-                            <input class="TagRadio" type="radio" />
+                            <input class="TagRadio" type="radio"  v-bind:value="CCode[key].codeId" onclick="ShowPart(this)"/>
                         </label>
                     </div>
                 </div>
@@ -232,16 +264,25 @@
             <!--Left bar End-->
             <div class="col-1"></div>
             <!--Demo-->
-            <div class="col-8 mt-3">
+            <div class="col-7 mt-3">
                 <div class="d-flex justify-content-between">
                     <div id="Ctitle">
                         <b>美甲查詢</b>
                     </div>
                     <div id="Sortdiv">
-                        <select>
-                            <option>請選擇</option>
+                        <select v-model="Query" onchange="ChangeQuery(this)">
+                            <option value="none" selected disabled hidden>請選擇</option>
+                            <option value="QueryM">查詢工作室</option>
+                            <option value="QueryNT">查詢名稱/標籤</option>
                         </select>
-                        <input type="text" />
+                        <div v-if="NowQuery=='QueryNT'">
+                            <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                            <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        </div>
+                        <div v-if="NowQuery=='QueryM'">
+                            <input class="Searchbar" type="text" placeholder="工作室" v-model="SearchM">
+                            <button class="Searchbtn" onclick="SearchM()"><i class="fa fa-search"></i></button>
+                        </div>
                     </div>
                 </div>
                 <div>共計商品數</div>
@@ -284,7 +325,16 @@
                     ShowAreas: false,
                     CCode: [],
                     Displayheart: [],
-                    DemoSet:[],
+                    DemoSet: [],
+                    SelectedColor: "",
+                    MaxPrice: 0,
+                    MinPrice: 0,
+                    SearchMin: this.MinPrice,
+                    SearchMax: this.MaxPrice,
+                    Query: "none",
+                    NowQuery: false,
+                    SearchString: "",
+                    SearchM:"",
                     }
             },
             methods: {
@@ -304,12 +354,31 @@
         const fromInput = document.querySelector('#Frommininput');
         const toInput = document.querySelector('#Frommaxinput');
         //const controlSlider = document.querySelector('.SliderControl');
-        fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', toSlider);
+        console.log(fromSlider);
+        console.log(toSlider);
+        //fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
+        toSlider.style.backgroundColor = '#25daa5';
         setToggleAccessible(toSlider);
-        fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
-        toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
-        fromInput.oninput = () => controlFromInput(fromSlider, fromInput, toInput, toSlider);
-        toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
+        //fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
+        fromSlider.oninput = function () {
+            controlFromSlider(fromSlider, toSlider, fromInput);
+            GetPriceMin(fromSlider.value);
+        };
+        //toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
+        toSlider.oninput = function () {
+            controlToSlider(fromSlider, toSlider, toInput);
+            GetPriceMax(toSlider.value);
+        };
+        fromInput.oninput = function () {
+            controlFromInput(fromSlider, fromInput, toInput, toSlider);
+            GetPriceMin(fromSlider.value);
+
+        };
+        toInput.oninput = function () {
+            controlToInput(toSlider, fromInput, toInput, toSlider);
+            GetPriceMax(toSlider.value);
+
+        };
 
 
         function fillSlider(from, to, sliderColor, rangeColor, controlSlider) {
@@ -377,16 +446,18 @@
 
         function getParsed(currentFrom, currentTo) {
             const from = parseInt(currentFrom.value, 10);
+            app.SearchMin = from;
             const to = parseInt(currentTo.value, 10);
+            app.SearchMax = to;
             return [from, to];
         }
 
         function setToggleAccessible(currentTarget) {
             const toSlider = document.querySelector('#ToSlider');
             if (Number(currentTarget.value) <= 0) {
-                toSlider.style.zIndex = 2;
+                toSlider.style.zindex = 2;
             } else {
-                toSlider.style.zIndex = 0;
+                toSlider.style.zindex = 0;
             }
         }
 
@@ -418,7 +489,7 @@
             type: "get",
             url: "/api/Color",
             success:  function (e) {
-                console.log(e);
+                //console.log(e);
                 for (color in e) {
                     app.Colors.push(e[color]);
                     app.ColorStyle.push({ backgroundColor: e[color].colorCss });
@@ -430,7 +501,7 @@
                 app.ColorStyle[13] = ({ backgroundColor: "#FFFFFF", border: 'gray solid 1pt' });
                 //app.ColorStyle[13] = ({ backgroundColor: "#00ffff", border: 'black solid 1pt' });
                 //background - image: linear - gradient(to right, #b8cbb8 0 %, #b8cbb8 0 %, #b465da 0 %, #cf6cc9 33 %, #ee609c 66 %, #ee609c 100 %);
-                console.log(app.ColorStyle);
+                //console.log(app.ColorStyle);
             }
         });
 
@@ -438,11 +509,11 @@
             type: "get",
             url: "/api/TagTable",
             success: function (e) {
-                console.log(e);
+                //console.log(e);
                 for (let g = 0; g < 10; g++) {
                     app.Tag.push(e[g]);
                 }
-                console.log(app.Tag);
+                //console.log(app.Tag);
             }
         });
 
@@ -450,7 +521,7 @@
             type: "get",
             url: "/api/PCodeTable",
             success: function (e) {
-                //console.log(e);
+                console.log(e);
                 app.CCode = e;
             }
         });
@@ -459,11 +530,31 @@
             type: "get",
             url: "/api/DemoSet/GetDemoSet",
             success: function (e) {
-                console.log(e);
+                //console.log(e);
                 //app.CCode = e;
                 app.DemoSet = e;
             }
         });
+
+        $.ajax({
+            type: "get",
+            url: "/api/DemoSet/GetMaxPrice",
+            success: function (e) {
+                //console.log(e.max);
+                app.MaxPrice = e.max;
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/DemoSet/GetMinPrice",
+            success: function (e) {
+                //console.log(e.max);
+                app.MinPrice = e.min;
+            }
+        });
+
+
 
 
 
@@ -471,19 +562,184 @@
 
     <!--On-->
     <script>
-        async function ShowArea(e) {
+        async function ShowCountry(e) {
             app.Area=[];
-            console.log(app.AreaList);
+            //console.log(app.AreaList);
              for (Area in app.AreaList[e.value]) {
                 await app.Area.push(app.AreaList[e.value][Area].AreaName);
             }
-            //console.log(app.Area);
             app.ShowAreas = true;
+            console.log(app.City[e.value]);
+            let AreaStr;
+            AreaStr = app.City[e.value].replace("臺", "台");
+
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetCountyDemo/?Country=" + AreaStr ,
+                success: function (e) {
+                    console.log(e);
+                    app.DemoSet = [];
+                    for (demo in e) {
+                        app.DemoSet.push(e[demo]);
+                    }
+                }
+            });
+
+
         }
 
         function HoverColor(e) {
             app.Displayheart[e.value] = true;
         }
+
+        function ShowArea(e) {
+            console.log(e.value)
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetAreaDemo/?Area=" + e.value,
+                success: function (e) {
+                    console.log(e);
+                    app.DemoSet = [];
+                    for (demo in e) {
+                        app.DemoSet.push(e[demo]);
+                    }
+                }
+            });
+        }
+
+        function ShowColor(e) {
+            console.log(e.value);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetColorDemo/?Color=" + e.value,
+                success: function (e) {
+                    console.log(e);
+                    app.DemoSet = [];
+                    for (demo in e) {
+                        app.DemoSet.push(e[demo]);
+                    }
+                }
+            });
+        }
+
+        function ShowTag(e) {
+            //console.log(e.value);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetFixTagDemo/?FixTag=" + e.value,
+                success: function (e) {
+                    console.log(e);
+                    app.DemoSet = [];
+                    for (demo in e) {
+                        app.DemoSet.push(e[demo]);
+                    }
+                }
+            });
+        }
+
+        function SeachPrice() {
+            //console.log("MIN"+app.SearchMin);
+            //console.log(app.SearchMax);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
+                success: function (e) {
+                    console.log(e);
+                    app.DemoSet = [];
+                    for (demo in e) {
+                        app.DemoSet.push(e[demo]);
+                    }
+                }
+            });
+        }
+
+        function GetPriceMin(e) {
+            //console.log("MIN"+app.SearchMin);
+            //console.log(app.SearchMax);
+            app.SearchMin = e;
+            console.log(app.SearchMin);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
+                success: function (e) {
+                    console.log(e);
+                    app.DemoSet = [];
+                    for (demo in e) {
+                        app.DemoSet.push(e[demo]);
+                    }
+                }
+            });
+        }
+
+        function GetPriceMax(e) {
+            //console.log("MIN"+app.SearchMin);
+            //console.log(app.SearchMax);
+            app.SearchMax = e;
+            console.log(app.SearchMax);
+
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
+                success: function (e) {
+                    console.log(e);
+                    app.DemoSet = [];
+                    for (demo in e) {
+                        app.DemoSet.push(e[demo]);
+                    }
+                }
+            });
+        }
+
+        function ShowPart(e) {
+            //console.log(e.value);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetPart/?Part=" + e.value,
+                success: function (e) {
+                    console.log(e);
+                    app.DemoSet = [];
+                    for (demo in e) {
+                        app.DemoSet.push(e[demo]);
+                    }
+                }
+            });
+        }
+
+        function ChangeQuery(e) {
+            console.log(e.value);
+            app.NowQuery = e.value;
+        }
+
+        function Searchit() {
+            console.log(app.SearchString);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetSearchAllTable?search=" + app.SearchString,
+                success: function (e) {
+                    app.DemoSet = [];
+                    for (DS in e) {
+                        app.DemoSet.push(e[DS]);
+                    }
+                }
+            });
+            console.log(app.DemoSet);
+        }
+
+        function SearchM() {
+            console.log(app.SearchM);
+            //$.ajax({
+            //    type: "get",
+            //    url: "/api/Manicurist?name=" + app.SearchM,
+            //    success: function (e) {
+            //        app.DemoSet = [];
+            //        for (DS in e) {
+            //            app.DemoSet.push(e[DS]);
+            //        }
+            //    }
+            //});
+        }
+
+
 
     </script>
 
