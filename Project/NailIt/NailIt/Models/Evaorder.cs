@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 #nullable disable
 
-
 namespace NailIt.Models
 {
-    public class Orderappointment
+    public class Evaorder
     {
         public string ManicuristSalonName { get; set; }
         public string ManicuristAddress { get; set; }
@@ -26,8 +25,11 @@ namespace NailIt.Models
         public string ManicuristPic { get; set; }
         public int OrderId { get; set; }
         public string OrderPartC { get; set; }
-        public int MemberId { get; set; }
-        public int ManicuristId { get; set; }
+        public double CommentScore { get; set; }
+        public string CommentContent { get; set; }
+        public DateTime CommentBuildTime { get; set; }
         public string MemberName { get; set; }
+        public int MemberId { get; set; }
+        public int ManicuristId { get; set; }   
     }
 }

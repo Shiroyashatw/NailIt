@@ -1,6 +1,5 @@
 ﻿var myCheckResult;//get到的資料轉換前
 var checkData;
-reserveCheckSendGet();
 function reserveCheckSendGet() {
 	var requestOptions = {
 		method: 'GET',
