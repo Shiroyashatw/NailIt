@@ -25,12 +25,13 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <!-- <link rel="stylesheet" href="./calendar.css" /> -->
+
 </head>
 
 <body>
 
     <!-- 內容主體 -->
-    <div class="container">
+    <div class="container-fluid">
         <!-- 切版 -->
         <div class="row">
             <!-- 左邊-預計放篩選介面 -->
@@ -92,9 +93,26 @@
                         </div>
                         <div class="footer-container">
                             <p class="demoSetPartC"></p>
-                            <p id="botmanicuristSalonName"></p>
-                            <p>店家/設計師評價:</p>
-                            <p id="star"><span style="color: yellow;">★★★★★</span>4</p>
+                            <p id="botmanicuristSalonName">
+                            </p>
+                            
+                            <div class="starBx">
+                                <div class="starContext">
+                                    <p>店家/設計師評價:</p>
+                                </div>
+                                <div class="ratings">
+                                    <div class="empty_star">★★★★★</div>
+                                    <div class="full_star">★★★★★</div>
+                                </div>
+                                <div class="starContext">
+                                    <p class="star"></p>
+                                </div>
+                            </div>
+                            <!-- <div class="ratings">
+                                <div class="empty_star">★★★★★</div>
+                                <div class="full_star">★★★★★<span>5</span></div>
+                            </div> -->
+                            
                             <p class="botphone"></p>
                             <p id="botadress"></p>
                             <p class="demoSetDeposit"></p>
@@ -284,7 +302,7 @@
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button  class="stepbtn" type="button" onclick="Closeform()">完成</button>
+                                        <button class="stepbtn" type="button" onclick="Closeform()">完成</button>
                                     </div>
                                 </div>
                             </div>
@@ -436,7 +454,7 @@
                 "color": "#3498db",
                 "transition": ".3s"
             })
-            
+
         }
         function step2() {
             document.getElementById("step1").className = "isHide";
@@ -471,12 +489,12 @@
                 document.getElementById("step4").className = "isHide";
 
                 $('.Progress .line:nth-child(3) .step').css({
-                "background-color": "#FF6733",
-                "color": "#333",
-                "transition": ".3s"
-            })
+                    "background-color": "#FF6733",
+                    "color": "#333",
+                    "transition": ".3s"
+                })
             }
-            
+
 
         }
         function step4() {
@@ -619,7 +637,7 @@
             let rdate = $('input[name="planId"]').attr("date")
             let rtime = $('input[name="planId"]').attr("time")
             let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
-            let rremovec =  $('select[name="OrderRemovalC"]').find("option:selected").text()
+            let rremovec = $('select[name="OrderRemovalC"]').find("option:selected").text()
             let ritem = $('select[name="OrderItem"]').find("option:selected").text()
             let rprice = $('input[name="OrderPrice"]').val()
             let rdep = $('input[name="OrderDeposit"]').val()

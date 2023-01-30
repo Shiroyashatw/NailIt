@@ -83,6 +83,11 @@ function getbasicinfo() {
             $('.botphone').text("電話:" + Ores['manicuristSalonPhone'])
             $('#botadress').text("地址:" + Ores['manicuristAddress'])
 
+            let star = Ores['manicuristScore'] * 20 + "%"
+            $('.star').text(Ores['manicuristScore'])
+            $('.full_star').css({
+                "width" : star
+            })
             demoSprice.text("預估金額:" + Demosetres['demoSetPrice']);
             inputOprice.val(Demosetres['demoSetPrice']);
             demoSde.text("訂金:NT$" + Demosetres['demoSetDeposit'])
