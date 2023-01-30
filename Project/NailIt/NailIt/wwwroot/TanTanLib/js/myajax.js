@@ -2,7 +2,7 @@
 var mydata = new Vue({
     el: "#mydata",
     data: {
-        //審核
+        //審核-----------------------------------------------------------------------------------------------------------------------------------------------------
         report: [{}],
         //[{"reportId":1,"reportBuilder":1,"reportTarget":2,"reportItem":111012801,"reportPlaceC":"D3","reportReasonC":"G2","reportContent":"邪惡","reportBuildTime":"2023-01-18 20:28","reportCheckTime":"","managerId":null,"reportResult":null,"codeUseIn":"D3","codeRepresent":"設計師主頁","memberName":"田美麗","managerName":null}]
         reportput: [{ "reportResult": true, "reportId": "", "reportCheckTime": "", "managerId": "1" }],
@@ -12,7 +12,7 @@ var mydata = new Vue({
         syscode: [{}],
         reportmodel: "",
         AAA: [],
-        //通知
+        //通知-----------------------------------------------------------------------------------------------------------------------------------------------------
         notice: [{}],
         //{ "noticeId": 1, "noticeScope": 2, "noticeTitle": "聖誕節快樂！", "noticeContent": "祝全體會員聖誕節快樂！", "noticeBuildTime": "2023-01-25T11:44:59.453", "noticePushTime": "2023-01-25T11:44:59.453", "noticeState": true },
         onenotice: [{}],
@@ -35,12 +35,18 @@ var mydata = new Vue({
         nocheckmember: [{}],
         //美甲師會員有哪些 member_ID member_Manicurist == 1是開通 
         checkmember: [{}],
+        //篩選
+        noticeget: [{ "NdataS": "1900-01-01", "NdataE": "3000-01-01", "NoiceMem": 3, "NoiceState": true, "NoiceStateN": "NOPE" }],
 
     },
 
 
 })
 
+////審核--------------------------------------------------------------------------------------------------------------------------------
+
+
+////審核--------------------------------------------------------------------------------------------------------------------------------
 //GET審核資料表
 $.ajax({
     type: "get",
@@ -483,8 +489,6 @@ function savenotice() {
             }
             tabcontent[1].style.display = "block";
 
-            alert("OK");
-
         }
     })
 
@@ -597,6 +601,111 @@ function savenotice() {
     };
 
 };
+
+
+//GET條件通知資料
+function selnotice() {
+    //noticeget: [{ "NdataS": "1900-01-01", "NdataE": "3000-01-01", "NoiceMem": 3, "NoiceState": true,"NoiceStateN": "nu" }],
+    var NdataS = $("#noticedatestart").val();
+    var NdataE = $("#noticedateend").val();
+    //value="0">一般會員,value="1">店家／設計師,value="2">全體
+    var NoiceMem = $("#noticemem").val();
+    //value="3" selected>請選擇狀態,value="0">未通知,value="1">已通知
+    var NoiceState = $("#noticestatus").val();
+    console.log(NdataS);
+    console.log(NdataE);
+    console.log(NoiceMem);
+    console.log(NoiceState);
+    //開始時間
+    if (NdataS == "") {
+        mydata.noticeget[0].NdataS = "1900-01-01";
+    } else {
+        mydata.noticeget[0].NdataS = NdataS
+    }
+    console.log(mydata.noticeget[0].NdataS)
+
+    //結束時間
+    if (NdataE.length == "") {
+        mydata.noticeget[0].NdataE = "3000-01-01";
+    } else {
+        mydata.noticeget[0].NdataE = NdataE
+    }
+    console.log(mydata.noticeget[0].NdataE)
+    //通知對象
+    if (NoiceMem == "3") {
+        mydata.noticeget[0].NoiceMem = 3;
+    } else {
+        mydata.noticeget[0].NoiceMem = NoiceMem;
+    }
+    console.log(mydata.noticeget[0].NoiceMem)
+    //通知狀態
+    if (NoiceState == "0") {
+        mydata.noticeget[0].NoiceState = false;
+        mydata.noticeget[0].NoiceStateN = "HVa";
+    } else if (NoiceState == "1") {
+        mydata.noticeget[0].NoiceState = true;
+        mydata.noticeget[0].NoiceStateN = "HVa";
+    } else if (NoiceState == "NOPE") {
+        mydata.noticeget[0].NoiceState = true;
+        mydata.noticeget[0].NoiceStateN = "NOPE";
+        NoiceStateN = "NOPE";
+    }
+
+    var urlnoticeresult = mydata.noticeget[0].NdataS + "/" + mydata.noticeget[0].NdataE + "/" + mydata.noticeget[0].NoiceMem + "/" + mydata.noticeget[0].NoiceState + "/" + mydata.noticeget[0].NoiceStateN;
+    console.log(urlnoticeresult)
+    $.ajax({
+        type: "get",
+        url: "/api/NoticeTables/noticecondition/" + urlnoticeresult,
+        success: function (e) {
+            mydata.notice = e;
+            console.log(e);
+
+            ////< !--通知狀態-- >
+            for (let i = 0; i < e.length; i++) {
+                if (e[i].noticeState == true) {
+                    mydata.notice[i].noticeState = "已通知";
+
+                } else if (e[i].noticeState == false) {
+                    mydata.notice[i].noticeState = "未通知";
+
+                }
+
+            };
+            ////< !--通知對象 >
+            for (let i = 0; i < e.length; i++) {
+                if (e[i].noticeScope == 0) {
+                    mydata.notice[i].noticeScope = "一般會員";
+
+                } else if (e[i].noticeScope == 1) {
+                    mydata.notice[i].noticeScope = "店家 / 美甲師";
+
+                } else if (e[i].noticeScope == 2) {
+                    mydata.notice[i].noticeScope = "全體";
+                }
+
+            };
+
+            ////審核總項目 跟 審核頁數
+            mydata.noticenum = e.length;
+            if (mydata.noticenum >= 5) {
+                mydata.noticepage = Math.ceil(mydata.noticenum / 5)
+            } else {
+                mydata.noticepage = 1
+            };
+
+        }
+
+    })
+
+
+
+    mydata.repertget[0].NdateS = "1900-01-01";
+    mydata.repertget[0].NdateE = "3000-01-01";
+    mydata.repertget[0].NoiceMem = 3;
+    mydata.repertget[0].NoiceState = true;
+    mydata.repertget[0].NoiceStateN = "nu";
+
+}
 
 
 
