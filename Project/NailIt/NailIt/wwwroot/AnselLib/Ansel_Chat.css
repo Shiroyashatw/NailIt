@@ -16,6 +16,9 @@
 
 
 /*#region draft message*/
+.fa-image:hover{
+    color: #ccc;
+}
 .material-symbols-outlined:hover{
     color: #007bff;
 }
