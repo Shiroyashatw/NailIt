@@ -80,13 +80,17 @@ function getbasicinfo() {
             $('#demoSetContent').text(Demosetres['demoSetContent'])
 
             $('#botmanicuristSalonName').text("店家/設計師名稱:" + Ores['manicuristSalonName'])
-            $('.botphone').text("電話:" + Ores['manicuristSalonPhone'])
-            $('#botadress').text("地址:" + Ores['manicuristAddress'])
+
+            if (Ores['manicuristPublic'] != false) {
+                $('.botphone').text("電話:" + Ores['manicuristSalonPhone'])
+                $('#botadress').text("地址:" + Ores['manicuristAddress'])
+            }
+
 
             let star = Ores['manicuristScore'] * 20 + "%"
             $('.star').text(Ores['manicuristScore'])
             $('.full_star').css({
-                "width" : star
+                "width": star
             })
             demoSprice.text("預估金額:" + Demosetres['demoSetPrice']);
             inputOprice.val(Demosetres['demoSetPrice']);
@@ -98,18 +102,12 @@ function getbasicinfo() {
             for (var i = 0; i < res.length; i++) {
                 $('.photocontainer').append(`<div class="smallphoto"><img onclick="getsrc(this)" src="${res[i]['demo']['demoPic']}" alt=""></div>`)
             }
-
-            $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag1']}</a>`)
-            $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag2']}</a>`)
-            $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag3']}</a>`)
-            $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag4']}</a>`)
-
-            //console.log(demo)
-            //console.log(res)
-            //console.log(leg)
-            //console.log(JSON.stringify(res))
-            //console.log(res[0]['demoset'])
-            //console.log(res[0]['demoset']['demoSetName'])
+            // 當標籤內容為null時 不顯示A標籤
+            for (let i = 1; i <= 4; i++) {
+                if (Demosetres['demoSetTag' + i] != null) {
+                    $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag' + i]}</a>`)
+                }
+            }
         },
         error: err => {
             console.log("無法讀取" + err)
@@ -225,30 +223,20 @@ function getReserveTime() {
                     ymd = `${year}-${month}-${date}`
                     time = ptime.substr(11, 5)
                     hour = parseInt(ptime.substr(11, 2))
-                    console.log(pOrderid)
                     // 當前點擊的 button id = 資料庫撈出 年月日時 顯示出可預約時間
                     if (dateid == ymd) {
-                        if (month < todaym) {
-                            $('#radio').append(`<label class="col-4"><input class="btnnotclick" type="radio" name="planId" value="${pID}" disabled><span class="round button">${time}</span></label>`)
-
-                        }
-                        else if (month <= todaym && date < todayd) {
-                            $('#radio').append(`<label class="col-4"><input class="btnnotclick" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
-
-                        }
-                        else if (month <= todaym && date <= todayd && hour < todayh) {
-                            $('#radio').append(`<label class="col-4"><input class="btnnotclick" type="radio" name="planId" value="${pID}" disabled><span class="round button">${time}</span></label>`)
+                        if (pOrderid != null) {
+                            $('#radio').append(`<label class="col-4"><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
                         }
                         else {
-                            $('#radio').append(`<label class="col-4"><input type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
+                            if (month <= todaym && date <= todayd && hour < todayh) {
+                                $('#radio').append(`<label class="col-4"><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
+                            }
+                            else {
+                                $('#radio').append(`<label class="col-4"><input type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
+                            }
                         }
-                        // if (pOrderid != '') {
-                        //     //$('#radio').append(`<label class="col-4"><input class="btnnotclick" type="radio" name="planId" value="${pID}" disabled><span class="round button">${time}</span></label>`)
-                        // }
-                        // else {
-
-                        // }
-
+                        
                     }
                 }
             },
