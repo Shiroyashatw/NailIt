@@ -31,7 +31,6 @@ namespace NailIt.Controllers.AnselControllers
         // GET: api/ArticleTables/L0/0/latest/Good
         [HttpGet("{boardSort}/{page}/{order}/{searchValue}")]
         [HttpGet("{boardSort}/{page}/{order}")]
-        //[HttpGet("{boardSort}/{page}")]
         public async Task<ActionResult<IEnumerable<ArticleTable>>> GetArticleTables(string boardSort = "L0", int page = 0, string order = "latest", string searchValue = "")
         {
             var amountPerPage = 10;
@@ -40,7 +39,7 @@ namespace NailIt.Controllers.AnselControllers
                 OrderByDescending(a => (order == "latest") ? a.ArticleId : a.ArticleLikesCount).
                 ThenByDescending(a => a.ArticleId).
                 ToListAsync();
-            if (searchValue != "")            
+            if (searchValue != "")
             {
                 articles = articles.
                 Where(a => a.ArticleTitle.Contains(searchValue)).
@@ -60,24 +59,41 @@ namespace NailIt.Controllers.AnselControllers
                 Take(amountPerPage).
                 ToList();
 
-            var articlesJoinMember = articles.Join(
-                _context.MemberTables,
-                a => a.ArticleAuthor,
-                m => m.MemberId,
-                (a, m) => new { article = a, m.MemberAccount, m.MemberNickname }).ToList();
+            // don't count those reply, which be report by user.
+            foreach (var article in articles)
+            {
+                var replyReport = _context.ReportTables.
+                    Where(r => r.ReportPlaceC == "D6").
+                    ToList();
+                var articleReplyReportCount = replyReport.
+                    Join(_context.ReplyTables,
+                        report => report.ReportItem,
+                        reply => reply.ReplyId,
+                        (report, reply) => new { articleId = reply.ArticleId }).
+                    Where(r => r.articleId == article.ArticleId).
+                    Count();
+                article.ArticleReplyCount -= articleReplyReportCount;
+            }
+
+            var articlesJoinMember = articles.
+                Join(_context.MemberTables,
+                    a => a.ArticleAuthor,
+                    m => m.MemberId,
+                    (a, m) => new { article = a, m.MemberAccount, m.MemberNickname }).
+                ToList();
 
             var userArticleLike = _context.ArticleLikeTables.Where(a => a.MemberId == HttpContext.Session.GetInt32("loginId")).ToList();
             var leftJoinLike = (from article in articlesJoinMember
-                               join like in userArticleLike
-                                    on article.article.ArticleId equals like.ArticleId into gj
-                               from userlike in gj.DefaultIfEmpty()
-                               select new
-                               {
-                                   article.article,
-                                   memberAccount = article.MemberAccount,
-                                   memberNickname = article.MemberNickname,
-                                   like = userlike?.ArticleLikeId == null ? false : true
-                               }).ToList();
+                                join like in userArticleLike
+                                     on article.article.ArticleId equals like.ArticleId into gj
+                                from userlike in gj.DefaultIfEmpty()
+                                select new
+                                {
+                                    article.article,
+                                    memberAccount = article.MemberAccount,
+                                    memberNickname = article.MemberNickname,
+                                    like = userlike?.ArticleLikeId == null ? false : true
+                                }).ToList();
 
 
             return Ok(leftJoinLike);

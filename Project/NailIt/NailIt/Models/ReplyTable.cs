@@ -13,6 +13,6 @@ namespace NailIt.Models
         public string ReplyContent { get; set; }
         public DateTime ReplyBuildTime { get; set; }
         public DateTime ReplyLastEdit { get; set; }
-        public int ReplyLikesCount { get; set; }
+        public int? ReplyLikesCount { get; set; }
     }
 }

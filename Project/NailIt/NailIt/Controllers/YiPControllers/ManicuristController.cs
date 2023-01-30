@@ -34,6 +34,45 @@ namespace NailIt.Controllers.YiPControllers
             return await myquery.ToListAsync();
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutManicuristTable(int id, ManicuristTable manicuristTable)
+        {
+      
+            if (id != manicuristTable.ManicuristId)
+            {
+                return BadRequest();
+            }
+            var CertainManicurist = (from o in Context.ManicuristTables
+                                          where o.ManicuristId == id
+                                          select o).FirstOrDefault();
+
+            CertainManicurist.ManicuristPic = manicuristTable.ManicuristPic;
+            CertainManicurist.ManicuristIntro = manicuristTable.ManicuristIntro;
+
+            try
+            {
+
+                await Context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ManicuristTableExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool ManicuristTableExists(int id)
+        {
+            return Context.ManicuristTables.Any(e => e.ManicuristId == id);
+        }
 
     }
 }

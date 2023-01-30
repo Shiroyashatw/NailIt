@@ -1,32 +1,66 @@
-/*#region Common*/
-.bottomBorder {
-  border-bottom: 2px solid #dee2e6;
+/*#region Font*/
+/*#endregion*/
+
+
+/*#region Fixed new article button*/
+#btnNewArticle{
+  font-size: 30px;
+  position: fixed;
+  right: 4vw;
+  bottom: 10vh;
+}
+/*#endregion*/
+
+
+/*#region Editable*/
+/* set only one picture a row, and center */
+.titleArea {
+  width: 100%;
+  min-height: 6vh;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 5px;
 }
 
-/* style="border-bottom:2px solid #dee2e6" */
-.cursor-pointer {
-  cursor: pointer;
+.contentArea {
+  width: 100%;
+  min-height: 50vh;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 5px;
 }
 
-.show {
-  display: block !important;
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
 }
 
-/*#endregion Common*/
+.editable[placeholder]:empty:before {
+  content: attr(placeholder);
+  color: #555;
+}
+
+.editable[placeholder]:empty:focus:before {
+  content: "";
+}
+
+/*#endregion*/
 
 
 
-/*#region Search_Input*/
-#searchInput {
+/*#region border_bottom_Input*/
+.border_bottom_Input {
   border: none;
   border-bottom: 1px solid #000;
 }
 
-#searchInput:focus-visible {
+.border_bottom_Input:focus-visible {
   outline: none;
 }
 
-/*#endregion Search_Input*/
+/*#endregion*/
 
 
 
@@ -71,7 +105,7 @@
   background-color: #ddd;
 }
 
-/*#endregion Dropdown*/
+/*#endregion*/
 
 
 
@@ -163,4 +197,4 @@
   }
 }
 
-/*#endregion The snackbar*/
+/*#endregion*/

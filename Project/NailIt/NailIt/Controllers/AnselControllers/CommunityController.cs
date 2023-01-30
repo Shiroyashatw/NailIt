@@ -23,13 +23,27 @@ namespace NailIt.Controllers
         }
 
         // GET: Community
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             // setup login user info
             //httpContextAccessor.HttpContext.Session.SetInt32(key, int_value);
             HttpContext.Session.SetInt32("loginId", 1);
-            HttpContext.Session.SetString("loginName", "Li-Rong-Siao");
+            HttpContext.Session.SetString("loginAccount", "Ansel Siao");
             HttpContext.Session.SetString("loginNickname", "Larryyy");
+
+            return View();
+        }
+
+        // GET: Chat
+        public IActionResult Chat(int? id)
+        {
+            // setup login user info
+            HttpContext.Session.SetInt32("loginId", 1);
+            HttpContext.Session.SetString("loginAccount", "Ansel Siao");
+            HttpContext.Session.SetString("loginNickname", "Larryyy");
+
+            // if comes with memberId which user want to talk to
+            ViewBag.FindMemberId = (id != null) ? id : -1;
 
             return View();
         }

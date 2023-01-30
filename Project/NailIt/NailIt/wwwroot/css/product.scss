@@ -160,7 +160,7 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
 
 
 // 彈出視窗 設計 
-#alert_div {
+#alert_div,#repalert_div {
     position: fixed;
     top: 10%;
     left: 20%;
@@ -183,7 +183,7 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
 }
 
 // 背後灰色遮照
-#hohodiv {
+#hohodiv,#rephohodiv {
     position: fixed;
     backdrop-filter: blur(2px);
     background: rgba(128, 128, 128, 0.329);
@@ -266,7 +266,17 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
                     z-index: -1;
                 }
             }
+            
         }
+        // .line:nth-child(1) .step {
+        //     background-color: #FF6733;
+        //     color: #333;
+        //     transition: .5s;
+        //     &::after {
+        //         background: #FF6733;
+        //         transition: .5s;
+        //     }
+        // }
         .line:nth-child(4) .step::after {
             content: none;
         }
@@ -379,7 +389,7 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
                 display: none;
             }
             #radio input:checked+.button {
-                background: #5e7380;
+                background: #333;
                 color: #fff;
                 cursor: default;
             }
@@ -394,7 +404,7 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
             
             #radio .button:hover {
                 transition: .3s;
-                background: orangered;
+                background: rgba(255, 145, 0, 0.5);
                 color: #fff;
             }
             
@@ -455,7 +465,30 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
     }
 }
 
-
+#reportform {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    padding: 0 0 0 2rem;
+    input {
+        width: 80%;
+    }
+    .reporttext textarea{
+        width: 50;
+        height: 250px;
+    }
+    .reportbot {
+        width: 100%;
+        text-align: right;
+        padding: 1.5rem 3rem 0 0;
+        button {
+            width: 6rem;
+            font-size: 20px;
+            background-color: #333;
+            color: #fff;
+        } 
+    }
+}
 
 
 

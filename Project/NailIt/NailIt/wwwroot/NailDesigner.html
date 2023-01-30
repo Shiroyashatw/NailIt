@@ -653,13 +653,12 @@
         <button id="Sendbtn" onclick="alertform()">預約</button>
     </div>
 
-    <!-- 預約表單 Sendbtn 按鈕 -->
     <div class="form-main">
         <div id="hohodiv" class="isHide"></div>
         <!-- 彈出視窗 表單 -->
         <div id="alert_div" class="isHide">
             <div class="alert_div-header">
-                <button type="button" onclick="Closeform()"><i class="bi bi-x"></i></button>
+                <button type="button" id="btncancel" onclick="Closeform()"><i class="bi bi-x"></i></button>
             </div>
             <!-- 主要表單 -->
             <div class="form-info">
@@ -708,13 +707,12 @@
                                 <p>
                                     施作項目:
                                     <select name="OrderItem">
-
+                                        
                                     </select>
                                 </p>
                                 <p>
                                     造型:
                                     <select name="OrderItemName">
-
                                     </select>
                                 </p>
 
@@ -782,7 +780,7 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step1()">上一步</button>
-                                        <button class="stepbtn" type="button" onclick="step3()">下一步</button>
+                                        <button id="step3btn" class="stepbtn" type="button" onclick="step3()">下一步</button>
                                     </div>
 
                                 </div>
@@ -800,18 +798,9 @@
                                 <input type="hidden" name="OrderType" value="true">
                                 <input type="hidden" name="OrderOrderTime" value="">
                                 <input type="hidden" name="OrderStateC" value="">
-                                <p>預約日期:2023-1-1</p>
-                                <p>
-                                    施作部位:
-                                </p>
-                                <p>
-                                    卸甲:
-                                </p>
-                                <p>
-                                    施作項目:
-                                </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                <div class="rescheck">
+
+                                </div>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -820,7 +809,7 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">上一步</button>
-                                        <button class="stepbtn" type="button" onclick="step4()">下一步</button>
+                                        <button id="btnsend" class="stepbtn" type="button" onclick="step4()">下一步</button>
                                     </div>
                                 </div>
                             </div>
@@ -831,25 +820,14 @@
                     <div id="step4" class="container step4-res isHide">
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
-                                <p>預約成功: 訂單編號: SA11111102</p>
-                                <p>預約日期:2023-1-1 13:00</p>
-                                <p>
-                                    施作部位:
-                                </p>
-                                <p>
-                                    卸甲:
-                                </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                <p>預約成功，請耐心等待預約設計師回覆</p>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
-                                        <button class="stepbtn" type="button" onclick="step3()">上一步</button>
-                                        <button id="btnsend" class="stepbtn" type="button" onclick="">送出</button>
+                                        <button class="stepbtn" type="button" onclick="Closeform()">完成</button>
                                     </div>
                                 </div>
                             </div>
@@ -964,6 +942,12 @@
         function alertform() {
             document.getElementById("hohodiv").className = "isShow";
             document.getElementById("alert_div").className = "isShow";
+
+            $('.Progress .line:nth-child(1) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
         }
         function Closeform() {
             document.getElementById("alert_div").className = "isHide";
@@ -972,12 +956,32 @@
         function step1() {
             document.getElementById("step1").className = "isShow";
             document.getElementById("step2").className = "isHide";
+
+            $('.Progress .line:nth-child(2) .step').css({
+                "background-color": "#fff",
+                "color": "#3498db",
+                "transition": ".3s"
+            })
+            
         }
         function step2() {
             document.getElementById("step1").className = "isHide";
             document.getElementById("step2").className = "isShow";
             document.getElementById("step3").className = "isHide";
             document.getElementById("step4").className = "isHide";
+
+            $('.Progress .line:nth-child(2) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
+
+            $('.Progress .line:nth-child(3) .step').css({
+                "background-color": "#fff",
+                "color": "#3498db",
+                "transition": ".3s"
+            })
+
         }
         function step3() {
             var checktime = $('input[name="planId"]').prop('checked')
@@ -991,7 +995,14 @@
                 document.getElementById("step2").className = "isHide";
                 document.getElementById("step3").className = "isShow";
                 document.getElementById("step4").className = "isHide";
+
+                $('.Progress .line:nth-child(3) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
             }
+            
 
         }
         function step4() {
@@ -999,6 +1010,12 @@
             document.getElementById("step2").className = "isHide";
             document.getElementById("step3").className = "isHide";
             document.getElementById("step4").className = "isShow";
+
+            $('.Progress .line:nth-child(4) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
         }
     </script>
 
@@ -1013,7 +1030,30 @@
         getReserveDate()
         getReserveTime()
         getOrderPartC()
-        getDemosetData()
+        postOrder()
+    </script>
+    <script>
+        $('#step3btn').on('click', function () {
+            $('.rescheck').empty();
+            let rdate = $('input[name="planId"]').attr("date")
+            let rtime = $('input[name="planId"]').attr("time")
+            let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
+            let rremovec =  $('select[name="OrderRemovalC"]').find("option:selected").text()
+            let ritem = $('select[name="OrderItem"]').find("option:selected").text()
+            let ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
+            let rprice = $('input[name="OrderPrice"]').val()
+            let rdep = $('input[name="OrderDeposit"]').val()
+            $('.rescheck').append(`
+            <p>預約日期:${rdate} 時間:${rtime}</p>
+            <p>施作部位:${rparc}</p>
+            <p>卸甲:${rremovec}</p>
+            <p>施作項目:${ritem}</p>
+            <p>造型:${ritemName}</p>
+            <p>預估價位:NT$${rprice}</p>
+            <p>訂金:NT$${rdep}</p>
+            `);
+
+        })
     </script>
 </body>
 

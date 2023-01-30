@@ -12,5 +12,6 @@ namespace NailIt.Models
         public int MessageReceiver { get; set; }
         public string MessageContent { get; set; }
         public DateTime MessageTime { get; set; }
+        public bool MessageRead { get; set; }
     }
 }

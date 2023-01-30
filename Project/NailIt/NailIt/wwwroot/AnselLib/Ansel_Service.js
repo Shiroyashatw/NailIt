@@ -77,9 +77,6 @@ class ArticleService {
     static getArticles(boardSort, page, order) {
         return fetchGet(`/api/ArticleTables/${boardSort}/${page}/${order}`);
     }
-    // static getArticles(boardSort, page) {
-    //     return fetchGet(`/api/ArticleTables/${boardSort}/${page}`);
-    // }
     static postArticle(data) {
         return fetchPost(`/api/ArticleTables`, data);
     }
@@ -97,9 +94,6 @@ class ArticleSocialService {
     static getMyArticles(articleAuthorID, page, order) {
         return fetchGet(`/api/ArticleSocial/GetMyArticles/${articleAuthorID}/${page}/${order}`);
     }
-    // static getMyArticles(articleAuthorID, page) {
-    //     return fetchGet(`/api/ArticleSocial/${articleAuthorID}/${page}`);
-    // }
 }
 class ArticleLikeService {
     static postArticleLike(data) {
@@ -107,6 +101,37 @@ class ArticleLikeService {
     }
     static deleteArticleLike(articleId, memberId) {
         return fetchDelete(`/api/ArticleLikeTables/${articleId}/${memberId}`);
+    }
+}
+class BlacklistService {
+    static postBlacklist(data) {
+        return fetchPost(`/api/Blacklist`, data);
+    }
+    static deleteBlacklist(builderId, targetId) {
+        return fetchDelete(`/api/Blacklist/${builderId}/${targetId}`);
+    }
+}
+class ChatService {
+    static getMembersMsg() {
+        return fetchGet(`/api/Chat/GetMembersMsg}`);
+    }
+    static getSingleMemberMsg(memberId) {
+        return fetchGet(`/api/Chat/GetSingleMemberMsg/${memberId}`);
+    }
+    static getNewMsg(updateTime) {
+        return fetchGet(`/api/Chat/GetNewMsg/${updateTime}`);
+    }
+    static putMsgRead(senderId) {
+        return fetchPut(`/api/Chat/PutMsgRead/${senderId}`);
+    }
+    static putMsgRevoke(id) {
+        return fetchPut(`/api/Chat/PutMsgRevoke/${id}`);
+    }
+    static postMessage(data) {
+        return fetchPost(`/api/Chat/PostMessage`,data);
+    }
+    static postMsgImage(data) {
+        return fetchPostMul(`/api/Chat/PostMsgImage`,data);
     }
 }
 class ReplyService {
@@ -147,67 +172,84 @@ function initialDate(value) {
     return isUndefined(value) ? new Date() : value;
 }
 function initialBool(value) {
-    return isUndefined(value) ? new false : value;
+    return isUndefined(value) ? false : value;
 }
 
 class ArticleTable {
     constructor(data) {
-        this.ArticleId = initialNum(data.ArticleId);
-        this.ArticleBoardC = initialStr(data.ArticleBoardC);
-        this.ArticleAuthor = initialNum(data.ArticleAuthor);
-        this.ArticleTitle = initialStr(data.ArticleTitle);
-        this.ArticleReplyCount = initialNum(data.ArticleReplyCount);
-        this.ArticleLikesCount = initialNum(data.ArticleLikesCount);
-        this.ArticleBuildTime = initialDate(data.ArticleBuildTime);
-        this.ArticleLastEdit = initialDate(data.ArticleLastEdit);
-        this.ArticleContent = initialStr(data.ArticleContent);
+        this.articleId = initialNum(data.articleId);
+        this.articleBoardC = initialStr(data.articleBoardC);
+        this.articleAuthor = initialNum(data.articleAuthor);
+        this.articleTitle = initialStr(data.articleTitle);
+        this.articleReplyCount = initialNum(data.articleReplyCount);
+        this.articleLikesCount = initialNum(data.articleLikesCount);
+        this.articleBuildTime = initialDate(data.articleBuildTime);
+        this.articleLastEdit = initialDate(data.articleLastEdit);
+        this.articleContent = initialStr(data.articleContent);
     }
 }
 class ArticleLikeTable {
     constructor(data) {
-        this.ArticleLikeId = initialNum(data.ArticleLikeId);
-        this.ArticleId = initialNum(data.ArticleId);
-        this.MemberId = initialNum(data.MemberId);
+        this.articleLikeId = initialNum(data.articleLikeId);
+        this.articleId = initialNum(data.articleId);
+        this.memberId = initialNum(data.memberId);
     }
 }
 class ArticlePicTable {
     constructor(data) {
-        this.ArtclePicId = initialNum(data.ArtclePicId);
-        this.ArticleId = initialNum(data.ArticleId);
-        this.ArticlePicPath = initialStr(data.ArticlePicPath);
+        this.artclePicId = initialNum(data.artclePicId);
+        this.articleId = initialNum(data.articleId);
+        this.articlePicPath = initialStr(data.articlePicPath);
+    }
+}
+class MessageBlacklistTable {
+    constructor(data) {
+        this.blacklistId = initialNum(data.blacklistId);
+        this.blacklistBuilder = initialNum(data.blacklistBuilder);
+        this.blacklistTarget = initialNum(data.blacklistTarget);
+    }
+}
+class MessageTable {
+    constructor(data) {
+        this.messageId = initialNum(data.messageId);
+        this.messageSender = initialNum(data.messageSender);
+        this.messageReceiver = initialNum(data.messageReceiver);
+        this.messageContent = initialStr(data.messageContent);
+        this.messageTime = initialDate(data.messageTime);
+        this.messageRead = initialBool(data.messageRead);
     }
 }
 class ReplyTable {
     constructor(data) {
-        this.ReplyId = initialNum(data.ReplyId);
-        this.ArticleId = initialNum(data.ArticleId);
-        this.MemberId = initialNum(data.MemberId);
-        this.ReplyContent = initialStr(data.ReplyContent);
-        this.ReplyBuildTime = initialDate(data.ReplyBuildTime);
-        this.ReplyLastEdit = initialDate(data.ReplyLastEdit);
-        this.ReplyLikesCount = initialNum(data.ReplyLikesCount);
+        this.replyId = initialNum(data.replyId);
+        this.articleId = initialNum(data.articleId);
+        this.memberId = initialNum(data.memberId);
+        this.replyContent = initialStr(data.replyContent);
+        this.replyBuildTime = initialDate(data.replyBuildTime);
+        this.replyLastEdit = initialDate(data.replyLastEdit);
+        this.replyLikesCount = initialNum(data.replyLikesCount);
     }
 }
 class ReplyLikeTable {
     constructor(data) {
-        this.ReplyLikeId = initialNum(data.ReplyLikeId);
-        this.ReplyId = initialNum(data.ReplyId);
-        this.MemberId = initialNum(data.MemberId);
+        this.replyLikeId = initialNum(data.replyLikeId);
+        this.replyId = initialNum(data.replyId);
+        this.memberId = initialNum(data.memberId);
     }
 }
 class ReportTable {
     constructor(data) {
-        this.ReportId = initialNum(data.ReportId);
-        this.ReportBuilder = initialNum(data.ReportBuilder);
-        this.ReportTarget = initialNum(data.ReportTarget);
-        this.ReportItem = initialNum(data.ReportItem);
-        this.ReportPlaceC = initialStr(data.ReportPlaceC);
-        this.ReportReasonC = initialStr(data.ReportReasonC);
-        this.ReportContent = initialStr(data.ReportContent);
-        this.ReportBuildTime = initialDate(data.ReportBuildTime);
-        this.ReportCheckTime = initialDate(data.ReportCheckTime);
-        this.ManagerId = initialNum(data.ManagerId);
-        this.ReportResult = initialBool(data.ReportResult);
+        this.reportId = initialNum(data.reportId);
+        this.reportBuilder = initialNum(data.reportBuilder);
+        this.reportTarget = initialNum(data.reportTarget);
+        this.reportItem = initialNum(data.reportItem);
+        this.reportPlaceC = initialStr(data.reportPlaceC);
+        this.reportReasonC = initialStr(data.reportReasonC);
+        this.reportContent = initialStr(data.reportContent);
+        this.reportBuildTime = initialDate(data.reportBuildTime);
+        this.reportCheckTime = initialDate(data.reportCheckTime);
+        this.managerId = initialNum(data.managerId);
+        this.reportResult = initialBool(data.reportResult);
     }
 }
 //#endregion

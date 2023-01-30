@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <nav class="d-flex justify-content-center navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="d-flex justify-content-center navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="col-sm-10 row">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Nail IT</a>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -34,13 +34,13 @@
             </div>
         </nav>
     </header>
-    <div class="d-flex justify-content-center">  
-        <main role="main" class="pb-3 col-sm-10">
+    <div id="mainPadding" class="d-flex justify-content-center">
+        <main id="mainBackground" role="main" class="col-sm-10">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted d-flex justify-content-center">
+    <footer class="footer text-muted d-flex justify-content-center bg-dark">
         <div class="col-sm-10">
             &copy; 2023 - NailIT - <a asp-area="" asp-controller="Home" asp-action="About">關於我們</a>
         </div>

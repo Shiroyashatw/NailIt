@@ -14,5 +14,6 @@ namespace NailIt.Models
         public string CommentContent { get; set; }
         public bool CommentType { get; set; }
         public DateTime CommentBuildTime { get; set; }
+        public int CommentOrderId { get; set; }
     }
 }

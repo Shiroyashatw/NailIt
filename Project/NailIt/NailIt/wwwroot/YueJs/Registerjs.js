@@ -105,7 +105,7 @@ function RegisterPost() { //呼叫post api 的方法
             body: raw,
             redirect: 'follow'
         };
-        fetch("https://localhost:44308/api/Member", requestOptions)
+        fetch("https://localhost:44308/api/YueMember", requestOptions)
             .then(response => response.text())
             .then(function (result) {
                 if ("true"==result)
