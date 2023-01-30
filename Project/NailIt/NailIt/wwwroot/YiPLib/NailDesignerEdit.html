@@ -90,14 +90,15 @@
         }
 
         #photoframe {
-            padding-left: 50px;
-            padding-right: 50px;
+            /*padding-left: 50px;*/
+            /*padding-right: 50px;*/
             text-align: center;
         }
 
         .Profileimg {
             max-width: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            /*object-fit: cover;*/
             height: 250px;
             width: 250px;
             object-position: center;
@@ -212,7 +213,7 @@
             display: inline-block;
             color: #ddd;
             overflow: hidden;
-            font-size: 30px;
+            font-size: 24px;
             text-shadow: 0px 1px 0 rgb(198, 198, 198);
             margin-top: -20px;
         }
@@ -269,9 +270,13 @@
             border: none;
             background-color: #7F7F7F;
             font-size: 16px;
-            width: 25%;
-            height: 35px;
+            /*width: 25%;*/
+            /*height: 35px;*/
             margin-top: 10px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 25px;
+            padding-right: 25px;
         }
 
         .Editbtn {
@@ -309,7 +314,7 @@
         }
 
         #EdChBt {
-            padding: 20px;
+            margin: 20px;
         }
 
         #ToSort {
@@ -709,8 +714,8 @@
             <div class="col-4"></div>
             <div class="col-3" id="EdChBt">
                 <button class="Editbtn" v-on:click="PutM">完成</button>
-                <a class="Checkbtn" v-if="Editing" v-on:click="Previewing">預覽</a>
-                <a class="Checkbtn" v-if="preview" v-on:click="BackEdit">編輯</a>
+                <button class="Checkbtn" v-if="Editing" v-on:click="Previewing">預覽</button>
+                <button class="Checkbtn" v-if="preview" v-on:click="BackEdit">編輯</button>
             </div>
             <div class="col-5"></div>
         </div>
@@ -785,10 +790,10 @@
                         <!--<button data-toggle="modal" data-target="#EditModal">新增</button>-->
                     </div>
                     <div class="col-4">
-                        <!--<form>
+                        <form>
                             <input class="Searchbar" type="text" placeholder="作品,標籤">
                             <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>-->
+                        </form>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1247,9 +1252,10 @@
 
 
     <script>
-        var PercantStar;
-        var FloatStar;
-        var DemoLenth;
+        let ManicuristID = 2;
+        let PercantStar;
+        let FloatStar;
+        let DemoLenth;
 
         $('.Chgcontext').hide();
         $('#pageone').show();
@@ -1257,13 +1263,13 @@
         $('#GetFileBtn').css('visibility', 'hidden');
 
         function Showthis(nowPage) {
-            var thisbtn = `button[value=${nowPage.value}]`;
+            let thisbtn = `button[value=${nowPage.value}]`;
             console.log(nowPage.value);
-            var BTNlist = ["demo", "event"];
-            var Contextlist = ["#pageone", "#pagetwo"];
+            let BTNlist = ["demo", "event"];
+            let Contextlist = ["#pageone", "#pagetwo"];
             $('.Chgcontext').hide();
             $('.recentbtn').removeClass('NowUnderLine');
-            for (var i = 0; i < BTNlist.length; i++) {
+            for (let i = 0; i < BTNlist.length; i++) {
                 if (nowPage.value == BTNlist[i]) {
                     console.log(Contextlist[i]);
                     $(thisbtn).addClass('NowUnderLine');
@@ -1276,11 +1282,9 @@
         $('.OnTxt').css('visibility', 'hidden');
         function GetVal(e, u) {
             console.log(e);
-            //var NowGroup = `input[name=${e.name}]`
             var NowGroup = `label[name=${e.name}]`
             $(NowGroup).removeClass('TagFullColor');
 
-            //var Nowtxt = `input[type=text][name=${e.name}]`
             var Nowtxt = `input[type=text][name=${e.name}]`
             if (e.value == "自訂") {
                 $(Nowtxt).css('visibility', 'visible');
@@ -1454,32 +1458,29 @@
         var ShowData = new Vue({
             el: '#ShowData',
             data: {
-                DesignList: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號", "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true, "manicuristSalonPhone": "0923859697", "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試", "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459", "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計", "manicuristScore": 4.6 }],
-                DemoSetList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoSetCover": "UploadFolder/Oneone.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是今年最流行的珍珠音調粉色系呦", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "碎花", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 1 }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoSetCover": "UploadFolder/Onetwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是彩色手手", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "造型", "demoSetTag2": "知性風", "demoSetTag3": "幾何", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 2 }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoSetCover": "UploadFolder/Onethree.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "造型腳腳", "demoSetPrice": 1200.0000, "demoSetDeposit": 600.0000, "demoSetTag1": "造型", "demoSetTag2": "漸層", "demoSetTag3": "可愛風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 3 }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoSetCover": "UploadFolder/Twoone.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "這紫色手手", "demoSetPrice": 999.0000, "demoSetDeposit": 400.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "華麗風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 4 }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoSetCover": "UploadFolder/Twotwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "喝咖啡最適合的美甲", "demoSetPrice": 850.0000, "demoSetDeposit": 100.0000, "demoSetTag1": "純色", "demoSetTag2": "立體", "demoSetTag3": "晶片", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 5 }, { "demoSetId": 7, "demoSetName": "我是珍珠", "demoSetCover": "UploadFolder/Twothree.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "超級大隻豬", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "可愛", "demoSetTag2": "碎花", "demoSetTag3": "漸層", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-14T00:00:00", "demoSetMainEndTime": "2023-01-31T23:59:59", "demoSetColor": 6 }, { "demoSetId": 8, "demoSetName": "", "demoSetCover": "UploadFolder/Threeone.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 7 }, { "demoSetId": 9, "demoSetName": "卡比獸美甲", "demoSetCover": "UploadFolder/Threetwo.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "我愛卡比獸", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "可愛風", "demoSetTag2": "漸層", "demoSetTag3": "立體", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": 8 }],
-                DemoCover: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Oneone.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onetwo.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onethree.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twoone.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twotwo.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twothree.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threeone.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threetwo.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threethree.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourone.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourtwo.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourthree.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fiveone.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivetwo.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivethree.png" }],
-                DemoList: [{ "demoId": 1, "demoSetId": 2, "demoPic": "UploadFolder/Oneone.png" }],
-                MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
+                DesignList: [],
+                DemoSetList: [],
+                DemoCover: [],
+                DemoList: [],
+                MainDemoCover: [],
                 width: "",
-                InsertDemoSet: [{ "demoSetName": null, "demoSetCover": "尚未選擇", "manicuristId": 2, "demoSetPartC": "none", "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "none", "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": false, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": "none" }],
+                InsertDemoSet: [{ "demoSetName": null, "demoSetCover": "尚未選擇", "manicuristId": ManicuristID, "demoSetPartC": "none", "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "none", "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": false, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": "none" }],
                 TagFtxt: "",
                 TagStxt: "",
                 TagTtxt: "",
-                CodeC: [{ "codeId": "C0", "codeUseIn": "C", "codeRepresent": "手" }, { "codeId": "C1", "codeUseIn": "C", "codeRepresent": "腳" }, { "codeId": "C2", "codeUseIn": "C", "codeRepresent": "手、腳" }],
-                PutManicurist: [{ "manicuristId": 2, "manicuristPic": "", "manicuristIntro": "" }],
+                CodeC: [],
+                PutManicurist: [{ "manicuristId": ManicuristID, "manicuristPic": "", "manicuristIntro": "" }],
                 preview: true,
                 Editing: false,
-                TagList: [{ "tagId": 1, "tagName": "純色" }, { "tagId": 2, "tagName": "漸層" }, { "tagId": 3, "tagName": "碎花" }, { "tagId": 4, "tagName": "幾何" }, { "tagId": 5, "tagName": "立體" }, { "tagId": 6, "tagName": "晶片" }, { "tagId": 7, "tagName": "鑽石" }, { "tagId": 8, "tagName": "可愛風" }, { "tagId": 9, "tagName": "知性風" }, { "tagId": 10, "tagName": "華麗風" }, { "tagId": 11, "tagName": "花磚" }, { "tagId": 12, "tagName": "大理石" }, { "tagId": 13, "tagName": "手繪美甲" }, { "tagId": 14, "tagName": "卡通人物" }, { "tagId": 15, "tagName": "乾燥玫瑰" }],
+                TagList: [],
                 NineTag: [],
                 FixTag: [],
-                //PostthisDemo: [{ "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }],
-                //PostthisDemo: [{ "demoPic": "", "demoSetId": null }],
                 PostthisDemo: [],
-                //PostDemoSetID:"",
-                FixColor: [{ "colorId": 1, "colorName": "灰色", "colorCss": "#5D5D5D" }, { "colorId": 2, "colorName": "黑色", "colorCss": "#000000" }, { "colorId": 3, "colorName": "淺褐咖啡色", "colorCss": "#754E43" }, { "colorId": 4, "colorName": "奶茶色", "colorCss": "#E1C9B1" }, { "colorId": 5, "colorName": "白色", "colorCss": "#F2F2F2" }, { "colorId": 6, "colorName": "粉色", "colorCss": "#DFBCB6" }, { "colorId": 7, "colorName": "紫色", "colorCss": "#875D73" }, { "colorId": 8, "colorName": "藍色", "colorCss": "#2B497B" }, { "colorId": 9, "colorName": "綠色", "colorCss": "#A0C2AA" }, { "colorId": 10, "colorName": "黃色", "colorCss": "#FFE590" }, { "colorId": 11, "colorName": "橘色", "colorCss": "#E29466" }, { "colorId": 12, "colorName": "紅色", "colorCss": "#B65F4B" }, { "colorId": 13, "colorName": "漸層色", "colorCss": null }, { "colorId": 14, "colorName": "透明色", "colorCss": "#FFFFFF" }],
-                GetUpList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調" }],
-                PutUpCover: [{ "demoSetId": 2, "demoSetCover": "" }],
-                PostDemoSet: [{ "demoSetName": null, "demoSetCover": "", "manicuristId": 2, "demoSetPartC": null, "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": null, "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
-                ThisFormData: [{ "demoSetId": 2, "demoSetName": "", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "", "demoSetPrice": 900, "demoSetDeposit": 500, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetPublic": true, "demoSetMain": true, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
+                FixColor: [],
+                GetUpList: [{ "demoSetId": ManicuristID, "demoSetName": "碧色珍珠音調" }],
+                PutUpCover: [{ "demoSetId": ManicuristID, "demoSetCover": "" }],
+                PostDemoSet: [{ "demoSetName": null, "demoSetCover": "", "manicuristId": ManicuristID, "demoSetPartC": null, "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": null, "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
+                ThisFormData: [{ "demoSetId": "", "demoSetName": "", "manicuristId": ManicuristID, "demoSetPartC": "C1", "demoSetContent": "", "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetPublic": true, "demoSetMain": true, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
                 StartDate: "",
                 EndDate: "",
                 GetCertainDemoKey: "",
@@ -1495,8 +1496,6 @@
                         this.InsertDemoSet[0].demoSetTag3 = this.TagTtxt;
                     }
 
-
-                    //$('form > input').text("");
 
                     $.ajax({
                         type: "post",
@@ -1523,8 +1522,7 @@
                 PutM: function () {
                     $.ajax({
                         type: "put",
-                        //url: "api/path/" + this.InsertDemoSet.manicuristId,
-                        url: "/api/Manicurist/2",
+                        url: "/api/Manicurist/" + ManicuristID,
                         contentType: "application/json",
                         data: JSON.stringify(this.PutManicurist[0]),
                         success: function () {
@@ -1537,8 +1535,7 @@
                     console.log(this.ThisFormData[0]);
                     $.ajax({
                         type: "put",
-                        //url: "api/path/" + this.InsertDemoSet.manicuristId,
-                        url: "/api/DemoSet/PutDemoSetTable/2",
+                        url: "/api/DemoSet/PutDemoSetTable/" + ManicuristID,
                         contentType: "application/json",
                         data: JSON.stringify(this.ThisFormData[0]),
                         success: function () {
@@ -1601,47 +1598,26 @@
 
         $.ajax({
             type: "get",
-            url: "/api/Manicurist/2",
+            url: "/api/Manicurist/" + ManicuristID,
             success: function (e) {
-                console.log(e[0]);
-                ShowData.DesignList = e[0];
-                PercantStar = e[0].manicuristScore;
+                ShowData.DesignList = e;
+                PercantStar = e.manicuristScore;
                 FloatStar = (PercantStar * 20) + '%';
                 ShowData.width = FloatStar;
-                ShowData.PutManicurist[0].manicuristIntro = e[0].manicuristIntro;
-                ShowData.PutManicurist[0].manicuristPic = e[0].manicuristPic;
+                ShowData.PutManicurist[0].manicuristIntro = e.manicuristIntro;
+                ShowData.PutManicurist[0].manicuristPic = e.manicuristPic;
             }
         });
 
         $.ajax({
             type: "get",
-            url: "/api/DemoSet/GetDemoSetTable/2",
+            url: "/api/DemoSet/GetDemoSetTable/" + ManicuristID,
             success: function (e) {
-                //console.log(e);
-                ShowData.DemoSetList = e;
-                DemoLenth = e.length;
+                for (demoset in e) {
+                    ShowData.DemoSetList.push(e[demoset]);
+                }
             }
         });
-
-
-
-        //$.ajax({
-        //    type: "get",
-        //    url: "/api/DemoSet/GetDemoCover/2",
-        //    success: function (e) {
-        //        //console.log(e);
-        //        ShowData.DemoCover = e;
-        //    }
-        //});
-
-        //$.ajax({
-        //    type: "get",
-        //    url: "/api/DemoSet/GetMainDemoCover/2",
-        //    success: function (e) {
-        //        //console.log(e);
-        //        ShowData.MainDemoCover = e;
-        //    }
-        //});
 
         $.ajax({
             type: "get",
@@ -1691,7 +1667,10 @@
             url: "/api/color",
             success: function (e) {
                 console.log(e);
-                ShowData.FixColor = e;
+                //ShowData.FixColor = e;
+                for (color in e) {
+                    ShowData.FixColor.push(e[color]);
+                }
             }
         });
 
@@ -1700,67 +1679,59 @@
             url: "/api/PCodeTable",
             success: function (e) {
                 console.log(e);
+                for (code in e) {
+                    ShowData.CodeC.push(e[code]);
+                }
             }
         });
 
-        var inputfile;
+        let inputfile;
         async function Getfile(e) {
             let form = new FormData();
             form.append("file", e.files[0]);
             console.log(e.files[0]);
-            //await fetch('https://localhost:44308/api/File', {
             await fetch('/api/File', {
                 method: 'POST',
                 body: form
             });
             inputfile = e.files[0].name;
             GetFileBtn();
-            //console.log("UploadFolder/" + e.files[0].name);
         }
-        var GetFileBtn = function () {
-            var FilePath = "UploadFolder/" + inputfile;
+        let GetFileBtn = function () {
+            let FilePath = "UploadFolder/" + inputfile;
             $('#DesignerImg').prop('src', FilePath);
             console.log(FilePath);
             ShowData.PutManicurist[0].manicuristPic = FilePath;
-            //console.log(ShowData.PutManicurist.manicuristPic);
         }
 
-        var inputCoverfile;
+        let inputCoverfile;
         async function GetCoverfile(e) {
             let Coverform = new FormData();
             Coverform.append("file", e.files[0]);
             console.log(e.files[0]);
-            //await fetch('https://localhost:44308/api/File', {
             await fetch('/api/File', {
                 method: 'POST',
                 body: Coverform
             });
             inputCoverfile = e.files[0].name;
-            var CoverFilePath = "UploadFolder/" + inputCoverfile;
+            let CoverFilePath = "UploadFolder/" + inputCoverfile;
             console.log(CoverFilePath);
             ShowData.InsertDemoSet[0].demoSetCover = CoverFilePath;
             $('#UpFileText').text(inputCoverfile);
-            //GetCoverFileBtn();
-            //console.log("UploadFolder/" + e.files[0].name);
         }
-        //var GetCoverFileBtn = function () {
-        //    var CoverFilePath = "UploadFolder/" + inputCoverfile;
-        //    console.log(CoverFilePath);
-        //    InsertDemoSet[0].demoSetCover = CoverFilePath;
-        //}
 
 
         function cleartext() {
             document.getElementsByClassName('ExitEmpty').value = '';
         }
 
-        var inputMorefile = [];
+        let inputMorefile = [];
         async function GetMorefile(e) {
-            var MoreFile = new FormData();
-            for (var i = 0; i < e.files.length; i++) {
+            let MoreFile = new FormData();
+            for (let i = 0; i < e.files.length; i++) {
                 MoreFile.append("files", e.files[i], `${e.files[i].name}`);
                 inputMorefile[i] = e.files[i].name;
-                var CoverPath = `UploadFolder/${e.files[i].name}`;
+                let CoverPath = `UploadFolder/${e.files[i].name}`;
                 //console.log("POST" +ShowData.PostDemo[i].demoSetId);
                 //console.log("THIS" + ShowData.ThisFormData[0].demoSetId);
                 ShowData.PostthisDemo.push({ "demoPic": CoverPath, "demoSetId": ShowData.PutUpCover[0].demoSetId });
@@ -1771,37 +1742,27 @@
                 //document.getElementById('UpDemoText').innerHTML += `${e.files[i].name} \n`;
             }
             console.log(MoreFile);
-            //await fetch('https://localhost:44308/api/Files', {
             await fetch('/api/Files', {
                 method: 'POST',
                 body: MoreFile
             });
             console.log(inputMorefile);
-            //var FirstFilePath = "UploadFolder/" + inputMorefile[0];
         }
 
-        //var inputCoverfile;
         var PutCoverimg;
         async function PutCoverfile(e) {
-            //let Coverform = new FormData();
             let Coverimg = new FormData();
             Coverimg.append("file", e.files[0]);
             console.log(e.files[0]);
-            //await fetch('https://localhost:44308/api/File', {
             await fetch('/api/File', {
                 method: 'POST',
                 body: Coverimg
             });
             PutCoverimg = e.files[0].name;
-            //var CoverFilePath = "UploadFolder/" + PutCoverimg;
             var CoverimgPath = "UploadFolder/" + PutCoverimg;
             console.log(CoverimgPath);
             $('#Previewphoto').attr('src', CoverimgPath);
             ShowData.PutUpCover[0].demoSetCover = CoverimgPath;
-            //ShowData.InsertDemoSet[0].demoSetCover = CoverimgPath;
-            //$('#UpFileText').text(PutCoverimg);
-            //GetCoverFileBtn();
-            //console.log("UploadFolder/" + e.files[0].name);
         }
 
 

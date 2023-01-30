@@ -51,20 +51,28 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <h6>請輸入電子信箱</h6>
+                        <h6>請輸入電子信箱(我們將寄送驗證碼到此信箱)</h6>
                         <div class="certified-input">
                             <input type="text" placeholder="example@gmail.com" id="emailcertified" class="form-control" required>
                             <br>
-                            <button id="certified-button" class="btn" onclick="sendmail()" value="newcard">發送驗證信</button>
+                            <button id="certified-button" class="btn" data-dismiss="modal"  onclick="sendmail()" value="newcard">發送驗證碼</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- 輸入驗證碼 -->
+        <div id="insertverif" class="insert-topdiv">
+            <div class="insert-content">
+                <span class="close111">&times;</span>
+                <p>請輸入驗證碼</p>
+                <input type="text" name="name" value="" />
+            </div>
+        </div>
         <div class="col-1">
 
         </div>
-        <div class="col-7" >
+        <div class="col-7">
             <div class="inner1"><b>我的帳戶</b></div>
             <div id="inner3content" class="inner3">
                 <div id="memberinfor">
@@ -333,7 +341,7 @@
                             <h5 class="bankaccount">{{shoplist.manicuristBankCompanyName}}</h5> <h5 class="bankaccount">{{shoplist.manicuristBankName}}({{shoplist.manicuristBankNameBranch}})</h5><h5 id="bankaccount1" class="bankaccount"></h5><button id="btndelete" v-on:click="deleteaccount" type="button" class="btn">刪除帳號</button>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="content" id="my-appointment">
                     <div class="switch-div">
                         <button class="switch-btn" id="switch-ing" onclick="orderstat(event,'ing','switch-ing')">預約中</button>
@@ -445,7 +453,7 @@
                             </div>
                             <br />
                         </div>
-                        </div>
+                    </div>
 
                     <div id="finish" class="tab-order">
                         <div v-for="(fin,key) in finlist">
@@ -499,7 +507,7 @@
                             </div>
                             <br />
                         </div>
-                        </div>
+                    </div>
                     <div id="cancel" class="tab-order">
                         <div v-for="(cancel,key) in cancellist">
                             <div class="order-name"><h6>{{cancel.manicuristSalonName}}</h6><h6 class="order-cancel">已取消</h6></div>
@@ -551,7 +559,7 @@
                             </div>
                             <br />
                         </div>
-                        </div>
+                    </div>
                 </div>
                 <!-- 我的評價-->
                 <div id="allevaluate">
@@ -565,7 +573,7 @@
                                     <div class="product-picture"><img v-bind:src="item.demoSetCover" alt=""></div>
                                     <div class="product-information"><h5><b>{{item.manicuristSalonName}}</b></h5><h6 style="font-size:11px">{{item.orderItemName}}</h6><h6 style="font-size:11px;color:gray">{{item.demoSetContent}}</h6><h6 class="productdetil">完成日期:{{item.orderOrderTime}}</h6></div>
                                     <div class="btn-order-stat"><pre>訂金 NT${{item.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'evashow'+[key]" onclick="Getevashowdetail(this)" data-target="#showdetil-evaluation" href="#">詳情</a></P></div>
-             
+
                                 </div>
                                 <br>
                                 <div v-bind:class="'rating'+[key]">
@@ -576,10 +584,10 @@
                                     <span v-bind:id="'star5'+[key]" class="fa fa-star-o" onclick="ratstar(this)"></span>
                                 </div>
                                 <div class="commment">
-                                    <textarea name="comment-text" class="form-control" v-bind:id="'commontext'+[key]"  cols="30" rows="10"></textarea>
+                                    <textarea name="comment-text" class="form-control" v-bind:id="'commontext'+[key]" cols="30" rows="10"></textarea>
                                     <button class="btn" v-bind:value="[key]" onclick="evainsertbtn(this)">評價</button>
                                 </div>
-                                <hr  />
+                                <hr />
                                 <div class="modal fade" id="showdetil-evaluation" tabindex="-1" role="dialog" aria-labelledby="showdetil-evaluation" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -750,7 +758,7 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
+                        </div>
                         <div class="tab-order" id="custom-finish">
                             <div v-for="(item,key) in historyfinlist">
                                 <br>
@@ -817,10 +825,10 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
+                        </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
 
         <div class="col-1">
@@ -857,7 +865,8 @@
                 }], creditlist: [{
                     "creditCardOwner": 1, "creditCardNumber": null, "creditCardExpirationdateYear": null, "creditCardExpirationdateMon": null
                     , "creditCardHolder": null, "creditCardBilladdress": null, "creditCardPostalCode": null
-                }],shoplistcard:[]
+                }], shoplistcard: [],
+                verifcodelist: [{ "VerifcodeId": null,"Verifcodetext":null}]
             },
             methods: { //會員資料修改
                 btnmodifmember: function () {
@@ -929,7 +938,7 @@
                             alert("資料修改成功");
                         }
                     })
-                }, 
+                },
                 // 新增信用卡
                 btninsertcard: function () {
                     var flag = true;
@@ -957,71 +966,80 @@
                     if (flag == true) {
                         app.creditlist[0].creditCardExpirationdateYear = ($("#creditenddate").val()).substr(3, 2);
                         app.creditlist[0].creditCardExpirationdateMon = ($("#creditenddate").val()).substr(0, 2);
-                        $.ajax({
-                            type: "post",
-                            url: "/api/CreditCardTables",
-                            contentType: "application/json",
-                            data: JSON.stringify(app.creditlist[0]),
+                        if (confirm('是否確定要新增信用卡?') == true) {
 
-                            success: function () {
-                                window.location = "/tedLb/tedmember.html";
-                                alert("信用卡新增成功");
-                            }
-                        })
+                            $.ajax({
+                                type: "post",
+                                url: "/api/CreditCardTables",
+                                contentType: "application/json",
+                                data: JSON.stringify(app.creditlist[0]),
+
+                                success: function () {
+                                    window.location = "/tedLb/tedmember.html";
+                                    alert("信用卡新增成功");
+                                }
+                            })
+                        }
                     }
                 },
                 //新增美甲師銀行帳號
                 insertaccount: function () {
                     console.log(this.shoplistcard);
-                    $.ajax({
-                        type: "put",
-                        url: "/api/ManicuristTables/1",
-                        contentType: "application/json",
-                        data: JSON.stringify(this.shoplist),
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("新增銀行帳號成功")
-                        }
-                    })
+                    if (confirm('是否確定要新增銀行帳號?') == true) {
+
+                        $.ajax({
+                            type: "put",
+                            url: "/api/ManicuristTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(this.shoplist),
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("新增銀行帳號成功")
+                            }
+                        })
+                    }
                 },  //刪除銀行帳號
                 deleteaccount: function () {
-                    this.shoplist.manicuristBankAccount = null;
-                    this.shoplist.manicuristBankCode = null;
-                    this.shoplist.manicuristBankCompanyName = null;
-                    this.shoplist.manicuristBankName = null;
-                    this.shoplist.manicuristBankNameBranch = null;
                     if (confirm('是否確定要刪除銀行帳號?') == true) {
+                        this.shoplist.manicuristBankAccount = null;
+                        this.shoplist.manicuristBankCode = null;
+                        this.shoplist.manicuristBankCompanyName = null;
+                        this.shoplist.manicuristBankName = null;
+                        this.shoplist.manicuristBankNameBranch = null;
                         console.log(this.shoplist);
-                    $.ajax({
-                        type: "put",
-                        url: "/api/ManicuristTables/1",
-                        contentType: "application/json",
-                        data: JSON.stringify(this.shoplist),
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("刪除銀行帳號成功");
-                        }
+                        $.ajax({
+                            type: "put",
+                            url: "/api/ManicuristTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(this.shoplist),
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("刪除銀行帳號成功");
+                            }
 
-                    })
+                        })
                     }
                 },
                 //刪除信用卡
                 btndelect: function () {
                     console.log(app.creditlist[0]);
-                    $.ajax({
-                        type: "delete",
-                        url: "/api/CreditCardTables/" + app.creditlist[0].creditCardId ,
-                        contentType: "application/json",
-                        data: JSON.stringify(app.creditlist[0]),
+                    if (confirm('是否確定要刪除信用卡?') == true) {
 
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("信用卡成功刪除");
-                        }
-                    })
+                        $.ajax({
+                            type: "delete",
+                            url: "/api/CreditCardTables/" + app.creditlist[0].creditCardId,
+                            contentType: "application/json",
+                            data: JSON.stringify(app.creditlist[0]),
+
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("信用卡成功刪除");
+                            }
+                        })
+                    }
                 }
+               
             }
-
         })
 
        
@@ -1039,12 +1057,43 @@
             })
         
 
-      
-       
+        var memidid = app.memberlist[0].memberId;
 
+        //寄送驗證碼
+        function sendmail() {
+            console.log(memidid);
+      
+            app.verifcodelist[0].VerifcodeId = memidid;
+            var randstr = randomstr(6);
+            console.log(randstr);
+            app.verifcodelist[0].Verifcodetext = randstr;
+            console.log(app.verifcodelist[0]);
+            $.ajax({
+                type: "post",
+                url: "/api/Verifcode",
+                contentType: "application/json",
+                data: JSON.stringify(app.verifcodelist[0])
+
+            })
+            alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼")
+            setTimeout(function () { $("#insertverif").css("display", "block") }, 1000);
+            //alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼");
+      
+            var span = document.getElementsByClassName("close111")[0];
+            
+           
+            span.onclick = function () {
+                $("#insertverif").css("display", "none");
+            }
+            window.onclick = function (event) {
+                if (event.target == $("#insertverif")) {
+                    $("#insertverif").css("display", "none");
+                }
+            }
+        }
 
         //會員修改判斷
-
+       
         $.ajax({
             type: "get",
             url: "/api/membertables/1",
@@ -1107,10 +1156,15 @@
             }
         })
 
-        //寄信
-        function sendmail() {
-
+        
+        function randomstr(e) {
+            var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz123456789", a = t.length, n = "";
+            for (var i = 0; i < e; i++) {
+                n += t.charAt(Math.floor(Math.random() * a));
+            }
+            return n;
         }
+       
     </script>
   
 </body>

@@ -1,11 +1,16 @@
-﻿namespace NailIt.Models
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
+
+namespace NailIt.Models
 {
-    public class RemovalPriceTable
+    public partial class RemovalPriceTable
     {
-        public int RemovalPriceManicuristID { get; set; }
-        public int RemovalPriceB0 { get; set; }
-        public int RemovalPriceB1 { get; set; }
-        public int RemovalPriceB2 { get; set; }
-        public int RemovalPriceB3 { get; set; }
+        public int RemovalPriceManicuristId { get; set; }
+        public decimal RemovalPriceB0 { get; set; }
+        public decimal RemovalPriceB1 { get; set; }
+        public decimal RemovalPriceB2 { get; set; }
+        public decimal RemovalPriceB3 { get; set; }
     }
 }

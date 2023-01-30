@@ -24,6 +24,6 @@ namespace NailIt.Models
         public int DemoSetCount { get; set; }
         public DateTime? DemoSetMainStartTime { get; set; }
         public DateTime? DemoSetMainEndTime { get; set; }
-        public int DemoSetColor { get; set; }
+        public int? DemoSetColor { get; set; }
     }
 }

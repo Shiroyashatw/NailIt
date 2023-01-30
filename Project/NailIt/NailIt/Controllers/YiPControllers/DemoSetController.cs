@@ -49,15 +49,14 @@ namespace NailIt.Controllers.YiPControllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetPostDemoSetTable(int id)
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetMainDemoSetTable(int id)
         {
-            //傳入DemoSet 美甲師id 找到最後一筆 回傳 demoset ID
-            var query = await (from User in Context.DemoSetTables
-                               where User.ManicuristId == id
-                               orderby User.DemoSetId
-                               select User).LastOrDefaultAsync();
+            var query = from Demo 
+                                   in Context.DemoSetTables
+                            where Demo.ManicuristId == id && Demo.DemoSetMain == true
+                            select Demo;
 
-            return Ok(new { query });
+            return await query.ToListAsync();
         }
 
         [HttpPut("{id}")]
@@ -109,6 +108,17 @@ namespace NailIt.Controllers.YiPControllers
             await Context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetSearchTable(int id,string search)
+        {
+            var query = from DemoSet in Context.DemoSetTables
+                        where DemoSet.ManicuristId == id && DemoSet.DemoSetName.Contains(search) || DemoSet.DemoSetTag1.Contains(search) || DemoSet.DemoSetTag2.Contains(search) || DemoSet.DemoSetTag3.Contains(search) || DemoSet.DemoSetTag4.Contains(search)
+                        select DemoSet;
+
+            return await query.ToListAsync();
+        }
+
 
     }
 }

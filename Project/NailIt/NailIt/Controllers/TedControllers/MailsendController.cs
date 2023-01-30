@@ -22,63 +22,47 @@ namespace NailIt.Controllers.TedControllers
             _context = context;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderTable(int id, OrderTable orderTable)
-        {
-            string Account = "testing@gmail.com";
-            string Password = "test123";
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> PostOrderTable(int id)
+        //{
+        //    string Account = "milk742020@gmail.com";
+        //    string Password = "epfbqclhgbhnzycx";
 
-            SmtpClient client = new SmtpClient();
-            client.Host = "smtp.gmail.com";
-            client.Port = 587;
-            client.Credentials = new NetworkCredential(Account, Password);
-            client.EnableSsl = true;
+        //    SmtpClient client = new SmtpClient();
+        //    client.Host = "smtp.gmail.com";
+        //    client.Port = 587;
+        //    client.Credentials = new NetworkCredential(Account, Password);
+        //    client.EnableSsl = true;
 
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(Account);
-            mail.To.Add("test1@test.com");
-            mail.Subject = "測試信";
-            mail.SubjectEncoding = Encoding.UTF8;
-            mail.IsBodyHtml = true;
-            mail.Body = "第一行<br> 第二行<br>第三行<br>";
-            mail.BodyEncoding = Encoding.UTF8;
+        //    MailMessage mail = new MailMessage();
+        //    mail.From = new MailAddress(Account);
+        //    mail.To.Add("etai183216@gmail.com");
+        //    mail.Subject = "測試信";
+        //    mail.SubjectEncoding = Encoding.UTF8;
+        //    mail.IsBodyHtml = true;
+        //    mail.Body = "第一行<br> 第二行<br>第三行<br>";
+        //    mail.BodyEncoding = Encoding.UTF8;
 
-            Attachment attachment = new Attachment(@"C:\fakepath\test.txt");
-            mail.Attachments.Add(attachment);
+           
+        //     try
+        //    {
+            
+        //    client.Send(mail);
+        //    }
+        //    catch 
+        //    {
+        //        throw ;
+        //    }
+        //    finally
+        //    {
+               
+        //        mail.Dispose();
+        //        client.Dispose();
+        //    }
 
-            //try
-            //{
-            //    client.Send(mail);
-            //}
-            //catch (Exception ex)
-            //{
-            //    //throw ex;
-            //}
-            //finally
-            //{
-            //    attachment.Dispose();
-            //    mail.Dispose();
-            //    client.Dispose();
-            //}
 
-            if (id != orderTable.OrderId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(orderTable).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-
-            }
-
-            return NoContent();
-        }
+        //    return  NoContent();
+        //}
 
     }
 }

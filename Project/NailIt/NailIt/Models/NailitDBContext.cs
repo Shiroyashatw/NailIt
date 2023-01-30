@@ -20,7 +20,6 @@ namespace NailIt.Models
         public virtual DbSet<ArticleLikeTable> ArticleLikeTables { get; set; }
         public virtual DbSet<ArticlePicTable> ArticlePicTables { get; set; }
         public virtual DbSet<ArticleTable> ArticleTables { get; set; }
-        public virtual DbSet<MessageBlacklistTable> MessageBlacklistTables { get; set; }
         public virtual DbSet<CodeTable> CodeTables { get; set; }
         public virtual DbSet<ColorTable> ColorTables { get; set; }
         public virtual DbSet<CommentTable> CommentTables { get; set; }
@@ -35,13 +34,15 @@ namespace NailIt.Models
         public virtual DbSet<NoticeTable> NoticeTables { get; set; }
         public virtual DbSet<OrderTable> OrderTables { get; set; }
         public virtual DbSet<PlanTable> PlanTables { get; set; }
+        public virtual DbSet<RemovalPriceTable> RemovalPriceTables { get; set; }
         public virtual DbSet<ReplyLikeTable> ReplyLikeTables { get; set; }
         public virtual DbSet<ReplyTable> ReplyTables { get; set; }
         public virtual DbSet<ReportTable> ReportTables { get; set; }
         public virtual DbSet<ServiceTable> ServiceTables { get; set; }
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
-        public virtual DbSet<RemovalPriceTable> RemovalPriceTables { get; set; }
+        public virtual DbSet<Verificationcode> Verificationcodes { get; set; }
+        public virtual DbSet<MessageBlacklistTable> MessageBlacklistTables { get; set; }
 
 
 
@@ -93,7 +94,7 @@ namespace NailIt.Models
                     .IsRequired()
                     .HasMaxLength(2)
                     .IsUnicode(false)
-                    .HasColumnName("article_BoardC")
+                    .HasColumnName("article_Board_C")
                     .IsFixedLength(true);
 
                 entity.Property(e => e.ArticleBuildTime)
@@ -118,19 +119,6 @@ namespace NailIt.Models
                     .HasMaxLength(30)
                     .HasColumnName("article_Title")
                     .HasDefaultValueSql("('文章標題未填')");
-            });
-
-            modelBuilder.Entity<MessageBlacklistTable>(entity =>
-            {
-                entity.HasKey(e => e.BlacklistId);
-
-                entity.ToTable("MessageBlacklist_Table");
-
-                entity.Property(e => e.BlacklistId).HasColumnName("blacklist_ID");
-
-                entity.Property(e => e.BlacklistBuilder).HasColumnName("blacklist_Builder");
-
-                entity.Property(e => e.BlacklistTarget).HasColumnName("blacklist_Target");
             });
 
             modelBuilder.Entity<CodeTable>(entity =>
@@ -197,6 +185,8 @@ namespace NailIt.Models
                     .HasColumnName("comment_Content")
                     .HasDefaultValueSql("('評論內容未填')");
 
+                entity.Property(e => e.CommentOrderId).HasColumnName("comment_OrderID");
+
                 entity.Property(e => e.CommentScore)
                     .HasColumnName("comment_Score")
                     .HasDefaultValueSql("((5))");
@@ -204,7 +194,6 @@ namespace NailIt.Models
                 entity.Property(e => e.CommentTarget).HasColumnName("comment_Target");
 
                 entity.Property(e => e.CommentType).HasColumnName("comment_Type");
-                entity.Property(e => e.CommentOrderId).HasColumnName("comment_OrderID");
             });
 
             modelBuilder.Entity<CreditCardTable>(entity =>
@@ -247,6 +236,8 @@ namespace NailIt.Models
                 entity.ToTable("DemoSet_Table");
 
                 entity.Property(e => e.DemoSetId).HasColumnName("demoSet_ID");
+
+                entity.Property(e => e.DemoSetColor).HasColumnName("demoSet_Color");
 
                 entity.Property(e => e.DemoSetContent)
                     .HasMaxLength(100)
@@ -311,7 +302,6 @@ namespace NailIt.Models
                     .HasColumnName("demoSet_Tag_4");
 
                 entity.Property(e => e.ManicuristId).HasColumnName("manicurist_ID");
-                entity.Property(e => e.DemoSetColor).HasColumnName("demoSet_Color");
             });
 
             modelBuilder.Entity<DemoTable>(entity =>
@@ -533,10 +523,14 @@ namespace NailIt.Models
                 entity.Property(e => e.MessageTime)
                     .HasColumnType("datetime")
                     .HasColumnName("message_Time");
-                
-                entity.Property(e => e.MessageRead).HasColumnName("message_Read");
             });
-
+            modelBuilder.Entity<MessageBlacklistTable>(entity =>
+            {
+                entity.HasKey(e => e.BlacklistId).HasName("PK_MessageBlacklist_Table");
+                entity.Property(e => e.BlacklistId).HasColumnName("blacklist_ID");
+                entity.Property(e => e.BlacklistBuilder).HasColumnName("blacklist_Builder");
+                entity.Property(e => e.BlacklistTarget).HasColumnName("blacklist_Target");
+            });
             modelBuilder.Entity<NoticeReadTable>(entity =>
             {
                 entity.HasKey(e => e.NoticeReadId)
@@ -572,6 +566,8 @@ namespace NailIt.Models
                     .HasColumnName("notice_Content")
                     .HasDefaultValueSql("('無內容')");
 
+                entity.Property(e => e.NoticeManagerId).HasColumnName("notice_manager_ID");
+
                 entity.Property(e => e.NoticePushTime)
                     .HasColumnType("datetime")
                     .HasColumnName("notice_PushTime");
@@ -589,8 +585,6 @@ namespace NailIt.Models
                     .HasMaxLength(50)
                     .HasColumnName("notice_Title")
                     .HasDefaultValueSql("('TITLE沒進')");
-                entity.Property(e => e.NoticeManagerId)
-                .HasColumnName("notice_manager_ID");
             });
 
             modelBuilder.Entity<OrderTable>(entity =>
@@ -687,6 +681,33 @@ namespace NailIt.Models
                 entity.Property(e => e.PlanStartTime)
                     .HasColumnType("datetime")
                     .HasColumnName("plan_StartTime");
+            });
+
+            modelBuilder.Entity<RemovalPriceTable>(entity =>
+            {
+                entity.HasKey(e => e.RemovalPriceManicuristId);
+
+                entity.ToTable("RemovalPrice_Table");
+
+                entity.Property(e => e.RemovalPriceManicuristId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("removalPrice_manicuristID");
+
+                entity.Property(e => e.RemovalPriceB0)
+                    .HasColumnType("money")
+                    .HasColumnName("removalPrice_B0");
+
+                entity.Property(e => e.RemovalPriceB1)
+                    .HasColumnType("money")
+                    .HasColumnName("removalPrice_B1");
+
+                entity.Property(e => e.RemovalPriceB2)
+                    .HasColumnType("money")
+                    .HasColumnName("removalPrice_B2");
+
+                entity.Property(e => e.RemovalPriceB3)
+                    .HasColumnType("money")
+                    .HasColumnName("removalPrice_B3");
             });
 
             modelBuilder.Entity<ReplyLikeTable>(entity =>
@@ -852,18 +873,18 @@ namespace NailIt.Models
                     .HasColumnName("tag_Name");
             });
 
-            modelBuilder.Entity<RemovalPriceTable>(entity =>
+            modelBuilder.Entity<Verificationcode>(entity =>
             {
-                entity.HasKey(e => e.RemovalPriceManicuristID);
+                entity.HasKey(e => e.VerifcodeId)
+                    .HasName("PK__Verifica__AF7445D56AAF6972");
 
-                entity.ToTable("RemovalPrice_Table");
+                entity.ToTable("Verificationcode");
 
-                entity.Property(e => e.RemovalPriceManicuristID).HasColumnName("removalPrice_manicuristID");
-                entity.Property(e => e.RemovalPriceB0).HasColumnType("money").HasColumnName("removalPrice_B0").HasDefaultValueSql("((0))");
-                entity.Property(e => e.RemovalPriceB1).HasColumnType("money").HasColumnName("removalPrice_B1").HasDefaultValueSql("((0))");
-                entity.Property(e => e.RemovalPriceB2).HasColumnType("money").HasColumnName("removalPrice_B2").HasDefaultValueSql("((0))");
-                entity.Property(e => e.RemovalPriceB3).HasColumnType("money").HasColumnName("removalPrice_B3").HasDefaultValueSql("((0))");
+                entity.Property(e => e.VerifcodeId).ValueGeneratedNever();
 
+                entity.Property(e => e.Verifcodetext)
+                    .IsRequired()
+                    .HasMaxLength(6);
             });
 
             OnModelCreatingPartial(modelBuilder);
