@@ -41,15 +41,9 @@ namespace NailIt.Models
         public virtual DbSet<ServiceTable> ServiceTables { get; set; }
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
+        public virtual DbSet<RemovalPriceTable> RemovalPriceTables { get; set; }
 
-//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//         {
-//             if (!optionsBuilder.IsConfigured)
-//             {
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                 optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=NailitDB;Integrated Security=True;");
-//             }
-//         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -99,7 +93,7 @@ namespace NailIt.Models
                     .IsRequired()
                     .HasMaxLength(2)
                     .IsUnicode(false)
-                    .HasColumnName("article_Board_C")
+                    .HasColumnName("article_BoardC")
                     .IsFixedLength(true);
 
                 entity.Property(e => e.ArticleBuildTime)
@@ -167,7 +161,7 @@ namespace NailIt.Models
             modelBuilder.Entity<ColorTable>(entity =>
             {
                 entity.HasKey(e => e.ColorId)
-                    .HasName("PK__Color_Ta__795F1D747055E1F2");
+                    .HasName("PK__Color_Ta__795F1D741816687F");
 
                 entity.ToTable("Color_Table");
 
@@ -203,8 +197,6 @@ namespace NailIt.Models
                     .HasColumnName("comment_Content")
                     .HasDefaultValueSql("('評論內容未填')");
 
-                entity.Property(e => e.CommentOrderId).HasColumnName("comment_OrderID");
-
                 entity.Property(e => e.CommentScore)
                     .HasColumnName("comment_Score")
                     .HasDefaultValueSql("((5))");
@@ -212,6 +204,7 @@ namespace NailIt.Models
                 entity.Property(e => e.CommentTarget).HasColumnName("comment_Target");
 
                 entity.Property(e => e.CommentType).HasColumnName("comment_Type");
+                entity.Property(e => e.CommentOrderId).HasColumnName("comment_OrderID");
             });
 
             modelBuilder.Entity<CreditCardTable>(entity =>
@@ -255,8 +248,6 @@ namespace NailIt.Models
 
                 entity.Property(e => e.DemoSetId).HasColumnName("demoSet_ID");
 
-                entity.Property(e => e.DemoSetColor).HasColumnName("demoSet_Color");
-
                 entity.Property(e => e.DemoSetContent)
                     .HasMaxLength(100)
                     .HasColumnName("demoSet_Content");
@@ -275,11 +266,11 @@ namespace NailIt.Models
 
                 entity.Property(e => e.DemoSetMainEndTime)
                     .HasColumnType("datetime")
-                    .HasColumnName("demoSet_MainEndTime");
+                    .HasColumnName("DemoSet_MainEndTime");
 
                 entity.Property(e => e.DemoSetMainStartTime)
                     .HasColumnType("datetime")
-                    .HasColumnName("demoSet_MainStartTime");
+                    .HasColumnName("DemoSet_MainStartTime");
 
                 entity.Property(e => e.DemoSetName)
                     .IsRequired()
@@ -320,6 +311,7 @@ namespace NailIt.Models
                     .HasColumnName("demoSet_Tag_4");
 
                 entity.Property(e => e.ManicuristId).HasColumnName("manicurist_ID");
+                entity.Property(e => e.DemoSetColor).HasColumnName("demoSet_Color");
             });
 
             modelBuilder.Entity<DemoTable>(entity =>
@@ -597,6 +589,8 @@ namespace NailIt.Models
                     .HasMaxLength(50)
                     .HasColumnName("notice_Title")
                     .HasDefaultValueSql("('TITLE沒進')");
+                entity.Property(e => e.NoticeManagerId)
+                .HasColumnName("notice_manager_ID");
             });
 
             modelBuilder.Entity<OrderTable>(entity =>
@@ -856,6 +850,20 @@ namespace NailIt.Models
                     .IsRequired()
                     .HasMaxLength(10)
                     .HasColumnName("tag_Name");
+            });
+
+            modelBuilder.Entity<RemovalPriceTable>(entity =>
+            {
+                entity.HasKey(e => e.RemovalPriceManicuristID);
+
+                entity.ToTable("RemovalPrice_Table");
+
+                entity.Property(e => e.RemovalPriceManicuristID).HasColumnName("removalPrice_manicuristID");
+                entity.Property(e => e.RemovalPriceB0).HasColumnType("money").HasColumnName("removalPrice_B0").HasDefaultValueSql("((0))");
+                entity.Property(e => e.RemovalPriceB1).HasColumnType("money").HasColumnName("removalPrice_B1").HasDefaultValueSql("((0))");
+                entity.Property(e => e.RemovalPriceB2).HasColumnType("money").HasColumnName("removalPrice_B2").HasDefaultValueSql("((0))");
+                entity.Property(e => e.RemovalPriceB3).HasColumnType("money").HasColumnName("removalPrice_B3").HasDefaultValueSql("((0))");
+
             });
 
             OnModelCreatingPartial(modelBuilder);

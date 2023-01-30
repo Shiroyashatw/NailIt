@@ -22,6 +22,8 @@
 
     <link rel="stylesheet" href="css/product.css">
     <script src="lib/jquery/dist/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <!-- <link rel="stylesheet" href="./calendar.css" /> -->
 </head>
 
@@ -92,7 +94,7 @@
                             <p class="demoSetPartC"></p>
                             <p id="botmanicuristSalonName"></p>
                             <p>店家/設計師評價:</p>
-                            <p><span style="color: yellow;">★★★★★</span>5.0</p>
+                            <p id="star"><span style="color: yellow;">★★★★★</span>4</p>
                             <p class="botphone"></p>
                             <p id="botadress"></p>
                             <p class="demoSetDeposit"></p>
@@ -234,7 +236,8 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step1()">上一步</button>
-                                        <button class="stepbtn" type="button" onclick="step3()">下一步</button>
+                                        <button id="step3btn" class="stepbtn" type="button"
+                                            onclick="step3()">下一步</button>
                                     </div>
 
                                 </div>
@@ -252,18 +255,9 @@
                                 <input type="hidden" name="OrderType" value="true">
                                 <input type="hidden" name="OrderOrderTime" value="">
                                 <input type="hidden" name="OrderStateC" value="">
-                                <p>預約日期:2023-1-1</p>
-                                <p>
-                                    施作部位:
-                                </p>
-                                <p>
-                                    卸甲:
-                                </p>
-                                <p>
-                                    施作項目:
-                                </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                <div class="rescheck">
+
+                                </div>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -272,7 +266,7 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">上一步</button>
-                                        <button class="stepbtn" type="button" onclick="step4()">下一步</button>
+                                        <button id="btnsend" class="stepbtn" type="button" onclick="step4()">預約</button>
                                     </div>
                                 </div>
                             </div>
@@ -283,25 +277,14 @@
                     <div id="step4" class="container step4-res isHide">
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
-                                <p>預約成功: 訂單編號: SA11111102</p>
-                                <p>預約日期:2023-1-1 13:00</p>
-                                <p>
-                                    施作部位:
-                                </p>
-                                <p>
-                                    卸甲:
-                                </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                <p>預約成功，請耐心等待預約設計師回覆</p>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
-                                        <button class="stepbtn" type="button" onclick="step3()">上一步</button>
-                                        <button id="btnsend" class="stepbtn" type="button" onclick="">送出</button>
+                                        <button  class="stepbtn" type="button" onclick="Closeform()">完成</button>
                                     </div>
                                 </div>
                             </div>
@@ -314,6 +297,41 @@
         </div>
     </div>
 
+    <!-- 綠界金流表單 -->
+    <div class="cash">
+        <input type="hidden" id="HashKey" value="pwFHCqoQZGmho4w6" />
+        <input type="hidden" id="HashIV" value="EkRm7iFT261dpevs" />
+        <form id="cashform" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="post">
+            <input type="hidden" name="MerchantID" value="3002607">
+            <br />
+            <input type="hidden" name="MerchantTradeNo" value="DX20230127114112152C">
+            <br />
+            <!-- Naillt20230127114112
+            DX20230127114112152C -->
+            <input type="hidden" name="MerchantTradeDate" value="2023/01/27 11:41:12">
+            <br />
+            <input type="hidden" name="PaymentType" value="aio">
+            <br />
+            <input type="hidden" name="TotalAmount" value="1000">
+            <br />
+            <input type="hidden" name="TradeDesc" value="美甲">
+            <br />
+            <input type="hidden" name="ItemName" value="繽紛">
+            <br />
+            <input type="hidden" name="ReturnURL" value="https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL">
+            <br />
+            <!-- <label for="">OrderResultURL<input type="text" id="" name="OrderResultURL" value="api/User"></label>
+        <br /> -->
+            <input type="hidden" id="" name="ChoosePayment" value="Credit">
+            <br />
+            <input type="hidden" id="" name="CheckMacValue" value="">
+            <br />
+            <input type="hidden" id="" name="EncryptType" value="1">
+            <br />
+            <!-- <button type="button" id="btnCashSend">送出</button> -->
+
+        </form>
+    </div>
     <!-- 檢舉表單 -->
     <div class="form-main">
         <div id="rephohodiv" class="isHide"></div>
@@ -326,19 +344,34 @@
             <div class="form-info">
                 <form id="reportform" action="" method="post">
                     <!-- 檢舉人 -->
-                    <input type="text" name="ReportBuilder">
+                    <input type="hidden" name="ReportBuilder" value="1">
                     <!-- 被檢舉人 -->
-                    <input type="text" name="ReportTarget">
+                    <input type="hidden" name="ReportTarget" value="">
                     <!-- 檢舉編號 文章 商品 -->
-                    <input type="text" name="ReportItem">
+                    <input type="hidden" name="ReportItem" value="">
                     <!-- 檢舉位置 -->
-                    <input type="text" name="ReportPlaceC">
+                    <input type="hidden" name="ReportPlaceC" value="D0">
                     <!-- 檢舉事由 -->
-                    <input type="text" name="ReportReasonC">
+                    <label for="">請選擇檢舉事由:</label>
+                    <select name="ReportReasonC" id="">
+                        <option value="I0">侵犯智慧財產權</option>
+                        <option value="I1">令人不舒服的內容</option>
+                        <option value="I2">色情內容</option>
+                    </select>
                     <!-- 檢舉描述 -->
-                    <input type="text" name="ReportContent">
+                    <div class="reporttext">
+                        <label for="ReportContent">請描述檢舉內容(最多兩百字)</label>
+                        <br>
+                        <textarea name="ReportContent" id="" cols="80" rows="5" maxlength="200"></textarea>
+                    </div>
+
                     <!-- 檢舉時間 -->
-                    <input type="text" name="ReportBuildTime">
+                    <input type="hidden" name="ReportBuildTime">
+                    <div class="reportbot">
+                        <button type="button" id="report">檢舉</button>
+                    </div>
+
+
                 </form>
             </div>
 
@@ -383,6 +416,12 @@
         function alertform() {
             document.getElementById("hohodiv").className = "isShow";
             document.getElementById("alert_div").className = "isShow";
+
+            $('.Progress .line:nth-child(1) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
         }
         function Closeform() {
             document.getElementById("alert_div").className = "isHide";
@@ -391,12 +430,32 @@
         function step1() {
             document.getElementById("step1").className = "isShow";
             document.getElementById("step2").className = "isHide";
+
+            $('.Progress .line:nth-child(2) .step').css({
+                "background-color": "#fff",
+                "color": "#3498db",
+                "transition": ".3s"
+            })
+            
         }
         function step2() {
             document.getElementById("step1").className = "isHide";
             document.getElementById("step2").className = "isShow";
             document.getElementById("step3").className = "isHide";
             document.getElementById("step4").className = "isHide";
+
+            $('.Progress .line:nth-child(2) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
+
+            $('.Progress .line:nth-child(3) .step').css({
+                "background-color": "#fff",
+                "color": "#3498db",
+                "transition": ".3s"
+            })
+
         }
         function step3() {
             var checktime = $('input[name="planId"]').prop('checked')
@@ -410,7 +469,14 @@
                 document.getElementById("step2").className = "isHide";
                 document.getElementById("step3").className = "isShow";
                 document.getElementById("step4").className = "isHide";
+
+                $('.Progress .line:nth-child(3) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
             }
+            
 
         }
         function step4() {
@@ -418,6 +484,12 @@
             document.getElementById("step2").className = "isHide";
             document.getElementById("step3").className = "isHide";
             document.getElementById("step4").className = "isShow";
+
+            $('.Progress .line:nth-child(4) .step').css({
+                "background-color": "#FF6733",
+                "color": "#333",
+                "transition": ".3s"
+            })
         }
     </script>
 
@@ -461,8 +533,107 @@
         getReserveTime()
         // 傳送表單資料
         postOrder()
-    </script>
 
+        $('#report').on('click', function () {
+            // 加入時區 8小時
+            var Tzdate = new Date(+new Date() + 8 * 3600 * 1000)
+            // 轉換成 SQL datetime格式
+            var Tztoday = Tzdate.toISOString().slice(0, 19) // .replace('T', ' ');
+            $('input[name="ReportBuildTime"]').val(Tztoday)
+
+            var formdata = $('#reportform').serializeArray();
+            var returnArray = {}
+            // var Yes = true
+            for (var i = 0; i < formdata.length; i++) {
+                returnArray[formdata[i]['name']] = formdata[i]['value'];
+            }
+            console.log(JSON.stringify(returnArray))
+            $.ajax({
+                url: "api/product/report",
+                method: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify(returnArray),
+
+                success: res => {
+                    alert('檢舉送出成功')
+                    Closeform()
+                },
+                error: err => {
+                    console.log("N")
+                },
+            });
+        })
+    </script>
+    <script>
+        $('#btnCashSend').on('click', function () {
+
+            let HashKey = "HashKey=pwFHCqoQZGmho4w6"
+            let HashIV = "EkRm7iFT261dpevs"
+            let itemName = $('input[name="ItemName"]').val();
+            let MerchantTradeDate = $('input[name="MerchantTradeDate"]').val();
+            let MerchantTradeNo = $('input[name="MerchantTradeNo"]').val();
+
+            let returnUrl = $('input[name="ReturnURL"]').val();
+
+            // let OrderResultURL = $('input[name="OrderResultURL"]').val();
+
+            let TotalAmount = $('input[name="TotalAmount"]').val();
+            let TradeDesc = $('input[name="TradeDesc"]').val();
+
+            let x = `${HashKey}&ChoosePayment=Credit&EncryptType=1&ItemName=${itemName}&MerchantID=3002607&MerchantTradeDate=${MerchantTradeDate}&MerchantTradeNo=${MerchantTradeNo}&PaymentType=aio&ReturnURL=${returnUrl}&TotalAmount=${TotalAmount}&TradeDesc=${TradeDesc}&HashIV=${HashIV}`
+
+            let y = encodeURIComponent(x)
+            y = y.replace("%20", "+")
+            y = y.toLowerCase();
+
+            var hash = CryptoJS.SHA256(y).toString();
+
+            hash = hash.toUpperCase()
+            $('input[name="CheckMacValue"]').val(hash)
+
+            $('#cashform').submit();
+            // axios({
+            //     method: "post",
+            //     url: "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5",
+            //     data: {
+            //         MerchantID: $('input[name="MerchantID"]').val()
+            //     }
+            // }).then(
+            //     res => {
+            //         console.log(res)
+            //     }
+            // ).catch((error) => console.log(error))
+        })
+
+
+
+
+        // let z = "HashKey%3dpwFHCqoQZGmho4w6%26ChoosePayment%3dCredit%26EncryptType%3d1%26ItemName%3d%e7%b9%bd%e7%b4%9b%26MerchantID%3d3002607%26MerchantTradeDate%3d2023%2f01%2f27+11%3a41%3a12%26MerchantTradeNo%3dDX20230127114112152a%26PaymentType%3daio%26ReturnURL%3dhttps%3a%2f%2fhoyo.idv.tw%2f%3fa%3dTools%2fEcPay%26b%3dReturnURL%26TotalAmount%3d1000%26TradeDesc%3d%e7%be%8e%e7%94%b2%26HashIV%3dEkRm7iFT261dpevs";
+        // %20 應該轉換成 +
+
+
+    </script>
+    <script>
+        $('#step3btn').on('click', function () {
+            $('.rescheck').empty();
+            let rdate = $('input[name="planId"]').attr("date")
+            let rtime = $('input[name="planId"]').attr("time")
+            let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
+            let rremovec =  $('select[name="OrderRemovalC"]').find("option:selected").text()
+            let ritem = $('select[name="OrderItem"]').find("option:selected").text()
+            let rprice = $('input[name="OrderPrice"]').val()
+            let rdep = $('input[name="OrderDeposit"]').val()
+            $('.rescheck').append(`
+            <p>預約日期:${rdate} 時間:${rtime}</p>
+            <p>施作部位:${rparc}</p>
+            <p>卸甲:${rremovec}</p>
+            <p>施作項目:${ritem}</p>
+            <p>預估價位:NT$${rprice}</p>
+            <p>訂金:NT$${rdep}</p>
+            `);
+
+        })
+    </script>
 </body>
 
 </html>

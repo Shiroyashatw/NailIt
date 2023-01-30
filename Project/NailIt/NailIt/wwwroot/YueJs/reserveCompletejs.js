@@ -1,5 +1,5 @@
-﻿var completeData;
-
+﻿var myCompleteResult;//get到的資料轉換前
+var completeData;
 function reserveCompleteSendGet() {
 
 	var requestOptions = {
@@ -10,24 +10,27 @@ function reserveCompleteSendGet() {
 
 	fetch("https://localhost:44308/api/YueOrderTables/"+2+"/"+"A1"+"/", requestOptions)
 		.then(response => response.text())
-		.then(result => reserveComplete(result))
+		.then(function (result) {
+			myCompleteResult = result;
+			reserveComplete();
+		})
 		.catch(error => console.log('error', error));
 }
 
 
 
 
-function reserveComplete(result) {
-    completeData = JSON.parse(result);
+function reserveComplete(search = false) {
+	completeData = JSON.parse(myCompleteResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
 					>訂單成立時間&nbsp&nbsp&nbsp&nbsp&nbsp</label
 				>
-				<input type="date" />
+				<input  id="searchStart" type="date" />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
-				<input type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" />
+				<input  id="searchEnd" type="date" />
+				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveComplete(true)" />
 				<br />
 				<div
 					id="removeNaildiv"
@@ -42,16 +45,31 @@ function reserveComplete(result) {
 				<div id="itemSetdiv" class="tag" onclick="reserveDoneSendGet()">已評價</div>
 				<hr style="border-color: black; margin-top: 0%" />
 				
-				`+ completeLoop(completeData);
+				`+ completeLoop(search);
+	searchStart.value = mySearchStart;
+	searchEnd.value = mySearchEnd;
 }
-function completeLoop(completeData) {
+function completeLoop(search=false) {
+	if (completeData.length == 0) return `<br /><span style="padding-left:5%">目前無進行中訂單</span>`;
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
-	var thisOrderTime=""
 	for (var x of completeData) {
+		if (search) {
+			if (searchStart.value == "" || searchEnd.value == "") {
+				let myDate = new Date();
+				let myMonth = myDate.getMonth() + 1;
+				searchStart.value = "1999-01-01";
+				searchEnd.value = myDate.getFullYear() + "-" + (myMonth.length > 1 ? myMonth : "0" + myMonth) + "-" + myDate.getDate();
+			}
+			mySearchStart = searchStart.value;
+			mySearchEnd = searchEnd.value;
+			if (x.order_AcceptTime < searchStart.value || x.order_AcceptTime > searchEnd.value.substring(0, 8) + (Number(searchEnd.value.substring(8)) + 1)) {
+				i++;
+				continue;
+			}
+		}
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
-		thisOrderTime = x.order_OrderTime.substring(0, 10) + " " + x.order_OrderTime.substring(11, 19);
 		thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
 		answer += `<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 20%; height:170px">
@@ -59,12 +77,12 @@ function completeLoop(completeData) {
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
 						<span style="font-size: 120%"><b>`+ x.order_ItemName+`</b></span>
-						<br /><br />
-						<span style="color: gray">`+ x.demoSet_Content+`</span>
 						<br />
+						<span style="color: gray">`+ x.demoSet_Content+`</span>
+						<br /><br />
 						<span>訂單編號：`+ thisOrderId +`</span>
 						<br />
-						<span>預約時間：`+ thisOrderTime +`</span>
+						<span>預約客戶：`+ x.member_Nickname +`</span>
 						<br />
 						<span>施作時間：`+ thisStartTime +`</span>
 					</div>
@@ -169,6 +187,7 @@ function getCompleteDetail(i, str) {
 }
 
 function reserveCompleteSendPut(id, state) {
+	console.log(id);
 	var raw = "";
 	var requestOptions = {
 		method: 'PUT',

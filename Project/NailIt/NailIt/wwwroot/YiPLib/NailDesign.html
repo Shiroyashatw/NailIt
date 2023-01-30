@@ -12,7 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
-
+    <link rel="stylesheet" href="../css/product.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
         .slider-nav {
             height: 100%;
@@ -80,8 +81,9 @@
         }
 
         .Blackline {
-            border-top: #000 solid 0.5pt;
-            position: relative;
+            border-bottom: black solid 0.5pt;
+            /*position: relative;*/
+            /*color:black;*/
         }
 
         #photoframe {
@@ -192,6 +194,7 @@
             overflow: hidden;
             font-size: 30px;
             text-shadow: 0px 1px 0 rgb(198, 198, 198);
+            margin-top: -20px;
         }
 
         .Fullstar {
@@ -216,7 +219,7 @@
         }
 
         .ContextFullstar {
-            width: 60%;
+            /*width: 60%;*/
             position: absolute;
             left: 0;
             top: 0;
@@ -319,6 +322,10 @@
             border: none;
         }
 
+            #SortSelectbox:focus {
+                outline: none;
+            }
+
         .DisInLine {
             display: inline;
         }
@@ -356,26 +363,14 @@
             height: 100px;
             width: 100px;
             border-radius: 50px;
-            border: #7F7F7F 1pt solid;
+            /*border: #7F7F7F 1pt solid;*/
             object-fit: cover;
             object-position: center;
         }
 
-        .ratingimgpd {
-            margin-left: 20px;
-            margin-right: 20px;
-        }
 
         .ratingcontext {
             margin-left: 30px;
-        }
-
-        #Score {
-            /*height: 20%;*/
-        }
-
-        #Scorefloat {
-            /*display: inline;*/
         }
 
         .produce {
@@ -389,6 +384,11 @@
 
         [v-cloak] {
             display: none;
+        }
+
+        #CommentMessage {
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -445,20 +445,22 @@
             <div class="col-5" id="Profile">
                 <b id="Title" class="Bigtext FixsmPad">{{DesignList.manicuristSalonName}}</b>
                 <p id="Context" class="mt-3">{{DesignList.manicuristIntro}}</p>
-                <div id="Scorediv" class="d-flex">
-                    <div id="Score">
+                <div>
+                    <div class="d-flex align-items-center">
                         <div class="ratings">
                             <div class="Emptystar">★★★★★</div>
                             <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
                         </div>
+                        <div>
+                            <p class="ml-2">{{DesignList.manicuristScore}}</p>
+                        </div>
                     </div>
-                    <p class="d-flex mb-0 mt-3 ml-2" id="Scorefloat">{{DesignList.manicuristScore}}</p>
                     <!--class="mb-0 mt-3 ml-2"-->
                 </div>
             </div>
             <div class="col-2">
                 <div style="height: 80%;"></div>
-                <button id="Sendbtn">預約</button>
+                <button id="Sendbtn" onclick="alertform()">預約</button>
             </div>
             <div class="col-1">
             </div>
@@ -493,10 +495,10 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                        <form>
+                        <!--<form>
                             <input class="Searchbar" type="text" placeholder="作品,標籤">
                             <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>
+                        </form>-->
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -504,7 +506,7 @@
                 <div class="row FixPad CowRight">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <p class="DisInLine">共計{{MainDemoCoverLenth}}個作品 頁數1/1</p>
+                        <p class="DisInLine">共計{{DemoSetList.length}}個作品 頁數1/1</p>
                         <button class="CBtn">上一頁</button>
                         <button class="CBtn">下一頁</button>
                     </div>
@@ -533,10 +535,10 @@
                     <div class="col-6">
                     </div>
                     <div class="col-4">
-                        <form>
+                        <!--<form>
                             <input class="Searchbar" type="text" placeholder="作品,標籤">
                             <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>
+                        </form>-->
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -544,7 +546,7 @@
                 <div class="row FixPad CowRight">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <p class="DisInLine">共計12個作品 頁數1/1</p>
+                        <p class="DisInLine">共計{{MainDemoCover.length}}個作品 頁數1/1</p>
                         <button class="CBtn">上一頁</button>
                         <button class="CBtn">下一頁</button>
                     </div>
@@ -577,6 +579,7 @@
                                 <p class="DisInLine ">排序：</p>
                             </div>
                             <select name="" id="SortSelectbox">
+                                <option value="none" selected disabled hidden>請選擇</option>
                                 <option value="">日期由近到遠</option>
                                 <option value="">日期由遠到近</option>
                                 <option value="">星數由高到低</option>
@@ -596,31 +599,45 @@
 
                 <div class="row">
                     <div class="col"></div>
-                    <div class="col-10 DisFlex">
-                        <div class="ratingimgpd">
-                            <img class="ratingimg" src="UploadFolder/Pink.jpg" alt="">
-                        </div>
-                        <div class="ratingcontext">
-                            <div>
-                                <p>So*****le7</p>
+                    <div class="col-10">
+                        <div v-for="(item,key) in Comment">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+
+                                    <div>
+                                        <p class="h5">{{Comment[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:Comment[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{Comment[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{Comment[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{Comment[key].commentContent}}</p></div>
+                                </div>
+
                             </div>
-                            <div class="Contextratings">
-                                <div class="Emptystar">★★★★★</div>
-                                <div class="ContextFullstar">★★★★★</div>
-                            </div>
-                            <div><p class="Orgtext">評價日期：</p></div>
-                            <div><p class="Orgtext">留言留言留言</p></div>
+                            <div class="Blackline my-3"></div>
                         </div>
+
                     </div>
                     <div class="col"></div>
                 </div>
-                <div class="row">
+
+                <!--<div class="row">
                     <div class="col-1"></div>
                     <div class="col-10">
                         <p class="Blackline ratingimgpd"></p>
                     </div>
                     <div class="col-1"></div>
-                </div>
+                </div>-->
 
             </div>
 
@@ -640,7 +657,211 @@
         </div>
     </div>
 
+    <!-- 預約表單 Sendbtn 按鈕 -->
+    <div class="form-main">
+        <div id="hohodiv" class="isHide"></div>
+        <!-- 彈出視窗 表單 -->
+        <div id="alert_div" class="isHide">
+            <div class="alert_div-header">
+                <button type="button" onclick="Closeform()"><i class="bi bi-x"></i></button>
+            </div>
+            <!-- 主要表單 -->
+            <div class="form-info">
+                <form id="form1" action="" method="post">
+                    <div class="form-header">
+                        <div class="Progress">
+                            <div class="line">
+                                <div class="step" datatext="選項目">
+                                    <i class="bi bi-cart"></i>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="step" datatext="預約時間">
+                                    <i class="bi bi-calendar3"></i>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="step" datatext="預付訂金">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="step" datatext="訂單送出">
+                                    <i class="bi bi-check-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step1" class="container step1-choseitem">
+                        <div class="form-container row">
+                            <div class="step-container pt-3 pl-4 col-9">
+                                <p>
+                                    施作部位:
+                                    <select name="OrderPartC">
+                                    </select>
+                                </p>
+                                <p>
+                                    卸甲:
+                                    <select name="OrderRemovalC">
+                                        <option value="B0">不用卸甲</option>
+                                        <option value="B1">去指甲油(無凝膠)</option>
+                                        <option value="B2">本店卸甲</option>
+                                        <option value="B3">他店卸甲</option>
+                                    </select>
+                                </p>
+                                <p>
+                                    施作項目:
+                                    <select name="OrderItem">
+                                        
+                                    </select>
+                                </p>
+                                <p>
+                                    造型:
+                                    <select name="OrderItemName">
+                                    </select>
+                                </p>
 
+                                <p class="demoSetPrice"></p>
+                                <input type="hidden" name="OrderPrice" value="">
+                                <p class="demoSetDeposit"></p>
+                                <input type="hidden" name="OrderDeposit" value="">
+                            </div>
+                            <div class="step-container col-3">
+                                <div class="time-container h-75">
+                                </div>
+                                <div class="form-footerbtn h-25">
+                                    <div class="btn-box">
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
+                                        <button class="stepbtn" type="button" onclick="step2()">下一步</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step2" class="container step2-chosetime isHide">
+                        <div class="form-container row">
+                            <div class="step-container col-9">
+                                <!-- 放入日曆 -->
+                                <div class="calendar">
+                                    <div class="header">
+                                        <button type="button" class="lastYear btnnotclick" title="Last year"></button>
+                                        <button type="button" class="lastMonth" title="Last month"><i
+                                                class="bi bi-chevron-compact-left"></i></button>
+                                        <div class="currentDate"></div>
+                                        <button type="button" class="nextMonth" title="Next month">
+                                            <i class="bi bi-chevron-compact-right"></i>
+                                        </button>
+                                        <button type="button" class="nextYear btnnotclick" title="Next year"></button>
+                                    </div>
+                                    <div class="days">
+                                        <div class="day">一</div>
+                                        <div class="day">二</div>
+                                        <div class="day">三</div>
+                                        <div class="day">四</div>
+                                        <div class="day">五</div>
+                                        <div class="day">六</div>
+                                        <div class="day">日</div>
+                                    </div>
+                                    <div class="dates">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step-container col-3">
+                                <div class="time-container h-75">
+                                    <!-- 顯示已選擇日期 -->
+                                    <!-- <p class="chosedate"></p> -->
+                                    <div class="container">
+                                        <div class="row">
+                                            <p class="col-12">可預約時間:</p>
+                                            <div id="radio">
+                                                <!-- <p>可預約時間:</p> -->
+                                                <!-- <label class="col-4"><input type="radio" name="label" value=""><span class="round button">9:00</span></label> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-footerbtn h-25">
+                                    <div class="btn-box">
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
+                                        <button class="stepbtn" type="button" onclick="step1()">上一步</button>
+                                        <button class="stepbtn" type="button" onclick="step3()">下一步</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div id="step3" class="container step3-paymoney isHide">
+                        <div class="form-container row">
+                            <div class="step-container pt-3 pl-4 col-9">
+
+                                <input type="hidden" name="MemberId" value="1">
+                                <input type="hidden" name="ManicuristId" value="">
+                                <input type="hidden" name="OrderType" value="true">
+                                <input type="hidden" name="OrderOrderTime" value="">
+                                <input type="hidden" name="OrderStateC" value="">
+                                <p>預約日期:2023-1-1</p>
+                                <p>
+                                    施作部位:
+                                </p>
+                                <p>
+                                    卸甲:
+                                </p>
+                                <p>
+                                    施作項目:
+                                </p>
+                                <p>預估價位:NT$ 1,450</p>
+                                <p>訂金:NT$ 200</p>
+                            </div>
+                            <div class="step-container col-3">
+                                <div class="time-container h-75">
+                                </div>
+                                <div class="form-footerbtn h-25">
+                                    <div class="btn-box">
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
+                                        <button class="stepbtn" type="button" onclick="step2()">上一步</button>
+                                        <button class="stepbtn" type="button" onclick="step4()">下一步</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div id="step4" class="container step4-res isHide">
+                        <div class="form-container row">
+                            <div class="step-container pt-3 pl-4 col-9">
+                                <p>預約成功: 訂單編號: SA11111102</p>
+                                <p>預約日期:2023-1-1 13:00</p>
+                                <p>
+                                    施作部位:
+                                </p>
+                                <p>
+                                    卸甲:
+                                </p>
+                                <p>預估價位:NT$ 1,450</p>
+                                <p>訂金:NT$ 200</p>
+                            </div>
+                            <div class="step-container col-3">
+                                <div class="time-container h-75">
+                                </div>
+                                <div class="form-footerbtn h-25">
+                                    <div class="btn-box">
+                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
+                                        <button class="stepbtn" type="button" onclick="step3()">上一步</button>
+                                        <button id="btnsend" class="stepbtn" type="button" onclick="">送出</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         var PercantStar;
@@ -671,20 +892,22 @@
             el: '#ShowData',
             data: function () {
                 return {
-                DesignList: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號", "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true, "manicuristSalonPhone": "0923859697", "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試", "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459", "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計", "manicuristScore": 4.6 }],
-                DemoSetList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoSetCover": "UploadFolder/Oneone.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是今年最流行的珍珠音調粉色系呦", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "碎花", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-01-31T00:00:00" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoSetCover": "UploadFolder/Onetwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是彩色手手", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "造型", "demoSetTag2": "知性風", "demoSetTag3": "幾何", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-01-31T00:00:00" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoSetCover": "UploadFolder/Onethree.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "造型腳腳", "demoSetPrice": 1200.0000, "demoSetDeposit": 600.0000, "demoSetTag1": "造型", "demoSetTag2": "漸層", "demoSetTag3": "可愛風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoSetCover": "UploadFolder/Twoone.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "這紫色手手", "demoSetPrice": 999.0000, "demoSetDeposit": 400.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "華麗風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-02-21T23:59:59" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoSetCover": "UploadFolder/Twotwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "喝咖啡最適合的美甲", "demoSetPrice": 850.0000, "demoSetDeposit": 100.0000, "demoSetTag1": "純色", "demoSetTag2": "立體", "demoSetTag3": "晶片", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 7, "demoSetName": "我是珍珠", "demoSetCover": "UploadFolder/Twothree.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "超級大隻豬", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "可愛", "demoSetTag2": "碎花", "demoSetTag3": "漸層", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-14T00:00:00", "demoSetMainEndTime": "2023-01-31T23:59:59" }, { "demoSetId": 8, "demoSetName": "", "demoSetCover": "UploadFolder/Threeone.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 9, "demoSetName": "卡比獸美甲", "demoSetCover": "UploadFolder/Threetwo.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "我愛卡比獸", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "可愛風", "demoSetTag2": "漸層", "demoSetTag3": "立體", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
-                DemoCover: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Oneone.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onetwo.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onethree.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twoone.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twotwo.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twothree.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threeone.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threetwo.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threethree.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourone.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourtwo.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourthree.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fiveone.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivetwo.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivethree.png" }],
-                DemoList: [{ "demoPic": "UploadFolder/Oneone.png" }, { "demoPic": "UploadFolder/Twotwo.png" }, { "demoPic": "UploadFolder/Threetwo.png" }, { "demoPic": "UploadFolder/Fourthree.png" }, { "demoPic": "UploadFolder/Fivethree.png" }],
-                MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
-                width: "",
+                    DesignList: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號", "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true, "manicuristSalonPhone": "0923859697", "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試", "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459", "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計", "manicuristScore": 4.6 }],
+                    DemoSetList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoSetCover": "UploadFolder/Oneone.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是今年最流行的珍珠音調粉色系呦", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "碎花", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-01-31T00:00:00" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoSetCover": "UploadFolder/Onetwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是彩色手手", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "造型", "demoSetTag2": "知性風", "demoSetTag3": "幾何", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-01-31T00:00:00" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoSetCover": "UploadFolder/Onethree.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "造型腳腳", "demoSetPrice": 1200.0000, "demoSetDeposit": 600.0000, "demoSetTag1": "造型", "demoSetTag2": "漸層", "demoSetTag3": "可愛風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoSetCover": "UploadFolder/Twoone.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "這紫色手手", "demoSetPrice": 999.0000, "demoSetDeposit": 400.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "華麗風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-02-21T23:59:59" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoSetCover": "UploadFolder/Twotwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "喝咖啡最適合的美甲", "demoSetPrice": 850.0000, "demoSetDeposit": 100.0000, "demoSetTag1": "純色", "demoSetTag2": "立體", "demoSetTag3": "晶片", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 7, "demoSetName": "我是珍珠", "demoSetCover": "UploadFolder/Twothree.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "超級大隻豬", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "可愛", "demoSetTag2": "碎花", "demoSetTag3": "漸層", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-14T00:00:00", "demoSetMainEndTime": "2023-01-31T23:59:59" }, { "demoSetId": 8, "demoSetName": "", "demoSetCover": "UploadFolder/Threeone.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 9, "demoSetName": "卡比獸美甲", "demoSetCover": "UploadFolder/Threetwo.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "我愛卡比獸", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "可愛風", "demoSetTag2": "漸層", "demoSetTag3": "立體", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
+                    DemoCover: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Oneone.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onetwo.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onethree.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twoone.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twotwo.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twothree.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threeone.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threetwo.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threethree.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourone.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourtwo.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourthree.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fiveone.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivetwo.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivethree.png" }],
+                    DemoList: [{ "demoPic": "UploadFolder/Oneone.png" }, { "demoPic": "UploadFolder/Twotwo.png" }, { "demoPic": "UploadFolder/Threetwo.png" }, { "demoPic": "UploadFolder/Fourthree.png" }, { "demoPic": "UploadFolder/Fivethree.png" }],
+                    MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
+                    width: "",
                     MainDemoCoverLenth: "",
+                    //Comment: [{ "memberNickname": "beautiful", "commentId": 1, "commentTarget": 2, "commentScore": 4.1, "commentContent": "做的很好看", "commentBuildTime": "2023-01-20T14:51:57.87" }, { "memberNickname": "beautiful", "commentId": 2, "commentTarget": 2, "commentScore": 4.6, "commentContent": "美甲師很準時", "commentBuildTime": "2023-01-01T00:00:00" }, { "memberNickname": "beautiful", "commentId": 3, "commentTarget": 2, "commentScore": 5, "commentContent": "非常有實力", "commentBuildTime": "2022-11-23T00:00:00" }, { "memberNickname": "beautiful", "commentId": 4, "commentTarget": 2, "commentScore": 2.5, "commentContent": "建構不太好", "commentBuildTime": "2022-09-18T00:00:00" }, { "memberNickname": "beautiful", "commentId": 5, "commentTarget": 2, "commentScore": 2, "commentContent": "新手美甲師吧?", "commentBuildTime": "2022-03-10T00:00:00" }, { "memberNickname": "beautiful", "commentId": 6, "commentTarget": 2, "commentScore": 2, "commentContent": "這樣都能開店", "commentBuildTime": "2022-04-26T00:00:00" }, { "memberNickname": "beautiful", "commentId": 7, "commentTarget": 2, "commentScore": 4.2, "commentContent": "態度良好", "commentBuildTime": "2022-05-25T00:00:00" }, { "memberNickname": "beautiful", "commentId": 8, "commentTarget": 2, "commentScore": 5, "commentContent": "送指緣油", "commentBuildTime": "2022-06-01T00:00:00" }, { "memberNickname": "beautiful", "commentId": 9, "commentTarget": 2, "commentScore": 1.6, "commentContent": "遲到欠檢舉", "commentBuildTime": "2022-07-03T00:00:00" }, { "memberNickname": "beautiful", "commentId": 10, "commentTarget": 2, "commentScore": 0, "commentContent": "放生的拉基", "commentBuildTime": "2023-01-04T00:00:00" }],
+                    Comment: [],
                 }
             },
             methods: {
                 GoToEdit: function () {
                     window.location = "NailDesignerEdit.html";
                 }
-                }
+            }
         }).$mount('#ShowData');
 
         //ShowData.$mount('#ShowData');
@@ -706,7 +929,7 @@
             url: "/api/DemoSet/GetDemoSetTable/2",
             success: function (e) {
                 //console.log(e);
-                //console.log(e.length);
+                console.log(e.length);
                 ShowData.DemoSetList = e;
 
             }
@@ -721,30 +944,81 @@
             }
         });
 
-        //$.ajax({
-        //    type: "get",
-        //    url: "/api/DemoSet/GetDemoCover/2",
-        //    success: function (e) {
-        //        //console.log(e);
-        //        ShowData.DemoCover = e;
-        //        ShowData.MainDemoCoverLenth = e.length;
-        //    }
-        //});
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/2",
+            success: function (e) {
+                for (var q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
 
-        //$.ajax({
-        //    type: "get",
-        //    url: "/api/DemoSet/GetMainDemoCover/2",
-        //    success: function (e) {
-        //        //console.log(e);
-        //        ShowData.MainDemoCover = e;
-        //    }
-        //});
+                    ShowData.Comment.push(e[q]);
+                }
+                //ShowData.Comment = e;
+                console.log(e);
+            }
+        });
 
 
 
 
     </script>
 
+    <!-- 表單頁面切換 -->
+    <script>
+        function alertform() {
+            document.getElementById("hohodiv").className = "isShow";
+            document.getElementById("alert_div").className = "isShow";
+        }
+        function Closeform() {
+            document.getElementById("alert_div").className = "isHide";
+            document.getElementById("hohodiv").className = "isHide";
+        }
+        function step1() {
+            document.getElementById("step1").className = "isShow";
+            document.getElementById("step2").className = "isHide";
+        }
+        function step2() {
+            document.getElementById("step1").className = "isHide";
+            document.getElementById("step2").className = "isShow";
+            document.getElementById("step3").className = "isHide";
+            document.getElementById("step4").className = "isHide";
+        }
+        function step3() {
+            var checktime = $('input[name="planId"]').prop('checked')
 
+            // undefined
+            if (checktime == undefined || checktime == false) {
+                alert("尚未選取預約日期及時間")
+            }
+            else {
+                document.getElementById("step1").className = "isHide";
+                document.getElementById("step2").className = "isHide";
+                document.getElementById("step3").className = "isShow";
+                document.getElementById("step4").className = "isHide";
+            }
+
+        }
+        function step4() {
+            document.getElementById("step1").className = "isHide";
+            document.getElementById("step2").className = "isHide";
+            document.getElementById("step3").className = "isHide";
+            document.getElementById("step4").className = "isShow";
+        }
+    </script>
+
+    <!-- 引用日曆 JS -->
+    <script src="../js/calendar.js"></script>
+    <script src="../js/calendarscript.js"></script>
+
+    <!-- 引用 商品資料 可預約日期 -->
+    <script src="../js/getData.js"></script>
+    <script>
+        getManicuristData()
+        getReserveDate()
+        getReserveTime()
+        getOrderPartC()
+        postOrder()
+    </script>
 </body>
 </html>

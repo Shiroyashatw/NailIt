@@ -938,7 +938,7 @@
                 <div class="row FixPad CowRight">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <p class="DisInLine">共計12個作品 頁數1/1</p>
+                        <p class="DisInLine">共計{{DemoSetList.length}}個作品 頁數1/1</p>
                         <button class="CBtn">上一頁</button>
                         <button class="CBtn">下一頁</button>
                     </div>
@@ -1150,6 +1150,21 @@
                                                                         </label>
                                                                     </td>
                                                                 </tr>
+                                                                <tr v-for="(item,key) in PostthisDemo" class="itemloop">
+                                                                    <td class="text-center">新增</td>
+                                                                    <td class="text-center">
+                                                                        <label>
+                                                                            查看
+                                                                            <input type="radio" style="display:none" v-bind:value="[key]" onclick="Showinsert(this)" />
+                                                                        </label>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <label>
+                                                                            刪除
+                                                                            <input type="radio" style="display:none" v-bind:value="[key]" onclick="Deleteinsert(this)" />
+                                                                        </label>
+                                                                    </td>
+                                                                </tr>
                                                             </table>
                                                         </div>
                                                         <div class="mx-3">
@@ -1159,7 +1174,7 @@
                                                 </div>
                                                 <hr />
                                                 <div class="d-flex">
-                                                    <textarea id="UpDemoText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly">尚未選擇</textarea>
+                                                    <!--<textarea id="UpDemoText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly">尚未選擇</textarea>-->
                                                     <label id="UpDemoLabel" class="mt-3">
                                                         新增相片
                                                         <input id="UpDemo" type="file" accept="image/*" onchange="GetMorefile(this)" multiple="multiple" />
@@ -1427,6 +1442,14 @@
             $('#Previewphoto').attr('src', 'UploadFolder/upload.png');
         }
 
+        function Showinsert(e) {
+            var insertimg = ShowData.PostthisDemo[e.value].demoPic;
+            $('#Previewphoto').attr('src', insertimg);
+        }
+        function Deleteinsert(e) {
+            ShowData.PostthisDemo.splice(e.value, 1);
+        }
+
 
         var ShowData = new Vue({
             el: '#ShowData',
@@ -1448,9 +1471,9 @@
                 TagList: [{ "tagId": 1, "tagName": "純色" }, { "tagId": 2, "tagName": "漸層" }, { "tagId": 3, "tagName": "碎花" }, { "tagId": 4, "tagName": "幾何" }, { "tagId": 5, "tagName": "立體" }, { "tagId": 6, "tagName": "晶片" }, { "tagId": 7, "tagName": "鑽石" }, { "tagId": 8, "tagName": "可愛風" }, { "tagId": 9, "tagName": "知性風" }, { "tagId": 10, "tagName": "華麗風" }, { "tagId": 11, "tagName": "花磚" }, { "tagId": 12, "tagName": "大理石" }, { "tagId": 13, "tagName": "手繪美甲" }, { "tagId": 14, "tagName": "卡通人物" }, { "tagId": 15, "tagName": "乾燥玫瑰" }],
                 NineTag: [],
                 FixTag: [],
-                PostthisDemo: [{ "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }],
+                //PostthisDemo: [{ "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }, { "demoPic": "", "demoSetId": null }],
                 //PostthisDemo: [{ "demoPic": "", "demoSetId": null }],
-                //PostthisDemo: [],
+                PostthisDemo: [],
                 //PostDemoSetID:"",
                 FixColor: [{ "colorId": 1, "colorName": "灰色", "colorCss": "#5D5D5D" }, { "colorId": 2, "colorName": "黑色", "colorCss": "#000000" }, { "colorId": 3, "colorName": "淺褐咖啡色", "colorCss": "#754E43" }, { "colorId": 4, "colorName": "奶茶色", "colorCss": "#E1C9B1" }, { "colorId": 5, "colorName": "白色", "colorCss": "#F2F2F2" }, { "colorId": 6, "colorName": "粉色", "colorCss": "#DFBCB6" }, { "colorId": 7, "colorName": "紫色", "colorCss": "#875D73" }, { "colorId": 8, "colorName": "藍色", "colorCss": "#2B497B" }, { "colorId": 9, "colorName": "綠色", "colorCss": "#A0C2AA" }, { "colorId": 10, "colorName": "黃色", "colorCss": "#FFE590" }, { "colorId": 11, "colorName": "橘色", "colorCss": "#E29466" }, { "colorId": 12, "colorName": "紅色", "colorCss": "#B65F4B" }, { "colorId": 13, "colorName": "漸層色", "colorCss": null }, { "colorId": 14, "colorName": "透明色", "colorCss": "#FFFFFF" }],
                 GetUpList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調" }],
@@ -1685,7 +1708,8 @@
             let form = new FormData();
             form.append("file", e.files[0]);
             console.log(e.files[0]);
-            await fetch('https://localhost:44308/api/File', {
+            //await fetch('https://localhost:44308/api/File', {
+            await fetch('/api/File', {
                 method: 'POST',
                 body: form
             });
@@ -1706,7 +1730,8 @@
             let Coverform = new FormData();
             Coverform.append("file", e.files[0]);
             console.log(e.files[0]);
-            await fetch('https://localhost:44308/api/File', {
+            //await fetch('https://localhost:44308/api/File', {
+            await fetch('/api/File', {
                 method: 'POST',
                 body: Coverform
             });
@@ -1738,14 +1763,16 @@
                 var CoverPath = `UploadFolder/${e.files[i].name}`;
                 //console.log("POST" +ShowData.PostDemo[i].demoSetId);
                 //console.log("THIS" + ShowData.ThisFormData[0].demoSetId);
-                ShowData.PostthisDemo[i].demoSetId = ShowData.PutUpCover[0].demoSetId;
-                ShowData.PostthisDemo[i].demoPic = CoverPath;
-                //DemoImgPath[i] = CoverPath;
+                ShowData.PostthisDemo.push({ "demoPic": CoverPath, "demoSetId": ShowData.PutUpCover[0].demoSetId });
+                //ShowData.PostthisDemo[i].demoSetId = ShowData.PutUpCover[0].demoSetId;
+                //ShowData.PostthisDemo[i].demoPic = CoverPath;
 
-                document.getElementById('UpDemoText').innerHTML += `${e.files[i].name} \n`;
+                //DemoImgPath[i] = CoverPath;
+                //document.getElementById('UpDemoText').innerHTML += `${e.files[i].name} \n`;
             }
             console.log(MoreFile);
-            await fetch('https://localhost:44308/api/Files', {
+            //await fetch('https://localhost:44308/api/Files', {
+            await fetch('/api/Files', {
                 method: 'POST',
                 body: MoreFile
             });
@@ -1760,7 +1787,8 @@
             let Coverimg = new FormData();
             Coverimg.append("file", e.files[0]);
             console.log(e.files[0]);
-            await fetch('https://localhost:44308/api/File', {
+            //await fetch('https://localhost:44308/api/File', {
+            await fetch('/api/File', {
                 method: 'POST',
                 body: Coverimg
             });

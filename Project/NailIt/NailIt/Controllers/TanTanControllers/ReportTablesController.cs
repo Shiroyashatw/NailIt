@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NailIt.Models;
+using Newtonsoft.Json.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace NailIt.Controllers.TanTanControllers
 {
@@ -25,7 +30,7 @@ namespace NailIt.Controllers.TanTanControllers
         // GET: api/ReportTables
         [HttpGet]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetReportTables()
-        {
+        {           
 
             var newReportTables = from o in _context.ReportTables
                                   join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
@@ -57,24 +62,77 @@ namespace NailIt.Controllers.TanTanControllers
             return await newReportTables.ToListAsync();
         }
 
-        // GET: api/ReportTables/condition
-        [HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetProductCondition(string dateS, string dateE, string reportP, bool? reportR)
+        // GET: api/ReportTables/condition 條件
+   
+
+        [HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}/{reportRN}")]  // ReportResult is null的情況 待審核
+
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProductCondition(string dateS, string dateE, string reportP, bool? reportR, string reportRN)
         {
             var date1 = DateTime.Parse(dateS);
-            var date2 = DateTime.Parse(dateE);
+            var date2 = DateTime.Parse(dateE).AddMinutes(1439);
             
-
 
             var query = from o in _context.ReportTables
                         join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
                         join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist
                         from m in mlist.DefaultIfEmpty()
-                        where o.ReportBuildTime >= Convert.ToDateTime(date1)
-                        && o.ReportBuildTime <= Convert.ToDateTime(date2).AddMinutes(1439)
-                        && o.ReportPlaceC == reportP
-                        //&& o.ReportResult == 
                         select new
+                        {
+                            ReportId = o.ReportId,
+                            ReportBuilder = o.ReportBuilder,
+                            ReportTarget = o.ReportTarget,
+                            ReportItem = o.ReportItem,
+                            ReportPlaceC = o.ReportPlaceC,
+                            ReportReasonC = o.ReportReasonC,
+                            ReportContent = o.ReportContent,
+                            ReportBuildTime = o.ReportBuildTime,
+                            ReportCheckTime = o.ReportCheckTime == null ? "" : ((DateTime)o.ReportCheckTime).ToString("yyyy-MM-dd HH:mm"),
+                            ManagerId = o.ManagerId,
+                            ReportResult = o.ReportResult,
+                            CodeUseIn = c.CodeId,
+                            CodeRepresent = c.CodeRepresent,
+                        };
+
+            //if else query在下where條件!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+            //原來寫三個去做判斷就就好了!!!!
+
+            var result = query;
+
+
+            if (dateS != "1900-01-01" && dateE != "3000-01-01")
+            {
+                result = result.Where(a => a.ReportBuildTime >= Convert.ToDateTime(date1) 
+                                        && a.ReportBuildTime <= Convert.ToDateTime(date2));
+            }
+
+            if (reportP!= "X0")
+            {
+                result = result.Where(a => a.ReportPlaceC == reportP);
+            }
+
+
+
+            if (reportR == true && reportRN.Length == 4)
+            {
+                result = result.Where(a => a.ReportResult == (bool?)null);
+
+            }
+            else if (reportR == true && reportRN.Length == 3)
+            {
+                result = result.Where(a => a.ReportResult == true);
+            }
+            else if (reportR == false)
+            {
+                result = result.Where(a => a.ReportResult == false);
+            }
+
+            if (dateS == "1900-01-01" && dateE == "3000-01-01" && reportP == "X0" && reportR == true && reportRN.Length == 2) {
+                result = query;
+            }
+            var result2 = from o in result
+                          join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
+                          select new
                         {
                             ReportId = o.ReportId,
                             ReportBuilder = o.ReportBuilder,
@@ -90,8 +148,9 @@ namespace NailIt.Controllers.TanTanControllers
                             CodeUseIn = c.CodeId,
                             CodeRepresent = c.CodeRepresent,
                         };
+            
+            return await result2.ToListAsync();
 
-            return await query.ToListAsync();
         }
 
         // GET: api/ReportTables/5
@@ -189,15 +248,15 @@ namespace NailIt.Controllers.TanTanControllers
             return NoContent();
         }
 
-        // POST: api/ReportTables
+        //// POST: api/ReportTables
 
-        [HttpPost]
-        public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
-        {
-            _context.ReportTables.Add(reportTable);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetReportTable", new { id = reportTable.ReportId }, reportTable);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
+        //{
+        //    _context.ReportTables.Add(reportTable);
+        //    await _context.SaveChangesAsync();
+        //    return CreatedAtAction("GetReportTable", new { id = reportTable.ReportId }, reportTable);
+        //}
 
         //// DELETE: api/ReportTables/5
         //[HttpDelete("{id}")]

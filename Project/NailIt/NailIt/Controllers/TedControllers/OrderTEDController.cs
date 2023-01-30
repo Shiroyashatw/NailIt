@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -43,11 +44,15 @@ namespace NailIt.Controllers.TedControllers
                         where o.MemberId == id
                         select new Orderappointment()
                         {
+                            MemberId =o.MemberId,
+                            ManicuristId =o.ManicuristId,
+                            OrderPartC = o.OrderPartC,
+                            OrderId = o.OrderId,
                           ManicuristAddress= m.ManicuristAddress,
                           ManicuristSalonName= m.ManicuristSalonName,
                           ManicuristPublic= m.ManicuristPublic,
                           OrderItemName= o.OrderItemName,
-                            ManicuristPic = o.OrderType == true ? m.ManicuristPic : null,
+                            ManicuristPic = o.OrderType == true ?  null: m.ManicuristPic,
                             OrderOrderTime=  o.OrderOrderTime,
                             OrderAcceptTime= o.OrderAcceptTime,
                             OrderDoneTime= o.OrderDoneTime,
@@ -69,14 +74,12 @@ namespace NailIt.Controllers.TedControllers
         // PUT: api/OrderTED/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderTable(int id, OrderTable orderTable)
+        public async Task<IActionResult> PutOrderTable(int id, string stat)
         {
-            if (id != orderTable.OrderId)
-            {
-                return BadRequest();
-            }
+            var orderTable = await _context.OrderTables.FindAsync(id);
+            orderTable.OrderStateC ="A6";
+            orderTable.OrderCancelTime = DateTime.Now;
 
-            _context.Entry(orderTable).State = EntityState.Modified;
 
             try
             {
