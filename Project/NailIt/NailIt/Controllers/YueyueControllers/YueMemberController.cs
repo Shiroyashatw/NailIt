@@ -44,7 +44,7 @@ namespace NailIt.Controllers.YueyueControllers
                 Guid g = Guid.NewGuid();
                 _context.Entry(nowUse).State = EntityState.Modified;
                 nowUse.MemberLogincredit = g;
-                HttpContext.Session.SetString("NailitToken", g.ToString());
+                HttpContext.Session.SetString("loginKey", g.ToString());
                 await _context.SaveChangesAsync();
                 return "OK";
             }

@@ -1,5 +1,4 @@
-﻿calenSendGet();
-var calenResult;
+﻿var calenResult;
 var calenData;
 var nowDay;
 var mySelectTime;
