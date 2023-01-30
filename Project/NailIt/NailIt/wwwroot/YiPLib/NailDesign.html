@@ -513,10 +513,10 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                        <form>
-                            <input class="Searchbar" type="text" placeholder="作品,標籤">
-                            <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>
+                        <!--<form>-->
+                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        <!--</form>-->
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -577,7 +577,7 @@
                         <div v-for="(item,key) in MainDemoCover">
                             <div class="Seemore my-0">
                                 <img class="Demoimg" v-bind:src="MainDemoCover[key].demoSetCover" alt="">
-                                <button onclick="Checkit(this)" v-bind:value="DemoSetList[key].demoSetId" class="Clickme">查看</button>
+                                <button onclick="Checkit(this)" v-bind:value="MainDemoCover[key].demoSetId" class="Clickme">查看</button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{MainDemoCover[key].demoSetName}}</p>
                             <p class="DemoGroup">${{MainDemoCover[key].demoSetPrice}}</p>
@@ -966,9 +966,9 @@
     </div>
 
     <script>
-        const ManicuristID = 2;
         let PercantStar;
         let FloatStar;
+
 
         $('.Chgcontext').hide();
         $('#pageone').show();
@@ -1014,6 +1014,21 @@
             window.location = "product.html?id=" + e.value;
         }
 
+        function Searchit() {
+            console.log(ShowData.SearchString);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetSearchTable/" + GetManicuristID + "?search=" + ShowData.SearchString,
+                success: function (e) {
+                    ShowData.DemoSetList = [];
+                    for (DS in e) {
+                        ShowData.DemoSetList.push(e[DS]);
+                    }
+                }
+            });
+            console.log(ShowData.DemoSetList);
+        }
+
 
         const ShowData = new Vue({
             el: '#ShowData',
@@ -1030,7 +1045,8 @@
                     Sort: "Default",
                     SortDateHTL:[],
                     SortRateHTL: [],
-                    SortRateLTH:[],
+                    SortRateLTH: [],
+                    SearchString: "",
                 }
             },
             methods: {
@@ -1040,9 +1056,15 @@
             }
         }).$mount('#ShowData');
 
+        let GetNowurl = window.location.href;
+        let Nowurl = new URL(GetNowurl);
+        let GetManicuristID = Nowurl.searchParams.get('id');
+        //let ManicuristID = 2;
+        //console.log(GetManicuristID);
+
         $.ajax({
             type: "get",
-            url: "/api/Manicurist/" + ManicuristID,
+            url: "/api/Manicurist/" + GetManicuristID,
             success: function (e) {
                 ShowData.DesignList = e;
                 PercantStar = e.manicuristScore;
@@ -1053,7 +1075,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/DemoSet/GetDemoSetTable/" + ManicuristID,
+            url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
             success: function (e) {
                 for (demoset in e) {
                     ShowData.DemoSetList.push(e[demoset]);
@@ -1063,7 +1085,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/Demo/" + ManicuristID,
+            url: "/api/Demo/" + GetManicuristID,
             success: function (e) {
                 for (demo in e) {
                     ShowData.DemoList.push(e[demo]);
@@ -1073,7 +1095,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/YiPComment/GetManicuristComment/" + ManicuristID,
+            url: "/api/YiPComment/GetManicuristComment/" + GetManicuristID,
             success: function (e) {
                 for (let q = 0; q < e.length; q++) {
                     e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
@@ -1085,7 +1107,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/DemoSet/GetMainDemoSetTable/" + ManicuristID,
+            url: "/api/DemoSet/GetMainDemoSetTable/" + GetManicuristID,
             success: function (e) {
                 console.log(e);
                 for (maindemo in e) {
@@ -1096,7 +1118,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/YiPComment/GetDateLTHComment/" + ManicuristID,
+            url: "/api/YiPComment/GetDateLTHComment/" + GetManicuristID,
             success: function (e) {
                 for (let q = 0; q < e.length; q++) {
                     e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
@@ -1109,7 +1131,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/YiPComment/GetDateHTLComment/" + ManicuristID,
+            url: "/api/YiPComment/GetDateHTLComment/" + GetManicuristID,
             success: function (e) {
                 for (let q = 0; q < e.length; q++) {
                     e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
@@ -1122,7 +1144,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/YiPComment/GetRateLTHComment/" + ManicuristID,
+            url: "/api/YiPComment/GetRateLTHComment/" + GetManicuristID,
             success: function (e) {
                 for (let q = 0; q < e.length; q++) {
                     e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
@@ -1135,7 +1157,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/YiPComment/GetRateHTLComment/" + ManicuristID,
+            url: "/api/YiPComment/GetRateHTLComment/" + GetManicuristID,
             success: function (e) {
                 for (let q = 0; q < e.length; q++) {
                     e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);

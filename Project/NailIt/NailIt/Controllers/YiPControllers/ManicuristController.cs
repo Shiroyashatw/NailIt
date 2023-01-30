@@ -20,9 +20,12 @@ namespace NailIt.Controllers.YiPControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ManicuristTable>>> GetManicuristTable()
+        public async Task<ActionResult<IEnumerable<ManicuristTable>>> GetManicuristTable(string name)
         {
-            var query = from User in Context.ManicuristTables where User.ManicuristId == 2 select User;
+            var query = from Designer 
+                                   in Context.ManicuristTables 
+                            where Designer.ManicuristSalonName.Contains(name) 
+                            select Designer;
             return await query.ToListAsync();
             //return await Context.ManicuristTables.ToListAsync();
 
