@@ -95,7 +95,7 @@
                             <p class="demoSetPartC"></p>
                             <p id="botmanicuristSalonName">
                             </p>
-                            
+
                             <div class="starBx">
                                 <div class="starContext">
                                     <p>店家/設計師評價:</p>
@@ -112,7 +112,7 @@
                                 <div class="empty_star">★★★★★</div>
                                 <div class="full_star">★★★★★<span>5</span></div>
                             </div> -->
-                            
+
                             <p class="botphone"></p>
                             <p id="botadress"></p>
                             <p class="demoSetDeposit"></p>
@@ -294,8 +294,11 @@
                     </div>
                     <div id="step4" class="container step4-res isHide">
                         <div class="form-container row">
-                            <div class="step-container pt-3 pl-4 col-9">
-                                <p>預約成功，請耐心等待預約設計師回覆</p>
+                            <div class="step-container pt-20 pl-20 col-9">
+                                <div class="reserveOKmsg">
+                                    <p>預約成功，請耐心等待預約設計師回覆</p>
+                                </div>
+                                
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -316,7 +319,7 @@
     </div>
 
     <!-- 綠界金流表單 -->
-    <div class="cash">
+    <!-- <div class="cash">
         <input type="hidden" id="HashKey" value="pwFHCqoQZGmho4w6" />
         <input type="hidden" id="HashIV" value="EkRm7iFT261dpevs" />
         <form id="cashform" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="post">
@@ -324,8 +327,6 @@
             <br />
             <input type="hidden" name="MerchantTradeNo" value="DX20230127114112152C">
             <br />
-            <!-- Naillt20230127114112
-            DX20230127114112152C -->
             <input type="hidden" name="MerchantTradeDate" value="2023/01/27 11:41:12">
             <br />
             <input type="hidden" name="PaymentType" value="aio">
@@ -338,18 +339,18 @@
             <br />
             <input type="hidden" name="ReturnURL" value="https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL">
             <br />
-            <!-- <label for="">OrderResultURL<input type="text" id="" name="OrderResultURL" value="api/User"></label>
-        <br /> -->
+            <label for="">OrderResultURL<input type="text" id="" name="OrderResultURL" value="api/User"></label>
+            <br />
             <input type="hidden" id="" name="ChoosePayment" value="Credit">
             <br />
             <input type="hidden" id="" name="CheckMacValue" value="">
             <br />
             <input type="hidden" id="" name="EncryptType" value="1">
             <br />
-            <!-- <button type="button" id="btnCashSend">送出</button> -->
+            <button type="button" id="btnCashSend">送出</button>
 
         </form>
-    </div>
+    </div> -->
     <!-- 檢舉表單 -->
     <div class="form-main">
         <div id="rephohodiv" class="isHide"></div>
@@ -436,8 +437,8 @@
             document.getElementById("alert_div").className = "isShow";
 
             $('.Progress .line:nth-child(1) .step').css({
-                "background-color": "#FF6733",
-                "color": "#333",
+                "background-color": "#3498db",
+                "color": "#FF6733",
                 "transition": ".3s"
             })
         }
@@ -463,8 +464,8 @@
             document.getElementById("step4").className = "isHide";
 
             $('.Progress .line:nth-child(2) .step').css({
-                "background-color": "#FF6733",
-                "color": "#333",
+                "background-color": "#3498db",
+                "color": "#FF6733",
                 "transition": ".3s"
             })
 
@@ -476,8 +477,8 @@
 
         }
         function step3() {
-            var checktime = $('input[name="planId"]').prop('checked')
-
+            var checktime = $('input[name="planId"]:checked').val();
+            
             // undefined
             if (checktime == undefined || checktime == false) {
                 alert("尚未選取預約日期及時間")
@@ -489,8 +490,8 @@
                 document.getElementById("step4").className = "isHide";
 
                 $('.Progress .line:nth-child(3) .step').css({
-                    "background-color": "#FF6733",
-                    "color": "#333",
+                    "background-color": "#3498db",
+                    "color": "#FF6733",
                     "transition": ".3s"
                 })
             }
@@ -504,8 +505,8 @@
             document.getElementById("step4").className = "isShow";
 
             $('.Progress .line:nth-child(4) .step').css({
-                "background-color": "#FF6733",
-                "color": "#333",
+                "background-color": "#3498db",
+                "color": "#FF6733",
                 "transition": ".3s"
             })
         }
@@ -521,6 +522,7 @@
             document.getElementById("repalert_div").className = "isHide";
         }
     </script>
+
     <!-- /點擊小圖 大圖跟著切換 -->
     <script>
         function getsrc(whichpic) {
@@ -530,9 +532,7 @@
         }
         getsrc(whichpic);
     </script>
-    <script>
 
-    </script>
     <!-- 日曆函數 -->
     <script src="../js/calendar.js"></script>
     <script src="../js/calendarscript.js"></script>
