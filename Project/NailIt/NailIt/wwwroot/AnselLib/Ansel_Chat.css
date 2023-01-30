@@ -22,14 +22,20 @@
 .material-symbols-outlined:hover{
     color: #007bff;
 }
-#draftMessagetextarea {
+#draftMessage{
+    border: none;
+    outline: none;
+    min-height: 10vh;
+    max-height: 40vh;
+}
+/* #draftMessagetextarea {
     border: none;
     outline: none;
     resize: none;
     min-height: 10vh;
     max-height: 40vh;
-    /* overflow-y: hidden; */
-}
+    /* overflow-y: hidden;
+} */
 /*#endregion*/
 
 

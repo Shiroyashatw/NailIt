@@ -2,8 +2,11 @@ var scop = {
     loginId: 0, // 目前登入者Id
     loginAccount: "", // 目前登入者帳號
     loginNickname: "", // 目前登入者暱稱
-    chattingMembersMenu: null, // right click menu of chattingMembers
-    chattingMembersArea: null // right click area of chattingMembers
+    bodyArea: null, // for closing right click menu
+    chattingMembersMenu: null, //  for chattingMembers right click menu
+    chattingMsgMenu: null, // for chattingMsg right click menu
+    chattingMembers: [], // 有聊天記錄的人員清單, show在#chattingMembers
+    currentChatMemId: 0 // 目前聊天對象Id
 }
 //#region Function
 //#region Action
@@ -56,27 +59,117 @@ var showMyNewImg = function () {
     // update chatting members
 }
 // Sending message
-var showMyNewMsg = function () {
+var showMyNewMsg = async function () {
+    if (!draftMessage.innerHTML.trim()) {
+        return;
+    }
+    content = await elmDataURLToLink(draftMessage.innerHTML);
     // get value from textarea
-
-    // call api (postMessage)
-
-    // clear textarea
-    // show new message
-    // update chatting members
+    let message = new MessageTable({
+        messageSender: scop.loginId,
+        messageReceiver: 2, // 需替換 scop.currentChatMemId
+        messageContent: content,
+    });
+    // call api (postMessage) 因為postMessage與系統功能名稱重複，改為postTheMessage
+    var result = await postTheMessage(message);
+    if (!!result) {
+        // clear textarea
+        draftMessage.innerHTML = "";
+        // show new message
+        await renderNewMsg(result);
+        var lastMessage = $("#chattingArea").children()[$("#chattingArea").children().length-1];
+        BindingMsgRightMenu([lastMessage]); // last one
+        // resize message
+        // lastMessage.style.height = 0;
+        lastMessage.style.height = (this.scrollHeight) + "px";
+        // update chatting members
+        await renderTheChatMember(result);
+        BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
+        ShowChattingButtom();
+    }
 }
 var showChatMember = async function () {
     // call api (getMembersMsg)
     var result = await getMembersMsg();
     if (!!result) {
-        // show chatting members
+        // show chatting members        
         await renderChatMember(result);
-        BindingMemberRightMenu();
+        BindingMemberRightMenu(document.getElementsByClassName("data-memberid"));
+        scop.chattingMembers = result;
     }
 }
 //#endregion
 
 //#region render updates
+// 渲染人員對話記錄
+var renderNewMsg = async function (message) {
+    let messageHTML = "";
+    // the message sent by other
+    if (message.messageSender != scop.loginId) {
+        // text message
+        if (message.messageContent.indexOf("<img") == -1) {
+            messageHTML = `
+                <div class="data-messageid mb-1 d-flex" data-messageid="${message.messageId}">
+                    <span class="bg-secondary text-white rounded px-3 py-2">${message.messageContent}</span>
+                    <span class="col-2 px-2 align-self-end">${message.messageTime.HHmm()}</span>
+                </div>`;
+        }
+        // image message
+        else{
+            messageHTML = `
+                <div class="data-messageid mb-1 d-flex" data-messageid="${message.messageId}">
+                    <span class="bg-secondary rounded px-1 py-1">${message.messageContent}</span>
+                    <span class="col-2 px-2 align-self-end">${message.messageTime.HHmm()}</span>
+                </div>`;
+        }
+    }
+    // the message sent by me
+    else {
+        // text message
+        if (message.messageContent.indexOf("<img") == -1) {
+            messageHTML = `
+                <div class="data-messageid mb-1 d-flex flex-row-reverse" data-messageid="${message.messageId}">
+                    <span class="rounded px-3 py-2" style="border: 4px solid black;">${message.messageContent}</span>
+                    <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.HHmm()}</span>
+                </div>`;
+                // messageHTML = `
+                //     <div class="data-messageid mb-1 d-flex flex-row-reverse" data-messageid="${message.messageId}">
+                //         <textarea class="rounded px-3 py-2" rows="1" style="border: 4px solid black;resize:none;" disabled>${message.messageContent}</textarea>
+                //         <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.HHmm()}</span>
+                //     </div>`;
+        }
+        // image message
+        else{
+            messageHTML = `
+                <div class="data-messageid mb-1 d-flex flex-row-reverse" data-messageid="${message.messageId}">
+                    <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
+                    <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.HHmm()}</span>
+                </div>`;
+        }
+    }
+    $("#chattingArea").append(messageHTML);
+}
+// 更新對話記錄人員list
+var renderTheChatMember = async function () {
+    // remove old memder msg
+    $(`div[data-memberid="${scop.currentChatMemId}"]`).remove();
+    // prepend new one
+    let chatMemberHTML = `
+        <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="${scop.currentChatMemId}">
+            <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
+                style="aspect-ratio:1;color: #fff;width:35px">
+                <div class="font-weight-bold">
+                    ${avatar.innerText}
+                </div>
+            </div>
+            <div class="pl-1 pl-sm-4">
+                <div class="font-weight-bold">${member.innerText}</div>
+                <div>1秒前</div>
+            </div>
+        </div>`;
+    $("#chattingMembers").prepend(chatMemberHTML);
+}
+// 渲染對話記錄人員list
 var renderChatMember = async function (chatMembers) {
     for (const chatMember of chatMembers) {
         let chatMemberHTML = `
@@ -90,12 +183,14 @@ var renderChatMember = async function (chatMembers) {
             <div class="pl-1 pl-sm-4">
                 <div class="font-weight-bold">${chatMember.memberNickname}</div>
                 <div>${chatMember.msgTimeDiff}</div>
-            </div>
+            </div>`;
+        if (chatMember.unreadCount > 0)
+            chatMemberHTML += `    
             <div class="bg-danger rounded-circle text-center"style="aspect-ratio:1;color:#fff;margin-left:auto;width:24px">
                 ${chatMember.unreadCount}
             </div>
         </div>`;
-        $("#chattingMembers").prepend(chatMemberHTML);        
+        $("#chattingMembers").prepend(chatMemberHTML);
     }
 }
 //#endregion
@@ -148,11 +243,18 @@ var putMsgRevoke = async function (messageId) {
     if (!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
     return true;
 }
-var postMessage = async function (message) {
+var postTheMessage = async function (message) {
     // call api get related data
     var res = await ChatService.postMessage(message);
     if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
     // return built model for displaying the message
+    return res;
+}
+var uploadImage = async function (formdata) {
+    // call api get related data
+    let res = await ChatService.uploadImage(formdata);
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    // return list of image url.
     return res;
 }
 var postMsgImage = async function (imageFiles) {
@@ -163,36 +265,76 @@ var postMsgImage = async function (imageFiles) {
     return res;
 }
 //#endregion
+// Save dataURL image. Replace image src dataURL to url link.
+async function elmDataURLToLink(html) {
+    let divEltment = document.createElement("div");
+    divEltment.innerHTML = `<div>${html}</div>`;
+    let imgTags = divEltment.getElementsByTagName("img");
+
+    let imageURLs = []; // 回復的image url link
+    let index = 0;
+    let formdata = new FormData();
+
+    // create image file with base64 which in article content.
+    for (const imgTag of imgTags) {
+        // if it's base64.
+        if (imgTag.src.startsWith("data")) {
+            let file = await urlToFile(imgTag.src, `lab.png${index}`, 'image/png');
+            formdata.append(`file${index}`, file);
+            index++;
+        }
+    }
+    if (index > 0) {
+        index = 0;
+        // call api save image, return url
+        let result = await uploadImage(formdata);
+        if (!!result) {
+            imageURLs = result;
+        }
+        // html <img> change base64 to backend link.
+        for (const imgTag of imgTags) {
+            if (imgTag.src.startsWith("data")) {
+                let urlImg = document.createElement("img");
+                urlImg.src = apiServer + imageURLs[index];
+                imgTag.before(urlImg);
+                imgTag.remove();
+                index++;
+            }
+        }
+    }
+
+    return divEltment.childNodes[0].innerHTML;
+}
 // Context menu for chattingArea
-function BindingMsgRightMenu () {
+function BindingMsgRightMenu(chattingMsgArea) {
     var bodyArea = document.querySelector("body");
-    const chattingMsgMenu = document.getElementById("chattingAreaMenu");
-    const chattingMembersMenu = document.getElementById("chattingMembersMenu");
-    var chattingMsgArea = document.getElementsByClassName("data-messageid");
+    const chattingMembersMenu = scop.chattingMembersMenu;
+    const chattingMsgsMenu = scop.chattingMsgsMenu;
+    // var chattingMsgArea = documenchattingMsgAreachattingMsgAreat.getElementsByClassName("data-messageid");
     for (const itemValue of chattingMsgArea) {
         itemValue.childNodes[1].addEventListener("contextmenu", (e) => {
             e.preventDefault();
 
             const { clientX: mouseX, clientY: mouseY } = e;
-            const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY, bodyArea, chattingMsgMenu);
+            const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY, bodyArea, chattingMsgsMenu);
 
-            chattingMsgMenu.style.top = `${normalizedY}px`;
-            chattingMsgMenu.style.left = `${normalizedX}px`;
+            chattingMsgsMenu.style.top = `${normalizedY}px`;
+            chattingMsgsMenu.style.left = `${normalizedX}px`;
 
-            chattingMsgMenu.classList.remove("visible");
+            chattingMsgsMenu.classList.remove("visible");
             chattingMembersMenu.classList.remove("visible");
             setTimeout(() => {
-                chattingMsgMenu.classList.add("visible");
+                chattingMsgsMenu.classList.add("visible");
             }, "50");
         });
     }
 }
 // Context menu for chattingMembers
-function BindingMemberRightMenu () {
+function BindingMemberRightMenu(chattingMembersArea) {
     var bodyArea = document.querySelector("body");
-    const chattingMsgMenu = document.getElementById("chattingAreaMenu");
-    const chattingMembersMenu = document.getElementById("chattingMembersMenu");
-    var chattingMembersArea = document.getElementsByClassName("data-memberid");
+    const chattingMembersMenu = scop.chattingMembersMenu;
+    const chattingMsgsMenu = scop.chattingMsgsMenu;
+    // var chattingMembersArea = document.getElementsByClassName("data-memberid");
     for (const itemValue of chattingMembersArea) {
         itemValue.addEventListener("contextmenu", (e) => {
             e.preventDefault();
@@ -203,7 +345,7 @@ function BindingMemberRightMenu () {
             chattingMembersMenu.style.top = `${normalizedY}px`;
             chattingMembersMenu.style.left = `${normalizedX}px`;
 
-            chattingMsgMenu.classList.remove("visible");
+            chattingMsgsMenu.classList.remove("visible");
             chattingMembersMenu.classList.remove("visible");
             setTimeout(() => {
                 chattingMembersMenu.classList.add("visible");
@@ -249,10 +391,10 @@ function ShowChattingButtom() {
     var chattingArea = document.querySelector('#chattingArea');
     chattingArea.scrollTop = chattingArea.scrollHeight - chattingArea.clientHeight;
 }
-function ShowTAInput() {
-    this.style.height = 0;
-    this.style.height = (this.scrollHeight) + "px";
-}
+// function ShowTAInput() {
+//     this.style.height = 0;
+//     this.style.height = (this.scrollHeight) + "px";
+// }
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -265,7 +407,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     scop.loginAccount = $("#loginAccount").val();
     scop.loginNickname = $("#loginNickname").val();
     console.log(scop.loginId, scop.loginAccount, scop.loginNickname);
-    
+
     // Initial
     showChatMember()
 
@@ -273,30 +415,34 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Setup event for right clicke context menu
     var bodyArea = document.querySelector("body");
+    const chattingMembersMenu = document.getElementById("chattingMembersMenu");
+    const chattingMsgsMenu = document.getElementById("chattingAreaMenu");
     // hide context menu while not click on specific area
     bodyArea.addEventListener("click", (e) => {
         if (e.target.offsetParent != chattingMembersMenu) {
             chattingMembersMenu.classList.remove("visible");
         }
-        if (e.target.offsetParent != chattingMsgMenu) {
-            chattingMsgMenu.classList.remove("visible");
+        if (e.target.offsetParent != chattingMsgsMenu) {
+            chattingMsgsMenu.classList.remove("visible");
         }
     });
     // hide context menu while scrolling
     document.addEventListener("scroll", (e) => {
         chattingMembersMenu.classList.remove("visible");
-        chattingMsgMenu.classList.remove("visible");
+        chattingMsgsMenu.classList.remove("visible");
     });
     document.getElementById("chattingArea").addEventListener("scroll", (e) => {
         chattingMembersMenu.classList.remove("visible");
-        chattingMsgMenu.classList.remove("visible");
+        chattingMsgsMenu.classList.remove("visible");
     });
+    scop.chattingMembersMenu = chattingMembersMenu;
+    scop.chattingMsgsMenu = chattingMsgsMenu;
 
 
     // Setup draftMessagetextarea input event
-    const tx = document.getElementById("draftMessagetextarea");
-    tx.setAttribute("style", "height:" + (tx.scrollHeight) + "px;");
-    tx.addEventListener("input", ShowTAInput, false);
+    // const tx = document.getElementById("draftMessagetextarea");
+    // tx.setAttribute("style", "height:" + (tx.scrollHeight) + "px;");
+    // tx.addEventListener("input", ShowTAInput, false);
 
     // Scroll to buttom of message 
     ShowChattingButtom();
