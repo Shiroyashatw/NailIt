@@ -1,0 +1,123 @@
+﻿var ood = new Vue({
+    el: "#my-appointment",
+    data: {
+        inglist: [],
+        rightlist: [],
+        finlist: [],
+        cancellist: []
+
+    }
+})
+$.ajax({
+    type: "get",
+    url: "/api/OrderTED/1",
+    success: function (e) {
+        
+        for (var i = 0; i < e.length; i++) {
+            if (e[i].demoSetCover == null) {
+                e[i].demoSetCover = e[i].manicuristPic;
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+           
+            e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
+            if (e[i].orderPartC == 'C0') {
+                e[i].orderPartC = "手";
+            } else if (e[i].orderPartC == 'C1') {
+                e[i].orderPartC = "腳";
+            } else if (e[i].orderPartC == 'C2') {
+                e[i].orderPartC = "手、腳";
+            }
+            if (e[i].orderRemovalC == 'B0') {
+                e[i].orderRemovalC = "不用卸甲"
+            } else if (e[i].orderRemovalC == 'B1') {
+                e[i].orderRemovalC = '去指卸甲'
+            } else if (e[i].orderRemovalC == 'B2') {
+                e[i].orderRemovalC = '本店卸甲'
+            } else if (e[i].orderRemovalC == 'B3') {
+                e[i].orderRemovalC = '他店卸甲'
+            }
+            if (e[i].orderStateC == "A0") {
+                (ood.inglist).push(e[i]);
+            } else if (e[i].orderStateC == 'A1') {
+                (ood.rightlist).push(e[i]);
+            } else if (e[i].orderStateC == 'A2') {
+                e[i].orderCompleteTime = e[i].orderCompleteTime.replace('T', ' ');
+                (ood.finlist).push(e[i]);
+            } else if (e[i].orderStateC == 'A6') {
+                e[i].orderCancelTime = e[i].orderCancelTime.replace('T', ' ');
+                (ood.cancellist).push(e[i]);
+            } 
+            
+      
+        }
+    }
+})
+function Getorder(e) {
+        $("#salonname").text(ood.inglist[(e.id).substr(5, 1)].manicuristSalonName);
+        $("#number-ing").text(ood.inglist[(e.id).substr(5, 1)].orderId)
+        $("#date-ing").text(ood.inglist[(e.id).substr(5, 1)].orderOrderTime);
+        $("#part-ing").text(ood.inglist[(e.id).substr(5, 1)].orderPartC);   
+        $("#remove-ing").text(ood.inglist[(e.id).substr(5, 1)].orderRemovalC);   
+        $("#item-ing").text(ood.inglist[(e.id).substr(5, 1)].orderItemName);   
+        $("#pay-ing").text('NT$'+ood.inglist[(e.id).substr(5, 1)].orderPrice);   
+        $("#rent-ing").text('NT$'+ood.inglist[(e.id).substr(5, 1)].orderDeposit);
+}
+function Getorderrig(e) {
+    $("#salonname-rig").text(ood.rightlist[(e.id).substr(8, 1)].manicuristSalonName);
+    $("#number-rig").text(ood.rightlist[(e.id).substr(8, 1)].orderId);
+    $("#date-rig").text(ood.rightlist[(e.id).substr(8, 1)].orderOrderTime);
+    $("#part-rig").text(ood.rightlist[(e.id).substr(8, 1)].orderPartC);
+    $("#remove-rig").text(ood.rightlist[(e.id).substr(8, 1)].orderRemovalC);
+    $("#item-rig").text(ood.rightlist[(e.id).substr(8, 1)].orderItemName);
+    $("#pay-rig").text('NT$' + ood.rightlist[(e.id).substr(8, 1)].orderPrice);
+    $("#rent-rig").text('NT$' + ood.rightlist[(e.id).substr(8, 1)].orderDeposit);
+}
+function Getorderfin(e) {
+    $("#salonname-fin").text(ood.finlist[(e.id).substr(8, 1)].manicuristSalonName);
+    $("#number-fin").text(ood.finlist[(e.id).substr(8, 1)].orderId);
+    $("#date-fin").text(ood.finlist[(e.id).substr(8, 1)].orderOrderTime);
+    $("#enddate-fin").text(ood.finlist[(e.id).substr(8, 1)].orderCompleteTime);
+    $("#part-fin").text(ood.finlist[(e.id).substr(8, 1)].orderPartC);
+    $("#remove-fin").text(ood.finlist[(e.id).substr(8, 1)].orderRemovalC);
+    $("#item-fin").text(ood.finlist[(e.id).substr(8, 1)].orderItemName);
+    $("#pay-fin").text('NT$' + ood.finlist[(e.id).substr(8, 1)].orderPrice);
+    $("#rent-fin").text('NT$' + ood.finlist[(e.id).substr(8, 1)].orderDeposit);
+}
+function Getordercancel(e) {
+    $("#salonname-cancel").text(ood.cancellist[(e.id).substr(11, 1)].manicuristSalonName);
+    $("#number-cancel").text(ood.cancellist[(e.id).substr(11, 1)].orderId);
+    $("#date-cancel").text(ood.cancellist[(e.id).substr(11, 1)].orderOrderTime);
+    $("#enddate-cancel").text(ood.cancellist[(e.id).substr(11, 1)].orderCompleteTime);
+    $("#part-cancel").text(ood.cancellist[(e.id).substr(11, 1)].orderPartC);
+    $("#remove-cancel").text(ood.cancellist[(e.id).substr(11, 1)].orderRemovalC);
+    $("#item-cancel").text(ood.cancellist[(e.id).substr(11, 1)].orderItemName);
+    $("#pay-cancel").text('NT$' + ood.cancellist[(e.id).substr(11, 1)].orderPrice);
+    $("#rent-cancel").text('NT$' + ood.cancellist[(e.id).substr(11, 1)].orderDeposit);
+}
+//取消預約
+function cancelorderbtn(e) {
+    var cancelid = e.id; 
+    var num = 0;
+    for (var i = 6; i < cancelid.length; i++) {
+        if (cancelid[i].toString().indexOf('0') <0) {
+            num = i;
+            break;
+        }
+    }
+    var realid = cancelid.substr(num, cancelid.length - num);
+
+  
+    if (confirm('是否確定要取消預約?') == true) {
+        $.ajax({
+            type: "put",
+            url: "/api/OrderTED/" + realid,
+            data: JSON.stringify('"orderStateC":"A6"'),
+        success: function () {
+            window.location = "/tedLb/tedmember.html";
+        alert('已取消訂單');
+        }
+   })
+       
+    }
+   
+}

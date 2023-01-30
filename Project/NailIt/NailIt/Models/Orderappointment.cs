@@ -24,5 +24,10 @@ namespace NailIt.Models
         public string DemoSetContent { get; set; }
         public string OrderRemovalC { get; set; }
         public string ManicuristPic { get; set; }
+        public int OrderId { get; set; }
+        public string OrderPartC { get; set; }
+        public int MemberId { get; set; }
+        public int ManicuristId { get; set; }
+        public string MemberName { get; set; }
     }
 }

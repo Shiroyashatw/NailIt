@@ -50,14 +50,19 @@
         
       }
       //評價星星
-      function ratstar(idid){
-        const stars=document.querySelector(".rating").children;
+function ratstar(e) {
+    var key = e.id.substr(5, 1);
+    var rat = ".rating" + key
+        const stars=document.querySelector(rat).children;
         for(var i=0;i<stars.length;i++){
           stars[i].className ="fa fa-star-o"
         }
-        for(var i=0;i<parseInt(idid[4]);i++){
+        for(var i=0;i<parseInt(e.id[4]);i++){
           stars[i].className = "fa fa-star"
-        }
+    }
+    bb.evainsertlist[0].commentScore = parseInt(e.id.substr(4, 1));
+    
+         
       }
 var area_data = {
   '台北市': [
