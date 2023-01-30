@@ -33,7 +33,7 @@ namespace NailIt.Controllers.AnselControllers
                 Where(r => r.ArticleId == ArticleId).
                 OrderByDescending(r => r.ReplyId).
                 ToListAsync();
-            
+
             // remove the reply had been report by this user
             var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D6").ToList();
             var leftJoinReport = (from reply in replies
@@ -59,14 +59,14 @@ namespace NailIt.Controllers.AnselControllers
                                 {
                                     reply.reply,
                                     memberNickname = reply.MemberNickname,
-                                    replyLastDateDiff = dateTimeDiff(DateTime.UtcNow,reply.reply.ReplyLastEdit),
+                                    replyLastDateDiff = dateTimeDiff(DateTime.UtcNow, reply.reply.ReplyLastEdit),
                                     like = userlike?.ReplyLikeId == null ? false : true
                                 }).ToList();
 
             return Ok(leftJoinLike);
         }
 
-        private string dateTimeDiff(DateTime date1, DateTime date2)
+        public static string dateTimeDiff(DateTime date1, DateTime date2)
         {
             string result = "";
 

@@ -125,7 +125,8 @@ namespace NailIt.Controllers.AnselControllers
                         message.MessageContent,
                         message.MessageTime,
                         // message.MessageRead,
-                        message.unreadCount
+                        message.unreadCount,
+                        msgTimeDiff = ReplyTablesController.dateTimeDiff(DateTime.UtcNow, message.MessageTime)
                     });
                 }
                 else if (message.MessageReceiver != loginId && !myMessages.Any(r => r.memberId == message.MessageReceiver))
@@ -136,7 +137,8 @@ namespace NailIt.Controllers.AnselControllers
                         message.MessageContent,
                         message.MessageTime,
                         // message.MessageRead,
-                        message.unreadCount
+                        message.unreadCount,
+                        msgTimeDiff = ReplyTablesController.dateTimeDiff(DateTime.UtcNow, message.MessageTime)
                     });
                 }
             }
