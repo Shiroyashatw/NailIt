@@ -49,15 +49,14 @@ namespace NailIt.Controllers.YiPControllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetPostDemoSetTable(int id)
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetMainDemoSetTable(int id)
         {
-            //傳入DemoSet 美甲師id 找到最後一筆 回傳 demoset ID
-            var query = await (from User in Context.DemoSetTables
-                               where User.ManicuristId == id
-                               orderby User.DemoSetId
-                               select User).LastOrDefaultAsync();
+            var query = from Demo 
+                                   in Context.DemoSetTables
+                            where Demo.ManicuristId == id && Demo.DemoSetMain == true
+                            select Demo;
 
-            return Ok(new { query });
+            return await query.ToListAsync();
         }
 
         [HttpPut("{id}")]

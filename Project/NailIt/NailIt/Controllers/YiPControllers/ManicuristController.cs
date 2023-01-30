@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace NailIt.Controllers.YiPControllers
 {
@@ -30,8 +31,13 @@ namespace NailIt.Controllers.YiPControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<ManicuristTable>>> GetThisManicuristTable(int id)
         {
-            var myquery = from User in Context.ManicuristTables where User.ManicuristId == id select User;
-            return await myquery.ToListAsync();
+            var Manicurist = await (from User 
+                                     in Context.ManicuristTables 
+                              where User.ManicuristId == id 
+                              select User).FirstOrDefaultAsync();
+            //return await myquery;
+            //return Ok(new { Manicurist });
+            return Ok(Manicurist);
         }
 
         [HttpPut("{id}")]
