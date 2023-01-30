@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NailIt.Models;
+using System.Net.Mail;
+using System.Net;
+using System.Security.Principal;
+using System.Text;
 
 namespace NailIt.Controllers.TedControllers
 {
@@ -32,6 +36,7 @@ namespace NailIt.Controllers.TedControllers
         public async Task<ActionResult<Verificationcode>> GetVerificationcode(int id)
         {
             var verificationcode = await _context.Verificationcodes.FindAsync(id);
+      
 
             if (verificationcode == null)
             {
@@ -75,7 +80,7 @@ namespace NailIt.Controllers.TedControllers
         // POST: api/Verifcode
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Verificationcode>> PostVerificationcode(Verificationcode verificationcode)
+        public async Task<ActionResult<Verificationcode>> PostVerificationcode(Verificationcode verificationcode )
         {
             if (VerificationcodeExists(verificationcode.VerifcodeId))
             {
@@ -98,7 +103,40 @@ namespace NailIt.Controllers.TedControllers
                     throw;
                 }
             }
+            string Account = "milk742020@gmail.com";
+            string Password = "epfbqclhgbhnzycx";
 
+            SmtpClient client = new SmtpClient();
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            client.Credentials = new NetworkCredential(Account, Password);
+            client.EnableSsl = true;
+
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(Account);
+            mail.To.Add("milk742020@gmail.com");
+            mail.Subject = "Nailit 美甲師功能開通";
+            mail.SubjectEncoding = Encoding.UTF8;
+            mail.IsBodyHtml = true;
+            mail.Body = "這是您的驗證碼" + verificationcode.Verifcodetext;
+            mail.BodyEncoding = Encoding.UTF8;
+
+
+            try
+            {
+
+                client.Send(mail);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+
+                mail.Dispose();
+                client.Dispose();
+            }
             return CreatedAtAction("GetVerificationcode", new { id = verificationcode.VerifcodeId }, verificationcode);
         }
 
