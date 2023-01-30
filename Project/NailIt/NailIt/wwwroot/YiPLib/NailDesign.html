@@ -471,7 +471,7 @@
                 </div>
             </div>
             <div class="col-2">
-                <div style="height: 80%;"></div>
+                <!--<div style="height: 80%;"></div>-->
                 <button id="Sendbtn" onclick="alertform()">預約</button>
             </div>
             <div class="col-1">
@@ -507,10 +507,10 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                        <!--<form>
+                        <form>
                             <input class="Searchbar" type="text" placeholder="作品,標籤">
                             <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>-->
+                        </form>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1019,6 +1019,8 @@
 
             if (e.value == "RateLTH") {
                 ShowData.Sort = "RateLTH";
+            } else {
+                console.log("Fail");
             }
         }
 
@@ -1035,7 +1037,6 @@
                     MainDemoCoverLenth: "",
                     Comment: [],
                     SortDateLTH: [],
-                    //Sort: [true, false, false, false, false],
                     Sort: "Default",
                     SortDateHTL:[],
                     SortRateHTL: [],
