@@ -601,7 +601,7 @@
                 <div class="row">
                     <div class="col"></div>
                     <div class="col-10">
-                        <div v-for="(item,key) in Comment">
+                        <div v-for="(item,key) in Comment" v-if="Sort=='Default'">
                             <div class="d-flex">
                                 <div>
                                     <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
@@ -624,21 +624,126 @@
                                 </div>
 
                             </div>
-                                    <div class="Blackline mt-3 mb-4">
-                                    </div>
+                            <div class="Blackline mt-3 mb-4"></div>
                         </div>
+
+                        <div v-for="(item,key) in SortDateLTH" v-if="Sort=='DateLTH'">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+                                    <div>
+                                        <p class="h5">{{SortDateLTH[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:SortDateLTH[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{SortDateLTH[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{SortDateLTH[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{SortDateLTH[key].commentContent}}</p></div>
+                                </div>
+
+                            </div>
+                            <div class="Blackline mt-3 mb-4"></div>
+                        </div>
+
+                        <div v-for="(item,key) in SortDateHTL" v-if="Sort=='DateHTL'">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+                                    <div>
+                                        <p class="h5">{{SortDateHTL[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:SortDateHTL[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{SortDateHTL[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{SortDateHTL[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{SortDateHTL[key].commentContent}}</p></div>
+                                </div>
+
+                            </div>
+                            <div class="Blackline mt-3 mb-4"></div>
+                        </div>
+
+                        <div v-for="(item,key) in SortRateHTL" v-if="Sort=='RateHTL'">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+                                    <div>
+                                        <p class="h5">{{SortRateHTL[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:SortRateHTL[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{SortRateHTL[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{SortRateHTL[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{SortRateHTL[key].commentContent}}</p></div>
+                                </div>
+
+                            </div>
+                            <div class="Blackline mt-3 mb-4"></div>
+                        </div>
+
+                        <div v-for="(item,key) in SortRateLTH" v-if="Sort=='RateLTH'">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+                                    <div>
+                                        <p class="h5">{{SortRateLTH[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:SortRateLTH[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{SortRateLTH[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{SortRateLTH[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{SortRateLTH[key].commentContent}}</p></div>
+                                </div>
+
+                            </div>
+                            <div class="Blackline mt-3 mb-4"></div>
+                        </div>
+
+
 
                     </div>
                     <div class="col"></div>
                 </div>
 
                 <!--<div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-10">
-                        <p class="Blackline ratingimgpd"></p>
-                    </div>
-                    <div class="col-1"></div>
-                </div>-->
+        <div class="col-1"></div>
+        <div class="col-10">
+            <p class="Blackline ratingimgpd"></p>
+        </div>
+        <div class="col-1"></div>
+    </div>-->
 
             </div>
 
@@ -684,6 +789,27 @@
             }
         }
 
+        function SortBySelect(e) {
+            console.log(e.value);
+            if (e.value == "DateLTH") {
+                ShowData.Sort = "DateLTH";
+            }
+
+            if (e.value == "DateHTL") {
+                ShowData.Sort = "DateHTL";
+            }
+
+            if (e.value == "RateHTL") {
+                ShowData.Sort = "RateHTL";
+            }
+
+            if (e.value == "RateLTH") {
+                ShowData.Sort = "RateLTH";
+            } else {
+                console.log("Fail");
+            }
+        }
+
 
         const ShowData = new Vue({
             el: '#ShowData',
@@ -697,6 +823,11 @@
                     width: "",
                     MainDemoCoverLenth: "",
                     Comment: [],
+                    SortDateLTH: [],
+                    Sort: "Default",
+                    SortDateHTL: [],
+                    SortRateHTL: [],
+                    SortRateLTH: [],
                 }
             },
             methods: {
@@ -757,6 +888,58 @@
                 for (maindemo in e) {
                     ShowData.MainDemoCover.push(e[maindemo]);
                 }
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/GetDateLTHComment/" + ManicuristID,
+            success: function (e) {
+                for (let q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                    ShowData.SortDateLTH.push(e[q]);
+                }
+                //console.log(e);
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/GetDateHTLComment/" + ManicuristID,
+            success: function (e) {
+                for (let q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                    ShowData.SortDateHTL.push(e[q]);
+                }
+                //console.log(e);
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/GetRateLTHComment/" + ManicuristID,
+            success: function (e) {
+                for (let q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                    ShowData.SortRateLTH.push(e[q]);
+                }
+                //console.log(e);
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/GetRateHTLComment/" + ManicuristID,
+            success: function (e) {
+                for (let q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                    ShowData.SortRateHTL.push(e[q]);
+                }
+                //console.log(e);
             }
         });
 
