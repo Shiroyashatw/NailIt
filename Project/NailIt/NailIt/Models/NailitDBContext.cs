@@ -42,6 +42,7 @@ namespace NailIt.Models
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
         public virtual DbSet<Verificationcode> Verificationcodes { get; set; }
+        public virtual DbSet<MessageBlacklistTable> MessageBlacklistTables { get; set; }
 
 
 
@@ -523,7 +524,13 @@ namespace NailIt.Models
                     .HasColumnType("datetime")
                     .HasColumnName("message_Time");
             });
-
+            modelBuilder.Entity<MessageBlacklistTable>(entity =>
+            {
+                entity.HasKey(e => e.BlacklistId).HasName("PK_MessageBlacklist_Table");
+                entity.Property(e => e.BlacklistId).HasColumnName("blacklist_ID");
+                entity.Property(e => e.BlacklistBuilder).HasColumnName("blacklist_Builder");
+                entity.Property(e => e.BlacklistTarget).HasColumnName("blacklist_Target");
+            });
             modelBuilder.Entity<NoticeReadTable>(entity =>
             {
                 entity.HasKey(e => e.NoticeReadId)

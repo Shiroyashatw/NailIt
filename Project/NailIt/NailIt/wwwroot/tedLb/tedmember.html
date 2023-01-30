@@ -55,30 +55,18 @@
                         <div class="certified-input">
                             <input type="text" placeholder="example@gmail.com" id="emailcertified" class="form-control" required>
                             <br>
-                            <button id="certified-button" class="btn" data-dismiss="modal" onclick="sendmail()" value="newcard">發送驗證碼</button>
+                            <button id="certified-button" class="btn" data-dismiss="modal"  onclick="sendmail()" value="newcard">發送驗證碼</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- 輸入驗證碼 -->
-        <div class="modal fade" id="verificationcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">請輸入驗證碼</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="verif">驗證碼:</label> <input class="form-control" type="text" name="name" id="verif" value="" />
-                    </div>
-                    <div class="modal-footer">
-                        
-                        <button type="button" class="btn btn-primary">驗證</button>
-                    </div>
-                </div>
+        <div id="insertverif" class="insert-topdiv">
+            <div class="insert-content">
+                <span class="close111">&times;</span>
+                <p>請輸入驗證碼</p>
+                <input type="text" name="name" value="" />
             </div>
         </div>
         <div class="col-1">
@@ -877,7 +865,8 @@
                 }], creditlist: [{
                     "creditCardOwner": 1, "creditCardNumber": null, "creditCardExpirationdateYear": null, "creditCardExpirationdateMon": null
                     , "creditCardHolder": null, "creditCardBilladdress": null, "creditCardPostalCode": null
-                }],shoplistcard:[]
+                }], shoplistcard: [],
+                verifcodelist: [{ "VerifcodeId": null,"Verifcodetext":null}]
             },
             methods: { //會員資料修改
                 btnmodifmember: function () {
@@ -949,7 +938,7 @@
                             alert("資料修改成功");
                         }
                     })
-                }, 
+                },
                 // 新增信用卡
                 btninsertcard: function () {
                     var flag = true;
@@ -979,17 +968,17 @@
                         app.creditlist[0].creditCardExpirationdateMon = ($("#creditenddate").val()).substr(0, 2);
                         if (confirm('是否確定要新增信用卡?') == true) {
 
-                        $.ajax({
-                            type: "post",
-                            url: "/api/CreditCardTables",
-                            contentType: "application/json",
-                            data: JSON.stringify(app.creditlist[0]),
+                            $.ajax({
+                                type: "post",
+                                url: "/api/CreditCardTables",
+                                contentType: "application/json",
+                                data: JSON.stringify(app.creditlist[0]),
 
-                            success: function () {
-                                window.location = "/tedLb/tedmember.html";
-                                alert("信用卡新增成功");
-                            }
-                        })
+                                success: function () {
+                                    window.location = "/tedLb/tedmember.html";
+                                    alert("信用卡新增成功");
+                                }
+                            })
                         }
                     }
                 },
@@ -998,37 +987,37 @@
                     console.log(this.shoplistcard);
                     if (confirm('是否確定要新增銀行帳號?') == true) {
 
-                    $.ajax({
-                        type: "put",
-                        url: "/api/ManicuristTables/1",
-                        contentType: "application/json",
-                        data: JSON.stringify(this.shoplist),
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("新增銀行帳號成功")
-                        }
-                    })
+                        $.ajax({
+                            type: "put",
+                            url: "/api/ManicuristTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(this.shoplist),
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("新增銀行帳號成功")
+                            }
+                        })
                     }
                 },  //刪除銀行帳號
                 deleteaccount: function () {
                     if (confirm('是否確定要刪除銀行帳號?') == true) {
-                    this.shoplist.manicuristBankAccount = null;
-                    this.shoplist.manicuristBankCode = null;
-                    this.shoplist.manicuristBankCompanyName = null;
-                    this.shoplist.manicuristBankName = null;
-                    this.shoplist.manicuristBankNameBranch = null;
+                        this.shoplist.manicuristBankAccount = null;
+                        this.shoplist.manicuristBankCode = null;
+                        this.shoplist.manicuristBankCompanyName = null;
+                        this.shoplist.manicuristBankName = null;
+                        this.shoplist.manicuristBankNameBranch = null;
                         console.log(this.shoplist);
-                    $.ajax({
-                        type: "put",
-                        url: "/api/ManicuristTables/1",
-                        contentType: "application/json",
-                        data: JSON.stringify(this.shoplist),
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("刪除銀行帳號成功");
-                        }
+                        $.ajax({
+                            type: "put",
+                            url: "/api/ManicuristTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(this.shoplist),
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("刪除銀行帳號成功");
+                            }
 
-                    })
+                        })
                     }
                 },
                 //刪除信用卡
@@ -1036,21 +1025,21 @@
                     console.log(app.creditlist[0]);
                     if (confirm('是否確定要刪除信用卡?') == true) {
 
-                    $.ajax({
-                        type: "delete",
-                        url: "/api/CreditCardTables/" + app.creditlist[0].creditCardId ,
-                        contentType: "application/json",
-                        data: JSON.stringify(app.creditlist[0]),
+                        $.ajax({
+                            type: "delete",
+                            url: "/api/CreditCardTables/" + app.creditlist[0].creditCardId,
+                            contentType: "application/json",
+                            data: JSON.stringify(app.creditlist[0]),
 
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("信用卡成功刪除");
-                        }
-                    })
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("信用卡成功刪除");
+                            }
+                        })
                     }
                 }
+               
             }
-
         })
 
        
@@ -1068,12 +1057,43 @@
             })
         
 
-      
-       
+        var memidid = app.memberlist[0].memberId;
 
+        //寄送驗證碼
+        function sendmail() {
+            console.log(memidid);
+      
+            app.verifcodelist[0].VerifcodeId = memidid;
+            var randstr = randomstr(6);
+            console.log(randstr);
+            app.verifcodelist[0].Verifcodetext = randstr;
+            console.log(app.verifcodelist[0]);
+            $.ajax({
+                type: "post",
+                url: "/api/Verifcode",
+                contentType: "application/json",
+                data: JSON.stringify(app.verifcodelist[0])
+
+            })
+            alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼")
+            setTimeout(function () { $("#insertverif").css("display", "block") }, 1000);
+            //alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼");
+      
+            var span = document.getElementsByClassName("close111")[0];
+            
+           
+            span.onclick = function () {
+                $("#insertverif").css("display", "none");
+            }
+            window.onclick = function (event) {
+                if (event.target == $("#insertverif")) {
+                    $("#insertverif").css("display", "none");
+                }
+            }
+        }
 
         //會員修改判斷
-
+       
         $.ajax({
             type: "get",
             url: "/api/membertables/1",
@@ -1136,12 +1156,15 @@
             }
         })
 
-        //寄信
-        function sendmail() {
-            alert("我們已寄送驗證碼到您的信箱");
-            jQuery.noConflict(); 
-            $("#verificationcode").modal("show");
+        
+        function randomstr(e) {
+            var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz123456789", a = t.length, n = "";
+            for (var i = 0; i < e; i++) {
+                n += t.charAt(Math.floor(Math.random() * a));
+            }
+            return n;
         }
+       
     </script>
   
 </body>
