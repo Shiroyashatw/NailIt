@@ -1109,25 +1109,7 @@
 
         //寄信
         function sendmail() {
-            var accepter = $("#emailcertified").val();
-                 subject = "美甲師功能開通", // 郵件主旨
-                content = "這裡是郵件內容！！！", // 郵件內容
-                mailData = "",
-                rawData = {},
-                base64Data, response;
 
-            mailData += "To: " + recipient + "\r\n"; // 每行字串要加上 Enter 及換行符號
-            mailData += "Subject: =?utf-8?B?" + Utilities.base64Encode(subject, Utilities.Charset.UTF_8) + "?=\r\n\r\n"; // 主旨這一行一定要有兩個換行；主旨字串一定需要額外重新 base64 編碼過一次
-            mailData += content;
-
-            base64Data = Utilities.base64EncodeWebSafe(mailData, Utilities.Charset.UTF_8);
-
-            rawData = {
-                "raw": base64Data
-            };
-
-            response = Gmail.Users.Messages.send(rawData, "me");
-            Logger.log(response);
         }
     </script>
   
