@@ -161,12 +161,18 @@
         }
 
         .Clickme {
-            position: relative;
-            top: -60px;
-            margin-left: 70px;
-            margin-right: 70px;
+            border: hidden;
+            position: absolute;
+            /*top: -60px;*/
+            /*margin-left: 70px;*/
+            /*margin-right: 70px;*/
+            left: 70px;
+            top: 190px;
             padding-top: 5px;
             padding-bottom: 5px;
+            padding-left: 70px;
+            padding-right: 70px;
+            /*width:100px;*/
             text-align: center;
             background-color: white;
             color: black;
@@ -496,10 +502,8 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                        <form>
-                            <input class="Searchbar" type="text" placeholder="作品,標籤">
-                            <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>
+                            <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                            <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -520,7 +524,7 @@
                         <div v-for="(item,key) in DemoSetList">
                             <div class="Seemore my-0">
                                 <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover" alt="Loading">
-                                <figcaption class="Clickme">查看</figcaption>
+                                <button onclick="Checkit(this)" v-bind:value="DemoSetList[key].demoSetId" class="Clickme">查看</button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
                             <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
@@ -560,7 +564,7 @@
                         <div v-for="(item,key) in MainDemoCover">
                             <div class="Seemore my-0">
                                 <img class="Demoimg" v-bind:src="MainDemoCover[key].demoSetCover" alt="">
-                                <figcaption class="Clickme">查看</figcaption>
+                                <button onclick="Checkit(this)" v-bind:value="DemoSetList[key].demoSetId" class="Clickme">查看</button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{MainDemoCover[key].demoSetName}}</p>
                             <p class="DemoGroup">${{MainDemoCover[key].demoSetPrice}}</p>
@@ -579,12 +583,12 @@
                             <div>
                                 <p class="DisInLine ">排序：</p>
                             </div>
-                            <select name="" id="SortSelectbox">
-                                <option value="none" selected disabled hidden>請選擇</option>
-                                <option value="">日期由近到遠</option>
-                                <option value="">日期由遠到近</option>
-                                <option value="">星數由高到低</option>
-                                <option value="">星數由低到高</option>
+                            <select name="" id="SortSelectbox" onchange="SortBySelect(this)">
+                                <option value="Default" selected disabled hidden>請選擇</option>
+                                <option value="DateHTL">日期由近到遠</option>
+                                <option value="DateLTH">日期由遠到近</option>
+                                <option value="RateHTL">星數由高到低</option>
+                                <option value="RateLTH">星數由低到高</option>
                             </select>
                         </div>
 
@@ -810,6 +814,25 @@
             }
         }
 
+        function Checkit(e) {
+            window.location = "product.html?id=" + e.value;
+        }
+
+        function Searchit() {
+            console.log(ShowData.SearchString);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetSearchTable/" + ManicuristID + "?search=" + ShowData.SearchString,
+                success: function (e) {
+                    ShowData.DemoSetList = [];
+                    for (DS in e) {
+                        ShowData.DemoSetList.push(e[DS]);
+                    }
+                }
+            });
+            console.log(ShowData.DemoSetList);
+        }
+
 
         const ShowData = new Vue({
             el: '#ShowData',
@@ -828,6 +851,7 @@
                     SortDateHTL: [],
                     SortRateHTL: [],
                     SortRateLTH: [],
+                    SearchString:"",
                 }
             },
             methods: {
@@ -942,6 +966,8 @@
                 //console.log(e);
             }
         });
+
+
 
 
 

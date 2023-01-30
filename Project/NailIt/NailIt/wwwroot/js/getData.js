@@ -34,7 +34,7 @@ function getbasicinfo() {
     // 一進畫面就帶入商品ID 進檢舉商品
     $('input[name="ReportItem"]').val(DSETID);
     $.ajax({
-        url: "api/product/" + DSETID,
+        url: "https://localhost:44308/api/product/" + DSETID,
         method: 'GET',
         dataType: 'json',
         async: true,
@@ -80,9 +80,18 @@ function getbasicinfo() {
             $('#demoSetContent').text(Demosetres['demoSetContent'])
 
             $('#botmanicuristSalonName').text("店家/設計師名稱:" + Ores['manicuristSalonName'])
-            $('.botphone').text("電話:" + Ores['manicuristSalonPhone'])
-            $('#botadress').text("地址:" + Ores['manicuristAddress'])
 
+            if (Ores['manicuristPublic'] != false) {
+                $('.botphone').text("電話:" + Ores['manicuristSalonPhone'])
+                $('#botadress').text("地址:" + Ores['manicuristAddress'])
+            }
+
+
+            let star = Ores['manicuristScore'] * 20 + "%"
+            $('.star').text(Ores['manicuristScore'])
+            $('.full_star').css({
+                "width": star
+            })
             demoSprice.text("預估金額:" + Demosetres['demoSetPrice']);
             inputOprice.val(Demosetres['demoSetPrice']);
             demoSde.text("訂金:NT$" + Demosetres['demoSetDeposit'])
@@ -93,18 +102,12 @@ function getbasicinfo() {
             for (var i = 0; i < res.length; i++) {
                 $('.photocontainer').append(`<div class="smallphoto"><img onclick="getsrc(this)" src="${res[i]['demo']['demoPic']}" alt=""></div>`)
             }
-
-            $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag1']}</a>`)
-            $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag2']}</a>`)
-            $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag3']}</a>`)
-            $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag4']}</a>`)
-
-            //console.log(demo)
-            //console.log(res)
-            //console.log(leg)
-            //console.log(JSON.stringify(res))
-            //console.log(res[0]['demoset'])
-            //console.log(res[0]['demoset']['demoSetName'])
+            // 當標籤內容為null時 不顯示A標籤
+            for (let i = 1; i <= 4; i++) {
+                if (Demosetres['demoSetTag' + i] != null) {
+                    $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag' + i]}</a>`)
+                }
+            }
         },
         error: err => {
             console.log("無法讀取" + err)
@@ -120,7 +123,7 @@ function getReserveDate() {
         // 讀取的設計師ID傳回設定
         MID = $("input[name='ManicuristId']").attr('value')
         $.ajax({
-            url: `api/product/${MID}/reserve`,
+            url: `https://localhost:44308/api/product/${MID}/reserve`,
             method: 'GET',
             dataType: 'json',
             data: '',
@@ -179,7 +182,7 @@ function getReserveDate() {
 function getReserveTime() {
     $('.date').on('click', function () {
         $.ajax({
-            url: `api/product/${MID}/reserve`,
+            url: `https://localhost:44308/api/product/${MID}/reserve`,
             method: 'GET',
             dataType: 'json',
             data: '',
@@ -220,30 +223,20 @@ function getReserveTime() {
                     ymd = `${year}-${month}-${date}`
                     time = ptime.substr(11, 5)
                     hour = parseInt(ptime.substr(11, 2))
-                    console.log(pOrderid)
                     // 當前點擊的 button id = 資料庫撈出 年月日時 顯示出可預約時間
                     if (dateid == ymd) {
-                        if (month < todaym) {
-                            $('#radio').append(`<label class="col-4"><input class="btnnotclick" type="radio" name="planId" value="${pID}" disabled><span class="round button">${time}</span></label>`)
-
-                        }
-                        else if (month <= todaym && date < todayd) {
-                            $('#radio').append(`<label class="col-4"><input class="btnnotclick" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
-
-                        }
-                        else if (month <= todaym && date <= todayd && hour < todayh) {
-                            $('#radio').append(`<label class="col-4"><input class="btnnotclick" type="radio" name="planId" value="${pID}" disabled><span class="round button">${time}</span></label>`)
+                        if (pOrderid != null) {
+                            $('#radio').append(`<label class="col-4"><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
                         }
                         else {
-                            $('#radio').append(`<label class="col-4"><input type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
+                            if (month <= todaym && date <= todayd && hour < todayh) {
+                                $('#radio').append(`<label class="col-4"><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
+                            }
+                            else {
+                                $('#radio').append(`<label class="col-4"><input type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
+                            }
                         }
-                        // if (pOrderid != '') {
-                        //     //$('#radio').append(`<label class="col-4"><input class="btnnotclick" type="radio" name="planId" value="${pID}" disabled><span class="round button">${time}</span></label>`)
-                        // }
-                        // else {
-
-                        // }
-
+                        
                     }
                 }
             },
@@ -283,7 +276,7 @@ function postOrder() {
         // 2019-01-06T17:16:40
         // json bool 格式 true false
         $.ajax({
-            url: "api/product",
+            url: "https://localhost:44308/api/product",
             method: "POST",
             contentType: 'application/json',
             data: JSON.stringify(returnArray),
@@ -303,7 +296,7 @@ function postOrder() {
 function getManicuristData() {
     MID = url.searchParams.get('MID');
     $.ajax({
-        url: `api/product/MID/${MID}`,
+        url: `https://localhost:44308/api/product/MID/${MID}`,
         method: "GET",
         dataType: "json",
         async: true,
@@ -341,7 +334,7 @@ function getOrderPartC() {
 // DemoSet 資料 為了撈 固定項目的造型
 function getDemosetData() {
     $.ajax({
-        url: `api/product/MID/dset/${MID}/${OpartCval}`,
+        url: `https://localhost:44308/api/product/MID/dset/${MID}/${OpartCval}`,
         method: "GET",
         dataType: "json",
         async: true,
@@ -378,7 +371,7 @@ function getDemosetData() {
 
 function getOrderItem() {
     $.ajax({
-        url: `api/product/MID/service/${MID}/${OpartCval}`,
+        url: `https://localhost:44308/api/product/MID/service/${MID}/${OpartCval}`,
         method: "GET",
         dataType: "json",
         async: true,

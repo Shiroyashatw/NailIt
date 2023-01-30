@@ -1,12 +1,16 @@
 ﻿var myCheckResult;//get到的資料轉換前
 var checkData;
-function reserveCheckSendGet() {
+
+
+async function reserveCheckSendGet() {
+
+	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueOrderTables/" + 2 + "/" + "A0" + "/", requestOptions)//2要改為token(controller也要改)
+	fetch("https://localhost:44308/api/YueOrderTables/" + nowMember + "/" + "A0" + "/", requestOptions)//2要改為token(controller也要改)
 		.then(response => response.text())
 		.then(function (result) {
 			myCheckResult = result;

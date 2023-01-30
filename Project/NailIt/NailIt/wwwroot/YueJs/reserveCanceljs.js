@@ -1,13 +1,17 @@
 ﻿var myCancelResult;
 var cancelData;
-function reserveCancelSendGet() {
+
+
+async function reserveCancelSendGet() {
+
+	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
 		redirect: 'follow'
 	};
 
 
-	fetch("https://localhost:44308/api/YueOrderTables/" + 2 + "/" + "A7" + "/", requestOptions)
+	fetch("https://localhost:44308/api/YueOrderTables/" + nowMember + "/" + "A7" + "/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			myCancelResult = result;

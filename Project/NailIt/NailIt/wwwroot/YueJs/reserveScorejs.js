@@ -4,14 +4,14 @@ var nowStar;//星星使用的參數
 var mySearchStart="";
 var mySearchEnd="";
 //網頁從送出get api開始
-function reserveScoreSendGet() {
-
+async function reserveScoreSendGet() {
+	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueOrderTables/" + 2 + "/" + "A5" + "/", requestOptions)
+	fetch("https://localhost:44308/api/YueOrderTables/" + nowMember + "/" + "A5" + "/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			myScoreResult = result;
