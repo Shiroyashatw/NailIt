@@ -113,7 +113,7 @@ class BlacklistService {
 }
 class ChatService {
     static getMembersMsg() {
-        return fetchGet(`/api/Chat/GetMembersMsg}`);
+        return fetchGet(`/api/Chat/GetMembersMsg`);
     }
     static getSingleMemberMsg(memberId) {
         return fetchGet(`/api/Chat/GetSingleMemberMsg/${memberId}`);

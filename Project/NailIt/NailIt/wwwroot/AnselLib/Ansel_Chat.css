@@ -15,7 +15,7 @@
 
 
 
-/*#region draft message*/
+/*#region Draft message*/
 .fa-image:hover{
     color: #ccc;
 }
@@ -23,6 +23,8 @@
     color: #007bff;
 }
 #draftMessagetextarea {
+    border: none;
+    outline: none;
     resize: none;
     min-height: 10vh;
     max-height: 40vh;

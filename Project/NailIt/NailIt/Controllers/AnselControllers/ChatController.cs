@@ -142,7 +142,22 @@ namespace NailIt.Controllers.AnselControllers
                     });
                 }
             }
-            return myMessages;
+            // left join memberTable, get MemberAccount and MemberNickname
+            var leftJoinMember = myMessages.
+                Join(_context.MemberTables,
+                    l => l.memberId,
+                    r => r.MemberId,
+                    (l,r) => new {
+                        l.memberId,
+                        l.MessageContent,
+                        l.MessageTime,
+                        l.unreadCount,
+                        l.msgTimeDiff,
+                        r.MemberAccount,
+                        r.MemberNickname
+                    }
+                ).ToList();
+            return ((IEnumerable<dynamic>)leftJoinMember).ToList();
         }
 
         // GET: api/Chat/GetMembersMsg

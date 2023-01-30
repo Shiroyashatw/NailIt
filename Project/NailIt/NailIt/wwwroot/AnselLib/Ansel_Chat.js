@@ -70,26 +70,31 @@ var showChatMember = async function () {
     var result = await getMembersMsg();
     if (!!result) {
         // show chatting members
-        renderChatMember(result);
+        await renderChatMember(result);
+        BindingMemberRightMenu();
     }
 }
 //#endregion
 
 //#region render updates
-var renderChatMember = function (chatMembers) {
+var renderChatMember = async function (chatMembers) {
     for (const chatMember of chatMembers) {
-        let chatMemberHTML = `<div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2" data-memberid="${chatMember.memberId}">
-                                <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
-                                    style="aspect-ratio:1;color: #fff;width:35px">
-                                    <div class="font-weight-bold">
-                                        ${chatMember.msgTimeDiff[0]}
-                                    </div>
-                                </div>
-                                <div class="pl-1 pl-sm-4">
-                                    <div class="font-weight-bold">${chatMember.memberId}</div>
-                                    <div>${chatMember.msgTimeDiff}</div>
-                                </div>
-                            </div>`;
+        let chatMemberHTML = `
+        <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="${chatMember.memberId}">
+            <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
+                style="aspect-ratio:1;color: #fff;width:35px">
+                <div class="font-weight-bold">
+                    ${chatMember.memberAccount[0].toUpperCase()}
+                </div>
+            </div>
+            <div class="pl-1 pl-sm-4">
+                <div class="font-weight-bold">${chatMember.memberNickname}</div>
+                <div>${chatMember.msgTimeDiff}</div>
+            </div>
+            <div class="bg-danger rounded-circle text-center"style="aspect-ratio:1;color:#fff;margin-left:auto;width:24px">
+                ${chatMember.unreadCount}
+            </div>
+        </div>`;
         $("#chattingMembers").prepend(chatMemberHTML);        
     }
 }
@@ -158,7 +163,54 @@ var postMsgImage = async function (imageFiles) {
     return res;
 }
 //#endregion
+// Context menu for chattingArea
+function BindingMsgRightMenu () {
+    var bodyArea = document.querySelector("body");
+    const chattingMsgMenu = document.getElementById("chattingAreaMenu");
+    const chattingMembersMenu = document.getElementById("chattingMembersMenu");
+    var chattingMsgArea = document.getElementsByClassName("data-messageid");
+    for (const itemValue of chattingMsgArea) {
+        itemValue.childNodes[1].addEventListener("contextmenu", (e) => {
+            e.preventDefault();
 
+            const { clientX: mouseX, clientY: mouseY } = e;
+            const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY, bodyArea, chattingMsgMenu);
+
+            chattingMsgMenu.style.top = `${normalizedY}px`;
+            chattingMsgMenu.style.left = `${normalizedX}px`;
+
+            chattingMsgMenu.classList.remove("visible");
+            chattingMembersMenu.classList.remove("visible");
+            setTimeout(() => {
+                chattingMsgMenu.classList.add("visible");
+            }, "50");
+        });
+    }
+}
+// Context menu for chattingMembers
+function BindingMemberRightMenu () {
+    var bodyArea = document.querySelector("body");
+    const chattingMsgMenu = document.getElementById("chattingAreaMenu");
+    const chattingMembersMenu = document.getElementById("chattingMembersMenu");
+    var chattingMembersArea = document.getElementsByClassName("data-memberid");
+    for (const itemValue of chattingMembersArea) {
+        itemValue.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+
+            const { clientX: mouseX, clientY: mouseY } = e;
+            const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY, bodyArea, chattingMembersMenu);
+
+            chattingMembersMenu.style.top = `${normalizedY}px`;
+            chattingMembersMenu.style.left = `${normalizedX}px`;
+
+            chattingMsgMenu.classList.remove("visible");
+            chattingMembersMenu.classList.remove("visible");
+            setTimeout(() => {
+                chattingMembersMenu.classList.add("visible");
+            }, "50");
+        });
+    }
+}
 const normalizePozition = (mouseX, mouseY, area, contextMenu) => {
     // compute what is the mouse position relative to the container element (scope)
     const {
@@ -213,6 +265,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     scop.loginAccount = $("#loginAccount").val();
     scop.loginNickname = $("#loginNickname").val();
     console.log(scop.loginId, scop.loginAccount, scop.loginNickname);
+    
+    // Initial
+    showChatMember()
 
     //#region Event Binding
 
@@ -236,46 +291,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         chattingMembersMenu.classList.remove("visible");
         chattingMsgMenu.classList.remove("visible");
     });
-    // context menu for chattingMembers
-    const chattingMembersMenu = document.getElementById("chattingMembersMenu");
-    var chattingMembersArea = document.getElementsByClassName("data-memberid");
-    for (const itemValue of chattingMembersArea) {
-        itemValue.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
 
-            const { clientX: mouseX, clientY: mouseY } = e;
-            const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY, bodyArea, chattingMembersMenu);
-
-            chattingMembersMenu.style.top = `${normalizedY}px`;
-            chattingMembersMenu.style.left = `${normalizedX}px`;
-
-            chattingMsgMenu.classList.remove("visible");
-            chattingMembersMenu.classList.remove("visible");
-            setTimeout(() => {
-                chattingMembersMenu.classList.add("visible");
-            }, "50");
-        });
-    }
-    // context menu for chattingArea
-    const chattingMsgMenu = document.getElementById("chattingAreaMenu");
-    var chattingMsgArea = document.getElementsByClassName("data-messageid");
-    for (const itemValue of chattingMsgArea) {
-        itemValue.childNodes[1].addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-
-            const { clientX: mouseX, clientY: mouseY } = e;
-            const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY, bodyArea, chattingMsgMenu);
-
-            chattingMsgMenu.style.top = `${normalizedY}px`;
-            chattingMsgMenu.style.left = `${normalizedX}px`;
-
-            chattingMsgMenu.classList.remove("visible");
-            chattingMembersMenu.classList.remove("visible");
-            setTimeout(() => {
-                chattingMsgMenu.classList.add("visible");
-            }, "50");
-        });
-    }
 
     // Setup draftMessagetextarea input event
     const tx = document.getElementById("draftMessagetextarea");
