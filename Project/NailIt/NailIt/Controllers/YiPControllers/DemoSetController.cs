@@ -109,6 +109,17 @@ namespace NailIt.Controllers.YiPControllers
             return Ok();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetSearchTable(int id,string search)
+        {
+            var query = from DemoSet in Context.DemoSetTables
+                        where DemoSet.ManicuristId == id && DemoSet.DemoSetName.Contains(search) || DemoSet.DemoSetTag1.Contains(search) || DemoSet.DemoSetTag2.Contains(search) || DemoSet.DemoSetTag3.Contains(search) || DemoSet.DemoSetTag4.Contains(search)
+                        select DemoSet;
+
+            return await query.ToListAsync();
+        }
+
+
     }
 }
 
