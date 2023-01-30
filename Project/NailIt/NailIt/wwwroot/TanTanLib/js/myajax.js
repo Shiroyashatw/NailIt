@@ -2,7 +2,7 @@
 var mydata = new Vue({
     el: "#mydata",
     data: {
-        //審核-----------------------------------------------------------------------------------------------------------------------------------------------------
+        //1.審核-----------------------------------------------------------------------------------------------------------------------------------------------------
         report: [{}],
         //[{"reportId":1,"reportBuilder":1,"reportTarget":2,"reportItem":111012801,"reportPlaceC":"D3","reportReasonC":"G2","reportContent":"邪惡","reportBuildTime":"2023-01-18 20:28","reportCheckTime":"","managerId":null,"reportResult":null,"codeUseIn":"D3","codeRepresent":"設計師主頁","memberName":"田美麗","managerName":null}]
         reportput: [{ "reportResult": true, "reportId": "", "reportCheckTime": "", "managerId": "1" }],
@@ -12,7 +12,7 @@ var mydata = new Vue({
         syscode: [{}],
         reportmodel: "",
         AAA: [],
-        //通知-----------------------------------------------------------------------------------------------------------------------------------------------------
+        //2.通知-----------------------------------------------------------------------------------------------------------------------------------------------------
         notice: [{}],
         //{ "noticeId": 1, "noticeScope": 2, "noticeTitle": "聖誕節快樂！", "noticeContent": "祝全體會員聖誕節快樂！", "noticeBuildTime": "2023-01-25T11:44:59.453", "noticePushTime": "2023-01-25T11:44:59.453", "noticeState": true },
         onenotice: [{}],
@@ -37,13 +37,58 @@ var mydata = new Vue({
         checkmember: [{}],
         //篩選
         noticeget: [{ "NdataS": "1900-01-01", "NdataE": "3000-01-01", "NoiceMem": 3, "NoiceState": true, "NoiceStateN": "NOPE" }],
-
+        //3.訂單-----------------------------------------------------------------------------------------------------------------------------------------------------
+        order: [{}],
+        //[{
+        //    "orderId": 1, "memberId": 1, "manicuristId": 2, "planId": 1, "orderPrice": 2500.0000, "orderDeposit": 200.0000,
+        //    "orderPartC": "C1", "orderRemovalC": "B2", "orderType": true, "orderItem": 1, "orderItemName": "繽紛雪人",
+        //    "orderOrderTime": "2023-01-17T00:00:00", "orderAcceptTime": null, "orderDoneTime": null, "orderCompleteTime": null,
+        //    "orderStateC": "A0", "orderCancelTime": null
+        //},
+        ordernum: "", orderpage: "",
+        ordermodel: "",
+        oneorder: [{}],
     },
 
 
 })
 
-////審核--------------------------------------------------------------------------------------------------------------------------------
+////3.訂單--------------------------------------------------------------------------------------------------------------------------------
+//GET訂單資料表
+$.ajax({
+    type: "get",
+    url: "/api/OrderTables2",
+    success: function (e) {
+        mydata.order = e;
+        console.log(e);
+        //訂單總項目 跟 訂單頁數
+        mydata.ordernum = e.length;
+        if (mydata.ordernum >= 5) {
+            mydata.orderpage = Math.ceil(mydata.ordernum / 5)
+        } else {
+            mydata.orderpage = 1
+        };
+    }
+})
+
+//GET單一訂單資料表
+function revieworder(e) {
+    mydata.ordermodel = e.value;
+    console.log(mydata.ordermodel);
+
+    $.ajax({
+        type: "get",
+        url: "/api/OrderTables2/" + mydata.ordermodel,
+        success: function (e) {
+            mydata.oneorder = e;
+            console.log(e);
+
+        }
+    })
+}
+
+
+
 
 
 ////審核--------------------------------------------------------------------------------------------------------------------------------
@@ -481,7 +526,7 @@ function savenotice() {
         contentType: "application/json",
         data: JSON.stringify(mydata.noticepost[0]),
         success: function () {
-            
+
             var tabcontent;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (var i = 0; i < tabcontent.length; i++) {
@@ -538,7 +583,7 @@ function savenotice() {
     console.log(mydata.noticepost[0])
     if (mydata.noticepost[0].noticeScope == 0) {
         for (var i = 0; i < mydata.nocheckmember.length; i++) {
-            mydata.noticereadpost[0].noticeId = nownoticId+1;
+            mydata.noticereadpost[0].noticeId = nownoticId + 1;
             mydata.noticereadpost[0].noticeReadMember = mydata.nocheckmember[i].memberId;
             console.log(mydata.noticereadpost[0])
             $.ajax({
