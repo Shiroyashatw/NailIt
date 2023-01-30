@@ -77,9 +77,6 @@ class ArticleService {
     static getArticles(boardSort, page, order) {
         return fetchGet(`/api/ArticleTables/${boardSort}/${page}/${order}`);
     }
-    // static getArticles(boardSort, page) {
-    //     return fetchGet(`/api/ArticleTables/${boardSort}/${page}`);
-    // }
     static postArticle(data) {
         return fetchPost(`/api/ArticleTables`, data);
     }

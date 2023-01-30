@@ -1,20 +1,3 @@
-/*#region Common*/
-.bottomBorder {
-  border-bottom: 2px solid #dee2e6;
-}
-
-/* style="border-bottom:2px solid #dee2e6" */
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.show {
-  display: block !important;
-}
-
-/*#endregion*/
-
-
 /*#region Font*/
 /*#endregion*/
 

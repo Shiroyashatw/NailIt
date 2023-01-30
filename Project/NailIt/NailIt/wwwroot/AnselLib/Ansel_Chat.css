@@ -1,0 +1,32 @@
+/*#region Body*/
+#mainPadding{
+    background-color: darkgrey;
+}
+#mainBackground{
+    background-color: white;
+}
+/*#endregion*/
+
+/*#region ChattingMembers*/
+.data-memberid:hover{
+    background-color: #ccc;
+}
+/*#endregion*/
+
+
+
+/*#region draft message*/
+.material-symbols-outlined:hover{
+    color: #007bff;
+}
+#draftMessagetextarea {
+    resize: none;
+    min-height: 10vh;
+    max-height: 40vh;
+    /* overflow-y: hidden; */
+}
+/*#endregion*/
+
+
+/*#region XXX*/
+/*#endregion*/

@@ -3,7 +3,7 @@
 
 var scop = {
     loginId: 0, // 目前登入者Id
-    loginName: "", // 目前登入者名字
+    loginAccount: "", // 目前登入者帳號
     loginNickname: "", // 目前登入者暱稱, 給新增留言使用
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
