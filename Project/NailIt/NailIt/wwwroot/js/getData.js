@@ -34,7 +34,7 @@ function getbasicinfo() {
     // 一進畫面就帶入商品ID 進檢舉商品
     $('input[name="ReportItem"]').val(DSETID);
     $.ajax({
-        url: "api/product/" + DSETID,
+        url: "https://localhost:44308/api/product/" + DSETID,
         method: 'GET',
         dataType: 'json',
         async: true,
@@ -120,7 +120,7 @@ function getReserveDate() {
         // 讀取的設計師ID傳回設定
         MID = $("input[name='ManicuristId']").attr('value')
         $.ajax({
-            url: `api/product/${MID}/reserve`,
+            url: `https://localhost:44308/api/product/${MID}/reserve`,
             method: 'GET',
             dataType: 'json',
             data: '',
@@ -179,7 +179,7 @@ function getReserveDate() {
 function getReserveTime() {
     $('.date').on('click', function () {
         $.ajax({
-            url: `api/product/${MID}/reserve`,
+            url: `https://localhost:44308/api/product/${MID}/reserve`,
             method: 'GET',
             dataType: 'json',
             data: '',
@@ -283,7 +283,7 @@ function postOrder() {
         // 2019-01-06T17:16:40
         // json bool 格式 true false
         $.ajax({
-            url: "api/product",
+            url: "https://localhost:44308/api/product",
             method: "POST",
             contentType: 'application/json',
             data: JSON.stringify(returnArray),
@@ -303,7 +303,7 @@ function postOrder() {
 function getManicuristData() {
     MID = url.searchParams.get('MID');
     $.ajax({
-        url: `api/product/MID/${MID}`,
+        url: `https://localhost:44308/api/product/MID/${MID}`,
         method: "GET",
         dataType: "json",
         async: true,
@@ -341,7 +341,7 @@ function getOrderPartC() {
 // DemoSet 資料 為了撈 固定項目的造型
 function getDemosetData() {
     $.ajax({
-        url: `api/product/MID/dset/${MID}/${OpartCval}`,
+        url: `https://localhost:44308/api/product/MID/dset/${MID}/${OpartCval}`,
         method: "GET",
         dataType: "json",
         async: true,
@@ -378,7 +378,7 @@ function getDemosetData() {
 
 function getOrderItem() {
     $.ajax({
-        url: `api/product/MID/service/${MID}/${OpartCval}`,
+        url: `https://localhost:44308/api/product/MID/service/${MID}/${OpartCval}`,
         method: "GET",
         dataType: "json",
         async: true,

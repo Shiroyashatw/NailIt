@@ -93,7 +93,7 @@ namespace NailIt.Models
                     .IsRequired()
                     .HasMaxLength(2)
                     .IsUnicode(false)
-                    .HasColumnName("article_BoardC")
+                    .HasColumnName("article_Board_C")
                     .IsFixedLength(true);
 
                 entity.Property(e => e.ArticleBuildTime)
