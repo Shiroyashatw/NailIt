@@ -1,8 +1,8 @@
 ﻿preDo();
 
+
 function preDo() {
 	clickEye();
-
 }
 
 
@@ -22,7 +22,6 @@ function login() {
 	myHeaders.append("Content-Type", "application/json");
 
 	var raw = JSON.stringify([accountInput.value, pwInput.value]);
-
 	var requestOptions = {
 		method: 'PUT',
 		headers: myHeaders,
@@ -30,7 +29,7 @@ function login() {
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/Member/", requestOptions)
+	fetch("https://localhost:44308/api/YueMember/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			if ("noAC" == result)

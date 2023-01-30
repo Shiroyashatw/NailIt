@@ -32,7 +32,6 @@ namespace NailIt
             // DB Context
             services.AddDbContext<NailitDBContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("linkToNailitDb")));
-            
             // Swagger
             services.AddSwaggerGen(c =>
             {

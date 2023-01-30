@@ -1,14 +1,14 @@
 ﻿var myCompleteResult;//get到的資料轉換前
 var completeData;
-function reserveCompleteSendGet() {
-
+async function reserveCompleteSendGet() {
+	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
 		redirect: 'follow'
 	};
 
 
-	fetch("https://localhost:44308/api/YueOrderTables/"+2+"/"+"A1"+"/", requestOptions)
+	fetch("https://localhost:44308/api/YueOrderTables/"+nowMember+"/"+"A1"+"/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			myCompleteResult = result;

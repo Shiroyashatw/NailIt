@@ -1,13 +1,14 @@
 ﻿var doneData;
 var myDoneResult;
-function reserveDoneSendGet() {
+async function reserveDoneSendGet() {
+	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
 		redirect: 'follow'
 	};
 
 
-	fetch("https://localhost:44308/api/YueCommentTables/" + 2 + "/" + "A6" + "/", requestOptions)
+	fetch("https://localhost:44308/api/YueCommentTables/" + nowMember + "/" + "A6" + "/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			myDoneResult = result;

@@ -1,13 +1,15 @@
 ﻿var myRemovalResult;
 var removalData;
-function removalSendGet()
+
+async function removalSendGet()
 {
+	await YueloginCheck();
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
     };
 
-    fetch("https://localhost:44308/api/YueRemovalPriceTables/2", requestOptions)
+    fetch("https://localhost:44308/api/YueRemovalPriceTables/"+nowMember, requestOptions)
         .then(response => response.text())
         .then(function (result) {
             myRemovalResult = result;
@@ -195,7 +197,7 @@ function removalSendPut() {
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueRemovalPriceTables/2", requestOptions)
+	fetch("https://localhost:44308/api/YueRemovalPriceTables/"+nowMember, requestOptions)
 		.then(response => response.text())
 		.then(function (result)
 		{
@@ -210,7 +212,5 @@ function removalSendPut() {
 			}
 		})
 		.catch(error => console.log('error', error));
-
-	
 
 }

@@ -1,16 +1,17 @@
-﻿calenSendGet();
+﻿
 var calenResult;
 var calenData;
 var nowDay;
 var mySelectTime;
 var nowMonth;
-function calenSendGet() {
+async function calenSendGet() {
+	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YuePlanTables/2", requestOptions)
+	fetch("https://localhost:44308/api/YuePlanTables/"+nowMember, requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			calenResult = result;
@@ -325,7 +326,7 @@ function planSendPost()
 	myHeaders.append("Content-Type", "application/json");
 
 	var raw = JSON.stringify({
-		"manicuristId": 2,
+		"manicuristId": nowMember,
 		"orderId": null,
 		"planRemark":oneRemark.value,
 		"planStartTime": nowDay + "T" + oneTime.value
@@ -491,7 +492,7 @@ function planAddMonthSendPost(resultArray)
 	var sendPostData = [];
 	for (var x of resultArray)
 	{
-		sendPostData.push({ "ManicuristId": 2, "PlanStartTime": x, "OrderId": null, "PlanRemark": bigDateRemark.value })
+		sendPostData.push({ "ManicuristId": nowMember, "PlanStartTime": x, "OrderId": null, "PlanRemark": bigDateRemark.value })
 	}
 
 	var myHeaders = new Headers();
