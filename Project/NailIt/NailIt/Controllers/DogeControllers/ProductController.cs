@@ -33,6 +33,10 @@ namespace NailIt.Controllers.DogeControllers
                         on demoset.DemoSetId equals demo.DemoSetId
                         where demoset.DemoSetId == id
                         select new { o, demoset, demo };
+            if (query == null)
+            {
+                return NotFound();
+            }
             return await query.ToListAsync();
         }
         // 傳送預約表單
