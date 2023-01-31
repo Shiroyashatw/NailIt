@@ -362,6 +362,8 @@ namespace NailIt.Controllers.AnselControllers
                     // use messageId be image name
                     string imageName = $"{message.MessageId}-{i + 1}.png";
                     message.MessageContent += $"<img class='mw-100' src='{baseUri}/AnselLib/ChatImage/{imageName}'>";
+                    // 如果多張圖片，需要<br>換行，才不會有多餘的空白
+                    if (i != frm.Files.Count - 1) { message.MessageContent += "<br>";}
                     chatSaveImage(imageName, frm.Files[i]);
                 }
                 await _context.SaveChangesAsync();
