@@ -27,7 +27,20 @@ namespace NailIt.Controllers.AnselControllers
         public async Task<ActionResult<IEnumerable<MessageBlacklistTable>>> GetBlacklist()
         {
             var loginId = HttpContext.Session.GetInt32("loginId");
-            return await _context.MessageBlacklistTables.Where(b => b.BlacklistBuilder == loginId).ToListAsync();
+            var blacklist = await _context.MessageBlacklistTables.
+                Where(b => b.BlacklistBuilder == loginId).ToListAsync();
+            var joinMember = blacklist.Join(_context.MemberTables, 
+                l=>l.BlacklistTarget,
+                r=>r.MemberId,
+                (l,r)=> new {
+                    l.BlacklistId,
+                    l.BlacklistBuilder,
+                    l.BlacklistTarget,
+                    r.MemberAccount,
+                    r.MemberNickname
+                }
+                ).ToList();
+            return blacklist;
         }
 
         // POST: api/Blacklist
@@ -44,11 +57,11 @@ namespace NailIt.Controllers.AnselControllers
             return CreatedAtAction("GetMessageBlacklistTable", new { id = blacklist.BlacklistId }, blacklist);
         }
 
-        // DELETE: api/Blacklist/1/2
-        [HttpDelete("{builderId}/{targetId}")]
-        public async Task<ActionResult> DeleteBlacklist(int builderId, int targetId)
+        // DELETE: api/Blacklist/1
+        [HttpDelete("{blacklistId}")]
+        public async Task<ActionResult> DeleteBlacklist(int blacklistId)
         {
-            var blacklist = _context.MessageBlacklistTables.FirstOrDefault(m => m.BlacklistBuilder == builderId && m.BlacklistTarget == targetId);
+            var blacklist = _context.MessageBlacklistTables.Find(blacklistId);
             if (blacklist == null)
             {
                 return NotFound();
