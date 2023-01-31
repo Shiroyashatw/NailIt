@@ -48,10 +48,82 @@ var mydata = new Vue({
         ordernum: "", orderpage: "",
         ordermodel: "",
         oneorder: [{}],
+        //篩選
+        orderget: [{ "OdataS": "1900-01-01", "OdataE": "3000-01-01", "orderStateC": "AA", "orderId": 0 }],
+        //4.會員-----------------------------------------------------------------------------------------------------------------------------------------------------
+        member: [{}],
+        membernum: "", memberpage: "",
+        membermodel: "",
+        onemember: [{}],
+
     },
 
 
 })
+
+////4.會員--------------------------------------------------------------------------------------------------------------------------------
+//GET會員資料表
+$.ajax({
+    type: "get",
+    url: "/api/MemberTables2",
+    success: function (e) {
+        mydata.member = e;
+        console.log(e);
+        //是否是店家或美甲師
+        for (var i = 0; i < mydata.member.length; i++) {
+            if (mydata.member[i].memberManicurist == false) {
+                mydata.member[i].memberManicurist = "一般會員"
+            } else { mydata.member[i].memberManicurist = "店家／美甲師" }
+        }
+
+        //是否已停權
+        for (var i = 0; i < mydata.member.length; i++) {
+            if (mydata.member[i].memberReportpoint >= 20) {
+                mydata.member[i].memberReportpoint = "已停權"
+            } else { mydata.member[i].memberReportpoint = "使用中" }
+        }
+        //訂單總項目 跟 訂單頁數
+        mydata.membernum = e.length;
+        if (mydata.membernum >= 5) {
+            mydata.memberpage = Math.ceil(mydata.membernum / 5)
+        } else {
+            mydata.memberpage = 1
+        };
+    }
+})
+
+//GET單一會員資料表
+function reviewmem(e) {
+    mydata.membermodel = e.value;
+    console.log(mydata.membermodel);
+    $.ajax({
+        type: "get",
+        url: "/api/MemberTables2/" + mydata.membermodel,
+        success: function (e) {
+            mydata.onemember = e;
+            console.log(e);
+            //是否已停權
+            if (mydata.onemember[0].memberReportpoint >= 20) {
+                mydata.onemember[0].memberBan = "已停權"
+            } else if (mydata.onemember[0].memberReportpoint < 20) {
+                mydata.member[0].memberBan = "使用中"
+            }
+            if (mydata.onemember[0].memberReportId != "－") {
+                var y = "";
+                for (x in mydata.onemember) {
+                    y += mydata.onemember[x].memberReportId + "、";
+                    console.log(mydata.onemember[x].memberReportId);
+                }
+                var str = y.substring(0, y.length-1)
+                mydata.onemember[0].memberReportId = str;
+                console.log(mydata.onemember[0].memberReportId);
+                
+
+            }
+        }
+    })
+}
+
 
 ////3.訂單--------------------------------------------------------------------------------------------------------------------------------
 //GET訂單資料表
@@ -87,7 +159,75 @@ function revieworder(e) {
     })
 }
 
+//GET訂單篩選
+function selorder() {
+    // orderget: [{ "OdataS": "1900-01-01", "OdataE": "3000-01-01", "orderStateC": "AA", "orderId": 0 }]
+    var OdataS = $("#orderdatestart").val();
+    var OdataE = $("#orderdateend").val();
+    //value="0">一般會員,value="1">店家／設計師,value="2">全體
+    var orderStateC = $("#orderstate").val();
+    //value="3" selected>請選擇狀態,value="0">未通知,value="1">已通知
+    var orderId = $("#orderId").val();
+    console.log(OdataS);
+    console.log(OdataE);
+    console.log(orderStateC);
+    console.log(orderId);
 
+    //開始時間
+    if (OdataS == "") {
+        mydata.orderget[0].OdataS = "1900-01-01";
+    } else {
+        mydata.orderget[0].OdataS = OdataS
+    }
+    console.log(mydata.orderget[0].OdataS)
+
+    //結束時間
+    if (OdataE == "") {
+        mydata.orderget[0].OdataE = "3000-01-01";
+    } else {
+        mydata.orderget[0].OdataE = OdataE
+    }
+    console.log(mydata.orderget[0].OdataE)
+    //訂單狀態
+    if (orderStateC == "AA") {
+        mydata.orderget[0].orderStateC = "AA";
+    } else {
+        mydata.orderget[0].orderStateC = orderStateC;
+    }
+    console.log(mydata.orderget[0].orderStateC)
+
+    //訂單編號
+    if (orderId == "") {
+        mydata.orderget[0].orderId = 0;
+    } else {
+        mydata.orderget[0].orderId = orderId;
+    }
+
+    var urlorderresult = mydata.orderget[0].OdataS + "/" + mydata.orderget[0].OdataE + "/" + mydata.orderget[0].orderStateC + "/" + mydata.orderget[0].orderId;
+    console.log(urlorderresult)
+
+    $.ajax({
+        type: "get",
+        url: "/api/OrderTables2/condition/" + urlorderresult,
+        success: function (e) {
+            mydata.order = e;
+            console.log(e);
+            //訂單總項目 跟 訂單頁數
+            mydata.ordernum = e.length;
+            if (mydata.ordernum >= 5) {
+                mydata.orderpage = Math.ceil(mydata.ordernum / 5)
+            } else {
+                mydata.orderpage = 1
+            };
+        }
+    })
+
+    mydata.orderget[0].OdataS = "1900-01-01";
+    mydata.orderget[0].OdataE = "3000-01-01";
+    mydata.orderget[0].orderStateC = "AA";
+    mydata.orderget[0].orderId = 0;
+
+}
 
 
 
