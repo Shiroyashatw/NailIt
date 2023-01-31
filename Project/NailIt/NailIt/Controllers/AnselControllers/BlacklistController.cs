@@ -22,6 +22,14 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
+        // GET: api/Blacklist
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MessageBlacklistTable>>> GetBlacklist()
+        {
+            var loginId = HttpContext.Session.GetInt32("loginId");
+            return await _context.MessageBlacklistTables.Where(b => b.BlacklistBuilder == loginId).ToListAsync();
+        }
+
         // POST: api/Blacklist
         [HttpPost]
         public async Task<ActionResult> PostBlacklist(MessageBlacklistTable blacklist)

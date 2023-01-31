@@ -104,6 +104,9 @@ class ArticleLikeService {
     }
 }
 class BlacklistService {
+    static getBlacklist() {
+        return fetchGet(`/api/Blacklist`);
+    }
     static postBlacklist(data) {
         return fetchPost(`/api/Blacklist`, data);
     }

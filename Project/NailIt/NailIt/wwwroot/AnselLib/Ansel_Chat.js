@@ -279,11 +279,18 @@ var renderChatMember = async function (chatMembers) {
 //#endregion
 
 //#region call API
+var getBlacklist = async function () {
+    // call api get related data
+    var res = await BlacklistService.getBlacklist();
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    // return list of user's blacklist configs
+    return res;
+}
 var postBlacklist = async function (blacklist) {
     // call api get related data
     var res = await BlacklistService.postBlacklist(blacklist);
     if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
-    // return list of member msg for update member msg
+    // return the new blacklist config
     return res;
 }
 var deleteBlacklist = async function (builderId, targetId) {
