@@ -24,7 +24,7 @@
     <script src="../lib/jquery/dist/jquery.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <!-- <link rel="stylesheet" href="./calendar.css" /> -->
+    
 
 </head>
 
@@ -536,13 +536,17 @@
     <!-- 日曆函數 -->
     <script src="../js/calendar.js"></script>
     <script src="../js/calendarscript.js"></script>
-
+    <script src="../YueJs/loginCheck.js"></script>
     <!-- 引用 商品資料 可預約日期 -->
     <script src="../js/getData.js"></script>
 
     <script>
-        // 切換預約頁面函數
-
+        // 抓取登入者ID
+        // YueloginCheck()
+        // setTimeout(() => {
+        //     console.log(nowMember)
+        // }, 2000);
+        //console.log(nowMember)
         // 抓取基本資料 
         getbasicinfo()
         // 放入可選擇的預約日期
@@ -551,7 +555,7 @@
         getReserveTime()
         // 傳送表單資料
         postOrder()
-
+        //let rMid = $('input[name="MemberId"]').val(nowMember)
         $('#report').on('click', function () {
             // 加入時區 8小時
             var Tzdate = new Date(+new Date() + 8 * 3600 * 1000)
