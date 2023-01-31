@@ -28,6 +28,16 @@ var demoSprice = $('.demoSetPrice')
 var demoSde = $('.demoSetDeposit')
 var inputOprice = $('input[name="OrderPrice"]')
 var inputOde = $('input[name="OrderDeposit"]')
+
+// 加入時區 8小時
+let Tzdate
+// 轉換成 SQL datetime格式
+let Tztoday
+
+// 選擇的項目、訂金
+let ritem
+let rdep
+
 // 讀取基本資料 設計師資料 demoset資料 demo資料 再顯示在畫面上
 // 一進畫面就進行讀取
 function getbasicinfo() {
@@ -194,7 +204,7 @@ function getReserveTime() {
             success: res => {
                 // 2023-01-10T09:00:00
                 // 重新組合 年月日
-                console.log(res)
+                // console.log(res)
                 var year
                 var month
                 var date
@@ -239,7 +249,7 @@ function getReserveTime() {
                                 $('#radio').append(`<label class="col-4"><input type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
                             }
                         }
-                        
+
                     }
                 }
             },
@@ -253,10 +263,9 @@ function getReserveTime() {
 // 傳送表單資料 商品頁面 預約送出
 function postOrder() {
     // 加入時區 8小時
-    var Tzdate = new Date(+new Date() + 8 * 3600 * 1000)
+    Tzdate = new Date(+new Date() + 8 * 3600 * 1000)
     // 轉換成 SQL datetime格式
-    var Tztoday = Tzdate.toISOString().slice(0, 19) // .replace('T', ' ');
-
+    Tztoday = Tzdate.toISOString().slice(0, 19) // .replace('T', ' ');
     $('#btnsend').on('click', function () {
         $('input[name="OrderOrderTime"]').val(Tztoday);
         $('input[name="OrderStateC"]').val("A0");
@@ -285,6 +294,7 @@ function postOrder() {
             data: JSON.stringify(returnArray),
 
             success: res => {
+                postCash()
                 // alert('訂單送出成功')
                 // Closeform()
             },
@@ -438,4 +448,109 @@ function getOrderItem() {
         }
     })
 }
+
+function OrderDetail() {
+    $('#step3btn').on('click', function () {
+        $('.rescheck').empty();
+        let rdate = $('input[name="planId"]:checked').attr("date")
+        console.log(rdate)
+        let rtime = $('input[name="planId"]:checked').attr("time")
+        let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
+        let rremovec = $('select[name="OrderRemovalC"]').find("option:selected").text()
+        ritem = $('select[name="OrderItem"]').find("option:selected").text()
+        let rprice = $('input[name="OrderPrice"]').val()
+        rdep = $('input[name="OrderDeposit"]').val()
+        $('.rescheck').append(`
+        <p>預約日期:${rdate} 時間:${rtime}</p>
+        <p>施作部位:${rparc}</p>
+        <p>卸甲:${rremovec}</p>
+        <p>施作項目:${ritem}</p>
+        <p>預估價位:NT$${rprice}</p>
+        <p>訂金:NT$${rdep}</p>
+        `);
+
+    })
+}
+
+function postCash() {
+    let Tzdatetime = Tzdate.toISOString().slice(0, 19).replace('T', ' ');
+    Tzdatetime = Tzdatetime.replaceAll('-', '/')
+    let Tzymd = Tztoday.slice(0, 10).replaceAll('-', '')
+    let Tztime = Tztoday.slice(11, 19).replaceAll(':', '')
+    // 寫死不用動
+    // input MerchantID
+    let HashKey = "HashKey=pwFHCqoQZGmho4w6"
+    let HashIV = "EkRm7iFT261dpevs"
+
+    // MerchantTradeNo 訂單編號
+    // MerchantTradeDate 訂單日期
+    // TotalAmount 付款金額
+    // TradeDesc 商品描述
+    // ItemName 商品名稱
+    // 上面五個須給值
+    $('input[name="ItemName"]').val(ritem);
+    let itemName = $('input[name="ItemName"]').val();
+
+    // console.log(itemName)
+    $('input[name="MerchantTradeDate"]').val(Tzdatetime);
+    let MerchantTradeDate = $('input[name="MerchantTradeDate"]').val();
+
+    //console.log(Tzdatetime)
+     
+    $('input[name="MerchantTradeNo"]').val(`Nailit${Tzymd + Tztime}`);
+    let MerchantTradeNo = $('input[name="MerchantTradeNo"]').val();
+
+    console.log(MerchantTradeNo)
+
+    let returnUrl = $('input[name="ReturnURL"]').val();
+
+    // let OrderResultURL = $('input[name="OrderResultURL"]').val();
+    $('input[name="TotalAmount"]').val(rdep);
+    let TotalAmount = $('input[name="TotalAmount"]').val();
+    
+    let TradeDesc = $('input[name="TradeDesc"]').val();
+
+    // CheckMacValue 檢查碼生成 上面參數都正確會傳放入 val()進去
+    let x = `${HashKey}&ChoosePayment=Credit&EncryptType=1&ItemName=${itemName}&MerchantID=3002607&MerchantTradeDate=${MerchantTradeDate}&MerchantTradeNo=${MerchantTradeNo}&PaymentType=aio&ReturnURL=${returnUrl}&TotalAmount=${TotalAmount}&TradeDesc=${TradeDesc}&HashIV=${HashIV}`
+    console.log(x)
+    let y = encodeURIComponent(x)
+    y = y.replace("%20", "+")
+    console.log(y)
+    y = y.toLowerCase();
+    
+    var hash = CryptoJS.SHA256(y).toString();
+
+    hash = hash.toUpperCase()
+    console.log(hash)
+    $('input[name="CheckMacValue"]').val(hash)
+
+    //$('#cashform').submit();
+    // const apiURL = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
+
+    // const data = { 
+    //     MerchantID: 3002607,
+    //     MerchantTradeNo: "DX20230127114112152C",
+    //     MerchantTradeDate: "2023/01/27 11:41:12",
+    //     PaymentType: "aio",
+    //     TotalAmount: 1500,
+    //     TradeDesc: "美甲",
+    //     ItemName: "繽紛",
+    //     ReturnURL: "https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL",
+    //     ChoosePayment: "Credit",
+    //     CheckMacValue: hash,
+    //     EncryptType: 1
+    // };
+    // const options = {
+    //     method: 'POST',
+    //     headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    //     data: Qs.stringify(data),
+    //     url : apiURL,
+    // };
+
+
+    // axios(options);
+    // let z = "HashKey%3dpwFHCqoQZGmho4w6%26ChoosePayment%3dCredit%26EncryptType%3d1%26ItemName%3d%e7%b9%bd%e7%b4%9b%26MerchantID%3d3002607%26MerchantTradeDate%3d2023%2f01%2f27+11%3a41%3a12%26MerchantTradeNo%3dDX20230127114112152a%26PaymentType%3daio%26ReturnURL%3dhttps%3a%2f%2fhoyo.idv.tw%2f%3fa%3dTools%2fEcPay%26b%3dReturnURL%26TotalAmount%3d1000%26TradeDesc%3d%e7%be%8e%e7%94%b2%26HashIV%3dEkRm7iFT261dpevs";
+    // %20 應該轉換成 +
+}
+
 
