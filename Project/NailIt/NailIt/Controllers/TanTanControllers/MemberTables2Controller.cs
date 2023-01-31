@@ -51,19 +51,46 @@ namespace NailIt.Controllers.TanTanControllers
             return await CheckMember.ToListAsync();
         }
 
-        //// GET: api/MemberTables2/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<MemberTable>> GetMemberTable(int id)
-        //{
-        //    var memberTable = await _context.MemberTables.FindAsync(id);
+        // GET: api/MemberTables2
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MemberTable>>> GetMemberTables()
+        {
+            return await _context.MemberTables.ToListAsync();
+        }
 
-        //    if (memberTable == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: api/MemberTables2/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<dynamic>> GetMemberTable(int id)
+        {
+            var memberTable = from o in _context.MemberTables
+                              join ma in _context.ReportTables on o.MemberId equals ma.ReportTarget into malist
+                              from ma in malist.DefaultIfEmpty()
+                              where o.MemberId == id
+                              select  new
+                              {
+                                  MemberId = o.MemberId,
+                                  MemberAccount = o.MemberAccount,
+                                  MemberName = o.MemberName,
+                                  MemberNickname = o.MemberNickname,
+                                  MemberGender = o.MemberGender == true ? "男" : "女",
+                                  MemberPhone = o.MemberPhone,
+                                  MemberBirth = o.MemberBirth == null ? "" : ((DateTime)o.MemberBirth).ToString("yyyy-MM-dd"),
+                                  MemberEmail = o.MemberEmail,
+                                  MemberManicurist = o.MemberManicurist == true ? "店家／美甲師" : "一般會員",
+                                  MemberReportpoint = o.MemberReportpoint,
+                                  MemberStatus = o.MemberReportpoint>=20? "已停權": "使用中",
+                                  //MemberBanned = o.MemberBanned, //???幹嗎用???
+                                  MemberReportId=ma.ReportId.ToString() == null ? "－" : ma.ReportId.ToString(),
 
-        //    return memberTable;
-        //}
+                              };
+
+            if (memberTable == null)
+            {
+                return NotFound();
+            }
+
+            return await memberTable.ToListAsync(); 
+        }
 
         //// PUT: api/MemberTables2/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

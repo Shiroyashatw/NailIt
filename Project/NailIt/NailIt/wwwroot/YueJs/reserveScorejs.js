@@ -174,6 +174,8 @@ function getScoreDetail(i)
 							value="返回"
 						/>
 			</div>`;
+	infoModal.style.width = "30%";
+	infoModal.style.height = "62%";
 	infoModal.showModal();
 }
 //送出comment
@@ -241,7 +243,7 @@ function reserveScoreGo(i)
 							value="返回"
 						/>`;
 	infoModal.style.width = "35%";
-	infoModal.style.height = "55%";
+	infoModal.style.height = "62%";
 	infoModal.showModal();
 }
 //滑動星星小功能
@@ -316,7 +318,7 @@ function reserveScoreSendPost(i)
 
 }
 //put到order表
-function reserveScoreSendPut(thisOrderID)
+async function reserveScoreSendPut(thisOrderID)
 {
 	var raw = "";
 	var requestOptions = {
@@ -325,14 +327,12 @@ function reserveScoreSendPut(thisOrderID)
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueOrderTables/" + thisOrderID + "/A6/", requestOptions)
+	await fetch("https://localhost:44308/api/YueOrderTables/" + thisOrderID + "/A6/", requestOptions)
 		.then(response => response.text())
 		.then()
 		.catch(error => console.log('error', error));
 
-	setTimeout(() => {
 		reserveScoreSendGet();
-	}, 300)
 	closeInfoModal();
 	toastr.success("評論已完成");
 }

@@ -514,7 +514,7 @@ function serviceDeleteLoop() {
 	return answer;
 }
 
-function serviceSendDelete()
+async function serviceSendDelete()
 {
 	var raw = "";
 	var requestOptions = {
@@ -527,7 +527,7 @@ function serviceSendDelete()
 		if (document.getElementById("serviceCheckBox" + i).checked == true)
 		{
 			console.log(serviceData);
-			fetch("https://localhost:44308/api/YueServiceTables/"+serviceData[i].serviceId, requestOptions)
+			await fetch("https://localhost:44308/api/YueServiceTables/"+serviceData[i].serviceId, requestOptions)
 				.then(response => response.text())
 				.then(function (result) {
 					if (result)
@@ -544,9 +544,6 @@ function serviceSendDelete()
 	}
 
 	closeInfoModal();
-	setTimeout(() => {
-		serviceSendGet();
-	}, 300);
-	closeInfoModal();
+	serviceSendGet();
 }
 
