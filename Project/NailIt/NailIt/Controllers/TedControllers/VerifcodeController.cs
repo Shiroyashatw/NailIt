@@ -80,21 +80,26 @@ namespace NailIt.Controllers.TedControllers
         // POST: api/Verifcode
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Verificationcode>> PostVerificationcode(Verificationcode verificationcode )
+        public async Task<ActionResult<Verificationcode>> PostVerificationcode(List<string> verificationcode )
         {
-            if (VerificationcodeExists(verificationcode.VerifcodeId))
+            if (VerificationcodeExists(Convert.ToInt32(verificationcode[0])))
             {
-                var verifff = await _context.Verificationcodes.FindAsync(verificationcode.VerifcodeId);
+                var verifff = await _context.Verificationcodes.FindAsync(Convert.ToInt32(verificationcode[0]));
+                
                 _context.Verificationcodes.Remove(verifff);
+                
             }
-            _context.Verificationcodes.Add(verificationcode);
+             Verificationcode verificationcode1 = new Verificationcode();
+            verificationcode1.VerifcodeId = Convert.ToInt32(verificationcode[0]);
+            verificationcode1.Verifcodetext= Convert.ToString(verificationcode[1]);
+            _context.Verificationcodes.Add(verificationcode1);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (VerificationcodeExists(verificationcode.VerifcodeId))
+                if (VerificationcodeExists(Convert.ToInt32(verificationcode[0])))
                 {
                     return Conflict();
                 }
@@ -114,11 +119,11 @@ namespace NailIt.Controllers.TedControllers
 
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(Account);
-            mail.To.Add("milk742020@gmail.com");
+            mail.To.Add(Convert.ToString( verificationcode[2]));
             mail.Subject = "Nailit 美甲師功能開通";
             mail.SubjectEncoding = Encoding.UTF8;
             mail.IsBodyHtml = true;
-            mail.Body = "這是您的驗證碼" + verificationcode.Verifcodetext;
+            mail.Body = "這是您的驗證碼" + Convert.ToString(verificationcode[1]);
             mail.BodyEncoding = Encoding.UTF8;
 
 
@@ -137,7 +142,7 @@ namespace NailIt.Controllers.TedControllers
                 mail.Dispose();
                 client.Dispose();
             }
-            return CreatedAtAction("GetVerificationcode", new { id = verificationcode.VerifcodeId }, verificationcode);
+            return CreatedAtAction("GetVerificationcode", new { id =Convert.ToInt16( verificationcode[0]) }, verificationcode1);
         }
 
         // DELETE: api/Verifcode/5

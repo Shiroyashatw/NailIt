@@ -45,7 +45,8 @@ function getbasicinfo() {
 
             var Ores = res[0]['o']
             var Demosetres = res[0]['demoset']
-            console.log(Ores)
+            var Colorres = res[0]['color'][0]
+            console.log(Colorres)
             var demoSetPartCtext = ''
             var demoSetPartC = Demosetres['demoSetPartC']
 
@@ -105,9 +106,11 @@ function getbasicinfo() {
             // 當標籤內容為null時 不顯示A標籤
             for (let i = 1; i <= 4; i++) {
                 if (Demosetres['demoSetTag' + i] != null) {
-                    $('.product-tag').append(`<a href="#">${Demosetres['demoSetTag' + i]}</a>`)
+                    $('.product-tag').append(`<a href="Fliter.html?FixTag=${Demosetres['demoSetTag' + i]}">${Demosetres['demoSetTag' + i]}</a>`)
                 }
             }
+
+            $('.product-tag').append(`<a href="Fliter.html?Color=${Colorres['colorId']}">${Colorres['colorName']}</a>`)
         },
         error: err => {
             console.log("無法讀取" + err)
