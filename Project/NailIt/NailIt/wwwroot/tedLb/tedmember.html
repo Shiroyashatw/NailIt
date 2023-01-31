@@ -40,6 +40,9 @@
                 <dd><a class="member-link" href="#">工作項目設定</a></dd>
             </div>
         </div>
+      
+
+    
         <!-- 身分認證-->
         <div class="modal fade" id="certified" tabindex="-1" role="dialog" aria-labelledby="certified" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -66,15 +69,34 @@
             <div class="insert-content">
                 <span class="close111">&times;</span>
                 <p>請輸入驗證碼</p>
-                <input type="text" name="name" value="" />
+                <input id="certifiednum" type="text" name="name" value="" />
+                <br />
+                <br />
+                <button onclick="verifcert()">驗證</button>
             </div>
         </div>
+       
         <div class="col-1">
 
         </div>
         <div class="col-7">
             <div class="inner1"><b>我的帳戶</b></div>
             <div id="inner3content" class="inner3">
+                <!-- 新增美甲師資料 -->
+                <div id="insertshopfirst" class="insertshop-div">
+                    <div class="contentinsertshop">
+                        <span class="close2">&times;</span>
+                        <div class="form-group">
+                            <label>店家/美甲師名稱:</label><input type="text" id="newsolanname" class="form-control" name="name" value="" />
+                            <label>店家/美甲師地址:</label><input type="text" id="newsolanaddress" class="form-control" name="name" value="" />
+                            <label>店家/美甲師電話:</label><input type="text" id="newshopphone" class="form-control" name="name" value="" />
+                            <label>介紹</label><textarea class="form-control" id="newintoshop" rows="3"></textarea>
+                            <label>證照</label><textarea class="form-control" id="newshoplicen" rows="3"></textarea>
+                                             <br />
+                            <button id="btninsertshop" onclick="btninsertshopcert()" class="btn">確定新增</button>
+                        </div>
+                    </div>
+                </div>
                 <div id="memberinfor">
                     <div class="content" id="member-infor">
                         <div class="inner2">
@@ -176,8 +198,8 @@
                             <h5><b>證照</b></h5>
                             <h5>{{shoplist.manicuristLicense}}</h5>
                         </div>
-                    <div id="shopnotopen"><h5>美甲師資料為空請先點擊修改按鈕進行新增</h5></div>
-                    <div id="shopnotnotopen"><h5>尚未開通美甲師功能，請先進行開通</h5></div>
+                        <div id="shopnotopen"><h5>美甲師資料為空請先點擊修改按鈕進行新增</h5></div>
+                        <div id="shopnotnotopen"><h5>尚未開通美甲師功能，請先進行開通</h5></div>
                     </div>
                     <div class="content" id="shop-infor-modif">
                         <div class="inner2"><pre><b><button class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button style="border-bottom: 1px solid;" class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b></pre></div>
@@ -868,7 +890,8 @@
                     "creditCardOwner": 1, "creditCardNumber": null, "creditCardExpirationdateYear": null, "creditCardExpirationdateMon": null
                     , "creditCardHolder": null, "creditCardBilladdress": null, "creditCardPostalCode": null
                 }], shoplistcard: [],
-                verifcodelist: [{ "VerifcodeId": null,"Verifcodetext":null}]
+                verifcodelist: [],
+                memberlistman:[]
             },
             methods: { //會員資料修改
                 btnmodifmember: function () {
@@ -1042,66 +1065,15 @@
                 }
                
             }
-        })      
-            $.ajax({
-                type: "get",
-                url: "/api/CreditCardTables/1",
-                success: function (e) {
-                    if (e.length != 0) {
-                    app.creditlist = e;
-                    $("#newcardbtn").css("visibility", "hidden");
-                    $(".card-1").css("visibility", "visible");
-                    $("#card-1-1-number").html("**** **** **** " + (e[0].creditCardNumber).substr(12, 4))
-                    }
-                }
-            })       
-        var memidid = app.memberlist[0].memberId;
-        //寄送驗證碼
-        function sendmail() {
-            console.log(memidid);
-      
-            app.verifcodelist[0].VerifcodeId = memidid;
-            var randstr = randomstr(6);
-            console.log(randstr);
-            app.verifcodelist[0].Verifcodetext = randstr;
-            console.log(app.verifcodelist[0]);
-            $.ajax({
-                type: "post",
-                url: "/api/Verifcode",
-                contentType: "application/json",
-                data: JSON.stringify(app.verifcodelist[0])
-
-            })
-            alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼")
-            setTimeout(function () { $("#insertverif").css("display", "block") }, 1000);
-            //alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼");
-      
-            var span = document.getElementsByClassName("close111")[0];
-            
-            $.ajax({
-                type: "get",
-                url: "/api/Verifcode/1",
-                success: function (e) {
-                    console.log(e);
-                }
-            })
-            span.onclick = function () {
-                $("#insertverif").css("display", "none");
-            }
-            window.onclick = function (event) {
-                if (event.target == $("#insertverif")) {
-                    $("#insertverif").css("display", "none");
-                }
-            }
-        }
+        })
 
         //會員修改判斷
-       
         $.ajax({
             type: "get",
             url: "/api/membertables/1",
             success: function (e) {
                 app.memberlist = e;
+
                 if (e.memberGender == true) {
                     $("#Gender").text("男");
                     $("#inputGroupSelect01").val(0);
@@ -1123,8 +1095,10 @@
                 };
                 $("#inputGroupSelect02").val(month).selected;
                 $("#inputGroupSelect03").val(day1).selected;
-                
-               
+                if (e.memberManicurist == true) {
+                    $("#memberManicurist").css("display", "none");
+                }
+
                 if (e.memberManicurist == false) {
                     $("#shopnotopen").css("display", "none");
                     $("#shopisopen").css("display", "none");
@@ -1132,7 +1106,140 @@
                 }
             }
         })
-        console.log(app.memberlist[0].memberManicurist);
+        
+            $.ajax({
+                type: "get",
+                url: "/api/CreditCardTables/1",
+                success: function (e) {
+                    if (e.length != 0) {
+                    app.creditlist = e;
+                    $("#newcardbtn").css("visibility", "hidden");
+                    $(".card-1").css("visibility", "visible");
+                    $("#card-1-1-number").html("**** **** **** " + (e[0].creditCardNumber).substr(12, 4))
+                    }
+                }
+            })       
+        var memidid = app.memberlist[0].memberId;
+        //寄送驗證碼
+        function sendmail() {
+            console.log(memidid);
+            app.verifcodelist = [];
+            app.verifcodelist.push(String(memidid));
+            var randstr = randomstr(6);
+            console.log(randstr);
+            app.verifcodelist.push(randstr);
+            app.verifcodelist.push($("#emailcertified").val());
+            console.log(app.verifcodelist);
+            console.log($("#emailcertified").val());
+            $.ajax({
+                type: "post",
+                url: "/api/Verifcode",
+                contentType: "application/json",
+                data: JSON.stringify(app.verifcodelist)
+
+            })
+            alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼")
+            setTimeout(function () { $("#insertverif").css("display", "block") }, 1000);
+            //alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼");
+      
+            var span = document.getElementsByClassName("close111")[0];
+            
+            //$.ajax({
+            //    type: "get",
+            //    url: "/api/Verifcode/1",
+            //    success: function (e) {
+            //        console.log(e);
+            //    }
+            //})
+            span.onclick = function () {
+                $("#insertverif").css("display", "none");
+            }
+            window.onclick = function (event) {
+                if (event.target == $("#insertverif")) {
+                    $("#insertverif").css("display", "none");
+                }
+            }
+        }
+        //驗證開通美甲師
+   
+        function verifcert() {
+            if ($("#certifiednum").val() != app.verifcodelist[1]) {
+                alert("驗證碼錯誤")
+            } else if ($("#certifiednum").val() == app.verifcodelist[1]) {
+                $.ajax({
+                    type: "get",
+                    url: "/api/MemberTables/1",
+                    success: function (e) {
+                        e.memberManicurist = true;
+                        $.ajax({
+                            type: "put",
+                            url: "/api/MemberTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(e),
+                            success: function () {
+                                alert("驗證成功");
+
+                            }
+                        })
+                    }
+                });
+              
+                
+                $("#insertverif").css("display", "none");
+                $("#insertshopfirst").css("display", "block");
+                var span = document.getElementsByClassName("close2")[0];
+               span.onclick =function () {
+                   $("#insertshopfirst").css("display", "none");
+
+                }
+            }
+        }
+        var newshoplist = [{
+            "manicuristId": 4, "manicuristPic": "UploadFolder/會員預設.jpg",
+            "manicuristSalonName":null, "manicuristAddress":null ,
+            "manicuristCounty": null, "manicuristTownship": null, "manicuristPublic": true,
+            "manicuristSalonPhone": null,
+            "manicuristLicense": "無",
+            "manicuristBankCode": null, "manicuristBankAccount": null,
+            "manicuristIntro": null,
+            "manicuristScore": null, "manicuristBankName": null, "manicuristBankNameBranch": null, "manicuristBankCompanyName": null
+        }]
+        var removallist = [{ "removalPriceManicuristId": 2, "removalPriceB0": 0, "removalPriceB1": 0, "removalPriceB2": 0, "removalPriceB3": 0 }]
+        //新增美甲師資料
+        function btninsertshopcert() {
+            newshoplist[0].manicuristId = 4;
+            newshoplist[0].manicuristSalonName = $("#newsolanname").val();
+            newshoplist[0].manicuristAddress = $("#newsolanaddress").val();
+            newshoplist[0].manicuristCounty = ($("#newsolanaddress").val()).substr(0, 3);
+            newshoplist[0].manicuristTownship = ($("#newsolanaddress").val()).substr(3, 3);
+            newshoplist[0].manicuristSalonPhone = $("#newshopphone").val();
+            newshoplist[0].manicuristIntro = $("#newintoshop").val();
+            newshoplist[0].manicuristLicense = $("#newshoplicen").val();
+            console.log(newshoplist);
+            $.ajax({
+                type: "post",
+                url: "/api/ManicuristTables",
+                contentType: "application/json",
+                data: JSON.stringify(newshoplist[0]),
+                success: function () {
+                
+                }
+            })
+            removallist.removalPriceManicuristId = 4;
+            $.ajax({
+                type: "post",
+                url: "/api/RemovalTed",
+                contentType: "application/json",
+                data: JSON.stringify(removallist[0]),
+                success: function () {
+
+                    window.location = "/tedLb/tedmember.html";
+                    alert("美甲師功能已開通囉!!請到個人資訊查看~");
+                }
+            })
+        }
+
+   
         if (app.memberlist[0].memberManicurist == true) {
 
         $.ajax({
