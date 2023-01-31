@@ -285,7 +285,10 @@
                         </div>
                     </div>
                 </div>
-                <div>共計商品數</div>
+                <div>
+                    <p>現在搜尋的條件為：{{QueryCondition}}</p>
+                    <p>共計{{QueryLength}}件商品</p>
+                </div>
                 <!--預設-->
                 <div class="d-flex Coverdiv">
                     <div v-for="(item,key) in DemoSet">
@@ -294,7 +297,16 @@
                         <p>{{DemoSet[key].demoSetPrice}}</p>
                     </div>
                 </div>
+
                 <!--預設END-->
+                <div class="d-flex Coverdiv" v-if="ShowQueryM">
+                    <div v-for="(item,key) in Manicurist">
+                        <img class="Cover" v-bind:src="Manicurist[key].manicuristPic" />
+                        <p>{{Manicurist[key].manicuristSalonName}}</p>
+                        <p>{{Manicurist[key].manicuristCounty}}</p>
+                    </div>
+                </div>
+
             </div>
             <!--Demo End-->
             <div class="col-1"></div>
@@ -334,7 +346,11 @@
                     Query: "none",
                     NowQuery: false,
                     SearchString: "",
-                    SearchM:"",
+                    SearchM: "",
+                    Manicurist: [],
+                    ShowQueryM: false,
+                    QueryCondition: "尚未選擇",
+                    QueryLength:"",
                     }
             },
             methods: {
@@ -357,7 +373,7 @@
         console.log(fromSlider);
         console.log(toSlider);
         //fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
-        toSlider.style.backgroundColor = '#25daa5';
+        //toSlider.style.backgroundColor = '#25daa5';
         setToggleAccessible(toSlider);
         //fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
         fromSlider.oninput = function () {
@@ -533,6 +549,7 @@
                 //console.log(e);
                 //app.CCode = e;
                 app.DemoSet = e;
+                app.QueryLength = e.length;
             }
         });
 
@@ -572,16 +589,18 @@
             console.log(app.City[e.value]);
             let AreaStr;
             AreaStr = app.City[e.value].replace("臺", "台");
-
+            app.QueryCondition = AreaStr;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetCountyDemo/?Country=" + AreaStr ,
                 success: function (e) {
-                    console.log(e);
+                    console.log(e.length);
+                    app.Manicurist = [];
                     app.DemoSet = [];
                     for (demo in e) {
                         app.DemoSet.push(e[demo]);
                     }
+                    app.QueryLength = e.length;
                 }
             });
 
@@ -594,79 +613,92 @@
 
         function ShowArea(e) {
             console.log(e.value)
+            app.QueryCondition = e.value;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetAreaDemo/?Area=" + e.value,
                 success: function (e) {
                     console.log(e);
+                    app.Manicurist = [];
                     app.DemoSet = [];
                     for (demo in e) {
                         app.DemoSet.push(e[demo]);
                     }
+                    app.QueryLength = e.length;
                 }
             });
         }
 
         function ShowColor(e) {
             console.log(e.value);
+            app.QueryCondition = app.Colors[e.value-1].colorName;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetColorDemo/?Color=" + e.value,
                 success: function (e) {
                     console.log(e);
                     app.DemoSet = [];
+                    app.Manicurist = [];
                     for (demo in e) {
                         app.DemoSet.push(e[demo]);
                     }
+                    app.QueryLength = e.length;
                 }
             });
         }
 
         function ShowTag(e) {
             //console.log(e.value);
+            app.QueryCondition = e.value;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetFixTagDemo/?FixTag=" + e.value,
                 success: function (e) {
                     console.log(e);
+                    app.Manicurist = [];
                     app.DemoSet = [];
                     for (demo in e) {
                         app.DemoSet.push(e[demo]);
                     }
+                    app.QueryLength = e.length;
                 }
             });
         }
 
-        function SeachPrice() {
-            //console.log("MIN"+app.SearchMin);
-            //console.log(app.SearchMax);
-            $.ajax({
-                type: "get",
-                url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
-                success: function (e) {
-                    console.log(e);
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
-                    }
-                }
-            });
-        }
+        //function SeachPrice() {
+        //    //console.log("MIN"+app.SearchMin);
+        //    //console.log(app.SearchMax);
+        //    $.ajax({
+        //        type: "get",
+        //        url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
+        //        success: function (e) {
+        //            console.log(e);
+        //            app.Manicurist = [];
+        //            app.DemoSet = [];
+        //            for (demo in e) {
+        //                app.DemoSet.push(e[demo]);
+        //            }
+        //        }
+        //    });
+        //}
 
         function GetPriceMin(e) {
             //console.log("MIN"+app.SearchMin);
             //console.log(app.SearchMax);
             app.SearchMin = e;
             console.log(app.SearchMin);
+            app.QueryCondition = `${app.SearchMin}元至${app.SearchMax}元`;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
                 success: function (e) {
                     console.log(e);
+                    app.Manicurist = [];
                     app.DemoSet = [];
                     for (demo in e) {
                         app.DemoSet.push(e[demo]);
                     }
+                    app.QueryLength = e.length;
                 }
             });
         }
@@ -676,31 +708,37 @@
             //console.log(app.SearchMax);
             app.SearchMax = e;
             console.log(app.SearchMax);
-
+            app.QueryCondition = `${app.SearchMin}元至${app.SearchMax}元`;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
                 success: function (e) {
                     console.log(e);
+                    app.Manicurist = [];
                     app.DemoSet = [];
                     for (demo in e) {
                         app.DemoSet.push(e[demo]);
                     }
+                    app.QueryLength = e.length;
                 }
             });
         }
 
         function ShowPart(e) {
             //console.log(e.value);
+            app.QueryCondition = app.CCode[e.value.substr(1, 1)].codeRepresent;
+
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetPart/?Part=" + e.value,
                 success: function (e) {
                     console.log(e);
+                    app.Manicurist = [];
                     app.DemoSet = [];
                     for (demo in e) {
                         app.DemoSet.push(e[demo]);
                     }
+                    app.QueryLength = e.length;
                 }
             });
         }
@@ -712,31 +750,39 @@
 
         function Searchit() {
             console.log(app.SearchString);
+            app.QueryCondition = app.SearchString;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetSearchAllTable?search=" + app.SearchString,
                 success: function (e) {
+                    app.Manicurist = [];
                     app.DemoSet = [];
                     for (DS in e) {
                         app.DemoSet.push(e[DS]);
                     }
+                    app.QueryLength = e.length;
                 }
             });
             console.log(app.DemoSet);
         }
 
+        //要多寫一個FOR美甲師的陣列
         function SearchM() {
             console.log(app.SearchM);
-            //$.ajax({
-            //    type: "get",
-            //    url: "/api/Manicurist?name=" + app.SearchM,
-            //    success: function (e) {
-            //        app.DemoSet = [];
-            //        for (DS in e) {
-            //            app.DemoSet.push(e[DS]);
-            //        }
-            //    }
-            //});
+            app.QueryCondition = app.SearchM;
+            $.ajax({
+                type: "get",
+                url: "/api/Manicurist?name=" + app.SearchM,
+                success: function (e) {
+                    app.DemoSet = [];
+                    app.Manicurist = [];
+                    for (M in e) {
+                        app.Manicurist.push(e[M]);
+                    }
+                    app.QueryLength = e.length;
+                }
+            });
+            app.ShowQueryM = true;
         }
 
 
