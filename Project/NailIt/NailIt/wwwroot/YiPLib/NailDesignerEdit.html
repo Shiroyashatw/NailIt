@@ -1250,7 +1250,7 @@
 
 
     <script>
-        let ManicuristID = 2;
+        let ManicuristID = 5;
         let PercantStar;
         let FloatStar;
         let DemoLenth;
@@ -1502,7 +1502,7 @@
             },
             methods: {
                 InsertDemo: function () {
-                    this.InsertDemoSet[0].manicuristId = 2;
+                    this.InsertDemoSet[0].manicuristId = ManicuristID;
                     console.log(this.InsertDemoSet[0]);
                     if (this.InsertDemoSet[0].demoSetTag2 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag2 = this.TagStxt;

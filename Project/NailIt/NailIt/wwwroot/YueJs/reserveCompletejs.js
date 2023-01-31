@@ -186,7 +186,7 @@ function getCompleteDetail(i, str) {
 	infoModal.showModal();
 }
 
-function reserveCompleteSendPut(id, state) {
+async function reserveCompleteSendPut(id, state) {
 	console.log(id);
 	var raw = "";
 	var requestOptions = {
@@ -195,14 +195,12 @@ function reserveCompleteSendPut(id, state) {
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueOrderTables/" + id + "/" + state + "/", requestOptions)
+	await fetch("https://localhost:44308/api/YueOrderTables/" + id + "/" + state + "/", requestOptions)
 		.then(response => response.text())
 		.then(result => console.log(result))
 		.catch(error => console.log('error', error));
 
-	setTimeout(() => {
-		reserveCompleteSendGet();
-	}, 300)
+	reserveCompleteSendGet();
 	closeInfoModal();
 	toastr.success("訂單已完成");
 }

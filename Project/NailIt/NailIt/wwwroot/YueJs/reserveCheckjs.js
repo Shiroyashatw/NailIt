@@ -224,7 +224,7 @@ function closeInfoModal() {
 
 
 
-function reserveCheckSendPut(id,state)
+async function reserveCheckSendPut(id,state)
 {
 	var raw = "";
 	var requestOptions = {
@@ -233,17 +233,16 @@ function reserveCheckSendPut(id,state)
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueOrderTables/"+id+"/"+state+"/", requestOptions)
+	await fetch("https://localhost:44308/api/YueOrderTables/"+id+"/"+state+"/", requestOptions)
 		.then(response => response.text())
 		.then(result=>console.log(result))
 		.catch(error => console.log('error', error));
 
-	setTimeout(() => {
 		if (state == "A1" || state == "A7")
 			reserveCheckSendGet();
 		else if (state == "A2")
 			reserveCompleteSendGet();
-	}, 300)
+
 	closeInfoModal();
 	if (state == "A1")
 		toastr.success("訂單已確認");
