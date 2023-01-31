@@ -19,13 +19,13 @@ namespace NailIt.Controllers.DogeControllers
         {
             _db = db;
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<dynamic>>> service()
-        {
-            var res = from s in _db.ServiceTables
-                      select s;
-            return await res.ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<dynamic>>> service()
+        //{
+        //    var res = from s in _db.ServiceTables
+        //              select s;
+        //    return await res.ToListAsync();
+        //}
         [HttpPost]
         public async Task<ActionResult<ServiceTable>> service(ServiceTable service)
         {

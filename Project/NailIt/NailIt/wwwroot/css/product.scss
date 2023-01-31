@@ -5,164 +5,166 @@
 // 當按鈕不能點擊時
 $btnnotclcik: rgba(0, 0, 0, 0.1);
 
-.container-fluid {
-    .row {
+// .container-fluid {
+    
+// }
+.row {
 
-        // 主體 div 包含上中下
-        .main-item {
-            a {
-                text-decoration: none;
-                color: black;
-            }
-
-            .header-item {
-                font-size: 18px;
-            }
-
-            // 中間資訊欄 照片加文字
-            .middle-item {
-                margin-top: 20px;
-                height: 400px;
-
-                // 左邊縮圖
-                .photo-little {
-                    width: 150px;
-
-                    // overflow: scroll;
-                    // overflow-x: hidden;
-                    .photocontainer {
-                        height: 350px;
-                        overflow: scroll;
-
-                        .smallphoto {
-                            margin: 10px 0 10px 0;
-                            max-width: 150px;
-                            max-height: 150px;
-
-                            img {
-                                height: 100px;
-                                width: 100%;
-                                object-fit: cover;
-                            }
-
-                            &:first-child {
-                                margin-top: 0;
-                            }
-
-                            &:last-child {
-                                margin-bottom: 0;
-                            }
-                        }
-
-
-                    }
-
-                    .photobtn {
-                        font-size: 16px;
-                        width: 100%;
-                        border: 0;
-                        color: white;
-                        background-color: gray;
-                    }
-                }
-
-                // 中間大圖
-                .photo-big {
-                    max-width: 400px;
-                    max-height: 400px;
-                    // 左右間距
-                    margin-left: 15px;
-
-                    img {
-                        width: 400px;
-                        height: 400px;
-                        object-fit: contain;
-                    }
-                }
-
-                // 右邊商品介紹
-                .product-info {
-                    margin-left: 40px;
-                    position: relative;
-
-                    // 商品標籤
-                    .product-tag {
-                        height: 200px;
-                        margin: 20px 0;
-
-                        a {
-                            display: inline-block;
-                            padding: 5px 15px;
-                            margin: .2rem .5rem;
-                            font-size: 18px;
-
-                            border: 2px solid black;
-                            border-radius: 10%;
-
-                            &:hover {
-                                color: white;
-                                background-color: black;
-                                transition: .5s;
-                            }
-                        }
-                    }
-
-                    // 尾部檢舉 預約按鈕
-                    .product-footer {
-                        position: absolute;
-                        bottom: 0px;
-                        left: 0px;
-
-                        .reportbtn {
-                            margin-bottom: 25px;
-
-                            button {
-                                // font-size: 16px;
-                                border: 0;
-                                background-color: white;
-                            }
-                        }
-
-                        .reservebtn {
-                            button {
-                                padding: 5px 50px;
-                                font-size: 18px;
-                                text-align: center;
-                                // 文字間距
-                                letter-spacing: .25rem;
-                                color: white;
-                                background-color: black;
-                                border: 1px black;
-                            }
-                        }
-                    }
-                }
-            }
+    // 主體 div 包含上中下
+    .main-item {
+        a {
+            text-decoration: none;
+            color: black;
         }
 
-        // 底部資訊欄
-        .footter-item {
-            margin: 20px 0;
+        .header-item {
+            font-size: 18px;
+        }
 
-            .footer-info {
-                p {
-                    padding: 0 0 .3rem 1rem;
-                    font-size: 20px;
-                    border-bottom: 2px solid black;
+        // 中間資訊欄 照片加文字
+        .middle-item {
+            margin-top: 20px;
+            height: 400px;
+
+            // 左邊縮圖
+            .photo-little {
+                width: 150px;
+
+                // overflow: scroll;
+                // overflow-x: hidden;
+                .photocontainer {
+                    height: 350px;
+                    overflow: scroll;
+
+                    .smallphoto {
+                        margin: 10px 0 10px 0;
+                        max-width: 150px;
+                        max-height: 150px;
+
+                        img {
+                            height: 100px;
+                            width: 100%;
+                            object-fit: cover;
+                        }
+
+                        &:first-child {
+                            margin-top: 0;
+                        }
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+
+
+                }
+
+                .photobtn {
+                    font-size: 16px;
+                    width: 100%;
+                    border: 0;
+                    color: white;
+                    background-color: gray;
                 }
             }
 
-            .footer-container {
-                p {
-                    
-                    font-size: 18px;
+            // 中間大圖
+            .photo-big {
+                max-width: 400px;
+                max-height: 400px;
+                // 左右間距
+                margin-left: 15px;
+
+                img {
+                    width: 400px;
+                    height: 400px;
+                    object-fit: contain;
+                }
+            }
+
+            // 右邊商品介紹
+            .product-info {
+                margin-left: 40px;
+                position: relative;
+
+                // 商品標籤
+                .product-tag {
+                    height: 200px;
+                    margin: 20px 0;
+
+                    a {
+                        display: inline-block;
+                        padding: 5px 15px;
+                        margin: .2rem .5rem;
+                        font-size: 18px;
+
+                        border: 2px solid black;
+                        border-radius: 10%;
+
+                        &:hover {
+                            color: white;
+                            background-color: black;
+                            transition: .5s;
+                        }
+                    }
+                }
+
+                // 尾部檢舉 預約按鈕
+                .product-footer {
+                    position: absolute;
+                    bottom: 0px;
+                    left: 0px;
+
+                    .reportbtn {
+                        margin-bottom: 25px;
+
+                        button {
+                            // font-size: 16px;
+                            border: 0;
+                            background-color: white;
+                        }
+                    }
+
+                    .reservebtn {
+                        button {
+                            padding: 5px 50px;
+                            font-size: 18px;
+                            text-align: center;
+                            // 文字間距
+                            letter-spacing: .25rem;
+                            color: white;
+                            background-color: black;
+                            border: 1px black;
+                        }
+                    }
                 }
             }
         }
     }
+
+    // 底部資訊欄
+    .footter-item {
+        margin: 20px 0;
+
+        .footer-info {
+            p {
+                padding: 0 0 .3rem 1rem;
+                font-size: 20px;
+                border-bottom: 2px solid black;
+            }
+        }
+
+        .footer-container {
+            p {
+                
+                font-size: 18px;
+            }
+        }
+    }
 }
-
-
+.pt90 {
+    padding-top: 90px;
+}
 // 彈出視窗 設計 
 #alert_div,
 #repalert_div {

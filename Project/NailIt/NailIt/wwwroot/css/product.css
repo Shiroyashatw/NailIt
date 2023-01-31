@@ -3,68 +3,68 @@
   display: none;
 }
 
-.container-fluid .row .main-item a {
+.row .main-item a {
   text-decoration: none;
   color: black;
 }
-.container-fluid .row .main-item .header-item {
+.row .main-item .header-item {
   font-size: 18px;
 }
-.container-fluid .row .main-item .middle-item {
+.row .main-item .middle-item {
   margin-top: 20px;
   height: 400px;
 }
-.container-fluid .row .main-item .middle-item .photo-little {
+.row .main-item .middle-item .photo-little {
   width: 150px;
 }
-.container-fluid .row .main-item .middle-item .photo-little .photocontainer {
+.row .main-item .middle-item .photo-little .photocontainer {
   height: 350px;
   overflow: scroll;
 }
-.container-fluid .row .main-item .middle-item .photo-little .photocontainer .smallphoto {
+.row .main-item .middle-item .photo-little .photocontainer .smallphoto {
   margin: 10px 0 10px 0;
   max-width: 150px;
   max-height: 150px;
 }
-.container-fluid .row .main-item .middle-item .photo-little .photocontainer .smallphoto img {
+.row .main-item .middle-item .photo-little .photocontainer .smallphoto img {
   height: 100px;
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
 }
-.container-fluid .row .main-item .middle-item .photo-little .photocontainer .smallphoto:first-child {
+.row .main-item .middle-item .photo-little .photocontainer .smallphoto:first-child {
   margin-top: 0;
 }
-.container-fluid .row .main-item .middle-item .photo-little .photocontainer .smallphoto:last-child {
+.row .main-item .middle-item .photo-little .photocontainer .smallphoto:last-child {
   margin-bottom: 0;
 }
-.container-fluid .row .main-item .middle-item .photo-little .photobtn {
+.row .main-item .middle-item .photo-little .photobtn {
   font-size: 16px;
   width: 100%;
   border: 0;
   color: white;
   background-color: gray;
 }
-.container-fluid .row .main-item .middle-item .photo-big {
+.row .main-item .middle-item .photo-big {
   max-width: 400px;
   max-height: 400px;
   margin-left: 15px;
 }
-.container-fluid .row .main-item .middle-item .photo-big img {
+.row .main-item .middle-item .photo-big img {
   width: 400px;
   height: 400px;
   -o-object-fit: contain;
      object-fit: contain;
 }
-.container-fluid .row .main-item .middle-item .product-info {
+.row .main-item .middle-item .product-info {
   margin-left: 40px;
   position: relative;
 }
-.container-fluid .row .main-item .middle-item .product-info .product-tag {
+.row .main-item .middle-item .product-info .product-tag {
   height: 200px;
   margin: 20px 0;
 }
-.container-fluid .row .main-item .middle-item .product-info .product-tag a {
+.row .main-item .middle-item .product-info .product-tag a {
   display: inline-block;
   padding: 5px 15px;
   margin: 0.2rem 0.5rem;
@@ -72,24 +72,24 @@
   border: 2px solid black;
   border-radius: 10%;
 }
-.container-fluid .row .main-item .middle-item .product-info .product-tag a:hover {
+.row .main-item .middle-item .product-info .product-tag a:hover {
   color: white;
   background-color: black;
   transition: 0.5s;
 }
-.container-fluid .row .main-item .middle-item .product-info .product-footer {
+.row .main-item .middle-item .product-info .product-footer {
   position: absolute;
   bottom: 0px;
   left: 0px;
 }
-.container-fluid .row .main-item .middle-item .product-info .product-footer .reportbtn {
+.row .main-item .middle-item .product-info .product-footer .reportbtn {
   margin-bottom: 25px;
 }
-.container-fluid .row .main-item .middle-item .product-info .product-footer .reportbtn button {
+.row .main-item .middle-item .product-info .product-footer .reportbtn button {
   border: 0;
   background-color: white;
 }
-.container-fluid .row .main-item .middle-item .product-info .product-footer .reservebtn button {
+.row .main-item .middle-item .product-info .product-footer .reservebtn button {
   padding: 5px 50px;
   font-size: 18px;
   text-align: center;
@@ -98,16 +98,20 @@
   background-color: black;
   border: 1px black;
 }
-.container-fluid .row .footter-item {
+.row .footter-item {
   margin: 20px 0;
 }
-.container-fluid .row .footter-item .footer-info p {
+.row .footter-item .footer-info p {
   padding: 0 0 0.3rem 1rem;
   font-size: 20px;
   border-bottom: 2px solid black;
 }
-.container-fluid .row .footter-item .footer-container p {
+.row .footter-item .footer-container p {
   font-size: 18px;
+}
+
+.pt90 {
+  padding-top: 90px;
 }
 
 #alert_div,

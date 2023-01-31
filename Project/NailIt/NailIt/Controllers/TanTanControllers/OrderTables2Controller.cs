@@ -87,63 +87,41 @@ namespace NailIt.Controllers.TanTanControllers
             return await newOrderTable.ToListAsync();
         }
 
-        //// PUT: api/OrderTables2/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutOrderTable(int id, OrderTable orderTable)
-        //{
-        //    if (id != orderTable.OrderId)
-        //    {
-        //        return BadRequest();
-        //    }
+        // GET: api/OrderTables2/condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}
+        [HttpGet("condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}")]
+        public async Task<ActionResult<dynamic>> GetOrderCondition(string OdateS, string OdateE, string reportP, string orderStateC ,int orderId)
+        {
+            var date1 = DateTime.Parse(OdateS);
+            var date2 = DateTime.Parse(OdateE).AddMinutes(1439);
 
-        //    _context.Entry(orderTable).State = EntityState.Modified;
+            var query = from o in _context.OrderTables
+                        select o;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!OrderTableExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            var result = query;
+            if (OdateS != "1900-01-01" && OdateE != "3000-01-01")
+            {
+                result = result.Where(a => a.OrderOrderTime >= Convert.ToDateTime(date1)
+                                        && a.OrderOrderTime <= Convert.ToDateTime(date2));
+            }
 
-        //    return NoContent();
-        //}
+            if (orderStateC == "AA") { result = query; }
+            else { result = result.Where(a => a.OrderStateC == orderStateC); }
 
-        //// POST: api/OrderTables2
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<OrderTable>> PostOrderTable(OrderTable orderTable)
-        //{
-        //    _context.OrderTables.Add(orderTable);
-        //    await _context.SaveChangesAsync();
 
-        //    return CreatedAtAction("GetOrderTable", new { id = orderTable.OrderId }, orderTable);
-        //}
+            if (orderId != 0) { result = result.Where(a => a.OrderId == orderId); }
+           
 
-        //// DELETE: api/OrderTables2/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteOrderTable(int id)
-        //{
-        //    var orderTable = await _context.OrderTables.FindAsync(id);
-        //    if (orderTable == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.OrderTables.Remove(orderTable);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
+            var result2 = from o in result
+                                 join os in _context.CodeTables on o.OrderStateC equals os.CodeId
+                                 select new
+                                 {
+                                     OrderId = o.OrderId,
+                                     OrderOrderTime = o.OrderOrderTime.ToString("yyyy-MM-dd HH:mm"),
+                                     OrderStateC = o.OrderStateC,
+                                     OrderStateName = os.CodeRepresent // 狀態
+                                 };
+            return await result2.ToListAsync();
+        }
 
         private bool OrderTableExists(int id)
         {
