@@ -113,7 +113,7 @@ class BlacklistService {
 }
 class ChatService {
     static getMembersMsg() {
-        return fetchGet(`/api/Chat/GetMembersMsg}`);
+        return fetchGet(`/api/Chat/GetMembersMsg`);
     }
     static getSingleMemberMsg(memberId) {
         return fetchGet(`/api/Chat/GetSingleMemberMsg/${memberId}`);
@@ -128,10 +128,13 @@ class ChatService {
         return fetchPut(`/api/Chat/PutMsgRevoke/${id}`);
     }
     static postMessage(data) {
-        return fetchPost(`/api/Chat/PostMessage`,data);
+        return fetchPost(`/api/Chat/PostMessage`, data);
+    }
+    static uploadImage(data) {
+        return fetchPostMul(`/api/Chat/UploadImage`, data);
     }
     static postMsgImage(data) {
-        return fetchPostMul(`/api/Chat/PostMsgImage`,data);
+        return fetchPostMul(`/api/Chat/PostMsgImage`, data);
     }
 }
 class ReplyService {

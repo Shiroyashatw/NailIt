@@ -41,7 +41,7 @@
 </div>
 
 <div class="row">
-    <div class="col-4 px-0 pt-3 " style="height:80vh;">
+    <div class="col-4 px-0 pt-3" style="height:80vh;">
         <div class="px-3">
             <input id="searchChatMember" class="w-100" type="text" placeholder="帳號查詢">
             <div class="pt-3 d-flex align-items-center">
@@ -49,8 +49,8 @@
                 <button class="btn btn-light  btn-sm">黑名單</button>
             </div>
         </div>
-        <div id="chattingMembers" class="d-flex justify-content-between align-items-center">
-            <div class="data-memberid cursor-pointer d-flex align-items-center pl-3 py-2" data-memberid="2">
+        <div id="chattingMembers">
+            @* <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="2">
                 <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
                     style="aspect-ratio:1;color: #fff;width:35px">
                     <div class="font-weight-bold">
@@ -61,22 +61,36 @@
                     <div class="font-weight-bold">Ohora美甲室</div>
                     <div>3天前</div>
                 </div>
-            </div>
-            <div class="pr-3 bg-danger rounded-circle"style="aspect-ratio:1;color: #fff;">
-                3
-            </div>
-            
+                <div class="bg-danger rounded-circle text-center"style="aspect-ratio:1;color:#fff;margin-left:auto;width:24px">
+                    3
+                </div>
+            </div> *@
+            @* <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="2">
+                <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
+                    style="aspect-ratio:1;color: #fff;width:35px">
+                    <div class="font-weight-bold">
+                        A
+                    </div>
+                </div>
+                <div class="pl-1 pl-sm-4">
+                    <div class="font-weight-bold">Ohora美甲室</div>
+                    <div>3天前</div>
+                </div>
+                <div class="bg-danger rounded-circle text-center"style="aspect-ratio:1;color:#fff;margin-left:auto;width:24px">
+                    3
+                </div>
+            </div> *@
         </div>
     </div>
     <div class="col-8 px-0 pt-2 border-left">
         <div class="pb-2 px-1 px-sm-4 d-flex align-items-center" style="height:10vh;">
-            <div id="avatar" class="d-flex align-items-center bg-secondary rounded-circle"
-                style="aspect-ratio:1;color: #fff;">
-                <div class="font-weight-bold">
-                    Avatar
+            <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
+                style="aspect-ratio:1;color: #fff;width:50px">
+                <div id="avatar" class="font-weight-bold">
+                    S
                 </div>
             </div>
-            <div class="px-1 px-sm-4 font-weight-bold">
+            <div id="member" class="px-1 px-sm-4 font-weight-bold">
                 Sofia美甲室
             </div>
         </div>
@@ -120,10 +134,11 @@
         </div>
         <div style="" class="d-flex">
             @* 使用textarea防止貼上圖片 *@
-            <textarea class="col-11" id="draftMessagetextarea" placeholder="輸入訊息"></textarea>
+            <div id="draftMessage" class="col-11 editable" contenteditable="true" placeholder="輸入訊息" style=" overflow-y: auto;"></div>
+            @* <textarea class="col-11" id="draftMessagetextarea" placeholder="輸入訊息"></textarea> *@
             <div class="col-1 d-flex flex-column justify-content-around align-items-center">
                 <i class="fa-solid fa-image cursor-pointer"></i>
-                <span class="cursor-pointer material-symbols-outlined">send</span>
+                <span class="cursor-pointer material-symbols-outlined" onclick="showMyNewMsg()">send</span>
             </div>
         </div>
     </div>

@@ -10,6 +10,16 @@ String.prototype.YYYYMMDD = function () {
 
     return `${dt.getFullYear()}-${month}-${day}`
 }
+String.prototype.HHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let dt = new Date(this);
+    let HH = dt.getHours().toString().padStart(2,"0");
+    let mm = dt.getMinutes().toString().padStart(2,"0");
+
+    return `${HH}:${mm}`
+}
 // Get date in "YYYY-MM-DD" ex:"2023-01-17"
 Date.prototype.YYYYMMDD = function () {
     if (this === undefined || this === null) {
@@ -19,6 +29,15 @@ Date.prototype.YYYYMMDD = function () {
     let day = this.getDate().toString().padStart(2,"0");
 
     return `${this.getFullYear()}-${month}-${day}`
+}
+Date.prototype.HHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let HH = this.getHours().toString().padStart(2,"0");
+    let mm = this.getMinutes().toString().padStart(2,"0");
+
+    return `${HH}:${mm}`
 }
 //#endregion
 

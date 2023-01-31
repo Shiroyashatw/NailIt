@@ -13,3 +13,14 @@
 }
 
 /*#endregion*/
+
+/*#region Editable*/
+.editable[placeholder]:empty:before {
+  content: attr(placeholder);
+  color: #555;
+}
+
+.editable[placeholder]:empty:focus:before {
+  content: "";
+}
+/*#endregion*/

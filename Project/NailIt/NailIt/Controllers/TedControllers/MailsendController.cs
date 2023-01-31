@@ -43,25 +43,25 @@ namespace NailIt.Controllers.TedControllers
         //    mail.Body = "第一行<br> 第二行<br>第三行<br>";
         //    mail.BodyEncoding = Encoding.UTF8;
 
-           
-        //     try
+
+        //    try
         //    {
-            
-        //    client.Send(mail);
+
+        //        client.Send(mail);
         //    }
-        //    catch 
+        //    catch
         //    {
-        //        throw ;
+        //        throw;
         //    }
         //    finally
         //    {
-               
+
         //        mail.Dispose();
         //        client.Dispose();
         //    }
 
 
-        //    return  NoContent();
+        //    return NoContent();
         //}
 
     }

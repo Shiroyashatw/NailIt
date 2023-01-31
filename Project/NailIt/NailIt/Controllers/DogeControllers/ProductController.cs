@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System;
+using System.Drawing;
 
 namespace NailIt.Controllers.DogeControllers
 {
@@ -32,7 +33,19 @@ namespace NailIt.Controllers.DogeControllers
                         join demo in _db.DemoTables
                         on demoset.DemoSetId equals demo.DemoSetId
                         where demoset.DemoSetId == id
-                        select new { o, demoset, demo };
+                        select new {
+                            o,
+                            demoset,
+                            demo,
+                            color = (
+                                from c in _db.ColorTables
+                                join demoset in _db.DemoSetTables
+                                on c.ColorId equals demoset.DemoSetColor
+                                where demoset.DemoSetId == id
+                                select c
+                            ).ToList()
+                        };
+            
             return await query.ToListAsync();
         }
         // 傳送預約表單

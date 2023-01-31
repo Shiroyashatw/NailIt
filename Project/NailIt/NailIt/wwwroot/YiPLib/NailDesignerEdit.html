@@ -15,6 +15,7 @@
     <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <script src="/"></script>
 
     <style>
         .slider-nav {
@@ -790,10 +791,8 @@
                         <!--<button data-toggle="modal" data-target="#EditModal">新增</button>-->
                     </div>
                     <div class="col-4">
-                        <form>
-                            <input class="Searchbar" type="text" placeholder="作品,標籤">
-                            <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>
+                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1252,7 +1251,10 @@
 
 
     <script>
-        let ManicuristID = 2;
+        //let ManicuristID = 2;
+        let GetNowurl = window.location.href;
+        let Nowurl = new URL(GetNowurl);
+        let GetManicuristID = Nowurl.searchParams.get('id');
         let PercantStar;
         let FloatStar;
         let DemoLenth;
@@ -1450,8 +1452,24 @@
             var insertimg = ShowData.PostthisDemo[e.value].demoPic;
             $('#Previewphoto').attr('src', insertimg);
         }
+
         function Deleteinsert(e) {
             ShowData.PostthisDemo.splice(e.value, 1);
+        }
+
+        function Searchit() {
+            console.log(ShowData.SearchString);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetSearchTable/" + GetManicuristID + "?search=" + ShowData.SearchString,
+                success: function (e) {
+                    ShowData.DemoSetList = [];
+                    for (DS in e) {
+                        ShowData.DemoSetList.push(e[DS]);
+                    }
+                }
+            });
+            console.log(ShowData.DemoSetList);
         }
 
 
@@ -1464,12 +1482,12 @@
                 DemoList: [],
                 MainDemoCover: [],
                 width: "",
-                InsertDemoSet: [{ "demoSetName": null, "demoSetCover": "尚未選擇", "manicuristId": ManicuristID, "demoSetPartC": "none", "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "none", "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": false, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": "none" }],
+                InsertDemoSet: [{ "demoSetName": null, "demoSetCover": "尚未選擇", "manicuristId": GetManicuristID, "demoSetPartC": "none", "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "none", "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": false, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null, "demoSetColor": "none" }],
                 TagFtxt: "",
                 TagStxt: "",
                 TagTtxt: "",
                 CodeC: [],
-                PutManicurist: [{ "manicuristId": ManicuristID, "manicuristPic": "", "manicuristIntro": "" }],
+                PutManicurist: [{ "manicuristId": GetManicuristID, "manicuristPic": "", "manicuristIntro": "" }],
                 preview: true,
                 Editing: false,
                 TagList: [],
@@ -1477,17 +1495,18 @@
                 FixTag: [],
                 PostthisDemo: [],
                 FixColor: [],
-                GetUpList: [{ "demoSetId": ManicuristID, "demoSetName": "碧色珍珠音調" }],
-                PutUpCover: [{ "demoSetId": ManicuristID, "demoSetCover": "" }],
-                PostDemoSet: [{ "demoSetName": null, "demoSetCover": "", "manicuristId": ManicuristID, "demoSetPartC": null, "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": null, "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
-                ThisFormData: [{ "demoSetId": "", "demoSetName": "", "manicuristId": ManicuristID, "demoSetPartC": "C1", "demoSetContent": "", "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetPublic": true, "demoSetMain": true, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
+                GetUpList: [{ "demoSetId": GetManicuristID, "demoSetName": "" }],
+                PutUpCover: [{ "demoSetId": GetManicuristID, "demoSetCover": "" }],
+                PostDemoSet: [{ "demoSetName": null, "demoSetCover": "", "manicuristId": GetManicuristID, "demoSetPartC": null, "demoSetContent": null, "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": null, "demoSetTag2": null, "demoSetTag3": null, "demoSetTag4": null, "demoSetPublic": null, "demoSetMain": null, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
+                ThisFormData: [{ "demoSetId": "", "demoSetName": "", "manicuristId": GetManicuristID, "demoSetPartC": "C1", "demoSetContent": "", "demoSetPrice": null, "demoSetDeposit": null, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetPublic": true, "demoSetMain": true, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
                 StartDate: "",
                 EndDate: "",
                 GetCertainDemoKey: "",
+                SearchString: "",
             },
             methods: {
                 InsertDemo: function () {
-                    this.InsertDemoSet[0].manicuristId = 2;
+                    this.InsertDemoSet[0].manicuristId = GetManicuristID;
                     console.log(this.InsertDemoSet[0]);
                     if (this.InsertDemoSet[0].demoSetTag2 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag2 = this.TagStxt;
@@ -1522,7 +1541,7 @@
                 PutM: function () {
                     $.ajax({
                         type: "put",
-                        url: "/api/Manicurist/" + ManicuristID,
+                        url: "/api/Manicurist/" + GetManicuristID,
                         contentType: "application/json",
                         data: JSON.stringify(this.PutManicurist[0]),
                         success: function () {
@@ -1535,7 +1554,7 @@
                     console.log(this.ThisFormData[0]);
                     $.ajax({
                         type: "put",
-                        url: "/api/DemoSet/PutDemoSetTable/" + ManicuristID,
+                        url: "/api/DemoSet/PutDemoSetTable/" + GetManicuristID,
                         contentType: "application/json",
                         data: JSON.stringify(this.ThisFormData[0]),
                         success: function () {
@@ -1598,7 +1617,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/Manicurist/" + ManicuristID,
+            url: "/api/Manicurist/" + GetManicuristID,
             success: function (e) {
                 ShowData.DesignList = e;
                 PercantStar = e.manicuristScore;
@@ -1611,7 +1630,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/DemoSet/GetDemoSetTable/" + ManicuristID,
+            url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
             success: function (e) {
                 for (demoset in e) {
                     ShowData.DemoSetList.push(e[demoset]);

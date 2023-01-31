@@ -87,7 +87,14 @@ namespace NailIt.Controllers.AnselControllers
                                MessageRead = noticRead == null ? false : true
                            })
                            ).ToList();
-            return messages.Union(sysNotices.Union(notices)).ToList();
+            var resultList = messages.Union(sysNotices.Union(notices)).ToList();
+            // the message i sent, it's read for me.
+            var tempList = resultList.Where(a => a.MessageSender == loginId).ToList();
+            foreach (var item in tempList)
+            {
+                item.MessageRead = true;
+            }
+            return resultList;
         }
 
         // Exclude those be placed on blacklist
@@ -142,7 +149,23 @@ namespace NailIt.Controllers.AnselControllers
                     });
                 }
             }
-            return myMessages;
+            // left join memberTable, get MemberAccount and MemberNickname
+            var leftJoinMember = myMessages.
+                Join(_context.MemberTables,
+                    l => l.memberId,
+                    r => r.MemberId,
+                    (l, r) => new
+                    {
+                        l.memberId,
+                        l.MessageContent,
+                        l.MessageTime,
+                        l.unreadCount,
+                        l.msgTimeDiff,
+                        r.MemberAccount,
+                        r.MemberNickname
+                    }
+                ).ToList();
+            return ((IEnumerable<dynamic>)leftJoinMember).ToList();
         }
 
         // GET: api/Chat/GetMembersMsg
@@ -189,8 +212,8 @@ namespace NailIt.Controllers.AnselControllers
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
 
-            // Check those later than display latest message_Time
-            var newMessages = allMessage.Where(a => a.MessageTime > updateTime).ToList();
+            // Check those later than display latest message_Time (not include login person sent).
+            var newMessages = allMessage.Where(a => a.MessageTime > updateTime && a.MessageSender != loginId).ToList();
             if (newMessages.Count() > 0)
             {
                 // Exclude those be placed on blacklist.
@@ -283,6 +306,39 @@ namespace NailIt.Controllers.AnselControllers
 
             t.Commit();
             return CreatedAtAction("GetMessageTable", new { id = message.MessageId }, message);
+        }
+
+        /// <summary>
+        /// upload image to ChatImage file and return image display link.
+        /// </summary>
+        /// <param name="frm">attached file</param>
+        /// <returns></returns>
+        // POST:/api/Social/UploadImage
+        [HttpPost]
+        public async Task<IActionResult> UploadImage(IFormCollection frm)
+        {
+            if (frm.Files.Count > 0)
+            {
+                List<string> imageUrls = new List<string>();
+
+                // lock DB
+                var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+
+                // get latest MessageId
+                var latestMsg = await _context.MessageTables.OrderByDescending(m => m.MessageId).FirstOrDefaultAsync();
+                var newMessageId = latestMsg.MessageId + 1;
+                for (int i = 0; i < frm.Files.Count; i++)
+                {
+                    // use messageId be image name
+                    string imageName = $"{newMessageId}-{i + 1}.png";
+                    chatSaveImage(imageName, frm.Files[i]);
+                    imageUrls.Add($"/AnselLib/ChatImage/{imageName}");
+                }
+
+                t.Commit();
+                return Ok(imageUrls);
+            }
+            return NotFound();
         }
 
         // POST: api/Chat/PostMsgImage

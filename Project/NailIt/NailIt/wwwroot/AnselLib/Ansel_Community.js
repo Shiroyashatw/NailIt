@@ -85,7 +85,7 @@ var showNewArticleModal = function () {
     if (!checkLogin()) return;
     scop.articleMode = "new";
     scop.newArticle = new ArticleTable({
-        articleBoardC: scop.articleCode,
+        articleBoardC: scop.articleCode == "My" ? "L0" : scop.articleCode,
         articleAuthor: scop.loginId,
     });
     $("#editArticleModal").modal("show");
@@ -392,7 +392,8 @@ var showMyMain = async function (own) {
     $("#memberInfo").children().show();
     $("#btnMoreArticle").removeAttr("disabled");
     await getMyArticles();
-    $("#avatar").addClass("d-flex align-items-center");
+    $("#avatar").addClass("d-flex");
+    $("#avatar").children()[0].innerText = scop.articles.member.memberAccount[0];
     $("#memberNames").children()[0].innerText = scop.articles.member.memberNickname;
     $("#memberNames").children()[1].innerText = scop.articles.member.memberAccount;
     $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
@@ -410,7 +411,7 @@ var showMain = async function (code, name) {
     $("#mainTitle").show();
     $("#memberInfo").children().hide();
     $("#btnMoreArticle").removeAttr("disabled");
-    $("#avatar").removeClass("d-flex align-items-center");
+    $("#avatar").removeClass("d-flex");
     // show articles
     await getArticles();
     renderArticles(scop.articles);
@@ -873,10 +874,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             $("#newArtiCodeList").attr('disabled', 'disabled');
             $("#articleModal").modal("hide");
             article = currentArticle().article;
+            $("#newArtiCodeList").val(article.articleCode); //選擇看板
+        } else {
+            $("#newArtiCodeList").val(article.articleBoardC); //選擇看板
         }
+        $("#editModalAuthorAvatar").children()[0].innerText = scop.loginAccount[0];
         $("#editModalAuthor").children()[0].innerText = scop.loginNickname;
         $("#editModalAuthor").children()[1].innerText = scop.loginAccount;
-        $("#newArtiCodeList").val(scop.articleCode);
         $("#editModalArticleTitle").val(article.articleTitle);
         $("#editModalArticleContent").html(article.articleContent);
     });
@@ -896,6 +900,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     $("#articleModal").on("show.bs.modal", function (e) {
         let article = currentArticle();
 
+        $("#ModalAuthorAvatar").children()[0].innerText = article.memberAccount[0];
         $("#ModalAuthor").children()[0].innerText = article.memberNickname;
         $("#ModalAuthor").children()[1].innerText = article.memberAccount;
 

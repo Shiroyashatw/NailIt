@@ -29,6 +29,7 @@ namespace NailIt.Models
         public virtual DbSet<ManagerTable> ManagerTables { get; set; }
         public virtual DbSet<ManicuristTable> ManicuristTables { get; set; }
         public virtual DbSet<MemberTable> MemberTables { get; set; }
+        public virtual DbSet<MessageBlacklistTable> MessageBlacklistTables { get; set; }
         public virtual DbSet<MessageTable> MessageTables { get; set; }
         public virtual DbSet<NoticeReadTable> NoticeReadTables { get; set; }
         public virtual DbSet<NoticeTable> NoticeTables { get; set; }
@@ -42,7 +43,6 @@ namespace NailIt.Models
         public virtual DbSet<SysNoticeTable> SysNoticeTables { get; set; }
         public virtual DbSet<TagTable> TagTables { get; set; }
         public virtual DbSet<Verificationcode> Verificationcodes { get; set; }
-        public virtual DbSet<MessageBlacklistTable> MessageBlacklistTables { get; set; }
 
 
 
@@ -502,6 +502,20 @@ namespace NailIt.Models
                     .IsFixedLength(true);
             });
 
+            modelBuilder.Entity<MessageBlacklistTable>(entity =>
+            {
+                entity.HasKey(e => e.BlacklistId)
+                    .HasName("PK__MessageB__570B2EEB49F9ACF8");
+
+                entity.ToTable("MessageBlacklist_Table");
+
+                entity.Property(e => e.BlacklistId).HasColumnName("blacklist_ID");
+
+                entity.Property(e => e.BlacklistBuilder).HasColumnName("blacklist_Builder");
+
+                entity.Property(e => e.BlacklistTarget).HasColumnName("blacklist_Target");
+            });
+
             modelBuilder.Entity<MessageTable>(entity =>
             {
                 entity.HasKey(e => e.MessageId)
@@ -516,6 +530,8 @@ namespace NailIt.Models
                     .HasMaxLength(200)
                     .HasColumnName("message_Content");
 
+                entity.Property(e => e.MessageRead).HasColumnName("message_Read");
+
                 entity.Property(e => e.MessageReceiver).HasColumnName("message_Receiver");
 
                 entity.Property(e => e.MessageSender).HasColumnName("message_Sender");
@@ -524,13 +540,7 @@ namespace NailIt.Models
                     .HasColumnType("datetime")
                     .HasColumnName("message_Time");
             });
-            modelBuilder.Entity<MessageBlacklistTable>(entity =>
-            {
-                entity.HasKey(e => e.BlacklistId).HasName("PK_MessageBlacklist_Table");
-                entity.Property(e => e.BlacklistId).HasColumnName("blacklist_ID");
-                entity.Property(e => e.BlacklistBuilder).HasColumnName("blacklist_Builder");
-                entity.Property(e => e.BlacklistTarget).HasColumnName("blacklist_Target");
-            });
+
             modelBuilder.Entity<NoticeReadTable>(entity =>
             {
                 entity.HasKey(e => e.NoticeReadId)

@@ -155,27 +155,29 @@
                     </div>
                     <div class="content" id="shop-infor">
                         <div class="inner2">
-                            <pre><b><button id="personal" class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button style="border-bottom: 1px solid;" id="shop" class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b>                          <button type="button" onclick="openinfor(event,'shop-infor-modif','個人檔案>店家個檔>修改')" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <pre><b><button id="personal" class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button style="border-bottom: 1px solid;" id="shop" class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b>                          <button id="btnshowmodif" type="button" onclick="openinfor(event,'shop-infor-modif','個人檔案>店家個檔>修改')" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
           </svg></button></pre>
                         </div>
-
-                        <h5><b>店家/美甲師名稱</b></h5>
-                        <h5>{{shoplist.manicuristSalonName}}</h5>
-                        <br />
-                        <h5><b>店家/美甲師地址</b></h5>
-                        <h5>{{shoplist.manicuristAddress}}</h5>
-                        <br />
-                        <h5><b>店家/美甲師電話</b></h5>
-                        <h5>{{shoplist.manicuristSalonPhone}}</h5>
-                        <br />
-                        <h5><b>介紹</b></h5>
-                        <h5>{{shoplist.manicuristIntro}}</h5>
-                        <br />
-                        <h5><b>證照</b></h5>
-                        <h5>{{shoplist.manicuristLicense}}</h5>
-
+                        <div id="shopisopen">
+                            <h5><b>店家/美甲師名稱</b></h5>
+                            <h5>{{shoplist.manicuristSalonName}}</h5>
+                            <br />
+                            <h5><b>店家/美甲師地址</b></h5>
+                            <h5>{{shoplist.manicuristAddress}}</h5>
+                            <br />
+                            <h5><b>店家/美甲師電話</b></h5>
+                            <h5>{{shoplist.manicuristSalonPhone}}</h5>
+                            <br />
+                            <h5><b>介紹</b></h5>
+                            <h5>{{shoplist.manicuristIntro}}</h5>
+                            <br />
+                            <h5><b>證照</b></h5>
+                            <h5>{{shoplist.manicuristLicense}}</h5>
+                        </div>
+                    <div id="shopnotopen"><h5>美甲師資料為空請先點擊修改按鈕進行新增</h5></div>
+                    <div id="shopnotnotopen"><h5>尚未開通美甲師功能，請先進行開通</h5></div>
                     </div>
                     <div class="content" id="shop-infor-modif">
                         <div class="inner2"><pre><b><button class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button style="border-bottom: 1px solid;" class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b></pre></div>
@@ -1040,9 +1042,7 @@
                 }
                
             }
-        })
-
-       
+        })      
             $.ajax({
                 type: "get",
                 url: "/api/CreditCardTables/1",
@@ -1054,11 +1054,8 @@
                     $("#card-1-1-number").html("**** **** **** " + (e[0].creditCardNumber).substr(12, 4))
                     }
                 }
-            })
-        
-
+            })       
         var memidid = app.memberlist[0].memberId;
-
         //寄送驗證碼
         function sendmail() {
             console.log(memidid);
@@ -1081,7 +1078,13 @@
       
             var span = document.getElementsByClassName("close111")[0];
             
-           
+            $.ajax({
+                type: "get",
+                url: "/api/Verifcode/1",
+                success: function (e) {
+                    console.log(e);
+                }
+            })
             span.onclick = function () {
                 $("#insertverif").css("display", "none");
             }
@@ -1120,8 +1123,18 @@
                 };
                 $("#inputGroupSelect02").val(month).selected;
                 $("#inputGroupSelect03").val(day1).selected;
+                
+               
+                if (e.memberManicurist == false) {
+                    $("#shopnotopen").css("display", "none");
+                    $("#shopisopen").css("display", "none");
+                    $("#btnshowmodif").attr("disabled", true);
+                }
             }
         })
+        console.log(app.memberlist[0].memberManicurist);
+        if (app.memberlist[0].memberManicurist == true) {
+
         $.ajax({
             type: "get",
             url: "/api/Manicuristtables/1",
@@ -1152,9 +1165,14 @@
                     $("#bankaccount1").html("**** **** **** " + (e.manicuristBankAccount).substr(12, 4));
                 }
 
+                if (e.manicuristSalonName != null) {
+                    $("#shopnotopen").css("display", "none");
+                    $("#shopnotnotopen").css("display", "none");
+                }
 
             }
         })
+        }
 
         
         function randomstr(e) {
@@ -1164,7 +1182,8 @@
             }
             return n;
         }
-       
+        //開通美甲師判斷
+
     </script>
   
 </body>
