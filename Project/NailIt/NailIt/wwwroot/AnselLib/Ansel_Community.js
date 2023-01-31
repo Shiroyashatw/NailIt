@@ -20,7 +20,8 @@ var scop = {
 
 //#region Function
 //#region Action
-// Edit article upload image(jpg/png) file change event 
+// Edit article upload image(jpg/png) file change event
+// insert image into draft 
 var showInsertImage = async function (obj) {
     var file = $(obj).prop('files')[0];
     var reader = new FileReader();

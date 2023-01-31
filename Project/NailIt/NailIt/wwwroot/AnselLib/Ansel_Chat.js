@@ -82,10 +82,12 @@ var showSingleMemberMsg = async function (obj) {
                     </div>`;
                 $("#chattingArea").append(messageDateHTML)                
             }
-            renderMessage(message);           
+            await renderMessage(message);           
         }
         BindingMsgRightMenu($(".myMessage"));
-        ShowChattingButtom();
+        setTimeout(() => {
+            ShowChattingButtom();
+        }, "100")
     }
     // call api for unread message (putMsgRead)
     let result2 = await putMsgRead(scop.currentChatMemId);
@@ -114,14 +116,30 @@ var showSingleMemberMsg = async function (obj) {
     }    
 }
 // Sending image(s) message
-var showMyNewImg = function () {
+var showMyNewImg = async function (obj) {
     // get file
-
-    // call api (postMsgImage)
-
-    // show new message
-    // update chatting members
-
+    var files = $(obj).prop('files');
+    var message = new MessageTable({
+        messageSender: scop.loginId,
+        messageReceiver: scop.currentChatMemId
+    });
+    let formdata = new FormData();
+    // call api (postMsgImage), get new message
+    for (let index = 0; index < files.length; index++) {
+        formdata.append(`file${index}`, files[index]);
+    }
+    formdata.append("message", JSON.stringify(message));
+    var result = await postMsgImage(formdata);
+    if (!!result) {
+        // show new message
+        await renderMessage(result);
+        // update chatting members
+        await renderTheChatMember(result);
+        BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one        
+        setTimeout(() => {
+            ShowChattingButtom();
+        }, "100")
+    }
 }
 // Sending message
 var showMyNewMsg = async function () {
@@ -132,7 +150,7 @@ var showMyNewMsg = async function () {
     // get value from textarea
     let message = new MessageTable({
         messageSender: scop.loginId,
-        messageReceiver: 2, // 需替換 scop.currentChatMemId
+        messageReceiver: scop.currentChatMemId, // 需替換 scop.currentChatMemId
         messageContent: content,
     });
     // call api (postMessage) 因為postMessage與系統功能名稱重複，改為postTheMessage
@@ -148,7 +166,9 @@ var showMyNewMsg = async function () {
         // update chatting members
         await renderTheChatMember(result);
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
-        ShowChattingButtom();
+        setTimeout(() => {
+            ShowChattingButtom();
+        }, "100")
     }
 }
 var showChatMember = async function () {
@@ -473,6 +493,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     showChatMember()
 
     //#region Event Binding
+    // Mousedown insert image at article editor. Don't preventDefault focus, or upload file can't find the plase to insert. 
+    // Don't use onclick, focus already set on mouse down.
+    $("#btnPostImage").on("mousedown", function (e) {
+        document.getElementById('postImage').click();
+        e.preventDefault();
+    })
 
     // Setup event for right clicke context menu
     var bodyArea = document.querySelector("body");
@@ -496,7 +522,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     scop.chattingMsgsMenu = chattingMsgsMenu;
 
     // Scroll to buttom of message 
-    ShowChattingButtom();
+    // ShowChattingButtom();
 
     //#endregion
 });

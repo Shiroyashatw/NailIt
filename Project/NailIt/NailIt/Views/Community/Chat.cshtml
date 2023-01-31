@@ -140,7 +140,9 @@
             <div id="draftMessage" class="col-11 editable" contenteditable="true" placeholder="輸入訊息" style=" overflow-y: auto;"></div>
             @* <textarea class="col-11" id="draftMessagetextarea" placeholder="輸入訊息"></textarea> *@
             <div class="col-1 d-flex flex-column justify-content-around align-items-center">
-                <i class="fa-solid fa-image cursor-pointer"></i>
+                <i id="btnPostImage" class="fa-solid fa-image cursor-pointer"></i>
+                <input type='file' id="postImage" onchange="showMyNewImg(this)" accept="image/jpeg, image/png" style="display: none;" multiple/>
+
                 <span class="cursor-pointer material-symbols-outlined" onclick="showMyNewMsg()">send</span>
             </div>
         </div>
