@@ -51,10 +51,10 @@ namespace NailIt.Controllers.YiPControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetMainDemoSetTable(int id)
         {
-            var query = from Demo 
+            var query = from Demo
                                    in Context.DemoSetTables
-                            where Demo.ManicuristId == id && Demo.DemoSetMain == true
-                            select Demo;
+                        where Demo.ManicuristId == id && Demo.DemoSetMain == true
+                        select Demo;
 
             return await query.ToListAsync();
         }
@@ -110,7 +110,7 @@ namespace NailIt.Controllers.YiPControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetSearchTable(int id,string search)
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetSearchTable(int id, string search)
         {
             var query = from DemoSet in Context.DemoSetTables
                         where DemoSet.ManicuristId == id && DemoSet.DemoSetName.Contains(search) || DemoSet.DemoSetTag1.Contains(search) || DemoSet.DemoSetTag2.Contains(search) || DemoSet.DemoSetTag3.Contains(search) || DemoSet.DemoSetTag4.Contains(search)
@@ -133,18 +133,18 @@ namespace NailIt.Controllers.YiPControllers
         public async Task<ActionResult<IEnumerable<dynamic>>> GetCountyDemo(string Country)
         {
             var query = from Demo in Context.DemoSetTables
-                                join Designer in Context.ManicuristTables
-                                  on Demo.ManicuristId equals Designer.ManicuristId
+                        join Designer in Context.ManicuristTables
+                          on Demo.ManicuristId equals Designer.ManicuristId
                         where Designer.ManicuristCounty.Contains(Country)
                         select new
-                            {
-                                DemoSetId = Demo.DemoSetId,
-                                DemoSetName = Demo.DemoSetName,
-                                DemoSetCover = Demo.DemoSetCover,
-                                ManicuristCounty = Designer.ManicuristCounty
-                                //DemoSetPartC = Demo.DemoSetPartC,
-                                //DemoSetPrice = Demo.DemoSetPrice,
-                            };
+                        {
+                            DemoSetId = Demo.DemoSetId,
+                            DemoSetName = Demo.DemoSetName,
+                            DemoSetCover = Demo.DemoSetCover,
+                            ManicuristCounty = Designer.ManicuristCounty
+                            //DemoSetPartC = Demo.DemoSetPartC,
+                            //DemoSetPrice = Demo.DemoSetPrice,
+                        };
 
             return await query.ToListAsync();
         }
