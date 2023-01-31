@@ -1,4 +1,6 @@
-.container-fluid {
+#mynav {
+
+    width:100%;
     height: 90px;
     position: fixed;
     font-weight: bold;
@@ -6,7 +8,6 @@
     background-color: white;
     opacity: .9;
     z-index: 9999;
-
 }
 
 #navall>div {
@@ -161,8 +162,14 @@ input{
     /* text-decoration-line:none; */
 }
 
+#Bblack:hover {
+    color: white;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+}
+
 .coldot{
-    margin:4% 0%;
+   margin:4% 0%;
 }
 
 .colmix {
@@ -200,10 +207,13 @@ input{
     }
 
 
-footer{
-    margin-top:7%;
-    background-color:rgb(0, 0, 0); 
+footer {
+
+    width: 100%;
+    margin-top: 7%;
+    background-color: rgb(0, 0, 0);
     color: white;
+    width: 100%;
 }
 
 
