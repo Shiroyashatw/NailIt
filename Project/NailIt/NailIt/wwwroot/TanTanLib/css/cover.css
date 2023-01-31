@@ -162,8 +162,14 @@ input{
     /* text-decoration-line:none; */
 }
 
+#Bblack:hover {
+    color: white;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+}
+
 .coldot{
-    margin:4% 0%;
+   margin:4% 0%;
 }
 
 .colmix {

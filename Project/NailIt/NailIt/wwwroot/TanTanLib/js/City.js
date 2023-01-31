@@ -4,6 +4,7 @@
         city: [{}],
         region: [{}],
         cityselected: null,
+        namesearch:"",
     }
 })
 
@@ -52,6 +53,11 @@ $("#region").click(function () {
         }
     })
 });
+
+$("#searchButton").click(function () {
+    $("#searchB").prop("href","YiPLib/fliter.html?search=聖誕節")
+    //"/YiPLib/fliter.html?search=mydata2.namesearch"
+})
 
 
 
