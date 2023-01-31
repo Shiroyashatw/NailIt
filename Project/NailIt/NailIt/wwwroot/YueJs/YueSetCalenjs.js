@@ -11,13 +11,14 @@ async function calenSendGet() {
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YuePlanTables/"+nowMember, requestOptions)
+	await fetch("https://localhost:44308/api/YuePlanTables/"+nowMember, requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			calenResult = result;
-			calenSet();
+			
 		})
 		.catch(error => console.log('error', error));
+	await calenSet();
 	loadScript("./YueJs/YueCalen.js", buildCalen, buildCalen);
 }
 

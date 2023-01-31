@@ -175,5 +175,7 @@ function getDoneDetail(i)
 							value="返回"
 						/>
 			</div>`;
+	infoModal.style.width = "30%";
+	infoModal.style.height = "62%";
 	infoModal.showModal();
 }

@@ -174,6 +174,8 @@ function getScoreDetail(i)
 							value="返回"
 						/>
 			</div>`;
+	infoModal.style.width = "30%";
+	infoModal.style.height = "62%";
 	infoModal.showModal();
 }
 //送出comment
@@ -241,7 +243,7 @@ function reserveScoreGo(i)
 							value="返回"
 						/>`;
 	infoModal.style.width = "35%";
-	infoModal.style.height = "55%";
+	infoModal.style.height = "62%";
 	infoModal.showModal();
 }
 //滑動星星小功能

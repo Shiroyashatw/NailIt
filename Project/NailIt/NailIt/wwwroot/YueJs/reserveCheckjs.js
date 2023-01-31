@@ -215,6 +215,8 @@ function getCheckDetail(i,str)
 		reserveCheckYes.style.visibility = "hidden";
 		reserveCheckback.style.right = "3%";
 	}
+	infoModal.style.width = "30%";
+	infoModal.style.height = "62%";
 		infoModal.showModal();
 }
 function closeInfoModal() {
