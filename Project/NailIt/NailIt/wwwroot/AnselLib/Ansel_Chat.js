@@ -7,6 +7,8 @@ var scop = {
     chattingMsgsMenu: null, // for chattingMsg right click menu
     messageid: 0, // 目前開啟context menu的訊息Id
     memberid: 0, // 目前開啟context menu的人員Id
+    systemAccount: "systemAdmin",
+    systemNickname: "系統通知",
     chattingMembers: [], // 有聊天記錄的人員清單, show在#chattingMembers
     currentChatMemId: 0, // 目前聊天對象Id
 }
@@ -255,6 +257,11 @@ var renderTheChatMember = async function () {
 // 渲染對話記錄人員list
 var renderChatMember = async function (chatMembers) {
     for (const chatMember of chatMembers) {
+        // if it's from sysNotic or Notic
+        if (chatMember.memberId == 0) {
+            chatMember.memberAccount == scop.systemAccount;
+            chatMember.memberNickname == scop.systemNickname;
+        }
         let chatMemberHTML = `
         <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="${chatMember.memberId}" onclick="showSingleMemberMsg(this)">
             <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"

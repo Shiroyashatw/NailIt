@@ -115,7 +115,7 @@ namespace NailIt.Controllers.AnselControllers
 
         // Exclude those be placed on blacklist
         // Get list of chatting with members with latest message content, sent time and message unreadCount
-        private List<dynamic> getCattingList(List<AllMessage> messages, int? loginId)
+        private List<dynamic> getChattingList(List<AllMessage> messages, int? loginId)
         {
             var blacklist = _context.MessageBlacklistTables.Where(m => m.BlacklistBuilder == loginId).ToList();
             var removeBlack = (from m in messages
@@ -165,12 +165,11 @@ namespace NailIt.Controllers.AnselControllers
                     });
                 }
             }
-            // join memberTable, get MemberAccount and MemberNickname
-            var joinMember = myMessages.
-                Join(_context.MemberTables,
-                    l => l.memberId,
-                    r => r.MemberId,
-                    (l, r) => new
+            // left join memberTable, get MemberAccount and MemberNickname
+            var leftJoinMember = (from l in myMessages
+                                join member in _context.MemberTables on l.memberId equals member.MemberId into lg
+                                from r in lg.DefaultIfEmpty()
+                select new
                     {
                         l.memberId,
                         l.MessageContent,
@@ -181,7 +180,7 @@ namespace NailIt.Controllers.AnselControllers
                         r.MemberNickname
                     }
                 ).ToList();
-            return ((IEnumerable<dynamic>)joinMember).ToList();
+            return ((IEnumerable<dynamic>)leftJoinMember).ToList();
         }
 
         // GET: api/Chat/GetMembersMsg
@@ -194,7 +193,7 @@ namespace NailIt.Controllers.AnselControllers
 
             // Exclude those be placed on blacklist.
             // Get list of chatting with members with latest message content, sent time and message unreadCount.
-            var myMessages = getCattingList(allMessage, loginId);
+            var myMessages = getChattingList(allMessage, loginId);
 
             return Ok(myMessages.OrderBy(r => r.MessageTime));
         }
@@ -234,7 +233,7 @@ namespace NailIt.Controllers.AnselControllers
             {
                 // Exclude those be placed on blacklist.
                 // Get list of chatting with members with latest message content, sent time and message unreadCount.
-                var myMessages = getCattingList(newMessages, loginId);
+                var myMessages = getChattingList(newMessages, loginId);
                 return Ok(myMessages.OrderBy(r => r.MessageTime));
             }
 
