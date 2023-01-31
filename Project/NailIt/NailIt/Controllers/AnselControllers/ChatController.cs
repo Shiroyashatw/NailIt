@@ -272,9 +272,10 @@ namespace NailIt.Controllers.AnselControllers
                 }
                 await _context.SaveChangesAsync();
                 t.Commit();
+                return Ok(unreadMessage.OrderBy(r => r.MessageTime));
             }
 
-            return Ok(unreadMessage.OrderBy(r => r.MessageTime));
+            return Ok(unreadMessage);
         }
 
         // PUT: api/Chat/PutMsgRevoke/1

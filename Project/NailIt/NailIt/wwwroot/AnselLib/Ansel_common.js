@@ -1,41 +1,85 @@
 ﻿//#region Prototype
+function addHours(date, hours) {
+    date.setHours(date.getHours() + hours);
+    return date;
+}
 // Get date in "YYYY-MM-DD" ex:"2023-01-17"
+String.prototype.localYYYYMMDD = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let dt = addHours(new Date(this), 8);
+    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
+    let day = dt.getDate().toString().padStart(2, "0");
+
+    return `${dt.getFullYear()}-${month}-${day}`
+}
 String.prototype.YYYYMMDD = function () {
     if (this === undefined || this === null) {
         return '';
     }
     let dt = new Date(this);
-    let month = (dt.getMonth() + 1).toString().padStart(2,"0");
-    let day = dt.getDate().toString().padStart(2,"0");
+    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
+    let day = dt.getDate().toString().padStart(2, "0");
 
     return `${dt.getFullYear()}-${month}-${day}`
+}
+String.prototype.localHHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let dt = addHours(new Date(this), 8);
+    let HH = dt.getHours().toString().padStart(2, "0");
+    let mm = dt.getMinutes().toString().padStart(2, "0");
+
+    return `${HH}:${mm}`
 }
 String.prototype.HHmm = function () {
     if (this === undefined || this === null) {
         return '';
     }
     let dt = new Date(this);
-    let HH = dt.getHours().toString().padStart(2,"0");
-    let mm = dt.getMinutes().toString().padStart(2,"0");
+    let HH = dt.getHours().toString().padStart(2, "0");
+    let mm = dt.getMinutes().toString().padStart(2, "0");
 
     return `${HH}:${mm}`
 }
 // Get date in "YYYY-MM-DD" ex:"2023-01-17"
+Date.prototype.localYYYYMMDD = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let dt = addHours(this, 8);
+    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
+    let day = dt.getDate().toString().padStart(2, "0");
+
+    return `${dt.getFullYear()}-${month}-${day}`
+}
 Date.prototype.YYYYMMDD = function () {
     if (this === undefined || this === null) {
         return '';
     }
-    let month = (this.getMonth() + 1).toString().padStart(2,"0");
-    let day = this.getDate().toString().padStart(2,"0");
+    let month = (this.getMonth() + 1).toString().padStart(2, "0");
+    let day = this.getDate().toString().padStart(2, "0");
 
     return `${this.getFullYear()}-${month}-${day}`
+}
+Date.prototype.localHHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let dt = addHours(this, 8);
+    let HH = dt.getHours().toString().padStart(2, "0");
+    let mm = dt.getMinutes().toString().padStart(2, "0");
+
+    return `${HH}:${mm}`
 }
 Date.prototype.HHmm = function () {
     if (this === undefined || this === null) {
         return '';
     }
-    let HH = this.getHours().toString().padStart(2,"0");
-    let mm = this.getMinutes().toString().padStart(2,"0");
+    let HH = this.getHours().toString().padStart(2, "0");
+    let mm = this.getMinutes().toString().padStart(2, "0");
 
     return `${HH}:${mm}`
 }
@@ -50,7 +94,7 @@ Date.prototype.HHmm = function () {
  * @param {string} name innerHTML for option
  * @param {string} value value for option
  */
- function renderSelect(target, data, name, value) {    
+function renderSelect(target, data, name, value) {
     let select = {};
     if (typeof target === 'string') {
         select = document.getElementById(target);
@@ -78,22 +122,22 @@ Date.prototype.HHmm = function () {
  * @param {string} html HTML string
  * @returns 
  */
-function HTMLToText (html) {
+function HTMLToText(html) {
     let divEltment = document.createElement("div");
     divEltment.innerHTML = `<div>${html}</div>`;
     divEltment.childNodes[0].innerHTML = divEltment.childNodes[0].innerHTML.split('<div>').join(' ');
     return divEltment.innerText; // remove space in text
 }
 // Get short version of HTML content. If content is longer than input length, add "..." at the end.
-function shortContent(length,contentHTML) {
-    let contentText =  HTMLToText(contentHTML);
+function shortContent(length, contentHTML) {
+    let contentText = HTMLToText(contentHTML);
     if (contentText.length <= length) {
         return contentText;
     }
-    return contentText.slice(0,length)+"..."
+    return contentText.slice(0, length) + "..."
 }
 // Return first img element of HTML.
-function firstImg (html) {
+function firstImg(html) {
     let divEltment = document.createElement("div");
     divEltment.innerHTML = `<div>${html}</div>`;
     return divEltment.getElementsByTagName("img")[0];
@@ -124,19 +168,19 @@ function firstImg (html) {
 // dataURL(base64) to file, works for any type of url, (http url, dataURL, blobURL, etc...)
 // Return a promise that resolves with a File instance
 // Usage: urlToFile(`data:image/png;base64,iVBORw0KGg...`, 'hear.png','image/png').then( function(file){...get file. }); 
-function urlToFile(url, filename, mimeType){
+function urlToFile(url, filename, mimeType) {
     return (fetch(url)
-        .then(function(res){return res.arrayBuffer();})
-        .then(function(buf){return new File([buf], filename,{type:mimeType});})
+        .then(function (res) { return res.arrayBuffer(); })
+        .then(function (buf) { return new File([buf], filename, { type: mimeType }); })
     );
 }
 // Display file with opening a new tab by file object
-function showFileObject(file){
+function showFileObject(file) {
     const url = URL.createObjectURL(file);
     window.open(url);
 }
 // Download file by file object
-function downloadFileObject(file){
+function downloadFileObject(file) {
     const link = document.createElement('a');
     const url = URL.createObjectURL(file);
     link.href = url;
