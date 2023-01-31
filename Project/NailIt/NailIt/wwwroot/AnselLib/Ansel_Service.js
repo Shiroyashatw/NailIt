@@ -110,8 +110,8 @@ class BlacklistService {
     static postBlacklist(data) {
         return fetchPost(`/api/Blacklist`, data);
     }
-    static deleteBlacklist(builderId, targetId) {
-        return fetchDelete(`/api/Blacklist/${builderId}/${targetId}`);
+    static deleteBlacklist(blackId) {
+        return fetchDelete(`/api/Blacklist/${blackId}`);
     }
 }
 class ChatService {
