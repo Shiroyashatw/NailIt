@@ -53,7 +53,8 @@ var showRevokeMsg = async function () {
     var result = await putMsgRevoke(scop.messageid);
     if (!!result) {
         // update message
-        $(`div[data-messageid='${scop.messageid}']`).children()[0].innerText = "訊息已收回";
+        $(`div[data-messageid='${scop.messageid}']`).prepend(`<span class="rounded px-3 py-2" style="border: 4px solid black;">訊息已收回</span>`);
+        $(`div[data-messageid='${scop.messageid}']`).children()[1].remove( );
     }
 }
 // Showing my conversation with chosen member
@@ -85,9 +86,10 @@ var showSingleMemberMsg = async function (obj) {
             await renderMessage(message);           
         }
         BindingMsgRightMenu($(".myMessage"));
+        // Scroll to buttom of message 
         setTimeout(() => {
             ShowChattingButtom();
-        }, "100")
+        }, "80")
     }
     // call api for unread message (putMsgRead)
     let result2 = await putMsgRead(scop.currentChatMemId);
@@ -133,12 +135,14 @@ var showMyNewImg = async function (obj) {
     if (!!result) {
         // show new message
         await renderMessage(result);
+        BindingMsgRightMenu($(`div[data-messageid="${result.messageId}"]`));
         // update chatting members
         await renderTheChatMember(result);
-        BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one        
+        BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one   
+        // Scroll to buttom of message 
         setTimeout(() => {
             ShowChattingButtom();
-        }, "100")
+        }, "80")
     }
 }
 // Sending message
@@ -166,9 +170,10 @@ var showMyNewMsg = async function () {
         // update chatting members
         await renderTheChatMember(result);
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
+        // Scroll to buttom of message
         setTimeout(() => {
             ShowChattingButtom();
-        }, "100")
+        }, "80")
     }
 }
 var showChatMember = async function () {
@@ -201,7 +206,7 @@ var renderMessage = async function (message) {
         else{
             messageHTML = `
                 <div class="mb-1 d-flex" data-messageid="${message.messageId}">
-                    <span class="bg-secondary rounded px-1 py-1">${message.messageContent}</span>
+                    <span class="bg-secondary rounded mw-100 px-1 py-1">${message.messageContent}</span>
                     <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
                 </div>`;
         }
@@ -220,7 +225,7 @@ var renderMessage = async function (message) {
         else{
             messageHTML = `
                 <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="${message.messageId}">
-                    <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
+                    <span class="rounded mw-100" style="border: 4px solid black;">${message.messageContent}</span>
                     <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
                 </div>`;
         }
@@ -378,6 +383,7 @@ async function elmDataURLToLink(html) {
             if (imgTag.src.startsWith("data")) {
                 let urlImg = document.createElement("img");
                 urlImg.src = apiServer + imageURLs[index];
+                urlImg.classList.add("mw-100");
                 imgTag.before(urlImg);
                 imgTag.remove();
                 index++;
@@ -520,9 +526,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     scop.chattingMembersMenu = chattingMembersMenu;
     scop.chattingMsgsMenu = chattingMsgsMenu;
-
-    // Scroll to buttom of message 
-    // ShowChattingButtom();
 
     //#endregion
 });
