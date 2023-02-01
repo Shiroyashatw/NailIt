@@ -1,4 +1,10 @@
-﻿var ood = new Vue({
+﻿
+async function appll() {
+    await YueloginCheck();
+
+    
+}
+var ood = new Vue({
     el: "#my-appointment",
     data: {
         inglist: [],
@@ -8,9 +14,11 @@
 
     }
 })
+function now3(nowMember) {
+
 $.ajax({
     type: "get",
-    url: "/api/OrderTED/1",
+    url: "/api/OrderTED/"+nowMember,
     success: function (e) {
         
         for (var i = 0; i < e.length; i++) {
@@ -52,6 +60,7 @@ $.ajax({
         }
     }
 })
+}
 function Getorder(e) {
         $("#salonname").text(ood.inglist[(e.id).substr(5, 1)].manicuristSalonName);
         $("#number-ing").text(ood.inglist[(e.id).substr(5, 1)].orderId)

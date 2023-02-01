@@ -5,6 +5,8 @@ var nowDay;
 var mySelectTime;
 var nowMonth;
 async function calenSendGet() {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
@@ -13,13 +15,10 @@ async function calenSendGet() {
 
 	await fetch("https://localhost:44308/api/YuePlanTables/"+nowMember, requestOptions)
 		.then(response => response.text())
-		.then(function (result) {
-			calenResult = result;
-			
-		})
+		.then(result=>calenResult = result)
 		.catch(error => console.log('error', error));
 	await calenSet();
-	loadScript("./YueJs/YueCalen.js", buildCalen, buildCalen);
+	loadScript("../YueJs/YueCalen.js", buildCalen, buildCalen);
 }
 
 function calenSet()

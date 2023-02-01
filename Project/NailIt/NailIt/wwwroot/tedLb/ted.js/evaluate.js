@@ -1,4 +1,5 @@
-﻿var bb = new Vue({
+﻿
+var bb = new Vue({
     el: "#allevaluate",
     data:{
         evaluatelist: [],
@@ -11,9 +12,11 @@
         historyfinlist:[]
 }
 })
+function now4(nowMember) {
+
 $.ajax({
     type: "get",
-    url: "/api/OrderTED/1",
+    url: "/api/OrderTED/" + nowMember,
     success: function (e) {
 
         for (var i = 0; i < e.length; i++) {
@@ -46,6 +49,7 @@ $.ajax({
         }
     }
 })
+}
 function Getevashowdetail(e) {
     var n = e.id.length;
     $("#salonname-evaing").text(bb.evaluatelist[(e.id).substr(7, n - 7)].manicuristSalonName);
@@ -106,9 +110,10 @@ function evainsertbtn(e) {
     }
 }
 //會員本身完成的評論
+function now5(nowMember) {
 $.ajax({
     type: "get",
-    url: "/api/EvaTEDControllers/1",
+    url: "/api/EvaTEDControllers/"+nowMember,
     success: function (e) {
 
         for (var i = 0; i < e.length; i++) {
@@ -144,6 +149,7 @@ $.ajax({
         }
     }
 })
+}
 
 function evafinbtnshow(e) {
     var x = (e.id).substr(10, e.id.length - 10);
@@ -157,9 +163,11 @@ function evafinbtnshow(e) {
     $("#pay-evafin").text('NT$' + bb.evafinlist[x].orderPrice);
     $("#rent-evafin").text('NT$' + bb.evafinlist[x].orderDeposit);
 }
+function now6(nowMember) {
+
 $.ajax({
     type: "get",
-    url: "/api/Commenting/1",
+    url: "/api/Commenting/"+nowMember,
     success: function (e) {
         for (var i = 0; i < e.length; i++) {
             if (e[i].demoSetCover == null) {
@@ -191,9 +199,12 @@ $.ajax({
         }
     }
 })
+}
+function now7(nowMember) {
+
 $.ajax({
     type: "get",
-    url: "/api/commentnotice/1",
+    url: "/api/commentnotice/"+nowMember,
     success: function (e) {
         for (var i = 0; i < e.length; i++) {
             if (e[i].demoSetCover == null) {
@@ -227,6 +238,7 @@ $.ajax({
         }
     }
 })
+}
 function noticeingbtn(e) {
     var x = (e.id).substr(9, e.id.length - 9);
     $("#salonname-noticeing").text(bb.historyinglist[x].manicuristSalonName);
