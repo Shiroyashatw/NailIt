@@ -694,7 +694,7 @@
             font-size: 16px;
             background-color: white;
             opacity: .9;
-            z-index: 9999;
+            z-index: 2;
         }
 
         #navall > div {
@@ -1105,7 +1105,7 @@
                             <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
                             <!--EditModal-->
                             <div class="modal fade" id="EditModal" data-keyboard="false" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1219,7 +1219,7 @@
                             <!--EditModalEnd-->
                             <!--DeleteModal-->
                             <div class="modal fade" id="DeleteModal" data-keyboard="false" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1243,7 +1243,7 @@
                             <!--DeleteModal End-->
                             <!--PostPicModal-->
                             <div class="modal fade" id="PostPicModal" data-keyboard="false" tabindex="-1" aria-labelledby="PostPicModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1774,11 +1774,12 @@
                 EndDate: "",
                 GetCertainDemoKey: "",
                 SearchString: "",
-                InsertCover:"",
+                InsertCover: [{ "demoSetId": GetManicuristID, "demoSetCover": "" }],
             },
             methods: {
                 InsertDemo: function () {
                     this.InsertDemoSet[0].manicuristId = GetManicuristID;
+                    this.InsertCover[0].manicuristId = GetManicuristID;
                     console.log(this.InsertDemoSet[0]);
                     if (this.InsertDemoSet[0].demoSetTag2 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag2 = this.TagStxt;
@@ -1786,7 +1787,6 @@
                     if (this.InsertDemoSet[0].demoSetTag3 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag3 = this.TagTtxt;
                     }
-
 
                     $.ajax({
                         type: "post",
@@ -1797,6 +1797,19 @@
                             window.location = "/YiPLib/NailDesignerEdit.html";
                         }
                     })
+
+                    // $.ajax({
+                    //    type: "post",
+                    //    url: "/api/Demo",
+                    //    contentType: "application/json",
+                    //    data: JSON.stringify(this.InsertCover[0]),
+                    //    success: function () {
+                    //        window.location = "/YiPLib/NailDesignerEdit.html";
+                    //        console.log("sucessDemo");
+                    //    }
+                    //})
+
+
 
                 },
                 Previewing: function () {
@@ -1967,6 +1980,7 @@
             console.log(CoverimgPath);
             $('#Previewphoto').attr('src', CoverimgPath);
             ShowData.PutUpCover[0].demoSetCover = CoverimgPath;
+            ShowData.InsertCover[0].demoSetCover = CoverimgPath;
         }
 
 
