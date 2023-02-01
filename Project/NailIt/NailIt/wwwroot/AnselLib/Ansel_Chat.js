@@ -52,7 +52,7 @@ var showAddBlack = async function () {
     }
 }
 // search member searchChatMember
-var showSearchChatMember = function () {
+var showSearchChatMember = async function () {
     let searchChatMember = $("#searchChatMember").val().trim();
     var searchMembers = scop.chattingMembers;
     if (searchChatMember != "") {
@@ -61,7 +61,10 @@ var showSearchChatMember = function () {
                 || x.memberNickname.toUpperCase().indexOf(searchChatMember.toUpperCase()) > -1);
     }
     $("#chattingMembers").empty();
-    renderChatMember(searchMembers);
+    await renderChatMember(searchMembers);
+    // system notic can't be add in blacklist, so there is a not()
+    BindingMemberRightMenu($(".data-memberid").not("div[data-memberid='0']"));
+
 }
 // Checking for new messages 
 var showNewMsg = function () {
