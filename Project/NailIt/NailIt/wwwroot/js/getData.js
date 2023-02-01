@@ -36,13 +36,17 @@ let Tztoday
 
 // 選擇的項目、訂金
 let ritem
+let ritemName
 let rdep
+
+
 
 // 讀取基本資料 設計師資料 demoset資料 demo資料 再顯示在畫面上
 // 一進畫面就進行讀取
 function getbasicinfo() {
     // 一進畫面就帶入商品ID 進檢舉商品
     $('input[name="ReportItem"]').val(DSETID);
+
     $.ajax({
         url: "https://localhost:44308/api/product/" + DSETID,
         method: 'GET',
@@ -134,6 +138,10 @@ function getReserveDate() {
     // onsole.log(typeof(id)); // string
     $('#reservebtn, .lastMonth, .nextMonth,#Sendbtn').on('click', function () {
         // 讀取的設計師ID傳回設定
+        $('input[name="MemberId"]').val();
+        if ($('input[name="MemberId"]').val() == '') {
+            alert("請先登入會員再進行預約")
+        }
         MID = $("input[name='ManicuristId']").attr('value')
         $.ajax({
             url: `https://localhost:44308/api/product/${MID}/reserve`,
@@ -307,7 +315,7 @@ function postOrder() {
 
 // 讀取設計師資料
 function getManicuristData() {
-    MID = url.searchParams.get('MID');
+    MID = url.searchParams.get('id');
     $.ajax({
         url: `https://localhost:44308/api/product/MID/${MID}`,
         method: "GET",
@@ -458,6 +466,9 @@ function OrderDetail() {
         let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
         let rremovec = $('select[name="OrderRemovalC"]').find("option:selected").text()
         ritem = $('select[name="OrderItem"]').find("option:selected").text()
+        ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
+        console.log(ritem)
+        console.log(ritemName)
         let rprice = $('input[name="OrderPrice"]').val()
         rdep = $('input[name="OrderDeposit"]').val()
         $('.rescheck').append(`
@@ -487,8 +498,13 @@ function postCash() {
     // TotalAmount 付款金額
     // TradeDesc 商品描述
     // ItemName 商品名稱
-    // 上面五個須給值
-    $('input[name="ItemName"]').val(ritem);
+    // 上面五個須給值ritemName
+    if (ritem == "固定造型") {
+        $('input[name="ItemName"]').val(ritemName);
+    }
+    else {
+        $('input[name="ItemName"]').val(ritem);
+    }
     let itemName = $('input[name="ItemName"]').val();
 
     // console.log(itemName)
@@ -496,7 +512,7 @@ function postCash() {
     let MerchantTradeDate = $('input[name="MerchantTradeDate"]').val();
 
     //console.log(Tzdatetime)
-     
+
     $('input[name="MerchantTradeNo"]').val(`Nailit${Tzymd + Tztime}`);
     let MerchantTradeNo = $('input[name="MerchantTradeNo"]').val();
 
@@ -507,7 +523,7 @@ function postCash() {
     // let OrderResultURL = $('input[name="OrderResultURL"]').val();
     $('input[name="TotalAmount"]').val(rdep);
     let TotalAmount = $('input[name="TotalAmount"]').val();
-    
+
     let TradeDesc = $('input[name="TradeDesc"]').val();
 
     // CheckMacValue 檢查碼生成 上面參數都正確會傳放入 val()進去
@@ -517,14 +533,14 @@ function postCash() {
     y = y.replace("%20", "+")
     console.log(y)
     y = y.toLowerCase();
-    
+
     var hash = CryptoJS.SHA256(y).toString();
 
     hash = hash.toUpperCase()
     console.log(hash)
     $('input[name="CheckMacValue"]').val(hash)
 
-    //$('#cashform').submit();
+    $('#cashform').submit();
     // const apiURL = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
     // const data = { 
@@ -552,5 +568,6 @@ function postCash() {
     // let z = "HashKey%3dpwFHCqoQZGmho4w6%26ChoosePayment%3dCredit%26EncryptType%3d1%26ItemName%3d%e7%b9%bd%e7%b4%9b%26MerchantID%3d3002607%26MerchantTradeDate%3d2023%2f01%2f27+11%3a41%3a12%26MerchantTradeNo%3dDX20230127114112152a%26PaymentType%3daio%26ReturnURL%3dhttps%3a%2f%2fhoyo.idv.tw%2f%3fa%3dTools%2fEcPay%26b%3dReturnURL%26TotalAmount%3d1000%26TradeDesc%3d%e7%be%8e%e7%94%b2%26HashIV%3dEkRm7iFT261dpevs";
     // %20 應該轉換成 +
 }
+
 
 

@@ -25,6 +25,8 @@ namespace NailIt.Controllers.DogeControllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts(int id)
         {
+            var res = _db.DemoSetTables.Find(id);
+            if (res == null) return NotFound();
             var query = from o in _db.ManicuristTables
                             // 利用 ManicuristId 設計師ID 兩表join
                         join demoset in _db.DemoSetTables
@@ -58,7 +60,7 @@ namespace NailIt.Controllers.DogeControllers
             _db.OrderTables.Add(orderTable);
             await _db.SaveChangesAsync();
 
-            var res = _db.OrderTables.FirstOrDefault(r => r.PlanId == orderTable.PlanId );
+            var res = _db.OrderTables.FirstOrDefault(r => r.PlanId == orderTable.PlanId && r.OrderOrderTime == orderTable.OrderOrderTime );
             plan.OrderId = res.OrderId;
             await _db.SaveChangesAsync();
             return Content("OK");
