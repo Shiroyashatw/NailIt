@@ -261,11 +261,10 @@
                 var myday = "";
                 var year = today.getFullYear();
                 var month = today.getMonth() + 1;
-                var day = today.getDate();
-                if (month < 10)
-                    myday = year + "-" + "0" + month + "-" + day;
-                else
-                    myday = year + "-" + month + "-" + day;
+                var day = today.getDate() >= 10 ? today.getDate().toString() : "0"+today.getDate()
+                if (month < 10) { myday = year + "-" + "0" + month + "-" + day; }
+                else { myday = year + "-" + month + "-" + day; }
+                
                 if (dateString < myday) {
                     dateEL.disabled = "disabled";
                     dateEL.style.backgroundColor = "#F0F0F0";
