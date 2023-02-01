@@ -20,7 +20,10 @@ namespace NailIt.Controllers.YueyueControllers
         {
             _context = context;
         }
-        // PUT: api/Member   //登入用
+
+
+
+        // PUT: api/YueMember   //登入用
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
         public async Task<string> PutMemberTable(string[] ACandPW)
@@ -44,7 +47,7 @@ namespace NailIt.Controllers.YueyueControllers
                 Guid g = Guid.NewGuid();
                 _context.Entry(nowUse).State = EntityState.Modified;
                 nowUse.MemberLogincredit = g;
-                HttpContext.Session.SetString("loginKey", g.ToString());
+                HttpContext.Session.SetString("NailLogin", g.ToString());
                 await _context.SaveChangesAsync();
                 return "OK";
             }

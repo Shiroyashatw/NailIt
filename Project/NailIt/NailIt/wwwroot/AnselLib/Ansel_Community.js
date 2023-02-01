@@ -3,7 +3,7 @@
 
 var scop = {
     loginId: 0, // 目前登入者Id
-    loginName: "", // 目前登入者名字
+    loginAccount: "", // 目前登入者帳號
     loginNickname: "", // 目前登入者暱稱, 給新增留言使用
     articleCodeList: [], // 版別清單
     reportCodeList: [], // 檢舉項目清單
@@ -20,6 +20,18 @@ var scop = {
 
 //#region Function
 //#region Action
+// Edit article upload image(jpg/png) file change event
+// insert image into draft 
+var showInsertImage = async function (obj) {
+    var file = $(obj).prop('files')[0];
+    var reader = new FileReader();
+
+    reader.addEventListener("load", function () {
+        document.execCommand('insertImage', false, reader.result);
+    }, false);
+
+    if (file) reader.readAsDataURL(file);
+}
 var showSaveArticle = async function () {
     if ($("#editModalArticleTitle").val().trim() == "" || $("#editModalArticleContent").html().trim().replace("<div>", "").replace("</div>", "").replace("<br>", "") == "") {
         alert("貼文標題與貼文內容皆為必填!");
@@ -31,7 +43,7 @@ var showSaveArticle = async function () {
         article.articleTitle = $("#editModalArticleTitle").val().trim();
         // save image, return url
         let content = $("#editModalArticleContent").html();
-        content = await dataURLToLink(content);
+        content = await elmDataURLToLink(content);
         article.articleContent = content;
         article.articleBuildTime = new Date();
         article.articleLastEdit = new Date();
@@ -50,7 +62,7 @@ var showSaveArticle = async function () {
         article.articleTitle = $("#editModalArticleTitle").val();
         // save image, return url
         let content = $("#editModalArticleContent").html()
-        content = await dataURLToLink(content);
+        content = await elmDataURLToLink(content);
         article.articleContent = content;
         article.articleLastEdit = new Date();
         // call api
@@ -71,9 +83,10 @@ var showEditArticleModal = function () {
     $("#editArticleModal").modal("show");
 }
 var showNewArticleModal = function () {
+    if (!checkLogin()) return;
     scop.articleMode = "new";
     scop.newArticle = new ArticleTable({
-        articleBoardC: scop.articleCode,
+        articleBoardC: scop.articleCode == "My" ? "L0" : scop.articleCode,
         articleAuthor: scop.loginId,
     });
     $("#editArticleModal").modal("show");
@@ -130,6 +143,7 @@ var showReportAction = async function () {
 }
 // Show report reason list, before confirm report
 var showReportModal = function (obj) {
+    if (!checkLogin()) return;
     // fade articleModal
     $("#articleModal").css("z-index", "1040");
     let replyId = $(obj).parent().parent().parent().parent().data("replyid");
@@ -158,6 +172,7 @@ var showDeleteReply = async function () {
 }
 // Show the new article in articles
 var showNewReply = async function () {
+    if (!checkLogin()) return;
     let reply = new ReplyTable({
         articleId: scop.articleId,
         memberId: scop.loginId,
@@ -250,6 +265,7 @@ var showDropdown = function (obj) {
 }
 // show reply like status change
 var showReplyLikeToggle = async function (likeObj) {
+    if (!checkLogin()) return;
     // get the reply (like status)
     let replyId = $(likeObj).parent().parent().data("replyid")
     let reply = scop.replies.find(r => r.reply.replyId == replyId);
@@ -285,6 +301,7 @@ var showReplyLikeToggle = async function (likeObj) {
 }
 // show article like status change
 var showArticleLikeToggle = async function (likeObj) {
+    if (!checkLogin()) return;
     // get like status
     let article = currentArticle();
     // build a like with articleId and memberId:scop.loginId
@@ -333,6 +350,11 @@ var showModal = async function (articleId) {
 }
 // search button show articles
 var showSearch = async function () {
+    // Check if user Login
+    if ($("#mainTitle").html() == "我的") if (!checkLogin()) {
+        $("#order").val(($("#order").val() == "latest") ? "like" : "latest");
+        return;
+    }
     scop.page = 0;
     $("#btnMoreArticle").removeAttr("disabled");
     // show articles
@@ -346,6 +368,8 @@ var showSearch = async function () {
 }
 // load more 10 articles
 var showMoreArticle = async function () {
+    // Check if user Login
+    if ($("#mainTitle").html() == "我的") if (!checkLogin()) return;
     scop.page++;
     // call and show 10 more articles
     let moreArticles = [];
@@ -355,8 +379,12 @@ var showMoreArticle = async function () {
 }
 // show articles of one person (my or other)
 var showMyMain = async function (own) {
+    if (own) if (!checkLogin()) return;
     scop.articleCode = "My";
     scop.page = 0;
+    // initial search condition
+    $('#searchInput').val("");
+    $('#order').val("latest");
     // update main area
     if (own) {
         $("#mainTitle").html("我的");
@@ -365,7 +393,8 @@ var showMyMain = async function (own) {
     $("#memberInfo").children().show();
     $("#btnMoreArticle").removeAttr("disabled");
     await getMyArticles();
-    $("#avatar").addClass("d-flex align-items-center");
+    $("#avatar").addClass("d-flex");
+    $("#avatar").children()[0].innerText = scop.articles.member.memberAccount[0];
     $("#memberNames").children()[0].innerText = scop.articles.member.memberNickname;
     $("#memberNames").children()[1].innerText = scop.articles.member.memberAccount;
     $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
@@ -375,12 +404,15 @@ var showMyMain = async function (own) {
 var showMain = async function (code, name) {
     scop.articleCode = code;
     scop.page = 0;
+    // initial search condition
+    $('#searchInput').val("");
+    $('#order').val("latest");
     // update main area
     $("#mainTitle").html(name);
     $("#mainTitle").show();
     $("#memberInfo").children().hide();
     $("#btnMoreArticle").removeAttr("disabled");
-    $("#avatar").removeClass("d-flex align-items-center");
+    $("#avatar").removeClass("d-flex");
     // show articles
     await getArticles();
     renderArticles(scop.articles);
@@ -673,8 +705,16 @@ var getArticles = async function () {
 }
 //#endregion
 
+// Check if login ?
+var checkLogin = function () {
+    if (scop.loginId == 0) {
+        alert("請先登入!");
+        return false;
+    }
+    return true;
+}
 // Save dataURL image. Replace image src dataURL to url link.
-async function dataURLToLink(html) {
+async function elmDataURLToLink(html) {
     let divEltment = document.createElement("div");
     divEltment.innerHTML = `<div>${html}</div>`;
     let imgTags = divEltment.getElementsByTagName("img");
@@ -701,7 +741,6 @@ async function dataURLToLink(html) {
         // call api save image, return url
         let result = await uploadImage(formdata);
         if (!!result) {
-            console.log(result);
             imageURLs = result;
         }
         // html <img> change base64 to backend link.
@@ -718,6 +757,7 @@ async function dataURLToLink(html) {
 
     return divEltment.childNodes[0].innerHTML;
 }
+// Get current article info
 var currentArticle = function () {
     let articles = scop.articles;
     if (scop.articles.reaultArticles != undefined) {
@@ -752,6 +792,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     else renderReport(); // Render report reason options
 
     //#region Event Binding
+    // Mousedown insert image at article editor. Don't preventDefault focus, or upload file can't find the plase to insert. 
+    // Don't use onclick, focus already set on mouse down.
+    $("#btnInsertImg").on("mousedown", function (e) {
+        document.getElementById('editArtiInsertImg').click();
+        e.preventDefault();
+    })
     // While report modal hide, show article Modal will come up.
     $("#reportModal").on("hide.bs.modal", function (e) {
         $("#articleModal").css("z-index", "1050");
@@ -829,10 +875,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             $("#newArtiCodeList").attr('disabled', 'disabled');
             $("#articleModal").modal("hide");
             article = currentArticle().article;
+            $("#newArtiCodeList").val(article.articleCode); //選擇看板
+        } else {
+            $("#newArtiCodeList").val(article.articleBoardC); //選擇看板
         }
+        $("#editModalAuthorAvatar").children()[0].innerText = scop.loginAccount[0];
         $("#editModalAuthor").children()[0].innerText = scop.loginNickname;
         $("#editModalAuthor").children()[1].innerText = scop.loginAccount;
-        $("#newArtiCodeList").val(scop.articleCode);
         $("#editModalArticleTitle").val(article.articleTitle);
         $("#editModalArticleContent").html(article.articleContent);
     });
@@ -852,6 +901,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     $("#articleModal").on("show.bs.modal", function (e) {
         let article = currentArticle();
 
+        $("#ModalAuthorAvatar").children()[0].innerText = article.memberAccount[0];
         $("#ModalAuthor").children()[0].innerText = article.memberNickname;
         $("#ModalAuthor").children()[1].innerText = article.memberAccount;
 
@@ -859,7 +909,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         else $("#ModelArticleLike").css("color", "rgb(108, 117, 125)");
         $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
         $("#ModalArticleTitle").children()[0].innerText = article.article.articleTitle;
-        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.YYYYMMDD();
+        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.localYYYYMMDD();
         if (article.article.articleLastEdit != article.article.articleBuildTime)
             $("#ModalArticleTitle").children()[1].innerText += "(已編輯)";
         $("#ModalArticleContent").html(article.article.articleContent);

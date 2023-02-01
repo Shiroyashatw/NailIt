@@ -153,7 +153,7 @@
                             </div>
                         </div>
                         <!-- 2通知------------------------------------------------------------------------------- -->
-                        <div id="sysmes" class="tabcontent" >
+                        <div id="sysmes" class="tabcontent" style="display:none" >
                             <b id="rigtil">後臺管理 ＞ <u>系統通知</u></b>
                             <!-- 通知條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
@@ -164,9 +164,9 @@
                                     <div class="d-flex align-items-start flex-column">
                                         <div class="d-flex align-items-center justify-content-start">
                                             <p class="my-0">通知時間：</p>
-                                            <input id="datestart" type="date" value="">
+                                            <input id="noticedatestart" type="date" >
                                             <b class="mx-4">-</b>
-                                            <input id="datestart" type="date" value="">
+                                            <input id="noticedateend" type="date" >
                                         </div>
                                         <div class="my-4 d-flex align-items-center  justify-content-start">
                                             <div class="d-flex align-items-center  justify-content-start">
@@ -175,10 +175,11 @@
                                                 </div>
                                                 <!--0只對會員，1只對美甲師，2對所有用戶。-->
                                                 <div>
-                                                    <select name="type" style="width: 130px;height:30px;">
-                                                        <option value="" selected>請選擇對象</option>
+                                                    <select id="noticemem" name="type" style="width: 130px;height:30px;">
+                                                        <option value="3" selected>請選擇對象</option>
                                                         <option value="0">一般會員</option>
                                                         <option value="1">店家／設計師</option>
+                                                        <option value="2">全體</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -187,8 +188,8 @@
                                                     <p class="my-0">通知狀態：</p>
                                                 </div>
                                                 <div>
-                                                    <select name="type" style="width: 130px;height:30px;">
-                                                        <option value="" selected>請選擇狀態</option>
+                                                    <select id="noticestatus"  name="type" style="width: 130px;height:30px;">
+                                                        <option value="NOPE" selected>請選擇狀態</option>
                                                         <option value="0">未通知</option>
                                                         <option value="1">已通知</option>
                                                     </select>
@@ -198,7 +199,7 @@
                                     </div>
                                 </div>
                                 <div class="mr-1 d-flex justify-content-end align-items-center">
-                                    <button class="serbut">查詢</button>
+                                    <button class="serbut"  onclick="selnotice()">查詢</button>
                                 </div>
                             </div>
 
@@ -251,8 +252,8 @@
                             </div>
                         </div>
                         <!-- 3訂單------------------------------------------------------------------------------- -->
-                        <div id="order" class="tabcontent" style="display:none">
-                            <b id="rigtil">後臺管理 ＞ 訂單管理</b>
+                        <div id="order" class="tabcontent"  style="display:none">
+                            <b id="rigtil">後臺管理 ＞<u>訂單管理</u></b>
                             <!-- 訂單條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
                                 <div class="d-flex align-items-start justify-content-start">
@@ -266,7 +267,7 @@
                                                     <p class="my-0">訂單編號：</p>
                                                 </div>
                                                 <div>
-                                                    <input type="text" class="searchTerm" style="width:100%;"
+                                                    <input id="orderId"  type="text" class="searchTerm" style="width:100%;"
                                                            placeholder="請輸入訂單編號">
                                                 </div>
                                             </div>
@@ -275,8 +276,8 @@
                                                     <p class="my-0">訂單狀態：</p>
                                                 </div>
                                                 <div>
-                                                    <select name="type" style="width:130px;height:30px;">
-                                                        <option value="" selected>請選擇狀態</option>
+                                                    <select id="orderstate" name="type" style="width:130px;height:30px;">
+                                                        <option value="AA" selected>請選擇狀態</option>
                                                         <option value="A0">預約中</option>
                                                         <option value="A1">已確認</option>
                                                         <option value="A2">設計師完成</option>
@@ -291,28 +292,28 @@
                                         <div>
                                             <div class="my-4 d-flex align-items-center justify-content-start">
                                                 <p class="my-0">訂單時間：</p>
-                                                <input id="datestart" type="date" value="">
+                                                <input id="orderdatestart" type="date" value="">
                                                 <b class="mx-4">-</b>
-                                                <input id="datestart" type="date" value="">
+                                                <input id="orderdateend" type="date" value="">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mr-1 d-flex justify-content-end align-items-center">
-                                    <button class="serbut">查詢</button>
+                                    <button class="serbut"   onclick="selorder()">查詢</button>
                                 </div>
                             </div>
                             <!-- 訂單項目標籤+上下頁------------------------------------------------------------------------------------------- -->
                             <div id="tabtitle" class="py-2 my-3 d-flex justify-content-between align-items-center">
                                 <div>
-                                    <b class="my-0 ml-2">通知項目</b>
+                                    <b class="my-0 ml-2">訂單項目</b>
                                 </div>
                                 <div id="infopage" class="d-flex align-items-center justify-content-end">
                                     <p class="my-0 mr-2">共計</p>
-                                    <p class="my-0 mr-2">2個項</p>
+                                    <p class="my-0 mr-2">{{ordernum}}個項</p>
                                     <p class="my-0 mr-1">頁數</p>
                                     <input class=" my-1 mr-1"  name="" id="" style="width:10%;height:100%;">
-                                    <p class="my-0 mr-2">/ 1 </p>
+                                    <p class="my-0 mr-2">/ {{orderpage}} </p>
                                     <a class="mr-2" href="">上一頁</a>
                                     <a class="mr-1" href="">下一頁</a>
                                 </div>
@@ -322,34 +323,27 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th scope="col">序號</th>
+                                            
                                             <th scope="col">訂單編號</th>
                                             <th scope="col">訂單建立日期</th>
                                             <th scope="col">通知狀態</th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody v-for="(item,key) in order">
                                         <tr>
-                                            <th scope="row">1</th>
-                                            <td>11109010002</td>
-                                            <td>2022-09-01 17:05</td>
-                                            <td>已完成</td>
-                                            <td><button data-toggle="modal" data-target="#orderModal">查 閱</button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>11109010001</td>
-                                            <td>2022-09-01 13:35</td>
-                                            <td>進行中</td>
-                                            <td><button data-toggle="modal" data-target="#orderModal">查 閱</button></td>
+                                            <th scope="row">{{order[key].orderId}}</th>
+                                            
+                                            <td>{{order[key].orderOrderTime}}</td>
+                                            <td>{{order[key].orderStateName}}</td>
+                                            <td><button onclick="revieworder(this)" data-toggle="modal" data-target="#orderModal" v-bind:value="order[key].orderId">查 閱</button></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <!-- 4會員管理------------------------------------------------------------------------------- -->
-                        <div id="member" class="tabcontent" style="display:none">
+                        <div id="member" class="tabcontent">
                             <b id="rigtil">後臺管理 ＞ 會員管理</b>
                             <!-- 會員條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
@@ -376,7 +370,7 @@
                                                     <select name="type" style="width: 130px;height:30px;">
                                                         <option value="" selected>請選擇類型</option>
                                                         <option value="0">一般會員</option>
-                                                        <option value="1">店家／設計師</option>
+                                                        <option value="1">店家／美甲師</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -385,8 +379,8 @@
                                                 <div>
                                                     <select name="type" style="width:130px;height:30px;">
                                                         <option value="" selected>請選擇狀態</option>
-                                                        <option value="0">使用</option>
-                                                        <option value="1">停用</option>
+                                                        <option value="0">使用中</option>
+                                                        <option value="1">已停權</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -404,10 +398,10 @@
                                 </div>
                                 <div id="infopage" class="d-flex align-items-center justify-content-end">
                                     <p class="my-0 mr-2">共計</p>
-                                    <p class="my-0 mr-2">2個項</p>
+                                    <p class="my-0 mr-2">{{membernum}}個項</p>
                                     <p class="my-0 mr-1">頁數</p>
                                     <input class=" my-1 mr-1" name="" id="" style="width:10%;height:100%;">
-                                    <p class="my-0 mr-2">/ 1 </p>
+                                    <p class="my-0 mr-2">/ {{memberpage}} </p>
                                     <a class="mr-2" href="">上一頁</a>
                                     <a class="mr-1" href="">下一頁</a>
                                 </div>
@@ -425,22 +419,14 @@
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody v-for="(item,key) in member">
                                         <tr>
-                                            <th scope="row">1</th>
-                                            <th scope="col">Tsia</th>
-                                            <th scope="col">蔡依林</th>
-                                            <th scope="col">一般會員</th>
-                                            <th scope="col">會員狀態</th>
-                                            <td><button data-toggle="modal" data-target="#memberModal">查 閱</button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <th scope="col">Tsia</th>
-                                            <th scope="col">蔡依林</th>
-                                            <th scope="col">一般會員</th>
-                                            <th scope="col">會員狀態</th>
-                                            <td><button data-toggle="modal" data-target="#memberModal">查 閱</button></td>
+                                            <th scope="row">{{member[key].memberId}}</th>
+                                            <th scope="col">{{member[key].memberAccount}}</th>
+                                            <th scope="col">{{member[key].memberName}}</th>
+                                            <th scope="col">{{member[key].memberManicurist}}</th>
+                                            <th scope="col">{{member[key].memberReportpoint}}</th>
+                                            <td><button onclick="reviewmem(this)" data-toggle="modal" data-target="#memberModal" v-bind:value="member[key].memberId">查 閱</button></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -693,24 +679,25 @@
                         </button>
                     </div>
                     <div class="modal-body py-2">
-                        <b>訂單編號：</b>
+                        <b>訂單編號：{{oneorder[0].planTime}}</b>
                         <hr>
-                        <p>訂單日期：</p>
-                        <p>客戶名稱：</p>
-                        <p>店家/設計師：</p>
-                        <p>行程編號：</p>
-                        <p>預估價格：</p>
-                        <p>預付訂金：</p>
-                        <p>預約部位：</p>
-                        <p>是否卸甲：</p>
-                        <p>項目：</p>
-                        <p>預約日期：</p>
-                        <p>接單日期：</p>
-                        <p>訂單完成日期：</p>
-                        <p>狀態：</p>
+                        <p>訂單日期：{{oneorder[0].orderOrderTime}}</p>
+                        <p>客戶名稱：{{oneorder[0].memberId}} {{oneorder[0].memberName}}</p>
+                        <p>店家/設計師：{{oneorder[0].manicuristId}} {{oneorder[0].manicuristName}}</p>
+                        <p>行程編號：{{oneorder[0].planId}} {{oneorder[0].planTime}}</p>
+                        <p>預估價格：{{oneorder[0].orderPrice}}</p>
+                        <p>預付訂金：{{oneorder[0].orderDeposit}}</p>
+                        <p>預約部位：{{oneorder[0].orderPartC}} {{oneorder[0].partCodeName}}</p>
+                        <p>卸甲：{{oneorder[0].orderRemovalC}} {{oneorder[0].removalRemovalC}}</p>
+                        <p>項目：{{oneorder[0].orderItem}} {{oneorder[0].orderItemName}}</p>
+                        <p>訂單預約日期：{{oneorder[0].orderOrderTime}}</p>
+                        <p>訂單取消日期：{{oneorder[0].orderCancelTime}}</p>
+                        <p>訂單確認日期：{{oneorder[0].orderDoneTime}}</p>
+                        <p>訂單完成日期：{{oneorder[0].orderCompleteTime}}</p>
+                        <p>狀態：{{oneorder[0].orderStateC}} {{oneorder[0].orderStateName}}</p>
                     </div>
                     <div class="p-3 d-flex justify-content-end">
-                        <button type="button" class="mycancel">關閉</button>
+                        <button type="button" class="mycancel"  data-dismiss="modal">關閉</button>
                     </div>
 
                 </div>
@@ -726,23 +713,23 @@
                         </button>
                     </div>
                     <div class="modal-body py-2">
-                        <b>會員編號：1</b>
+                        <b>會員編號：{{onemember[0].memberId}}</b>
                         <hr>
-                        <p>會員帳號：Tsia</p>
-                        <p>會員姓名：蔡依林</p>
-                        <p>會員暱稱：Tsia</p>
-                        <p>性別：女</p>
-                        <p>生日：1990/01/18</p>
-                        <p>Email：Tsia@gmail.com</p>
-                        <p>登入憑證：已驗證</p>
-                        <p>檢舉狀態：已停權</p>
-                        <p>會員暱稱：Tsia</p>
-                        <p>檢舉點數：20</p>
-                        <p>檢舉點數：</p>
-                        <p class="mb-0">0001、0012、0113、2014</p>
+                        <p>會員帳號：{{onemember[0].memberAccount}}</p>
+                        <p>會員姓名：{{onemember[0].memberName}}</p>
+                        <p>會員暱稱：{{onemember[0].memberNickname}}</p>
+                        <p>性別：{{onemember[0].memberGender}}</p>
+                        <p>生日：{{onemember[0].memberBirth}}</p>
+                        <p>電話：{{onemember[0].memberPhone}}</p>
+                        <p>Email：{{onemember[0].memberEmail}}</p>
+                        <p>會員類型：{{onemember[0].memberManicurist}}</p>
+                        <p>檢舉狀態：{{onemember[0].memberStatus}}</p>
+                        <p>檢舉點數：{{onemember[0].memberReportpoint}}</p>
+                        <p>檢舉編號：{{onemember[0].memberReportId}}</p>
+                        <!--<p class="mb-0"></p>-->
                     </div>
                     <div class="p-3 d-flex justify-content-end">
-                        <button type="button" class="mycancel">關閉</button>
+                        <button type="button" class="mycancel" data-dismiss="modal">關閉</button>
                     </div>
                 </div>
             </div>

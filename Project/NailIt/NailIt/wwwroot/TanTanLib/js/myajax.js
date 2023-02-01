@@ -2,7 +2,7 @@
 var mydata = new Vue({
     el: "#mydata",
     data: {
-        //審核
+        //1.審核-----------------------------------------------------------------------------------------------------------------------------------------------------
         report: [{}],
         //[{"reportId":1,"reportBuilder":1,"reportTarget":2,"reportItem":111012801,"reportPlaceC":"D3","reportReasonC":"G2","reportContent":"邪惡","reportBuildTime":"2023-01-18 20:28","reportCheckTime":"","managerId":null,"reportResult":null,"codeUseIn":"D3","codeRepresent":"設計師主頁","memberName":"田美麗","managerName":null}]
         reportput: [{ "reportResult": true, "reportId": "", "reportCheckTime": "", "managerId": "1" }],
@@ -12,7 +12,7 @@ var mydata = new Vue({
         syscode: [{}],
         reportmodel: "",
         AAA: [],
-        //通知
+        //2.通知-----------------------------------------------------------------------------------------------------------------------------------------------------
         notice: [{}],
         //{ "noticeId": 1, "noticeScope": 2, "noticeTitle": "聖誕節快樂！", "noticeContent": "祝全體會員聖誕節快樂！", "noticeBuildTime": "2023-01-25T11:44:59.453", "noticePushTime": "2023-01-25T11:44:59.453", "noticeState": true },
         onenotice: [{}],
@@ -35,12 +35,203 @@ var mydata = new Vue({
         nocheckmember: [{}],
         //美甲師會員有哪些 member_ID member_Manicurist == 1是開通 
         checkmember: [{}],
+        //篩選
+        noticeget: [{ "NdataS": "1900-01-01", "NdataE": "3000-01-01", "NoiceMem": 3, "NoiceState": true, "NoiceStateN": "NOPE" }],
+        //3.訂單-----------------------------------------------------------------------------------------------------------------------------------------------------
+        order: [{}],
+        //[{
+        //    "orderId": 1, "memberId": 1, "manicuristId": 2, "planId": 1, "orderPrice": 2500.0000, "orderDeposit": 200.0000,
+        //    "orderPartC": "C1", "orderRemovalC": "B2", "orderType": true, "orderItem": 1, "orderItemName": "繽紛雪人",
+        //    "orderOrderTime": "2023-01-17T00:00:00", "orderAcceptTime": null, "orderDoneTime": null, "orderCompleteTime": null,
+        //    "orderStateC": "A0", "orderCancelTime": null
+        //},
+        ordernum: "", orderpage: "",
+        ordermodel: "",
+        oneorder: [{}],
+        //篩選
+        orderget: [{ "OdataS": "1900-01-01", "OdataE": "3000-01-01", "orderStateC": "AA", "orderId": 0 }],
+        //4.會員-----------------------------------------------------------------------------------------------------------------------------------------------------
+        member: [{}],
+        membernum: "", memberpage: "",
+        membermodel: "",
+        onemember: [{}],
 
     },
 
 
 })
 
+////4.會員--------------------------------------------------------------------------------------------------------------------------------
+//GET會員資料表
+$.ajax({
+    type: "get",
+    url: "/api/MemberTables2",
+    success: function (e) {
+        mydata.member = e;
+        console.log(e);
+        //是否是店家或美甲師
+        for (var i = 0; i < mydata.member.length; i++) {
+            if (mydata.member[i].memberManicurist == false) {
+                mydata.member[i].memberManicurist = "一般會員"
+            } else { mydata.member[i].memberManicurist = "店家／美甲師" }
+        }
+
+        //是否已停權
+        for (var i = 0; i < mydata.member.length; i++) {
+            if (mydata.member[i].memberReportpoint >= 20) {
+                mydata.member[i].memberReportpoint = "已停權"
+            } else { mydata.member[i].memberReportpoint = "使用中" }
+        }
+        //訂單總項目 跟 訂單頁數
+        mydata.membernum = e.length;
+        if (mydata.membernum >= 5) {
+            mydata.memberpage = Math.ceil(mydata.membernum / 5)
+        } else {
+            mydata.memberpage = 1
+        };
+    }
+})
+
+//GET單一會員資料表
+function reviewmem(e) {
+    mydata.membermodel = e.value;
+    console.log(mydata.membermodel);
+    $.ajax({
+        type: "get",
+        url: "/api/MemberTables2/" + mydata.membermodel,
+        success: function (e) {
+            mydata.onemember = e;
+            console.log(e);
+            //是否已停權
+            if (mydata.onemember[0].memberReportpoint >= 20) {
+                mydata.onemember[0].memberBan = "已停權"
+            } else if (mydata.onemember[0].memberReportpoint < 20) {
+                mydata.member[0].memberBan = "使用中"
+            }
+            if (mydata.onemember[0].memberReportId != "－") {
+                var y = "";
+                for (x in mydata.onemember) {
+                    y += mydata.onemember[x].memberReportId + "、";
+                    console.log(mydata.onemember[x].memberReportId);
+                }
+                var str = y.substring(0, y.length-1)
+                mydata.onemember[0].memberReportId = str;
+                console.log(mydata.onemember[0].memberReportId);
+                
+
+            }
+        }
+    })
+}
+
+
+////3.訂單--------------------------------------------------------------------------------------------------------------------------------
+//GET訂單資料表
+$.ajax({
+    type: "get",
+    url: "/api/OrderTables2",
+    success: function (e) {
+        mydata.order = e;
+        console.log(e);
+        //訂單總項目 跟 訂單頁數
+        mydata.ordernum = e.length;
+        if (mydata.ordernum >= 5) {
+            mydata.orderpage = Math.ceil(mydata.ordernum / 5)
+        } else {
+            mydata.orderpage = 1
+        };
+    }
+})
+
+//GET單一訂單資料表
+function revieworder(e) {
+    mydata.ordermodel = e.value;
+    console.log(mydata.ordermodel);
+
+    $.ajax({
+        type: "get",
+        url: "/api/OrderTables2/" + mydata.ordermodel,
+        success: function (e) {
+            mydata.oneorder = e;
+            console.log(e);
+
+        }
+    })
+}
+
+//GET訂單篩選
+function selorder() {
+    // orderget: [{ "OdataS": "1900-01-01", "OdataE": "3000-01-01", "orderStateC": "AA", "orderId": 0 }]
+    var OdataS = $("#orderdatestart").val();
+    var OdataE = $("#orderdateend").val();
+    //value="0">一般會員,value="1">店家／設計師,value="2">全體
+    var orderStateC = $("#orderstate").val();
+    //value="3" selected>請選擇狀態,value="0">未通知,value="1">已通知
+    var orderId = $("#orderId").val();
+    console.log(OdataS);
+    console.log(OdataE);
+    console.log(orderStateC);
+    console.log(orderId);
+
+    //開始時間
+    if (OdataS == "") {
+        mydata.orderget[0].OdataS = "1900-01-01";
+    } else {
+        mydata.orderget[0].OdataS = OdataS
+    }
+    console.log(mydata.orderget[0].OdataS)
+
+    //結束時間
+    if (OdataE == "") {
+        mydata.orderget[0].OdataE = "3000-01-01";
+    } else {
+        mydata.orderget[0].OdataE = OdataE
+    }
+    console.log(mydata.orderget[0].OdataE)
+    //訂單狀態
+    if (orderStateC == "AA") {
+        mydata.orderget[0].orderStateC = "AA";
+    } else {
+        mydata.orderget[0].orderStateC = orderStateC;
+    }
+    console.log(mydata.orderget[0].orderStateC)
+
+    //訂單編號
+    if (orderId == "") {
+        mydata.orderget[0].orderId = 0;
+    } else {
+        mydata.orderget[0].orderId = orderId;
+    }
+
+    var urlorderresult = mydata.orderget[0].OdataS + "/" + mydata.orderget[0].OdataE + "/" + mydata.orderget[0].orderStateC + "/" + mydata.orderget[0].orderId;
+    console.log(urlorderresult)
+
+    $.ajax({
+        type: "get",
+        url: "/api/OrderTables2/condition/" + urlorderresult,
+        success: function (e) {
+            mydata.order = e;
+            console.log(e);
+            //訂單總項目 跟 訂單頁數
+            mydata.ordernum = e.length;
+            if (mydata.ordernum >= 5) {
+                mydata.orderpage = Math.ceil(mydata.ordernum / 5)
+            } else {
+                mydata.orderpage = 1
+            };
+        }
+    })
+
+    mydata.orderget[0].OdataS = "1900-01-01";
+    mydata.orderget[0].OdataE = "3000-01-01";
+    mydata.orderget[0].orderStateC = "AA";
+    mydata.orderget[0].orderId = 0;
+
+}
+
+
+
+////審核--------------------------------------------------------------------------------------------------------------------------------
 //GET審核資料表
 $.ajax({
     type: "get",
@@ -475,15 +666,13 @@ function savenotice() {
         contentType: "application/json",
         data: JSON.stringify(mydata.noticepost[0]),
         success: function () {
-            
+
             var tabcontent;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (var i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
             tabcontent[1].style.display = "block";
-
-            alert("OK");
 
         }
     })
@@ -534,7 +723,7 @@ function savenotice() {
     console.log(mydata.noticepost[0])
     if (mydata.noticepost[0].noticeScope == 0) {
         for (var i = 0; i < mydata.nocheckmember.length; i++) {
-            mydata.noticereadpost[0].noticeId = nownoticId+1;
+            mydata.noticereadpost[0].noticeId = nownoticId + 1;
             mydata.noticereadpost[0].noticeReadMember = mydata.nocheckmember[i].memberId;
             console.log(mydata.noticereadpost[0])
             $.ajax({
@@ -597,6 +786,111 @@ function savenotice() {
     };
 
 };
+
+
+//GET條件通知資料
+function selnotice() {
+    //noticeget: [{ "NdataS": "1900-01-01", "NdataE": "3000-01-01", "NoiceMem": 3, "NoiceState": true,"NoiceStateN": "nu" }],
+    var NdataS = $("#noticedatestart").val();
+    var NdataE = $("#noticedateend").val();
+    //value="0">一般會員,value="1">店家／設計師,value="2">全體
+    var NoiceMem = $("#noticemem").val();
+    //value="3" selected>請選擇狀態,value="0">未通知,value="1">已通知
+    var NoiceState = $("#noticestatus").val();
+    console.log(NdataS);
+    console.log(NdataE);
+    console.log(NoiceMem);
+    console.log(NoiceState);
+    //開始時間
+    if (NdataS == "") {
+        mydata.noticeget[0].NdataS = "1900-01-01";
+    } else {
+        mydata.noticeget[0].NdataS = NdataS
+    }
+    console.log(mydata.noticeget[0].NdataS)
+
+    //結束時間
+    if (NdataE.length == "") {
+        mydata.noticeget[0].NdataE = "3000-01-01";
+    } else {
+        mydata.noticeget[0].NdataE = NdataE
+    }
+    console.log(mydata.noticeget[0].NdataE)
+    //通知對象
+    if (NoiceMem == "3") {
+        mydata.noticeget[0].NoiceMem = 3;
+    } else {
+        mydata.noticeget[0].NoiceMem = NoiceMem;
+    }
+    console.log(mydata.noticeget[0].NoiceMem)
+    //通知狀態
+    if (NoiceState == "0") {
+        mydata.noticeget[0].NoiceState = false;
+        mydata.noticeget[0].NoiceStateN = "HVa";
+    } else if (NoiceState == "1") {
+        mydata.noticeget[0].NoiceState = true;
+        mydata.noticeget[0].NoiceStateN = "HVa";
+    } else if (NoiceState == "NOPE") {
+        mydata.noticeget[0].NoiceState = true;
+        mydata.noticeget[0].NoiceStateN = "NOPE";
+        NoiceStateN = "NOPE";
+    }
+
+    var urlnoticeresult = mydata.noticeget[0].NdataS + "/" + mydata.noticeget[0].NdataE + "/" + mydata.noticeget[0].NoiceMem + "/" + mydata.noticeget[0].NoiceState + "/" + mydata.noticeget[0].NoiceStateN;
+    console.log(urlnoticeresult)
+    $.ajax({
+        type: "get",
+        url: "/api/NoticeTables/noticecondition/" + urlnoticeresult,
+        success: function (e) {
+            mydata.notice = e;
+            console.log(e);
+
+            ////< !--通知狀態-- >
+            for (let i = 0; i < e.length; i++) {
+                if (e[i].noticeState == true) {
+                    mydata.notice[i].noticeState = "已通知";
+
+                } else if (e[i].noticeState == false) {
+                    mydata.notice[i].noticeState = "未通知";
+
+                }
+
+            };
+            ////< !--通知對象 >
+            for (let i = 0; i < e.length; i++) {
+                if (e[i].noticeScope == 0) {
+                    mydata.notice[i].noticeScope = "一般會員";
+
+                } else if (e[i].noticeScope == 1) {
+                    mydata.notice[i].noticeScope = "店家 / 美甲師";
+
+                } else if (e[i].noticeScope == 2) {
+                    mydata.notice[i].noticeScope = "全體";
+                }
+
+            };
+
+            ////審核總項目 跟 審核頁數
+            mydata.noticenum = e.length;
+            if (mydata.noticenum >= 5) {
+                mydata.noticepage = Math.ceil(mydata.noticenum / 5)
+            } else {
+                mydata.noticepage = 1
+            };
+
+        }
+
+    })
+
+
+
+    mydata.repertget[0].NdateS = "1900-01-01";
+    mydata.repertget[0].NdateE = "3000-01-01";
+    mydata.repertget[0].NoiceMem = 3;
+    mydata.repertget[0].NoiceState = true;
+    mydata.repertget[0].NoiceStateN = "nu";
+
+}
 
 
 

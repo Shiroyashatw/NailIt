@@ -17,6 +17,7 @@
     <script src="~/AnselLib/Ansel_Common.js"></script>
     
     <link rel="stylesheet" href="~/AnselLib/Ansel_Community.css">
+    <link rel="stylesheet" href="~/AnselLib/Ansel_Common.css">
     <style></style>
 }
 @section Scripts{}
@@ -27,14 +28,14 @@
 <input id="loginNickname" type="text" value="@loginNickname" class="d-none">
 
 <div class="">
-    <nav aria-label="breadcrumb">
+    @* <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item"><a href="#">Library</a></li>
             <li class="breadcrumb-item active" aria-current="page">Data</li>
         </ol>
-    </nav>
-    <div class="row">
+    </nav> *@
+    <div class="row py-3">
         <nav class="col-sm-2">
             <h4>看板</h4>
             <ul class="nav flex-sm-column communityUl">
@@ -51,10 +52,10 @@
             <div class="d-flex justify-content-between align-items-baseline">
                 <div class="d-flex flex-column">
                     <h4 id="mainTitle">mainTitle</h4>
-                    <div id="memberInfo" class="d-flex align-items-center">
-                        <div id="avatar" class="bg-secondary rounded-circle" style="aspect-ratio:1;color: #fff;">
+                    <div id="memberInfo" class="d-flex align-items-center ">
+                        <div id="avatar" class="bg-secondary rounded-circle justify-content-center align-items-center" style="aspect-ratio:1;color: #fff;width:60px">
                             <div>
-                                Avatarrr
+                                B
                             </div>
                         </div>
                         <div id="memberNames">
@@ -89,10 +90,10 @@
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
-                <div id="ModalAuthorInfo" class="d-flex align-items-center cursor-pointer" data-dismiss="modal" onclick="showMyMain()">
-                    <div class="bg-secondary d-flex align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;">
+                <div class="d-flex align-items-center cursor-pointer" data-dismiss="modal" onclick="showMyMain()">
+                    <div id="ModalAuthorAvatar" class="bg-secondary d-flex justify-content-center align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;width:55px">
                         <div>
-                            Avatarrr
+                            B
                         </div>
                     </div>
                     <div id="ModalAuthor">
@@ -114,7 +115,7 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="modal-body" style="max-height: calc(100vh - 190px); overflow-y: auto;">
+            <div class="modal-body" style="max-height: calc(100vh - 180px); overflow-y: auto;">
                 <div class="bottomBorder">
                     <div id="ModalArticleTitle" class="mb-1 mb-sm-2">
                         <h4 class="mb-0">Article Title</h4>
@@ -148,10 +149,10 @@
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
-                <div id="editModalAuthorInfo" class="d-flex align-items-center">
-                    <div class="bg-secondary d-flex align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;">
+                <div class="d-flex align-items-center">
+                    <div id="editModalAuthorAvatar" class="bg-secondary d-flex justify-content-center align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;width:55px">
                         <div>
-                            Avatarrr
+                            B
                         </div>
                     </div>
                     <div id="editModalAuthor">
@@ -171,11 +172,15 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="modal-body" style="max-height: calc(100vh - 190px); overflow-y: auto;">
+            <div class="modal-body pb-0" style="max-height: calc(100vh - 180px); overflow-y: auto;">
                 <div>
                     <input type="text" id="editModalArticleTitle" style="font-size:24px;" class="editable titleArea mb-1 mb-sm-2" placeholder="請輸入標題"/>
                     <article id="editModalArticleContent" class="editable contentArea" contenteditable="true" placeholder="請輸入貼文內容"></article>
                 </div>
+            </div>
+            <div class="px-3 pb-2">
+                <i id="btnInsertImg" class="fa-solid fa-image cursor-pointer"></i>
+                <input type='file' id="editArtiInsertImg" onchange="showInsertImage(this)" accept="image/jpeg, image/png" style="display: none;" />
             </div>
         </div>
     </div>

@@ -77,9 +77,6 @@ class ArticleService {
     static getArticles(boardSort, page, order) {
         return fetchGet(`/api/ArticleTables/${boardSort}/${page}/${order}`);
     }
-    // static getArticles(boardSort, page) {
-    //     return fetchGet(`/api/ArticleTables/${boardSort}/${page}`);
-    // }
     static postArticle(data) {
         return fetchPost(`/api/ArticleTables`, data);
     }
@@ -97,9 +94,6 @@ class ArticleSocialService {
     static getMyArticles(articleAuthorID, page, order) {
         return fetchGet(`/api/ArticleSocial/GetMyArticles/${articleAuthorID}/${page}/${order}`);
     }
-    // static getMyArticles(articleAuthorID, page) {
-    //     return fetchGet(`/api/ArticleSocial/${articleAuthorID}/${page}`);
-    // }
 }
 class ArticleLikeService {
     static postArticleLike(data) {
@@ -107,6 +101,40 @@ class ArticleLikeService {
     }
     static deleteArticleLike(articleId, memberId) {
         return fetchDelete(`/api/ArticleLikeTables/${articleId}/${memberId}`);
+    }
+}
+class BlacklistService {
+    static postBlacklist(data) {
+        return fetchPost(`/api/Blacklist`, data);
+    }
+    static deleteBlacklist(builderId, targetId) {
+        return fetchDelete(`/api/Blacklist/${builderId}/${targetId}`);
+    }
+}
+class ChatService {
+    static getMembersMsg() {
+        return fetchGet(`/api/Chat/GetMembersMsg`);
+    }
+    static getSingleMemberMsg(memberId) {
+        return fetchGet(`/api/Chat/GetSingleMemberMsg/${memberId}`);
+    }
+    static getNewMsg(updateTime) {
+        return fetchGet(`/api/Chat/GetNewMsg/${updateTime}`);
+    }
+    static putMsgRead(senderId) {
+        return fetchPut(`/api/Chat/PutMsgRead/${senderId}`);
+    }
+    static putMsgRevoke(id) {
+        return fetchPut(`/api/Chat/PutMsgRevoke/${id}`);
+    }
+    static postMessage(data) {
+        return fetchPost(`/api/Chat/PostMessage`, data);
+    }
+    static uploadImage(data) {
+        return fetchPostMul(`/api/Chat/UploadImage`, data);
+    }
+    static postMsgImage(data) {
+        return fetchPostMul(`/api/Chat/PostMsgImage`, data);
     }
 }
 class ReplyService {
@@ -175,6 +203,23 @@ class ArticlePicTable {
         this.artclePicId = initialNum(data.artclePicId);
         this.articleId = initialNum(data.articleId);
         this.articlePicPath = initialStr(data.articlePicPath);
+    }
+}
+class MessageBlacklistTable {
+    constructor(data) {
+        this.blacklistId = initialNum(data.blacklistId);
+        this.blacklistBuilder = initialNum(data.blacklistBuilder);
+        this.blacklistTarget = initialNum(data.blacklistTarget);
+    }
+}
+class MessageTable {
+    constructor(data) {
+        this.messageId = initialNum(data.messageId);
+        this.messageSender = initialNum(data.messageSender);
+        this.messageReceiver = initialNum(data.messageReceiver);
+        this.messageContent = initialStr(data.messageContent);
+        this.messageTime = initialDate(data.messageTime);
+        this.messageRead = initialBool(data.messageRead);
     }
 }
 class ReplyTable {

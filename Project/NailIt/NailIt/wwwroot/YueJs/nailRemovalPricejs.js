@@ -1,13 +1,15 @@
 ﻿var myRemovalResult;
 var removalData;
-function removalSendGet()
+
+async function removalSendGet()
 {
+	await YueloginCheck();
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
     };
 
-    fetch("https://localhost:44308/api/YueRemovalPriceTables/2", requestOptions)
+    fetch("https://localhost:44308/api/YueRemovalPriceTables/"+nowMember, requestOptions)
         .then(response => response.text())
         .then(function (result) {
             myRemovalResult = result;
@@ -139,20 +141,6 @@ function removalSee()
 	checkButton.addEventListener("click", setRemoveNail, { passive: true });
 }
 
-//function setItemBtn() {
-//	for (var i = 1; i < 5; i++) {
-//		var x = document.getElementById("setItemInput" + i);
-//		x.readOnly = false;
-//	}
-//	setItemInput5.value = "確定";
-//	setItemInput5.style.backgroundColor = "#ff6733";
-//	setItemInput5.onclick = "setItemCheck()";
-//}
-
-//function setItemCheck() {
-//	setItemInput5.value = "編輯";
-//	setItemInput5.style.backgroundColor = "black";
-//}
 
 function setRemoveNail(check) {
 	if (check) {
@@ -195,7 +183,7 @@ function removalSendPut() {
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueRemovalPriceTables/2", requestOptions)
+	fetch("https://localhost:44308/api/YueRemovalPriceTables/"+nowMember, requestOptions)
 		.then(response => response.text())
 		.then(function (result)
 		{
@@ -210,7 +198,5 @@ function removalSendPut() {
 			}
 		})
 		.catch(error => console.log('error', error));
-
-	
 
 }

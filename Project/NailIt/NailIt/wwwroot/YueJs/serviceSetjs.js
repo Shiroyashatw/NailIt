@@ -1,16 +1,15 @@
 ﻿var myServiceResult;
 var serviceData;
 
-function serviceSendGet()
+async function serviceSendGet()
 {
-    var raw = "";
-
+	await YueloginCheck();
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
     };
 
-    fetch("https://localhost:44308/api/YueServiceTables/2", requestOptions)
+    fetch("https://localhost:44308/api/YueServiceTables/"+nowMember, requestOptions)
         .then(response => response.text())
         .then((function (result) {
             myServiceResult = result;
@@ -397,7 +396,7 @@ function serviceSendPost()
 	myHeaders.append("Content-Type", "application/json");
 
 	var raw = JSON.stringify({
-		"manicuristId": 2,
+		"manicuristId": nowMember,
 		"seriveDeposit": serviceSetDeposit.value,
 		"serviceName": serviceSetName.value,
 		"servicePartC": serviceSetPartC.value,
@@ -515,7 +514,7 @@ function serviceDeleteLoop() {
 	return answer;
 }
 
-function serviceSendDelete()
+async function serviceSendDelete()
 {
 	var raw = "";
 	var requestOptions = {
@@ -528,7 +527,7 @@ function serviceSendDelete()
 		if (document.getElementById("serviceCheckBox" + i).checked == true)
 		{
 			console.log(serviceData);
-			fetch("https://localhost:44308/api/YueServiceTables/"+serviceData[i].serviceId, requestOptions)
+			await fetch("https://localhost:44308/api/YueServiceTables/"+serviceData[i].serviceId, requestOptions)
 				.then(response => response.text())
 				.then(function (result) {
 					if (result)
@@ -545,9 +544,6 @@ function serviceSendDelete()
 	}
 
 	closeInfoModal();
-	setTimeout(() => {
-		serviceSendGet();
-	}, 300);
-	closeInfoModal();
+	serviceSendGet();
 }
 

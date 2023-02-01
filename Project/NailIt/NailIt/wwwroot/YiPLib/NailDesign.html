@@ -87,14 +87,15 @@
         }
 
         #photoframe {
-            padding-left: 50px;
-            padding-right: 50px;
+            /*padding-left: 50px;*/
+            /*padding-right: 50px;*/
             text-align: center;
         }
 
         .Profileimg {
             max-width: 100%;
-            object-fit: cover;
+            /*object-fit: cover;*/
+            object-fit: contain;
             height: 250px;
             width: 250px;
             object-position: center;
@@ -161,12 +162,18 @@
         }
 
         .Clickme {
-            position: relative;
-            top: -60px;
-            margin-left: 70px;
-            margin-right: 70px;
+            border:hidden;
+            position: absolute;
+            /*top: -60px;*/
+            /*margin-left: 70px;*/
+            /*margin-right: 70px;*/
+            left:70px;
+            top:190px;
             padding-top: 5px;
             padding-bottom: 5px;
+            padding-left: 70px;
+            padding-right: 70px;
+            /*width:100px;*/
             text-align: center;
             background-color: white;
             color: black;
@@ -213,7 +220,7 @@
             display: inline-block;
             color: #ddd;
             overflow: hidden;
-            font-size: 30px;
+            font-size: 24px;
             text-shadow: 0px 1px 0 rgb(198, 198, 198);
             margin-top: -20px;
         }
@@ -257,8 +264,19 @@
             border: none;
             background-color: black;
             font-size: 18px;
-            width: 80%;
-            height: 40px;
+            /*width: 80%;*/
+            /*height: 40px;*/
+            padding-top: 6px;
+            padding-bottom: 6px;
+            height:39px;
+            width:80%;
+            min-height:10%;
+            min-width:50px;
+/*            padding-left: 30%;
+            padding-right: 30%;*/
+            margin-top:210px;
+            min-width:contain;
+            min-height:contain;
         }
 
             #Sendbtn:hover {
@@ -459,7 +477,7 @@
                 </div>
             </div>
             <div class="col-2">
-                <div style="height: 80%;"></div>
+                <!--<div style="height: 80%;"></div>-->
                 <button id="Sendbtn" onclick="alertform()">預約</button>
             </div>
             <div class="col-1">
@@ -495,10 +513,10 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                        <!--<form>
-                            <input class="Searchbar" type="text" placeholder="作品,標籤">
-                            <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>-->
+                        <!--<form>-->
+                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        <!--</form>-->
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -519,7 +537,7 @@
                         <div v-for="(item,key) in DemoSetList">
                             <div class="Seemore my-0">
                                 <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover" alt="Loading">
-                                <figcaption class="Clickme">查看</figcaption>
+                                <button onclick="Checkit(this)" v-bind:value="DemoSetList[key].demoSetId" class="Clickme">查看</button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
                             <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
@@ -558,8 +576,8 @@
                     <div class="col-10 EventDemo">
                         <div v-for="(item,key) in MainDemoCover">
                             <div class="Seemore my-0">
-                                <img class="Demoimg" v-bind:src="MainDemoCover[key].demoPic" alt="">
-                                <figcaption class="Clickme">查看</figcaption>
+                                <img class="Demoimg" v-bind:src="MainDemoCover[key].demoSetCover" alt="">
+                                <button onclick="Checkit(this)" v-bind:value="MainDemoCover[key].demoSetId" class="Clickme">查看</button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{MainDemoCover[key].demoSetName}}</p>
                             <p class="DemoGroup">${{MainDemoCover[key].demoSetPrice}}</p>
@@ -578,12 +596,12 @@
                             <div>
                                 <p class="DisInLine ">排序：</p>
                             </div>
-                            <select name="" id="SortSelectbox">
-                                <option value="none" selected disabled hidden>請選擇</option>
-                                <option value="">日期由近到遠</option>
-                                <option value="">日期由遠到近</option>
-                                <option value="">星數由高到低</option>
-                                <option value="">星數由低到高</option>
+                            <select name="" id="SortSelectbox" onchange="SortBySelect(this)">
+                                <option value="Default" selected disabled hidden>請選擇</option>
+                                <option value="DateHTL">日期由近到遠</option>
+                                <option value="DateLTH">日期由遠到近</option>
+                                <option value="RateHTL">星數由高到低</option>
+                                <option value="RateLTH">星數由低到高</option>
                             </select>
                         </div>
 
@@ -600,17 +618,16 @@
                 <div class="row">
                     <div class="col"></div>
                     <div class="col-10">
-                        <div v-for="(item,key) in Comment">
+                        <div v-for="(item,key) in Comment" v-if="Sort=='Default'">
                             <div class="d-flex">
                                 <div>
                                     <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
                                 </div>
                                 <div class="ratingcontext">
-
                                     <div>
                                         <p class="h5">{{Comment[key].memberNickname}}</p>
                                     </div>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center mt-3">
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
                                             <div class="ContextFullstar" v-bind:style="{width:Comment[key].Commentwid}">★★★★★</div>
@@ -624,8 +641,114 @@
                                 </div>
 
                             </div>
-                            <div class="Blackline my-3"></div>
+                            <div class="Blackline mt-3 mb-4"></div>
                         </div>
+
+                        <div v-for="(item,key) in SortDateLTH" v-if="Sort=='DateLTH'">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+                                    <div>
+                                        <p class="h5">{{SortDateLTH[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:SortDateLTH[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{SortDateLTH[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{SortDateLTH[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{SortDateLTH[key].commentContent}}</p></div>
+                                </div>
+
+                            </div>
+                            <div class="Blackline mt-3 mb-4"></div>
+                        </div>
+
+                        <div v-for="(item,key) in SortDateHTL" v-if="Sort=='DateHTL'">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+                                    <div>
+                                        <p class="h5">{{SortDateHTL[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:SortDateHTL[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{SortDateHTL[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{SortDateHTL[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{SortDateHTL[key].commentContent}}</p></div>
+                                </div>
+
+                            </div>
+                            <div class="Blackline mt-3 mb-4"></div>
+                        </div>
+
+                        <div v-for="(item,key) in SortRateHTL" v-if="Sort=='RateHTL'">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+                                    <div>
+                                        <p class="h5">{{SortRateHTL[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:SortRateHTL[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{SortRateHTL[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{SortRateHTL[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{SortRateHTL[key].commentContent}}</p></div>
+                                </div>
+
+                            </div>
+                            <div class="Blackline mt-3 mb-4"></div>
+                        </div>
+
+                        <div v-for="(item,key) in SortRateLTH" v-if="Sort=='RateLTH'">
+                            <div class="d-flex">
+                                <div>
+                                    <img class="ratingimg" src="UploadFolder/Avatar.png" alt="">
+                                </div>
+                                <div class="ratingcontext">
+                                    <div>
+                                        <p class="h5">{{SortRateLTH[key].memberNickname}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <div class="Contextratings">
+                                            <div class="Emptystar">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:SortRateLTH[key].Commentwid}">★★★★★</div>
+                                        </div>
+                                        <div>
+                                            <p class="ml-2">{{SortRateLTH[key].commentScore}}</p>
+                                        </div>
+                                    </div>
+                                    <div><p>評價日期：{{SortRateLTH[key].commentBuildTime}}</p></div>
+                                    <div><p id="CommentMessage">{{SortRateLTH[key].commentContent}}</p></div>
+                                </div>
+
+                            </div>
+                            <div class="Blackline mt-3 mb-4"></div>
+                        </div>
+
+
 
                     </div>
                     <div class="col"></div>
@@ -645,7 +768,6 @@
                 <div class="col-1"></div>
                 <div class="col-10">
                     <div>
-                        <p class="produce">服務項目：</p>
                         <p class="produce">電話：{{DesignList.manicuristSalonPhone}}</p>
                         <p class="produce">地址：{{DesignList.manicuristAddress}}</p>
                         <p class="produce">證照：{{DesignList.manicuristLicense}}</p>
@@ -663,7 +785,7 @@
         <!-- 彈出視窗 表單 -->
         <div id="alert_div" class="isHide">
             <div class="alert_div-header">
-                <button type="button" onclick="Closeform()"><i class="bi bi-x"></i></button>
+                <button type="button" id="btncancel" onclick="Closeform()"><i class="bi bi-x"></i></button>
             </div>
             <!-- 主要表單 -->
             <div class="form-info">
@@ -785,7 +907,7 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step1()">上一步</button>
-                                        <button class="stepbtn" type="button" onclick="step3()">下一步</button>
+                                        <button id="step3btn" class="stepbtn" type="button" onclick="step3()">下一步</button>
                                     </div>
 
                                 </div>
@@ -803,18 +925,9 @@
                                 <input type="hidden" name="OrderType" value="true">
                                 <input type="hidden" name="OrderOrderTime" value="">
                                 <input type="hidden" name="OrderStateC" value="">
-                                <p>預約日期:2023-1-1</p>
-                                <p>
-                                    施作部位:
-                                </p>
-                                <p>
-                                    卸甲:
-                                </p>
-                                <p>
-                                    施作項目:
-                                </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                <div class="rescheck">
+
+                                </div>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -823,7 +936,7 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">上一步</button>
-                                        <button class="stepbtn" type="button" onclick="step4()">下一步</button>
+                                        <button id="btnsend" class="stepbtn" type="button" onclick="step4()">送出預約</button>
                                     </div>
                                 </div>
                             </div>
@@ -834,25 +947,14 @@
                     <div id="step4" class="container step4-res isHide">
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
-                                <p>預約成功: 訂單編號: SA11111102</p>
-                                <p>預約日期:2023-1-1 13:00</p>
-                                <p>
-                                    施作部位:
-                                </p>
-                                <p>
-                                    卸甲:
-                                </p>
-                                <p>預估價位:NT$ 1,450</p>
-                                <p>訂金:NT$ 200</p>
+                                <p>預約成功，請耐心等待預約設計師回覆</p>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
                                 </div>
                                 <div class="form-footerbtn h-25">
                                     <div class="btn-box">
-                                        <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
-                                        <button class="stepbtn" type="button" onclick="step3()">上一步</button>
-                                        <button id="btnsend" class="stepbtn" type="button" onclick="">送出</button>
+                                        <button class="stepbtn" type="button" onclick="Closeform()">完成</button>
                                     </div>
                                 </div>
                             </div>
@@ -864,27 +966,67 @@
     </div>
 
     <script>
-        var PercantStar;
-        var FloatStar;
+        let PercantStar;
+        let FloatStar;
+
 
         $('.Chgcontext').hide();
         $('#pageone').show();
         $('button[value=demo]').addClass('NowUnderLine');
 
         function Showthis(nowPage) {
-            var thisbtn = `button[value=${nowPage.value}]`;
-            console.log(nowPage.value);
-            var BTNlist = ["demo", "event", "star", "produce"];
-            var Contextlist = ["#pageone", "#pagetwo", "#pagethree", "#pagefour"];
+            let thisbtn = `button[value=${nowPage.value}]`;
+            //console.log(nowPage.value);
+            let BTNlist = ["demo", "event", "star", "produce"];
+            let Contextlist = ["#pageone", "#pagetwo", "#pagethree", "#pagefour"];
             $('.Chgcontext').hide();
             $('.recentbtn').removeClass('NowUnderLine');
-            for (var i = 0; i < BTNlist.length; i++) {
+            for (let i = 0; i < BTNlist.length; i++) {
                 if (nowPage.value == BTNlist[i]) {
-                    //console.log(Contextlist[i]);
                     $(thisbtn).addClass('NowUnderLine');
                     $(Contextlist[i]).show();
                 }
             }
+        }
+
+        function SortBySelect(e) {
+            console.log(e.value);
+            if (e.value == "DateLTH") {
+                ShowData.Sort = "DateLTH";
+            }
+
+            if (e.value == "DateHTL") {
+                ShowData.Sort = "DateHTL";
+            }
+
+            if (e.value == "RateHTL") {
+                ShowData.Sort = "RateHTL";
+            }
+
+            if (e.value == "RateLTH") {
+                ShowData.Sort = "RateLTH";
+            } else {
+                console.log("Fail");
+            }
+        }
+
+        function Checkit(e) {
+            window.location = "product.html?id=" + e.value;
+        }
+
+        function Searchit() {
+            console.log(ShowData.SearchString);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetSearchTable/" + GetManicuristID + "?search=" + ShowData.SearchString,
+                success: function (e) {
+                    ShowData.DemoSetList = [];
+                    for (DS in e) {
+                        ShowData.DemoSetList.push(e[DS]);
+                    }
+                }
+            });
+            console.log(ShowData.DemoSetList);
         }
 
 
@@ -892,15 +1034,19 @@
             el: '#ShowData',
             data: function () {
                 return {
-                    DesignList: [{ "manicuristId": 2, "manicuristPic": "UploadFolder/Saya.jpg", "manicuristSalonName": "我看妳欠店", "manicuristAddress": "台北市萬華區萬大路486巷16號", "manicuristCounty": "台北市", "manicuristTownship": "萬華區", "manicuristPublic": true, "manicuristSalonPhone": "0923859697", "manicuristLicense": "TNA美甲師檢定、JNA國際美甲師技能檢定考試", "manicuristBankCode": "700", "manicuristBankAccount": "5570571987464459", "manicuristIntro": "竹北個人工作室,預約後傳地址(近萊爾富晨晞店)·禁食、飲料,請勿攜伴、陌生男賓止步·店付款方式:現金、轉帳(中國信).本店具感恩的心,待調為正式價位舊客享專屬折扣排除病變甲、孕婦、趕時間的孩子.需久坐約2至3小時,請預留足夠時間卸甲及加購保養時間另計", "manicuristScore": 4.6 }],
-                    DemoSetList: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoSetCover": "UploadFolder/Oneone.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是今年最流行的珍珠音調粉色系呦", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "碎花", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-01-31T00:00:00" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoSetCover": "UploadFolder/Onetwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "這是彩色手手", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "造型", "demoSetTag2": "知性風", "demoSetTag3": "幾何", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-01-31T00:00:00" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoSetCover": "UploadFolder/Onethree.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "造型腳腳", "demoSetPrice": 1200.0000, "demoSetDeposit": 600.0000, "demoSetTag1": "造型", "demoSetTag2": "漸層", "demoSetTag3": "可愛風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoSetCover": "UploadFolder/Twoone.png", "manicuristId": 2, "demoSetPartC": "C2", "demoSetContent": "這紫色手手", "demoSetPrice": 999.0000, "demoSetDeposit": 400.0000, "demoSetTag1": "純色", "demoSetTag2": "漸層", "demoSetTag3": "華麗風", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-12T00:00:00", "demoSetMainEndTime": "2023-02-21T23:59:59" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoSetCover": "UploadFolder/Twotwo.png", "manicuristId": 2, "demoSetPartC": "C1", "demoSetContent": "喝咖啡最適合的美甲", "demoSetPrice": 850.0000, "demoSetDeposit": 100.0000, "demoSetTag1": "純色", "demoSetTag2": "立體", "demoSetTag3": "晶片", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 7, "demoSetName": "我是珍珠", "demoSetCover": "UploadFolder/Twothree.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "超級大隻豬", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "可愛", "demoSetTag2": "碎花", "demoSetTag3": "漸層", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": "2023-01-14T00:00:00", "demoSetMainEndTime": "2023-01-31T23:59:59" }, { "demoSetId": 8, "demoSetName": "", "demoSetCover": "UploadFolder/Threeone.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "", "demoSetPrice": 900.0000, "demoSetDeposit": 500.0000, "demoSetTag1": "", "demoSetTag2": "", "demoSetTag3": "", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": true, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }, { "demoSetId": 9, "demoSetName": "卡比獸美甲", "demoSetCover": "UploadFolder/Threetwo.png", "manicuristId": 2, "demoSetPartC": "C0", "demoSetContent": "我愛卡比獸", "demoSetPrice": 1600.0000, "demoSetDeposit": 800.0000, "demoSetTag1": "可愛風", "demoSetTag2": "漸層", "demoSetTag3": "立體", "demoSetTag4": null, "demoSetPublic": true, "demoSetMain": false, "demoSetCount": 0, "demoSetMainStartTime": null, "demoSetMainEndTime": null }],
-                    DemoCover: [{ "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Oneone.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onetwo.png" }, { "demoSetId": 2, "demoSetName": "碧色珍珠音調", "demoPic": "UploadFolder/Onethree.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twoone.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twotwo.png" }, { "demoSetId": 3, "demoSetName": "黑色珍珠音調", "demoPic": "UploadFolder/Twothree.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threeone.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threetwo.png" }, { "demoSetId": 4, "demoSetName": "粉色珍珠音調", "demoPic": "UploadFolder/Threethree.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourone.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourtwo.png" }, { "demoSetId": 5, "demoSetName": "橘色珍珠音調", "demoPic": "UploadFolder/Fourthree.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fiveone.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivetwo.png" }, { "demoSetId": 6, "demoSetName": "藍色珍珠音調", "demoPic": "UploadFolder/Fivethree.png" }],
-                    DemoList: [{ "demoPic": "UploadFolder/Oneone.png" }, { "demoPic": "UploadFolder/Twotwo.png" }, { "demoPic": "UploadFolder/Threetwo.png" }, { "demoPic": "UploadFolder/Fourthree.png" }, { "demoPic": "UploadFolder/Fivethree.png" }],
-                    MainDemoCover: [{ "demoPic": "UploadFolder/Oneone.png", "demoSetName": "碧色珍珠音調", "demoSetPrice": 900.0000 }, { "demoPic": "UploadFolder/Twotwo.png", "demoSetName": "黑色珍珠音調", "demoSetPrice": 1600.0000 }, { "demoPic": "UploadFolder/Fourthree.png", "demoSetName": "橘色珍珠音調", "demoSetPrice": 999.0000 }],
+                    DesignList: [],
+                    DemoSetList: [],
+                    DemoList: [],
+                    MainDemoCover: [],
                     width: "",
                     MainDemoCoverLenth: "",
-                    //Comment: [{ "memberNickname": "beautiful", "commentId": 1, "commentTarget": 2, "commentScore": 4.1, "commentContent": "做的很好看", "commentBuildTime": "2023-01-20T14:51:57.87" }, { "memberNickname": "beautiful", "commentId": 2, "commentTarget": 2, "commentScore": 4.6, "commentContent": "美甲師很準時", "commentBuildTime": "2023-01-01T00:00:00" }, { "memberNickname": "beautiful", "commentId": 3, "commentTarget": 2, "commentScore": 5, "commentContent": "非常有實力", "commentBuildTime": "2022-11-23T00:00:00" }, { "memberNickname": "beautiful", "commentId": 4, "commentTarget": 2, "commentScore": 2.5, "commentContent": "建構不太好", "commentBuildTime": "2022-09-18T00:00:00" }, { "memberNickname": "beautiful", "commentId": 5, "commentTarget": 2, "commentScore": 2, "commentContent": "新手美甲師吧?", "commentBuildTime": "2022-03-10T00:00:00" }, { "memberNickname": "beautiful", "commentId": 6, "commentTarget": 2, "commentScore": 2, "commentContent": "這樣都能開店", "commentBuildTime": "2022-04-26T00:00:00" }, { "memberNickname": "beautiful", "commentId": 7, "commentTarget": 2, "commentScore": 4.2, "commentContent": "態度良好", "commentBuildTime": "2022-05-25T00:00:00" }, { "memberNickname": "beautiful", "commentId": 8, "commentTarget": 2, "commentScore": 5, "commentContent": "送指緣油", "commentBuildTime": "2022-06-01T00:00:00" }, { "memberNickname": "beautiful", "commentId": 9, "commentTarget": 2, "commentScore": 1.6, "commentContent": "遲到欠檢舉", "commentBuildTime": "2022-07-03T00:00:00" }, { "memberNickname": "beautiful", "commentId": 10, "commentTarget": 2, "commentScore": 0, "commentContent": "放生的拉基", "commentBuildTime": "2023-01-04T00:00:00" }],
                     Comment: [],
+                    SortDateLTH: [],
+                    Sort: "Default",
+                    SortDateHTL:[],
+                    SortRateHTL: [],
+                    SortRateLTH: [],
+                    SearchString: "",
                 }
             },
             methods: {
@@ -910,15 +1056,18 @@
             }
         }).$mount('#ShowData');
 
-        //ShowData.$mount('#ShowData');
+        let GetNowurl = window.location.href;
+        let Nowurl = new URL(GetNowurl);
+        let GetManicuristID = Nowurl.searchParams.get('id');
+        //let ManicuristID = 2;
+        //console.log(GetManicuristID);
 
         $.ajax({
             type: "get",
-            url: "/api/Manicurist/2",
+            url: "/api/Manicurist/" + GetManicuristID,
             success: function (e) {
-                //console.log(e[0]);
-                ShowData.DesignList = e[0];
-                PercantStar = e[0].manicuristScore;
+                ShowData.DesignList = e;
+                PercantStar = e.manicuristScore;
                 FloatStar = (PercantStar * 20) + '%';
                 ShowData.width = FloatStar;
             }
@@ -926,99 +1075,220 @@
 
         $.ajax({
             type: "get",
-            url: "/api/DemoSet/GetDemoSetTable/2",
+            url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
             success: function (e) {
-                //console.log(e);
-                console.log(e.length);
-                ShowData.DemoSetList = e;
-
+                for (demoset in e) {
+                    ShowData.DemoSetList.push(e[demoset]);
+                }
             }
         });
 
         $.ajax({
             type: "get",
-            url: "/api/Demo/2",
+            url: "/api/Demo/" + GetManicuristID,
             success: function (e) {
-                //console.log(e);
-                ShowData.DemoList = e;
+                for (demo in e) {
+                    ShowData.DemoList.push(e[demo]);
+                }
             }
         });
 
         $.ajax({
             type: "get",
-            url: "/api/YiPComment/2",
+            url: "/api/YiPComment/GetManicuristComment/" + GetManicuristID,
             success: function (e) {
-                for (var q = 0; q < e.length; q++) {
+                for (let q = 0; q < e.length; q++) {
                     e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
                     e[q].Commentwid = (e[q].commentScore * 20) + '%';
-
                     ShowData.Comment.push(e[q]);
                 }
-                //ShowData.Comment = e;
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/DemoSet/GetMainDemoSetTable/" + GetManicuristID,
+            success: function (e) {
                 console.log(e);
+                for (maindemo in e) {
+                    ShowData.MainDemoCover.push(e[maindemo]);
+                }
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/GetDateLTHComment/" + GetManicuristID,
+            success: function (e) {
+                for (let q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                    ShowData.SortDateLTH.push(e[q]);
+                }
+                //console.log(e);
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/GetDateHTLComment/" + GetManicuristID,
+            success: function (e) {
+                for (let q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                    ShowData.SortDateHTL.push(e[q]);
+                }
+                //console.log(e);
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/GetRateLTHComment/" + GetManicuristID,
+            success: function (e) {
+                for (let q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                    ShowData.SortRateLTH.push(e[q]);
+                }
+                //console.log(e);
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            url: "/api/YiPComment/GetRateHTLComment/" + GetManicuristID,
+            success: function (e) {
+                for (let q = 0; q < e.length; q++) {
+                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                    ShowData.SortRateHTL.push(e[q]);
+                }
+                //console.log(e);
             }
         });
 
 
 
-
     </script>
+<!-- 表單頁面切換 -->
+<script>
+    function alertform() {
+        document.getElementById("hohodiv").className = "isShow";
+        document.getElementById("alert_div").className = "isShow";
 
-    <!-- 表單頁面切換 -->
-    <script>
-        function alertform() {
-            document.getElementById("hohodiv").className = "isShow";
-            document.getElementById("alert_div").className = "isShow";
+        $('.Progress .line:nth-child(1) .step').css({
+            "background-color": "#FF6733",
+            "color": "#333",
+            "transition": ".3s"
+        })
+    }
+    function Closeform() {
+        document.getElementById("alert_div").className = "isHide";
+        document.getElementById("hohodiv").className = "isHide";
+    }
+    function step1() {
+        document.getElementById("step1").className = "isShow";
+        document.getElementById("step2").className = "isHide";
+
+        $('.Progress .line:nth-child(2) .step').css({
+            "background-color": "#fff",
+            "color": "#3498db",
+            "transition": ".3s"
+        })
+        
+    }
+    function step2() {
+        document.getElementById("step1").className = "isHide";
+        document.getElementById("step2").className = "isShow";
+        document.getElementById("step3").className = "isHide";
+        document.getElementById("step4").className = "isHide";
+
+        $('.Progress .line:nth-child(2) .step').css({
+            "background-color": "#FF6733",
+            "color": "#333",
+            "transition": ".3s"
+        })
+
+        $('.Progress .line:nth-child(3) .step').css({
+            "background-color": "#fff",
+            "color": "#3498db",
+            "transition": ".3s"
+        })
+
+    }
+    function step3() {
+        var checktime = $('input[name="planId"]').prop('checked')
+
+        // undefined
+        if (checktime == undefined || checktime == false) {
+            alert("尚未選取預約日期及時間")
         }
-        function Closeform() {
-            document.getElementById("alert_div").className = "isHide";
-            document.getElementById("hohodiv").className = "isHide";
-        }
-        function step1() {
-            document.getElementById("step1").className = "isShow";
-            document.getElementById("step2").className = "isHide";
-        }
-        function step2() {
+        else {
             document.getElementById("step1").className = "isHide";
-            document.getElementById("step2").className = "isShow";
-            document.getElementById("step3").className = "isHide";
+            document.getElementById("step2").className = "isHide";
+            document.getElementById("step3").className = "isShow";
             document.getElementById("step4").className = "isHide";
+
+            $('.Progress .line:nth-child(3) .step').css({
+            "background-color": "#FF6733",
+            "color": "#333",
+            "transition": ".3s"
+        })
         }
-        function step3() {
-            var checktime = $('input[name="planId"]').prop('checked')
+        
 
-            // undefined
-            if (checktime == undefined || checktime == false) {
-                alert("尚未選取預約日期及時間")
-            }
-            else {
-                document.getElementById("step1").className = "isHide";
-                document.getElementById("step2").className = "isHide";
-                document.getElementById("step3").className = "isShow";
-                document.getElementById("step4").className = "isHide";
-            }
+    }
+    function step4() {
+        document.getElementById("step1").className = "isHide";
+        document.getElementById("step2").className = "isHide";
+        document.getElementById("step3").className = "isHide";
+        document.getElementById("step4").className = "isShow";
 
-        }
-        function step4() {
-            document.getElementById("step1").className = "isHide";
-            document.getElementById("step2").className = "isHide";
-            document.getElementById("step3").className = "isHide";
-            document.getElementById("step4").className = "isShow";
-        }
-    </script>
+        $('.Progress .line:nth-child(4) .step').css({
+            "background-color": "#FF6733",
+            "color": "#333",
+            "transition": ".3s"
+        })
+    }
+</script>
 
-    <!-- 引用日曆 JS -->
-    <script src="../js/calendar.js"></script>
-    <script src="../js/calendarscript.js"></script>
+<!-- 引用日曆 JS -->
+<script src="../js/calendar.js"></script>
+<script src="../js/calendarscript.js"></script>
 
-    <!-- 引用 商品資料 可預約日期 -->
-    <script src="../js/getData.js"></script>
-    <script>
-        getManicuristData()
-        getReserveDate()
-        getReserveTime()
-        getOrderPartC()
-        postOrder()
-    </script>
+<!-- 引用 商品資料 可預約日期 -->
+<script src="../js/getData.js"></script>
+<script>
+    getManicuristData()
+    getReserveDate()
+    getReserveTime()
+    getOrderPartC()
+    postOrder()
+</script>
+<script>
+    $('#step3btn').on('click', function () {
+        $('.rescheck').empty();
+        let rdate = $('input[name="planId"]').attr("date")
+        let rtime = $('input[name="planId"]').attr("time")
+        let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
+        let rremovec =  $('select[name="OrderRemovalC"]').find("option:selected").text()
+        let ritem = $('select[name="OrderItem"]').find("option:selected").text()
+        let ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
+        let rprice = $('input[name="OrderPrice"]').val()
+        let rdep = $('input[name="OrderDeposit"]').val()
+        $('.rescheck').append(`
+        <p>預約日期:${rdate} 時間:${rtime}</p>
+        <p>施作部位:${rparc}</p>
+        <p>卸甲:${rremovec}</p>
+        <p>施作項目:${ritem}</p>
+        <p>造型:${ritemName}</p>
+        <p>預估價位:NT$${rprice}</p>
+        <p>訂金:NT$${rdep}</p>
+        `);
+
+    })
+</script>
+    
 </body>
 </html>

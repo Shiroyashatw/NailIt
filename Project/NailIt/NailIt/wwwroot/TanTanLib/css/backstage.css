@@ -54,10 +54,16 @@
 .mylist b{
     font-size:20px;
 }
-
+/*.mylist 
+a:link,
+a:visited,
+a:active {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+}*/
 /* 右側------------------------------------------------------------------------------------------------ */
-
-#rigtil{
+#rigtil {
     font-size: 20px;
 }
 

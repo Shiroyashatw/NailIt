@@ -1,13 +1,17 @@
 ﻿var myCancelResult;
 var cancelData;
-function reserveCancelSendGet() {
+
+
+async function reserveCancelSendGet() {
+
+	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
 		redirect: 'follow'
 	};
 
 
-	fetch("https://localhost:44308/api/YueOrderTables/" + 2 + "/" + "A7" + "/", requestOptions)
+	fetch("https://localhost:44308/api/YueOrderTables/" + nowMember + "/" + "A7" + "/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			myCancelResult = result;
@@ -56,6 +60,7 @@ function cancelLoop(search=false) {
 	var answer = "";
 	var thisOrderTime = ""
 	for (var x of cancelData) {
+		console.log(x);
 		if (search) {
 			if (searchStart.value == "" || searchEnd.value == "") {
 				let myDate = new Date();
@@ -157,5 +162,7 @@ function getCancelDetail(i) {
 							value="返回"
 						/>
 			</div>`;
+	infoModal.style.width = "30%";
+	infoModal.style.height = "62%";
 	infoModal.showModal();
 }

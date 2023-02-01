@@ -40,6 +40,9 @@
                 <dd><a class="member-link" href="#">工作項目設定</a></dd>
             </div>
         </div>
+      
+
+    
         <!-- 身分認證-->
         <div class="modal fade" id="certified" tabindex="-1" role="dialog" aria-labelledby="certified" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -51,22 +54,49 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <h6>請輸入電子信箱</h6>
+                        <h6>請輸入電子信箱(我們將寄送驗證碼到此信箱)</h6>
                         <div class="certified-input">
                             <input type="text" placeholder="example@gmail.com" id="emailcertified" class="form-control" required>
                             <br>
-                            <button id="certified-button" class="btn" onclick="sendmail()" value="newcard">發送驗證信</button>
+                            <button id="certified-button" class="btn" data-dismiss="modal"  onclick="sendmail()" value="newcard">發送驗證碼</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- 輸入驗證碼 -->
+        <div id="insertverif" class="insert-topdiv">
+            <div class="insert-content">
+                <span class="close111">&times;</span>
+                <p>請輸入驗證碼</p>
+                <input id="certifiednum" type="text" name="name" value="" />
+                <br />
+                <br />
+                <button onclick="verifcert()">驗證</button>
+            </div>
+        </div>
+       
         <div class="col-1">
 
         </div>
-        <div class="col-7" >
+        <div class="col-7">
             <div class="inner1"><b>我的帳戶</b></div>
             <div id="inner3content" class="inner3">
+                <!-- 新增美甲師資料 -->
+                <div id="insertshopfirst" class="insertshop-div">
+                    <div class="contentinsertshop">
+                        <span class="close2">&times;</span>
+                        <div class="form-group">
+                            <label>店家/美甲師名稱:</label><input type="text" id="newsolanname" class="form-control" name="name" value="" />
+                            <label>店家/美甲師地址:</label><input type="text" id="newsolanaddress" class="form-control" name="name" value="" />
+                            <label>店家/美甲師電話:</label><input type="text" id="newshopphone" class="form-control" name="name" value="" />
+                            <label>介紹</label><textarea class="form-control" id="newintoshop" rows="3"></textarea>
+                            <label>證照</label><textarea class="form-control" id="newshoplicen" rows="3"></textarea>
+                                             <br />
+                            <button id="btninsertshop" onclick="btninsertshopcert()" class="btn">確定新增</button>
+                        </div>
+                    </div>
+                </div>
                 <div id="memberinfor">
                     <div class="content" id="member-infor">
                         <div class="inner2">
@@ -147,27 +177,29 @@
                     </div>
                     <div class="content" id="shop-infor">
                         <div class="inner2">
-                            <pre><b><button id="personal" class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button style="border-bottom: 1px solid;" id="shop" class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b>                          <button type="button" onclick="openinfor(event,'shop-infor-modif','個人檔案>店家個檔>修改')" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <pre><b><button id="personal" class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button style="border-bottom: 1px solid;" id="shop" class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b>                          <button id="btnshowmodif" type="button" onclick="openinfor(event,'shop-infor-modif','個人檔案>店家個檔>修改')" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
           </svg></button></pre>
                         </div>
-
-                        <h5><b>店家/美甲師名稱</b></h5>
-                        <h5>{{shoplist.manicuristSalonName}}</h5>
-                        <br />
-                        <h5><b>店家/美甲師地址</b></h5>
-                        <h5>{{shoplist.manicuristAddress}}</h5>
-                        <br />
-                        <h5><b>店家/美甲師電話</b></h5>
-                        <h5>{{shoplist.manicuristSalonPhone}}</h5>
-                        <br />
-                        <h5><b>介紹</b></h5>
-                        <h5>{{shoplist.manicuristIntro}}</h5>
-                        <br />
-                        <h5><b>證照</b></h5>
-                        <h5>{{shoplist.manicuristLicense}}</h5>
-
+                        <div id="shopisopen">
+                            <h5><b>店家/美甲師名稱</b></h5>
+                            <h5>{{shoplist.manicuristSalonName}}</h5>
+                            <br />
+                            <h5><b>店家/美甲師地址</b></h5>
+                            <h5>{{shoplist.manicuristAddress}}</h5>
+                            <br />
+                            <h5><b>店家/美甲師電話</b></h5>
+                            <h5>{{shoplist.manicuristSalonPhone}}</h5>
+                            <br />
+                            <h5><b>介紹</b></h5>
+                            <h5>{{shoplist.manicuristIntro}}</h5>
+                            <br />
+                            <h5><b>證照</b></h5>
+                            <h5>{{shoplist.manicuristLicense}}</h5>
+                        </div>
+                        <div id="shopnotopen"><h5>美甲師資料為空請先點擊修改按鈕進行新增</h5></div>
+                        <div id="shopnotnotopen"><h5>尚未開通美甲師功能，請先進行開通</h5></div>
                     </div>
                     <div class="content" id="shop-infor-modif">
                         <div class="inner2"><pre><b><button class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button style="border-bottom: 1px solid;" class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b></pre></div>
@@ -333,7 +365,7 @@
                             <h5 class="bankaccount">{{shoplist.manicuristBankCompanyName}}</h5> <h5 class="bankaccount">{{shoplist.manicuristBankName}}({{shoplist.manicuristBankNameBranch}})</h5><h5 id="bankaccount1" class="bankaccount"></h5><button id="btndelete" v-on:click="deleteaccount" type="button" class="btn">刪除帳號</button>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="content" id="my-appointment">
                     <div class="switch-div">
                         <button class="switch-btn" id="switch-ing" onclick="orderstat(event,'ing','switch-ing')">預約中</button>
@@ -445,7 +477,7 @@
                             </div>
                             <br />
                         </div>
-                        </div>
+                    </div>
 
                     <div id="finish" class="tab-order">
                         <div v-for="(fin,key) in finlist">
@@ -499,7 +531,7 @@
                             </div>
                             <br />
                         </div>
-                        </div>
+                    </div>
                     <div id="cancel" class="tab-order">
                         <div v-for="(cancel,key) in cancellist">
                             <div class="order-name"><h6>{{cancel.manicuristSalonName}}</h6><h6 class="order-cancel">已取消</h6></div>
@@ -551,7 +583,7 @@
                             </div>
                             <br />
                         </div>
-                        </div>
+                    </div>
                 </div>
                 <!-- 我的評價-->
                 <div id="allevaluate">
@@ -565,7 +597,7 @@
                                     <div class="product-picture"><img v-bind:src="item.demoSetCover" alt=""></div>
                                     <div class="product-information"><h5><b>{{item.manicuristSalonName}}</b></h5><h6 style="font-size:11px">{{item.orderItemName}}</h6><h6 style="font-size:11px;color:gray">{{item.demoSetContent}}</h6><h6 class="productdetil">完成日期:{{item.orderOrderTime}}</h6></div>
                                     <div class="btn-order-stat"><pre>訂金 NT${{item.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'evashow'+[key]" onclick="Getevashowdetail(this)" data-target="#showdetil-evaluation" href="#">詳情</a></P></div>
-             
+
                                 </div>
                                 <br>
                                 <div v-bind:class="'rating'+[key]">
@@ -576,10 +608,10 @@
                                     <span v-bind:id="'star5'+[key]" class="fa fa-star-o" onclick="ratstar(this)"></span>
                                 </div>
                                 <div class="commment">
-                                    <textarea name="comment-text" class="form-control" v-bind:id="'commontext'+[key]"  cols="30" rows="10"></textarea>
+                                    <textarea name="comment-text" class="form-control" v-bind:id="'commontext'+[key]" cols="30" rows="10"></textarea>
                                     <button class="btn" v-bind:value="[key]" onclick="evainsertbtn(this)">評價</button>
                                 </div>
-                                <hr  />
+                                <hr />
                                 <div class="modal fade" id="showdetil-evaluation" tabindex="-1" role="dialog" aria-labelledby="showdetil-evaluation" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -750,7 +782,7 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
+                        </div>
                         <div class="tab-order" id="custom-finish">
                             <div v-for="(item,key) in historyfinlist">
                                 <br>
@@ -817,10 +849,10 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
+                        </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
 
         <div class="col-1">
@@ -857,7 +889,9 @@
                 }], creditlist: [{
                     "creditCardOwner": 1, "creditCardNumber": null, "creditCardExpirationdateYear": null, "creditCardExpirationdateMon": null
                     , "creditCardHolder": null, "creditCardBilladdress": null, "creditCardPostalCode": null
-                }],shoplistcard:[]
+                }], shoplistcard: [],
+                verifcodelist: [],
+                memberlistman:[]
             },
             methods: { //會員資料修改
                 btnmodifmember: function () {
@@ -929,7 +963,7 @@
                             alert("資料修改成功");
                         }
                     })
-                }, 
+                },
                 // 新增信用卡
                 btninsertcard: function () {
                     var flag = true;
@@ -957,99 +991,89 @@
                     if (flag == true) {
                         app.creditlist[0].creditCardExpirationdateYear = ($("#creditenddate").val()).substr(3, 2);
                         app.creditlist[0].creditCardExpirationdateMon = ($("#creditenddate").val()).substr(0, 2);
-                        $.ajax({
-                            type: "post",
-                            url: "/api/CreditCardTables",
-                            contentType: "application/json",
-                            data: JSON.stringify(app.creditlist[0]),
+                        if (confirm('是否確定要新增信用卡?') == true) {
 
-                            success: function () {
-                                window.location = "/tedLb/tedmember.html";
-                                alert("信用卡新增成功");
-                            }
-                        })
+                            $.ajax({
+                                type: "post",
+                                url: "/api/CreditCardTables",
+                                contentType: "application/json",
+                                data: JSON.stringify(app.creditlist[0]),
+
+                                success: function () {
+                                    window.location = "/tedLb/tedmember.html";
+                                    alert("信用卡新增成功");
+                                }
+                            })
+                        }
                     }
                 },
                 //新增美甲師銀行帳號
                 insertaccount: function () {
                     console.log(this.shoplistcard);
-                    $.ajax({
-                        type: "put",
-                        url: "/api/ManicuristTables/1",
-                        contentType: "application/json",
-                        data: JSON.stringify(this.shoplist),
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("新增銀行帳號成功")
-                        }
-                    })
+                    if (confirm('是否確定要新增銀行帳號?') == true) {
+
+                        $.ajax({
+                            type: "put",
+                            url: "/api/ManicuristTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(this.shoplist),
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("新增銀行帳號成功")
+                            }
+                        })
+                    }
                 },  //刪除銀行帳號
                 deleteaccount: function () {
-                    this.shoplist.manicuristBankAccount = null;
-                    this.shoplist.manicuristBankCode = null;
-                    this.shoplist.manicuristBankCompanyName = null;
-                    this.shoplist.manicuristBankName = null;
-                    this.shoplist.manicuristBankNameBranch = null;
                     if (confirm('是否確定要刪除銀行帳號?') == true) {
+                        this.shoplist.manicuristBankAccount = null;
+                        this.shoplist.manicuristBankCode = null;
+                        this.shoplist.manicuristBankCompanyName = null;
+                        this.shoplist.manicuristBankName = null;
+                        this.shoplist.manicuristBankNameBranch = null;
                         console.log(this.shoplist);
-                    $.ajax({
-                        type: "put",
-                        url: "/api/ManicuristTables/1",
-                        contentType: "application/json",
-                        data: JSON.stringify(this.shoplist),
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("刪除銀行帳號成功");
-                        }
+                        $.ajax({
+                            type: "put",
+                            url: "/api/ManicuristTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(this.shoplist),
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("刪除銀行帳號成功");
+                            }
 
-                    })
+                        })
                     }
                 },
                 //刪除信用卡
                 btndelect: function () {
                     console.log(app.creditlist[0]);
-                    $.ajax({
-                        type: "delete",
-                        url: "/api/CreditCardTables/" + app.creditlist[0].creditCardId ,
-                        contentType: "application/json",
-                        data: JSON.stringify(app.creditlist[0]),
+                    if (confirm('是否確定要刪除信用卡?') == true) {
 
-                        success: function () {
-                            window.location = "/tedLb/tedmember.html";
-                            alert("信用卡成功刪除");
-                        }
-                    })
-                }
-            }
+                        $.ajax({
+                            type: "delete",
+                            url: "/api/CreditCardTables/" + app.creditlist[0].creditCardId,
+                            contentType: "application/json",
+                            data: JSON.stringify(app.creditlist[0]),
 
-        })
-
-       
-            $.ajax({
-                type: "get",
-                url: "/api/CreditCardTables/1",
-                success: function (e) {
-                    if (e.length != 0) {
-                    app.creditlist = e;
-                    $("#newcardbtn").css("visibility", "hidden");
-                    $(".card-1").css("visibility", "visible");
-                    $("#card-1-1-number").html("**** **** **** " + (e[0].creditCardNumber).substr(12, 4))
+                            success: function () {
+                                window.location = "/tedLb/tedmember.html";
+                                alert("信用卡成功刪除");
+                            }
+                        })
                     }
                 }
-            })
-        
-
-      
-       
-
+               
+            }
+        })
 
         //會員修改判斷
-
         $.ajax({
             type: "get",
             url: "/api/membertables/1",
             success: function (e) {
                 app.memberlist = e;
+
                 if (e.memberGender == true) {
                     $("#Gender").text("男");
                     $("#inputGroupSelect01").val(0);
@@ -1071,8 +1095,153 @@
                 };
                 $("#inputGroupSelect02").val(month).selected;
                 $("#inputGroupSelect03").val(day1).selected;
+                if (e.memberManicurist == true) {
+                    $("#memberManicurist").css("display", "none");
+                }
+
+                if (e.memberManicurist == false) {
+                    $("#shopnotopen").css("display", "none");
+                    $("#shopisopen").css("display", "none");
+                    $("#btnshowmodif").attr("disabled", true);
+                }
             }
         })
+        
+            $.ajax({
+                type: "get",
+                url: "/api/CreditCardTables/1",
+                success: function (e) {
+                    if (e.length != 0) {
+                    app.creditlist = e;
+                    $("#newcardbtn").css("visibility", "hidden");
+                    $(".card-1").css("visibility", "visible");
+                    $("#card-1-1-number").html("**** **** **** " + (e[0].creditCardNumber).substr(12, 4))
+                    }
+                }
+            })       
+        var memidid = app.memberlist[0].memberId;
+        //寄送驗證碼
+        function sendmail() {
+            console.log(memidid);
+            app.verifcodelist = [];
+            app.verifcodelist.push(String(memidid));
+            var randstr = randomstr(6);
+            console.log(randstr);
+            app.verifcodelist.push(randstr);
+            app.verifcodelist.push($("#emailcertified").val());
+            console.log(app.verifcodelist);
+            console.log($("#emailcertified").val());
+            $.ajax({
+                type: "post",
+                url: "/api/Verifcode",
+                contentType: "application/json",
+                data: JSON.stringify(app.verifcodelist)
+
+            })
+            alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼")
+            setTimeout(function () { $("#insertverif").css("display", "block") }, 1000);
+            //alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼");
+      
+            var span = document.getElementsByClassName("close111")[0];
+            
+            //$.ajax({
+            //    type: "get",
+            //    url: "/api/Verifcode/1",
+            //    success: function (e) {
+            //        console.log(e);
+            //    }
+            //})
+            span.onclick = function () {
+                $("#insertverif").css("display", "none");
+            }
+            window.onclick = function (event) {
+                if (event.target == $("#insertverif")) {
+                    $("#insertverif").css("display", "none");
+                }
+            }
+        }
+        //驗證開通美甲師
+   
+        function verifcert() {
+            if ($("#certifiednum").val() != app.verifcodelist[1]) {
+                alert("驗證碼錯誤")
+            } else if ($("#certifiednum").val() == app.verifcodelist[1]) {
+                $.ajax({
+                    type: "get",
+                    url: "/api/MemberTables/1",
+                    success: function (e) {
+                        e.memberManicurist = true;
+                        $.ajax({
+                            type: "put",
+                            url: "/api/MemberTables/1",
+                            contentType: "application/json",
+                            data: JSON.stringify(e),
+                            success: function () {
+                                alert("驗證成功");
+
+                            }
+                        })
+                    }
+                });
+              
+                
+                $("#insertverif").css("display", "none");
+                $("#insertshopfirst").css("display", "block");
+                var span = document.getElementsByClassName("close2")[0];
+               span.onclick =function () {
+                   $("#insertshopfirst").css("display", "none");
+
+                }
+            }
+        }
+        var newshoplist = [{
+            "manicuristId": 4, "manicuristPic": "UploadFolder/會員預設.jpg",
+            "manicuristSalonName":null, "manicuristAddress":null ,
+            "manicuristCounty": null, "manicuristTownship": null, "manicuristPublic": true,
+            "manicuristSalonPhone": null,
+            "manicuristLicense": "無",
+            "manicuristBankCode": null, "manicuristBankAccount": null,
+            "manicuristIntro": null,
+            "manicuristScore": null, "manicuristBankName": null, "manicuristBankNameBranch": null, "manicuristBankCompanyName": null
+        }]
+        var removallist = [{ "removalPriceManicuristId": 2, "removalPriceB0": 0, "removalPriceB1": 0, "removalPriceB2": 0, "removalPriceB3": 0 }]
+        //新增美甲師資料
+        function btninsertshopcert() {
+            newshoplist[0].manicuristId = 4;
+            newshoplist[0].manicuristSalonName = $("#newsolanname").val();
+            newshoplist[0].manicuristAddress = $("#newsolanaddress").val();
+            newshoplist[0].manicuristCounty = ($("#newsolanaddress").val()).substr(0, 3);
+            newshoplist[0].manicuristTownship = ($("#newsolanaddress").val()).substr(3, 3);
+            newshoplist[0].manicuristSalonPhone = $("#newshopphone").val();
+            newshoplist[0].manicuristIntro = $("#newintoshop").val();
+            newshoplist[0].manicuristLicense = $("#newshoplicen").val();
+            console.log(newshoplist);
+            $.ajax({
+                type: "post",
+                url: "/api/ManicuristTables",
+                contentType: "application/json",
+                data: JSON.stringify(newshoplist[0]),
+                success: function () {
+                
+                }
+            })
+            removallist.removalPriceManicuristId = 4;
+            $.ajax({
+                type: "post",
+                url: "/api/RemovalTed",
+                contentType: "application/json",
+                data: JSON.stringify(removallist[0]),
+                success: function () {
+
+                    window.location = "/tedLb/tedmember.html";
+                    alert("美甲師功能已開通囉!!請到個人資訊查看~");
+                }
+            })
+        }
+
+   
+        if (app.memberlist[0].memberManicurist == true) {
+
         $.ajax({
             type: "get",
             url: "/api/Manicuristtables/1",
@@ -1103,14 +1272,25 @@
                     $("#bankaccount1").html("**** **** **** " + (e.manicuristBankAccount).substr(12, 4));
                 }
 
+                if (e.manicuristSalonName != null) {
+                    $("#shopnotopen").css("display", "none");
+                    $("#shopnotnotopen").css("display", "none");
+                }
 
             }
         })
-
-        //寄信
-        function sendmail() {
-
         }
+
+        
+        function randomstr(e) {
+            var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz123456789", a = t.length, n = "";
+            for (var i = 0; i < e; i++) {
+                n += t.charAt(Math.floor(Math.random() * a));
+            }
+            return n;
+        }
+        //開通美甲師判斷
+
     </script>
   
 </body>

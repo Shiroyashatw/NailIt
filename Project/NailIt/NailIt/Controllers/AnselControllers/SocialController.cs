@@ -75,7 +75,7 @@ namespace NailIt.Controllers.AnselControllers
 
         private async Task<string> saveImage(ArticlePicTable articlePic,IFormFile imageFile)
         {
-            articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + "00.png";
+            // articlePic.ArticlePicPath = "wwwroot\\AnselLib\\ArticleImage" + "\\" + "00.png";
             _context.ArticlePicTables.Add(articlePic);
             _context.SaveChanges();
 

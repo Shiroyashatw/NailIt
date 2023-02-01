@@ -46,8 +46,48 @@ namespace NailIt.Controllers.TanTanControllers
 
             return await newNoticeTables.ToListAsync();
         }
+        // GET: api/NoticeTables/condition
+        [HttpGet("noticecondition/{NdateS}/{NdateE}/{NoticeScope}/{NoticeState}/{NoiceStateN}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetNoticeCondition(string NdateS, string NdateE, int NoticeScope, bool? NoticeState,string NoiceStateN)
+        {
+            var date1 = DateTime.Parse(NdateS);
+            var date2 = DateTime.Parse(NdateE).AddMinutes(1439);
+            var query = from o in _context.NoticeTables
+                        select o;
+
+            var result = query;
+
+            if (NdateS != "1900-01-01" && NdateE != "3000-01-01")
+            {
+                result = result.Where(a => a.NoticePushTime >= Convert.ToDateTime(date1)
+                                        && a.NoticePushTime <= Convert.ToDateTime(date2));
+            }
+
+            if (NoticeScope == 0) { result = result.Where(a => a.NoticeScope == 0); }
+            else if (NoticeScope == 1) { result = result.Where(a => a.NoticeScope == 1); }
+            else if (NoticeScope == 2) { result = result.Where(a => a.NoticeScope == 2); }
 
 
+            if (NoticeState == false && NoiceStateN.Length == 3) { result = result.Where(a => a.NoticeState == false); }
+            else if (NoticeState == true && NoiceStateN.Length == 3) { result = result.Where(a => a.NoticeState == true); }
+
+            var newNoticeTables = from o in result
+                                  select new
+                                  {
+                                      NowNoticeId = o.NoticeId,
+                                      NoticeId = o.NoticeId,
+                                      NoticeScope = o.NoticeScope,
+                                      NoticeTitle = o.NoticeTitle,
+                                      NoticeContent = o.NoticeContent,
+                                      NoticeBuildTime = o.NoticeBuildTime,
+                                      NoticePushTime = o.NoticePushTime.ToString("yyyy-MM-dd HH:mm"),
+                                      NoticeState = o.NoticeState,
+                                      NoticeManagerId = o.NoticeManagerId,
+                                  };
+
+
+            return await newNoticeTables.ToListAsync();
+        }
         // GET: api/NoticeTables/5
         [HttpGet("{id}")]
         public async Task<ActionResult<dynamic>> GetNoticeTable(int id)
@@ -77,6 +117,7 @@ namespace NailIt.Controllers.TanTanControllers
 
             return await noticeTable.ToListAsync();
         }
+
 
         //// PUT: api/NoticeTables/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
