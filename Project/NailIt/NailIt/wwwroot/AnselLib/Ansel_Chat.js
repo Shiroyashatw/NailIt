@@ -51,9 +51,23 @@ var showAddBlack = async function () {
         }
     }
 }
+// search member searchChatMember
+var showSearchChatMember = function () {
+    let searchChatMember = $("#searchChatMember").val().trim();
+    var searchMembers = scop.chattingMembers;
+    if (searchChatMember != "") {
+        searchMembers = scop.chattingMembers.
+            filter(x => x.memberAccount.toUpperCase().indexOf(searchChatMember.toUpperCase()) > -1
+                || x.memberNickname.toUpperCase().indexOf(searchChatMember.toUpperCase()) > -1);
+    }
+    $("#chattingMembers").empty();
+    renderChatMember(searchMembers);
+}
 // Checking for new messages 
 var showNewMsg = function () {
+    console.log("showNewMsg");
     // call api (getNewMsg)
+
 
     // update chatting members
     // BindingMemberRightMenu not include system
@@ -86,7 +100,7 @@ var showSingleMemberMsg = async function (obj) {
     let result = await getSingleMemberMsg(scop.currentChatMemId);
     let messageDate;
     if (!!result) {
-        chattingMain.classList.remove("d-none");        
+        chattingMain.classList.remove("d-none");
         sendMsgArea.classList.add("d-flex");
         sendMsgArea.classList.remove("d-none");
         emptySendMsgArea.classList.add("d-none");
@@ -575,6 +589,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // $("#findMemberAccount").val();
     // $("#findMemberNickname").val();
 
+    
     //#region Event Binding
     // Initial blacklistModal show setting
     $('#blacklistModal').on('show.bs.modal', async function (e) {
@@ -616,7 +631,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     //#endregion
 
 
-    // Initial
+    // Page Initial
     await showChatMember();
     let findMemberId = $("#findMemberId").val();
     if (findMemberId != -1) {
