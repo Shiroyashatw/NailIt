@@ -77,7 +77,15 @@ namespace NailIt.Controllers.TedControllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ManicuristTable>> PostManicuristTable(ManicuristTable manicuristTable)
+
         {
+            var table = new RemovalPriceTable();
+            table.RemovalPriceManicuristId = manicuristTable.ManicuristId;
+            table.RemovalPriceB0 = 0;
+            table.RemovalPriceB1 = 0;
+            table.RemovalPriceB3 = 0;
+            table.RemovalPriceB2 = 0;
+            _context.RemovalPriceTables.Add(table);
             _context.ManicuristTables.Add(manicuristTable);
             try
             {

@@ -24,12 +24,16 @@ namespace NailIt.Controllers.YueyueControllers
         // POST: api/YueReportTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)
+        public async Task<bool> PostReportTable(ReportTable reportTable)
         {
+            reportTable.ReportBuildTime = DateTime.Now;
             _context.ReportTables.Add(reportTable);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetReportTable", new { id = reportTable.ReportId }, reportTable);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch { return false; }
+            return true;
         }
 
         [HttpPut]

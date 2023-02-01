@@ -63,8 +63,6 @@ namespace NailIt.Controllers.TanTanControllers
         }
 
         // GET: api/ReportTables/condition 條件
-   
-
         [HttpGet("condition/{dateS}/{dateE}/{reportP}/{reportR}/{reportRN}")]  // ReportResult is null的情況 待審核
 
         public async Task<ActionResult<IEnumerable<dynamic>>> GetProductCondition(string dateS, string dateE, string reportP, bool? reportR, string reportRN)

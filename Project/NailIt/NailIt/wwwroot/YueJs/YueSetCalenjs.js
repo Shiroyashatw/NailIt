@@ -326,6 +326,10 @@ function planSendPost()
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 
+	if (oneTime.value == "") {
+		toastr.warning("請輸入時間");
+		return;
+	}
 	var raw = JSON.stringify({
 		"manicuristId": nowMember,
 		"orderId": null,
