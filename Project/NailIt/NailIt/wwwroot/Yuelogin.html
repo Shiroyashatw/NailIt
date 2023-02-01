@@ -8,8 +8,10 @@
 	<link rel="stylesheet" href="./YueCss/bootstrap.css" />
 	<script src="/YueJs/jquery.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <link href="./YueCss/workSet.css" rel="stylesheet" />
 </head>
 	<body>
+        <dialog id="infoModal"></dialog>
 		<div style="background-color: pink; height: 90px">
 			<h1>頁首</h1>
 		</div>
@@ -34,7 +36,8 @@
 					</span>
 
 					<br />
-					<a href="./forgot.html"
+					<a href="#"
+						onclick="forgor()"
 					   style="
 							text-decoration: underline;
 							font-size: 5%;
@@ -61,11 +64,9 @@
 							margin-left: 1%;
 							background-color: #ff6733;
 							color: white;
-
 						">
 						登入
 					</button>
-                    <button onclick="lookCookie()">看cookie</button>
 				</div>
 				<div class="col-md-5" style="margin-top: 5%">
 					<img style="width: 70%" src="./YuePic/meme.webp" />

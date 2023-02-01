@@ -21,7 +21,30 @@ namespace NailIt.Controllers.YueyueControllers
             _context = context;
         }
 
+        [HttpGet("{AC}")]
+        public async Task<string> GetMemberTalbe(string AC)
+        {
+            var myMember = from member in _context.MemberTables
+                           where member.MemberAccount == AC
+                           select member;   
+            if (myMember.Count() == 0) return "";
+            string qq = (await myMember.ToListAsync())[0].MemberQuestion;
+           
 
+            return qq;
+        }
+        [HttpPut("{state}")]
+        public async Task<int> GetMemberTalbe(int state, string[] acAndaa)
+        {
+            var myMember = from member in _context.MemberTables
+                           where member.MemberAccount == acAndaa[0]
+                           select member;
+            if (myMember.Count() == 0) return -1;
+            string aa = (await myMember.ToListAsync())[0].MemberAnswer;
+            if (aa == acAndaa[1]) return (await myMember.ToListAsync())[0].MemberId;
+
+            return -1;
+        }
 
         // PUT: api/YueMember   //登入用
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
