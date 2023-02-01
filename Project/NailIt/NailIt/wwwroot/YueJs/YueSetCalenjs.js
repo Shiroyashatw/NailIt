@@ -19,7 +19,7 @@ async function calenSendGet() {
 		})
 		.catch(error => console.log('error', error));
 	await calenSet();
-	loadScript("./YueJs/YueCalen.js", buildCalen, buildCalen);
+	await loadScript("./YueJs/YueCalen.js", buildCalen, buildCalen);
 }
 
 function calenSet()
