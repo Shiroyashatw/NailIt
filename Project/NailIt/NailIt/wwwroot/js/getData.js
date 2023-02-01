@@ -36,6 +36,7 @@ let Tztoday
 
 // 選擇的項目、訂金
 let ritem
+let ritemName
 let rdep
 
 // 讀取基本資料 設計師資料 demoset資料 demo資料 再顯示在畫面上
@@ -458,6 +459,7 @@ function OrderDetail() {
         let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
         let rremovec = $('select[name="OrderRemovalC"]').find("option:selected").text()
         ritem = $('select[name="OrderItem"]').find("option:selected").text()
+        ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
         let rprice = $('input[name="OrderPrice"]').val()
         rdep = $('input[name="OrderDeposit"]').val()
         $('.rescheck').append(`
@@ -487,8 +489,13 @@ function postCash() {
     // TotalAmount 付款金額
     // TradeDesc 商品描述
     // ItemName 商品名稱
-    // 上面五個須給值
-    $('input[name="ItemName"]').val(ritem);
+    // 上面五個須給值ritemName
+    if (ritem == "固定項目") {
+        $('input[name="ItemName"]').val(ritemName);
+    }
+    else {
+        $('input[name="ItemName"]').val(ritem);
+    }
     let itemName = $('input[name="ItemName"]').val();
 
     // console.log(itemName)
@@ -524,7 +531,7 @@ function postCash() {
     console.log(hash)
     $('input[name="CheckMacValue"]').val(hash)
 
-    //$('#cashform').submit();
+    $('#cashform').submit();
     // const apiURL = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
     // const data = { 
