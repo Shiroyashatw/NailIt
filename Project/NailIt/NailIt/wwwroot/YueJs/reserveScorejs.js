@@ -5,6 +5,8 @@ var mySearchStart="";
 var mySearchEnd="";
 //網頁從送出get api開始
 async function reserveScoreSendGet() {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',

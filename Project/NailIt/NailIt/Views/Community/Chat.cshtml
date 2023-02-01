@@ -6,6 +6,8 @@
     string loginAccount = hca.HttpContext.Session.GetString("loginAccount") ?? "Guest";
     string loginNickname = hca.HttpContext.Session.GetString("loginNickname") ?? "Guest";
     int findMemberId = ViewBag.FindMemberId;
+    string findMemberAccount = ViewBag.FindMemberAccount ?? "";
+    string findMemberNickname = ViewBag.FindMemberNickname ?? "";
 }
 @section Head{
     <!-- Google Icons -->
@@ -30,6 +32,9 @@
 <input id="loginAccount" type="text" value="@loginAccount" class="d-none">
 <input id="loginNickname" type="text" value="@loginNickname" class="d-none">
 <input id="findMemberId" type="text" value="@findMemberId" class="d-none">
+<input id="findMemberAccount" type="text" value="@findMemberAccount" class="d-none">
+<input id="findMemberNickname" type="text" value="@findMemberNickname" class="d-none">
+
 
 @* context menu for chattingMembers *@
 <div id="chattingMembersMenu" class="context-menu">
@@ -43,7 +48,7 @@
 <div class="row">
     <div class="col-4 px-0 pt-3" style="height:80vh;">
         <div class="px-3">
-            <input id="searchChatMember" class="w-100" type="text" placeholder="帳號查詢">
+            <input id="searchChatMember" oninput="showSearchChatMember()" class="w-100" type="text" placeholder="帳號查詢">
             <div class="pt-3 d-flex align-items-center">
                 <h6 class="font-weight-bold pr-2 m-0">聊天室</h6>
                 <button class="btn btn-light btn-sm" onclick="showBlacklist()">黑名單</button>
@@ -51,34 +56,36 @@
         </div>
         <div id="chattingMembers">
             @* <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="2">
-                <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
-                    style="aspect-ratio:1;color: #fff;width:35px">
-                    <div class="font-weight-bold">
-                        A
-                    </div>
-                </div>
-                <div class="pl-1 pl-sm-4">
-                    <div class="font-weight-bold">Ohora美甲室</div>
-                    <div>3天前</div>
-                </div>
-                <div class="bg-danger rounded-circle text-center"style="aspect-ratio:1;color:#fff;margin-left:auto;width:24px">
-                    3
-                </div>
+            <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
+            style="aspect-ratio:1;color: #fff;width:35px">
+            <div class="font-weight-bold">
+            A
+            </div>
+            </div>
+            <div class="pl-1 pl-sm-4">
+            <div class="font-weight-bold">Ohora美甲室</div>
+            <div>3天前</div>
+            </div>
+            <div class="bg-danger rounded-circle
+            text-center"style="aspect-ratio:1;color:#fff;margin-left:auto;width:24px">
+            3
+            </div>
             </div> *@
             @* <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="2">
-                <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
-                    style="aspect-ratio:1;color: #fff;width:35px">
-                    <div class="font-weight-bold">
-                        A
-                    </div>
-                </div>
-                <div class="pl-1 pl-sm-4">
-                    <div class="font-weight-bold">Ohora美甲室</div>
-                    <div>3天前</div>
-                </div>
-                <div class="bg-danger rounded-circle text-center"style="aspect-ratio:1;color:#fff;margin-left:auto;width:24px">
-                    3
-                </div>
+            <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
+            style="aspect-ratio:1;color: #fff;width:35px">
+            <div class="font-weight-bold">
+            A
+            </div>
+            </div>
+            <div class="pl-1 pl-sm-4">
+            <div class="font-weight-bold">Ohora美甲室</div>
+            <div>3天前</div>
+            </div>
+            <div class="bg-danger rounded-circle
+            text-center"style="aspect-ratio:1;color:#fff;margin-left:auto;width:24px">
+            3
+            </div>
             </div> *@
         </div>
     </div>
@@ -95,56 +102,61 @@
             </div>
         </div>
         <div id="chattingArea" class="border-bottom px-4" style="height:65vh;overflow-y: scroll;">
-            @* <div class="my-3 d-flex justify-content-center">                    
-                <span class="px-3 bg-secondary text-white rounded">2023-01-31</span>
+            @* <div class="my-3 d-flex justify-content-center">
+            <span class="px-3 bg-secondary text-white rounded">2023-01-31</span>
             </div>
             <div class="mb-1 d-flex" data-messageid="1">
-                <span class="bg-secondary text-white rounded px-3 py-2">階層式樣式表是一種用來為結構化文件添加樣式的電腦語言，由W3C定義和維護。CSS3現在已被大部分現代瀏覽器支援，而下一版的CSS4仍在開發中。
-                    CSS不僅可以靜態地修飾網頁，還可以配合各種手稿語言動態地對網頁各元素進行格式化。</span>
-                <span class="col-2 px-2 align-self-end">16:40</span>
+            <span class="bg-secondary text-white rounded px-3
+            py-2">階層式樣式表是一種用來為結構化文件添加樣式的電腦語言，由W3C定義和維護。CSS3現在已被大部分現代瀏覽器支援，而下一版的CSS4仍在開發中。
+            CSS不僅可以靜態地修飾網頁，還可以配合各種手稿語言動態地對網頁各元素進行格式化。</span>
+            <span class="col-2 px-2 align-self-end">16:40</span>
             </div>
             <div class="mb-1 d-flex" data-messageid="1">
-                <span class="bg-secondary text-white rounded px-3 py-2">Lorem ipsum dolor sit, amet consectetur
-                    adipisicing elit. Quidem consequuntur praesentium nostrum ipsam voluptates possimus, minus ducimus
-                    veniam dolores consectetur.</span>
-                <span class="col-2 px-2 align-self-end">16:40</span>
+            <span class="bg-secondary text-white rounded px-3 py-2">Lorem ipsum dolor sit, amet consectetur
+            adipisicing elit. Quidem consequuntur praesentium nostrum ipsam voluptates possimus, minus ducimus
+            veniam dolores consectetur.</span>
+            <span class="col-2 px-2 align-self-end">16:40</span>
             </div>
             <div class="mb-1 d-flex" data-messageid="1">
-                <span class="bg-secondary text-white rounded px-3 py-2">aaa</span>
-                <span class="col-2 px-2 align-self-end">16:40</span>
+            <span class="bg-secondary text-white rounded px-3 py-2">aaa</span>
+            <span class="col-2 px-2 align-self-end">16:40</span>
             </div>
             <div class="mb-1 d-flex" data-messageid="1">
-                <span class="bg-secondary rounded px-1 py-1"><img class="mw-100"
-                        src="https://localhost:5001/AnselLib/ArticleImage/1067.png" alt=""></span>
-                <span class="col-2 px-2 align-self-end">16:40</span>
+            <span class="bg-secondary rounded px-1 py-1"><img class="mw-100"
+            src="https://localhost:5001/AnselLib/ArticleImage/1067.png" alt=""></span>
+            <span class="col-2 px-2 align-self-end">16:40</span>
             </div>
 
             <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="1">
-                <span class="rounded px-3 py-2" style="border: 4px solid black;">Lorem ipsum dolor sit, amet consectetur
-                    adipisicing elit. Quidem consequuntur praesentium nostrum ipsam voluptates possimus, minus ducimus
-                    veniam dolores consectetur.</span>
-                <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
+            <span class="rounded px-3 py-2" style="border: 4px solid black;">Lorem ipsum dolor sit, amet consectetur
+            adipisicing elit. Quidem consequuntur praesentium nostrum ipsam voluptates possimus, minus ducimus
+            veniam dolores consectetur.</span>
+            <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
             </div>
             <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="1">
-                <span class="rounded px-3 py-2" style="border: 4px solid black;">aaa</span>
-                <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
+            <span class="rounded px-3 py-2" style="border: 4px solid black;">aaa</span>
+            <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
             </div>
             <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="1">
-                <span class="rounded" style="border: 4px solid black;"><img class="mw-100"
-                        src="https://localhost:5001/AnselLib/ArticleImage/1067.png" alt=""></span>
-                <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
+            <span class="rounded" style="border: 4px solid black;"><img class="mw-100"
+            src="https://localhost:5001/AnselLib/ArticleImage/1067.png" alt=""></span>
+            <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
             </div> *@
         </div>
         <div id="sendMsgArea" class="d-flex">
             @* 使用textarea防止貼上圖片 *@
             @* <textarea class="col-11" id="draftMessagetextarea" placeholder="輸入訊息"></textarea> *@
-            <div id="draftMessage" class="col-11 editable" contenteditable="true" placeholder="輸入訊息" style=" overflow-y: auto;"></div>
+            <div id="draftMessage" class="col-11 editable" contenteditable="true" placeholder="輸入訊息"
+                style=" overflow-y: auto;"></div>
             <div class="col-1 d-flex flex-column justify-content-around align-items-center">
                 <i id="btnPostImage" class="fa-solid fa-image cursor-pointer"></i>
-                <input type='file' id="postImage" onchange="showMyNewImg(this)" accept="image/jpeg, image/png" style="display: none;" multiple/>
+                <input type='file' id="postImage" onchange="showMyNewImg(this)" accept="image/jpeg, image/png"
+                    style="display: none;" multiple />
 
                 <span class="cursor-pointer material-symbols-outlined" onclick="showMyNewMsg()">send</span>
             </div>
+        </div>
+        <div id="emptySendMsgArea" class="d-none">
         </div>
     </div>
 </div>
@@ -160,14 +172,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div id="blacklistBody" class="modal-body" style="max-height: calc(100vh - 190px); overflow-y: auto;">
+            <div id="blacklistBody" class="modal-body pb-5" style="max-height: calc(100vh - 190px); overflow-y: auto;">
                 @* <div class="d-flex justify-content-between" data-blackid="1">
-                    <div>Account(nickName)</div>
-                    <button>解除</button>
+                <div>Account(nickName)</div>
+                <button>解除</button>
                 </div>
                 <div class="d-flex justify-content-between" data-blackid="2">
-                    <div>Account2(nickName2)</div>
-                    <button>解除</button>
+                <div>Account2(nickName2)</div>
+                <button>解除</button>
                 </div> *@
             </div>
         </div>

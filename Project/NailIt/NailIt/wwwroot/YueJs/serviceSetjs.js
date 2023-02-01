@@ -3,6 +3,8 @@ var serviceData;
 
 async function serviceSendGet()
 {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
     var requestOptions = {
         method: 'GET',

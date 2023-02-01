@@ -5,8 +5,10 @@
       for(var i=1;i<32;i++){
         document.getElementById("inputGroupSelect03").add(new Option(i,i));
       }
-      //切換 content
-      function openinfor(evt,idcontent,titile){
+//切換 content
+function openinfor(evt, idcontent, titile) {
+    tedDiv.style.display = "block";
+    contentdiv.style.display = "none";
         var i,content,innerlink;
         content = document.getElementsByClassName('content');
         for(i=0;i<content.length;i++)
@@ -28,8 +30,10 @@
         }
       }
       //切換 modif
-      //切換訂單狀態
-      function orderstat(evt,stat,switchbtn){
+//切換訂單狀態
+function orderstat(evt, stat, switchbtn) {
+    tedDiv.style.display = "block";
+    contentdiv.style.display = "none";
         var i,taborder,btn,btn1;
         taborder = document.getElementsByClassName('tab-order');
         for(i=0;i<taborder.length;i++)
