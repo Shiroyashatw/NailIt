@@ -25,6 +25,8 @@ namespace NailIt.Controllers.DogeControllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts(int id)
         {
+            var res = _db.DemoSetTables.Find(id);
+            if (res == null) return NotFound();
             var query = from o in _db.ManicuristTables
                             // 利用 ManicuristId 設計師ID 兩表join
                         join demoset in _db.DemoSetTables
