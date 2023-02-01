@@ -705,7 +705,11 @@
         <div class="row">
             <div class="col-1"></div>
             <div class="col-11">
-                <a href="#">路徑</a>
+                <div>
+                    <a href="/TanTanLib/html/cover.html">首頁</a>
+                    <span>></span>
+                    <a href="Fliter.html">美甲查詢</a>
+                </div>
             </div>
 
         </div>
@@ -1254,7 +1258,14 @@
         //let ManicuristID = 2;
         let GetNowurl = window.location.href;
         let Nowurl = new URL(GetNowurl);
-        let GetManicuristID = Nowurl.searchParams.get('id');
+        let ManicuristID = Nowurl.searchParams.get('id');
+        let GetManicuristID;
+        if (ManicuristID != null) {
+            GetManicuristID = ManicuristID;
+        } else {
+            GetManicuristID = nowMember;
+        }
+
         let PercantStar;
         let FloatStar;
         let DemoLenth;
