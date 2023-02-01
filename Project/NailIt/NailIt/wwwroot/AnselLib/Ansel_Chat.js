@@ -100,14 +100,13 @@ var showSingleMemberMsg = async function (obj) {
     avatar.innerText = $(obj).children()[0].innerText;
     member.innerText = $(obj).children()[1].childNodes[1].innerText;
     // call api for read message (getSingleMemberMsg)
-    let result = await getSingleMemberMsg(scop.currentChatMemId);
-    let messageDate;
+    let result = await getSingleMemberMsg(scop.currentChatMemId);    
     if (!!result) {
         chattingMain.classList.remove("d-none");
         sendMsgArea.classList.add("d-flex");
         sendMsgArea.classList.remove("d-none");
         emptySendMsgArea.classList.add("d-none");
-        // can't send message to system
+        // can't send message to system, hide sendMsgArea
         if (scop.currentChatMemId == 0) {
             sendMsgArea.classList.add("d-none");
             sendMsgArea.classList.remove("d-flex");
@@ -115,6 +114,7 @@ var showSingleMemberMsg = async function (obj) {
         }
         chattingArea.innerHTML = "";
         // show messages
+        let messageDate;
         for (const message of result) {
             // print Date
             if (messageDate != message.messageTime.localYYYYMMDD()) {
@@ -142,6 +142,7 @@ var showSingleMemberMsg = async function (obj) {
             </div>`;
         $("#chattingArea").append(messageDateHTML)
         // show messages
+        let messageDate;
         for (const message of result2) {
             // print Date
             if (messageDate != message.messageTime.localYYYYMMDD()) {
@@ -199,7 +200,7 @@ var showMyNewMsg = async function () {
     // get value from textarea
     let message = new MessageTable({
         messageSender: scop.loginId,
-        messageReceiver: scop.currentChatMemId, // 需替換 scop.currentChatMemId
+        messageReceiver: scop.currentChatMemId,
         messageContent: content,
     });
     // call api (postMessage) 因為postMessage與系統功能名稱重複，改為postTheMessage
@@ -291,7 +292,7 @@ var renderMessage = async function (message) {
             messageHTML = `
                 <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="${message.messageId}">
                     <span class="rounded mw-100" style="border: 4px solid black;">${message.messageContent}</span>
-                    <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
+                    <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.indexOf("Z") != -1 ? message.messageTime.HHmm() : message.messageTime.localHHmm()}</span>
                 </div>`;
         }
     }
