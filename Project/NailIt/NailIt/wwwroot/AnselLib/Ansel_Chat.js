@@ -24,6 +24,10 @@ var showRevokeBlock = async function (obj) {
         $(obj).parent().remove();
         // showChatMember() reload cahtting member
         showChatMember();
+
+        if ($("#blacklistBody").children().length == 0) {
+            $("#blacklistBody").append('<div class="d-flex justify-content-center">目前黑名單沒有資料</div>');
+        }
     }
 }
 var showBlacklist = function () {
@@ -159,7 +163,7 @@ var showMyNewImg = async function (obj) {
         await renderTheChatMember(result);
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
         // update scop.chattingMembers, for fliter
-        updateThechattingMember();
+        updateThechattingMember(result);
 
         // Scroll to buttom of message 
         setTimeout(() => {
@@ -193,7 +197,7 @@ var showMyNewMsg = async function () {
         await renderTheChatMember(result);
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
         // update scop.chattingMembers, for fliter
-        updateThechattingMember();
+        updateThechattingMember(result);
 
         // Scroll to buttom of message
         setTimeout(() => {
@@ -219,13 +223,14 @@ var showChatMember = async function () {
 var renderBlacklist = function (blacklist) {
     if (blacklist.length == 0) {
         $("#blacklistBody").append('<div class="d-flex justify-content-center">目前黑名單沒有資料</div>');
+        return;
     }
 
     for (const black of blacklist) {
         let blackHTML = `
             <div class="d-flex justify-content-between" data-blackid="${black.blacklistId}">
                 <div>${black.memberAccount}(${black.memberNickname})</div>
-                <button onclick="showRevokeBlock(this)">解除</button>
+                <button class="btn btn-light" onclick="showRevokeBlock(this)">解除</button>
             </div>`;
         $("#blacklistBody").append(blackHTML);
     }
@@ -295,6 +300,12 @@ var renderTheChatMember = async function () {
 }
 // 渲染對話記錄人員list
 var renderChatMember = async function (chatMembers) {
+    if (chatMembers.length == 0) {
+        $("#chattingMembers").append('<div id="noChattingMember" class="py-5 d-flex justify-content-center">目前尚無通知記錄</div>');
+        return;
+    }
+
+    $("#chattingMembers").empty();
     for (const chatMember of chatMembers) {
         // if it's from sysNotic or Notic
         if (chatMember.memberId == 0) {
@@ -403,14 +414,14 @@ var postMsgImage = async function (imageFiles) {
 //#endregion
 
 //#region Custom tool function
-function updateThechattingMember(){
+function updateThechattingMember(chatMember) {
     let chattingMember = chattingMembersSplice(scop.currentChatMemId);
-        chattingMember.messageContent = result.messageContent;
-        chattingMember.messageTime = result.messageTime;
-        chattingMember.msgTimeDiff = "1秒前";
-        scop.chattingMembers.push(chattingMember);
+    chattingMember.messageContent = chatMember.messageContent;
+    chattingMember.messageTime = chatMember.messageTime;
+    chattingMember.msgTimeDiff = "1秒前";
+    scop.chattingMembers.push(chattingMember);
 }
-function chattingMembersSplice(memberid){
+function chattingMembersSplice(memberid) {
     let index = scop.chattingMembers.findIndex(x => x.memberId == memberid);
     let chattingMember = scop.chattingMembers[index];
     scop.chattingMembers.splice(index, 1);
@@ -497,7 +508,6 @@ function BindingMemberRightMenu(chattingMembersArea) {
             e.preventDefault();
             // get the member id
             scop.memberid = $(e.currentTarget).data("memberid");
-            console.log(scop.memberid)
             const { clientX: mouseX, clientY: mouseY } = e;
             const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY, bodyArea, chattingMembersMenu);
 
@@ -568,9 +578,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     // $("#findMemberAccount").val();
     // $("#findMemberNickname").val();
 
-    // Initial
-    showChatMember()
-
     //#region Event Binding
     // Initial blacklistModal show setting
     $('#blacklistModal').on('show.bs.modal', async function (e) {
@@ -610,4 +617,43 @@ document.addEventListener("DOMContentLoaded", async function () {
     scop.chattingMsgsMenu = chattingMsgsMenu;
 
     //#endregion
+
+
+    // Initial
+    await showChatMember();
+    let findMemberId = $("#findMemberId").val();
+    if (findMemberId != -1) {
+        // 有帶入人員，移除無訊息文字
+        $("#noChattingMember").remove();
+        // chech if member already existed. Not exist, then append new chattingMember
+        if (scop.chattingMembers.findIndex(x => x.memberId == findMemberId) == -1) {
+            // append new chattingMember
+            let chatMemberHTML = `
+                <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="${findMemberId}" onclick="showSingleMemberMsg(this)">
+                    <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
+                        style="aspect-ratio:1;color: #fff;width:35px">
+                        <div class="font-weight-bold">
+                            ${$("#findMemberAccount").val()[0].toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="pl-1 pl-sm-4">
+                        <div class="font-weight-bold">${$("#findMemberNickname").val()}</div>
+                        <div></div>
+                    </div>
+                </div>`;
+            $("#chattingMembers").prepend(chatMemberHTML);
+            // add into scop.chattingMembers
+            scop.chattingMembers.push({
+                memberId: findMemberId,
+                messageContent: "",
+                messageTime: new Date(),
+                unreadCount: 0,
+                msgTimeDiff: "",
+                memberAccount: $("#findMemberAccount"),
+                memberNickname: $("#findMemberNickname")
+            });
+        }
+        // show the conversation with the member
+        showSingleMemberMsg($(`div[data-memberid='${findMemberId}']`));
+    }
 });
