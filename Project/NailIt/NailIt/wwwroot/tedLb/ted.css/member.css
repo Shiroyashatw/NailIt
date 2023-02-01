@@ -407,8 +407,8 @@ button[value=newcounnt]:hover{
     margin:auto;
     padding:20px;
     border:1px solid #888;
-    width:30%;
-    height:25%;
+    width:20%;
+    height:20%;
 
 }
 .close111 {
@@ -461,5 +461,12 @@ button[value=newcounnt]:hover{
     color:white;
 }
 #btninsertshop:hover{
+    background-color:#fc8158;
+}
+#btnverif{
+    background-color:#FF6733;
+    color:white;
+}
+#btnverif:hover{
     background-color:#fc8158;
 }

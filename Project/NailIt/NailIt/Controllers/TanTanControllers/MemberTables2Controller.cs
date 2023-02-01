@@ -42,20 +42,29 @@ namespace NailIt.Controllers.TanTanControllers
 
 
             var CheckMember = from o in _context.MemberTables
-                                where o.MemberManicurist == true
-                                select new
-                                {
-                                    MemberId = o.MemberId,
-                                };
+                              where o.MemberManicurist == true
+                              select new
+                              {
+                                  MemberId = o.MemberId,
+                              };
 
             return await CheckMember.ToListAsync();
         }
 
         // GET: api/MemberTables2
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberTable>>> GetMemberTables()
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetMemberTables()
         {
-            return await _context.MemberTables.ToListAsync();
+            var MemberTables = from o in _context.MemberTables
+                                  select new
+                                  {
+                                      MemberId = o.MemberId,
+                                      MemberAccount = o.MemberAccount,
+                                      MemberName = o.MemberName,
+                                      MemberManicurist = o.MemberManicurist == true ? "店家／美甲師" : "一般會員",
+                                      MemberReportpoint = o.MemberReportpoint >= 20 ? "已停權" : "使用中"
+                                  };
+            return await MemberTables.ToListAsync();
         }
 
         // GET: api/MemberTables2/5
@@ -66,7 +75,7 @@ namespace NailIt.Controllers.TanTanControllers
                               join ma in _context.ReportTables on o.MemberId equals ma.ReportTarget into malist
                               from ma in malist.DefaultIfEmpty()
                               where o.MemberId == id
-                              select  new
+                              select new
                               {
                                   MemberId = o.MemberId,
                                   MemberAccount = o.MemberAccount,
@@ -78,9 +87,9 @@ namespace NailIt.Controllers.TanTanControllers
                                   MemberEmail = o.MemberEmail,
                                   MemberManicurist = o.MemberManicurist == true ? "店家／美甲師" : "一般會員",
                                   MemberReportpoint = o.MemberReportpoint,
-                                  MemberStatus = o.MemberReportpoint>=20? "已停權": "使用中",
+                                  MemberStatus = o.MemberReportpoint >= 20 ? "已停權" : "使用中",
                                   //MemberBanned = o.MemberBanned, //???幹嗎用???
-                                  MemberReportId=ma.ReportId.ToString() == null ? "－" : ma.ReportId.ToString(),
+                                  MemberReportId = ma.ReportId.ToString() == null ? "－" : ma.ReportId.ToString(),
 
                               };
 
@@ -89,70 +98,57 @@ namespace NailIt.Controllers.TanTanControllers
                 return NotFound();
             }
 
-            return await memberTable.ToListAsync(); 
+            return await memberTable.ToListAsync();
         }
 
-        //// PUT: api/MemberTables2/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutMemberTable(int id, MemberTable memberTable)
-        //{
-        //    if (id != memberTable.MemberId)
-        //    {
-        //        return BadRequest();
-        //    }
 
-        //    _context.Entry(memberTable).State = EntityState.Modified;
+        // GET: api/MemberTables2/condition 條件
+        [HttpGet("condition/{memberId}/{memberManicurist}/{memberStatus}")]
+        public async Task<ActionResult<dynamic>> GetMemberCondition(int memberId, string memberManicurist, int memberStatus)
+        {
+            var query = from o in _context.MemberTables
+                        select o;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!MemberTableExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            var result = query;
 
-        //    return NoContent();
-        //}
 
-        //// POST: api/MemberTables2
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<MemberTable>> PostMemberTable(MemberTable memberTable)
-        //{
-        //    _context.MemberTables.Add(memberTable);
-        //    await _context.SaveChangesAsync();
 
-        //    return CreatedAtAction("GetMemberTable", new { id = memberTable.MemberId }, memberTable);
-        //}
+            if (memberId != 0) { result = result.Where(a => a.MemberId == memberId); }
+   
 
-        //// DELETE: api/MemberTables2/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteMemberTable(int id)
-        //{
-        //    var memberTable = await _context.MemberTables.FindAsync(id);
-        //    if (memberTable == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (memberManicurist == "0") { result = result.Where(a => a.MemberManicurist == false); }
+            else if(memberManicurist == "1") { result = result.Where(a => a.MemberManicurist == true); }
 
-        //    _context.MemberTables.Remove(memberTable);
-        //    await _context.SaveChangesAsync();
+            if (memberStatus == 1) { result = result.Where(a => a.MemberReportpoint >= 20); }
+            else if (memberStatus == 0) { result = result.Where(a => a.MemberReportpoint < 20); }
+ 
 
-        //    return NoContent();
-        //}
+
+
+            var membercondition = from o in result
+                                  select new
+                                  {
+                                      MemberId = o.MemberId,
+                                      MemberAccount = o.MemberAccount,
+                                      MemberName = o.MemberName,
+                                      MemberManicurist = o.MemberManicurist == true ? "店家／美甲師" : "一般會員",
+                                      MemberReportpoint = o.MemberReportpoint >= 20 ? "已停權" : "使用中"
+                                      
+                                      
+                                  };
+
+
+
+            return await membercondition.ToListAsync();
+        }
+
+
 
         private bool MemberTableExists(int id)
         {
             return _context.MemberTables.Any(e => e.MemberId == id);
         }
+
     }
 }
+

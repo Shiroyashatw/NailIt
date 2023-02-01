@@ -22,35 +22,39 @@
 
     <link rel="stylesheet" href="../css/product.css">
     <script src="../lib/jquery/dist/jquery.js"></script>
-
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
 
 
 </head>
 
 <body>
 
-    
-    
+
+
     <!-- 綠界金流表單 -->
     <div class="cash">
-        <input type="hidden" id="HashKey" value="pwFHCqoQZGmho4w6" />
-        <input type="hidden" id="HashIV" value="EkRm7iFT261dpevs" />
-        <form id="cashform" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="post">
+        <form id="cashform" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="post" >
             <input type="hidden" name="MerchantID" value="3002607">
             <br />
-            <input type="text" name="MerchantTradeNo" value="DX20230127114112152C">
+            <!-- DX20230127114112152C -->
+            <input type="text" name="MerchantTradeNo" value="Nailit20230131211012">
             <br />
-            <input type="text" name="MerchantTradeDate" value="2023/01/27 11:41:12">
+            <input type="text" name="MerchantTradeDate" value="2023/01/31 21:10:12">
             <br />
             <input type="hidden" name="PaymentType" value="aio">
             <br />
-            <input type="text" name="TotalAmount" value="1000">
+            <input type="text" name="TotalAmount" value="500">
             <br />
-            <input type="text" name="TradeDesc" value="美甲">
+            <!-- NAILIT美甲預約 -->
+            <input type="text" name="TradeDesc" value="NAILIT美甲預約">
             <br />
-            <input type="text" name="ItemName" value="繽紛">
+            <input type="text" name="ItemName" value="固定項目">
             <br />
             <input type="hidden" name="ReturnURL" value="https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL">
             <br />
@@ -61,13 +65,16 @@
             <input type="hidden" id="" name="EncryptType" value="1">
             <br />
             <button type="button" id="btnCashSend">送出</button>
-
         </form>
     </div>
 
     <script>
         $('#btnCashSend').on('click', function () {
-
+            // Nailit20230131211012
+            // 2023/01/31 21:10:12
+            // 500
+            // NAILIT美甲預約
+            // 固定項目
             // 寫死不用動
             // input MerchantID
             let HashKey = "HashKey=pwFHCqoQZGmho4w6"
@@ -93,15 +100,43 @@
 
             // CheckMacValue 檢查碼生成 上面參數都正確會傳放入 val()進去
             let x = `${HashKey}&ChoosePayment=Credit&EncryptType=1&ItemName=${itemName}&MerchantID=3002607&MerchantTradeDate=${MerchantTradeDate}&MerchantTradeNo=${MerchantTradeNo}&PaymentType=aio&ReturnURL=${returnUrl}&TotalAmount=${TotalAmount}&TradeDesc=${TradeDesc}&HashIV=${HashIV}`
-
+            console.log(x)
             let y = encodeURIComponent(x)
             y = y.replace("%20", "+")
             y = y.toLowerCase();
-
+            
             var hash = CryptoJS.SHA256(y).toString();
-
+            
+            // QB = QB.toUpperCase();
+            // console.log(hash)
             hash = hash.toUpperCase()
             $('input[name="CheckMacValue"]').val(hash)
+
+            // const apiURL = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
+            
+            // const data = { 
+            //     MerchantID: 3002607,
+            //     MerchantTradeNo: "DX20230127114112152C",
+            //     MerchantTradeDate: "2023/01/27 11:41:12",
+            //     PaymentType: "aio",
+            //     TotalAmount: 1500,
+            //     TradeDesc: "美甲",
+            //     ItemName: "繽紛",
+            //     ReturnURL: "https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL",
+            //     ChoosePayment: "Credit",
+            //     CheckMacValue: hash,
+            //     EncryptType: 1
+            // };
+            // const options = {
+            //     method: 'POST',
+            //     headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            //     data: Qs.stringify(data),
+            //     url : apiURL,
+            // };
+            
+            
+            // axios(options);
+
 
             $('#cashform').submit();
         })
