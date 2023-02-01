@@ -44,6 +44,12 @@ namespace NailIt.Controllers
 
             // if comes with memberId which user want to talk to
             ViewBag.FindMemberId = (id != null) ? id : -1;
+            if (id != null)
+            {
+                var findMember = _context.MemberTables.Find(id);
+                ViewBag.FindMemberAccount = findMember.MemberAccount;
+                ViewBag.FindMemberNickname = findMember.MemberNickname;
+            }
 
             return View();
         }

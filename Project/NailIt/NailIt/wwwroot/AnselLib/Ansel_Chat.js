@@ -42,9 +42,7 @@ var showAddBlack = async function () {
         // remove member from display
         $(`div[data-memberid='${scop.memberid}']`).remove();
         // remove from scop, for filter
-        let index = scop.chattingMembers.findIndex(x => x.memberId == scop.memberid);
-        scop.chattingMembers.splice(index, 1);
-
+        chattingMembersSplice(scop.memberid);
         // if chatting area show the member's message
         if (scop.memberid == scop.currentChatMemId) {
             $("#chattingMain").addClass("d-none");
@@ -57,6 +55,7 @@ var showNewMsg = function () {
 
     // update chatting members
     // BindingMemberRightMenu not include system
+    // update scop.chattingMembers, for fliter
 
     // if showing the member
     // (update message)
@@ -86,6 +85,7 @@ var showSingleMemberMsg = async function (obj) {
     let messageDate;
     if (!!result) {
         chattingMain.classList.remove("d-none");
+        sendMsgArea.classList.remove("d-none");
         // can't send message to system
         if (scop.currentChatMemId == 0) {
             sendMsgArea.classList.add("d-none");
@@ -158,8 +158,8 @@ var showMyNewImg = async function (obj) {
         // update chatting members
         await renderTheChatMember(result);
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
-        // here
         // update scop.chattingMembers, for fliter
+        updateThechattingMember();
 
         // Scroll to buttom of message 
         setTimeout(() => {
@@ -192,8 +192,8 @@ var showMyNewMsg = async function () {
         // update chatting members
         await renderTheChatMember(result);
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
-        // here
         // update scop.chattingMembers, for fliter
+        updateThechattingMember();
 
         // Scroll to buttom of message
         setTimeout(() => {
@@ -401,6 +401,21 @@ var postMsgImage = async function (imageFiles) {
     return res;
 }
 //#endregion
+
+//#region Custom tool function
+function updateThechattingMember(){
+    let chattingMember = chattingMembersSplice(scop.currentChatMemId);
+        chattingMember.messageContent = result.messageContent;
+        chattingMember.messageTime = result.messageTime;
+        chattingMember.msgTimeDiff = "1秒前";
+        scop.chattingMembers.push(chattingMember);
+}
+function chattingMembersSplice(memberid){
+    let index = scop.chattingMembers.findIndex(x => x.memberId == memberid);
+    let chattingMember = scop.chattingMembers[index];
+    scop.chattingMembers.splice(index, 1);
+    return chattingMember;
+}
 function scrolltoId(id) {
     var access = document.getElementById(id);
     access.scrollIntoView();
@@ -537,6 +552,8 @@ function ShowChattingButtom() {
 }
 //#endregion
 
+//#endregion
+
 document.addEventListener("DOMContentLoaded", async function () {
     // $('#blacklist').modal({
     //     show: true, // 預設開啟modal
@@ -547,6 +564,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     scop.loginAccount = $("#loginAccount").val();
     scop.loginNickname = $("#loginNickname").val();
     console.log(scop.loginId, scop.loginAccount, scop.loginNickname);
+    // $("#findMemberId").val();
+    // $("#findMemberAccount").val();
+    // $("#findMemberNickname").val();
 
     // Initial
     showChatMember()
