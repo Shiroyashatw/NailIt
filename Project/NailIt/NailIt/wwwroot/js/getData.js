@@ -467,6 +467,8 @@ function OrderDetail() {
         let rremovec = $('select[name="OrderRemovalC"]').find("option:selected").text()
         ritem = $('select[name="OrderItem"]').find("option:selected").text()
         ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
+        console.log(ritem)
+        console.log(ritemName)
         let rprice = $('input[name="OrderPrice"]').val()
         rdep = $('input[name="OrderDeposit"]').val()
         $('.rescheck').append(`
@@ -497,7 +499,7 @@ function postCash() {
     // TradeDesc 商品描述
     // ItemName 商品名稱
     // 上面五個須給值ritemName
-    if (ritem == "固定項目") {
+    if (ritem == "固定造型") {
         $('input[name="ItemName"]').val(ritemName);
     }
     else {
