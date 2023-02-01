@@ -1,4 +1,10 @@
-﻿var ood = new Vue({
+﻿
+async function appll() {
+    await YueloginCheck();
+
+    
+}
+var ood = new Vue({
     el: "#my-appointment",
     data: {
         inglist: [],
@@ -8,9 +14,11 @@
 
     }
 })
+function now3(nowMember) {
+
 $.ajax({
     type: "get",
-    url: "/api/OrderTED/1",
+    url: "/api/OrderTED/"+nowMember,
     success: function (e) {
         
         for (var i = 0; i < e.length; i++) {
@@ -38,9 +46,9 @@ $.ajax({
             }
             if (e[i].orderStateC == "A0") {
                 (ood.inglist).push(e[i]);
-            } else if (e[i].orderStateC == 'A1') {
+            } else if (e[i].orderStateC == 'A1' || e[i].orderStateC == 'A2') {
                 (ood.rightlist).push(e[i]);
-            } else if (e[i].orderStateC == 'A2') {
+            } else if (e[i].orderStateC == 'A4' || e[i].orderStateC == 'A5') {
                 e[i].orderCompleteTime = e[i].orderCompleteTime.replace('T', ' ');
                 (ood.finlist).push(e[i]);
             } else if (e[i].orderStateC == 'A6') {
@@ -52,6 +60,7 @@ $.ajax({
         }
     }
 })
+}
 function Getorder(e) {
         $("#salonname").text(ood.inglist[(e.id).substr(5, 1)].manicuristSalonName);
         $("#number-ing").text(ood.inglist[(e.id).substr(5, 1)].orderId)
@@ -106,12 +115,13 @@ function cancelorderbtn(e) {
     }
     var realid = cancelid.substr(num, cancelid.length - num);
 
-  
+    var ooder = ["A6"];
     if (confirm('是否確定要取消預約?') == true) {
         $.ajax({
             type: "put",
             url: "/api/OrderTED/" + realid,
-            data: JSON.stringify('"orderStateC":"A6"'),
+            contentType:"application/json",
+            data: JSON.stringify(ooder),
         success: function () {
             window.location = "/tedLb/tedmember.html";
         alert('已取消訂單');

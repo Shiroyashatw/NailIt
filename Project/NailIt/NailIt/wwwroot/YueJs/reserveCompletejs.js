@@ -1,6 +1,8 @@
 ﻿var myCompleteResult;//get到的資料轉換前
 var completeData;
 async function reserveCompleteSendGet() {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',

@@ -12,6 +12,8 @@ dd{
 }
 #select{
     border-right:2px solid;
+
+
    
 }
 .inner1{
@@ -408,7 +410,7 @@ button[value=newcounnt]:hover{
     padding:20px;
     border:1px solid #888;
     width:20%;
-    height:20%;
+    height:30%;
 
 }
 .close111 {
@@ -469,4 +471,112 @@ button[value=newcounnt]:hover{
 }
 #btnverif:hover{
     background-color:#fc8158;
+}
+
+/*­¶­º*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#mynav {
+    width: 100%;
+    height: 90px;
+    position: fixed;
+    background-position-x: 0px;
+    font-size: 16px;
+    background-color: white;
+    opacity: .9;
+    z-index: 9999;
+}
+
+#navall > div {
+    /* background-color: blue; */
+    max-height: 100%;
+    /* «Ý¬ã¨s */
+    height: 90px;
+}
+
+#brand {
+    font-family: Cascadia Mono SemiBold;
+    font-size: 30px;
+    color: black;
+    height: 100%;
+}
+
+
+
+.navmid {
+    /* background-color: blue; */
+    height: 100%;
+}
+
+    .navmid > li {
+        display: inline;
+        color: black;
+    }
+
+        .navmid > li > a {
+            color: black;
+            font-weight: bold;
+        }
+
+            .navmid > li > a:hover {
+                text-decoration-line: underline;
+                text-decoration-thickness: 1.5px;
+                text-underline-offset: 7px;
+            }
+
+.navend1 {
+    /* background-color: darksalmon; */
+    font-size: 14px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.navend2 > img {
+    width: 25px;
+    /* background-color: blue; */
+}
+
+/* ­¶§À---------------------------------------------------------- */
+
+#hid {
+    background-color: white;
+    border: 0px solid white;
+    height: 60px;
+    margin: 1% 0%;
+}
+
+
+footer {
+    width: 100%;
+    margin-top: 7%;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    width: 100%;
+}
+
+
+#footit {
+    margin-top: 6%;
+}
+
+    #footit b {
+        font-size: 14px;
+        margin-right: 1%;
+    }
+
+#footpre pre {
+    color: white;
+    font-size: 14px;
+}
+
+#footpre, #footcopy {
+    margin-top: 1%;
 }

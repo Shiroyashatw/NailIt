@@ -12,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
-    <script src="../YueJs/loginCheck.js"></script>
 
     <style>
         .slider-nav {
@@ -398,13 +397,148 @@
             word-wrap: break-word;
         }
 
+        /*DD*/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #mynav {
+            width: 100%;
+            height: 90px;
+            position: fixed;
+            background-position-x: 0px;
+            font-size: 16px;
+            background-color: white;
+            opacity: .9;
+            z-index: 9999;
+        }
+
+        #navall > div {
+            /* background-color: blue; */
+            max-height: 100%;
+            /* 待研究 */
+            height: 90px;
+        }
+
+        #brand {
+            font-family: Cascadia Mono SemiBold;
+            font-size: 30px;
+            color: black;
+            height: 100%;
+        }
+
+
+
+        .navmid {
+            /* background-color: blue; */
+            height: 100%;
+        }
+
+            .navmid > li {
+                display: inline;
+                color: black;
+            }
+
+                .navmid > li > a {
+                    color: black;
+                    font-weight: bold;
+                }
+
+                    .navmid > li > a:hover {
+                        text-decoration-line: underline;
+                        text-decoration-thickness: 1.5px;
+                        text-underline-offset: 7px;
+                    }
+
+        .navend1 {
+            /* background-color: darksalmon; */
+            font-size: 14px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .navend2 > img {
+            width: 25px;
+            /* background-color: blue; */
+        }
+
+        /* 頁尾---------------------------------------------------------- */
+
+        #hid {
+            background-color: white;
+            border: 0px solid white;
+            height: 60px;
+            margin: 1% 0%;
+        }
+
+
+        footer {
+            width: 100%;
+            margin-top: 7%;
+            background-color: rgb(0, 0, 0);
+            color: white;
+            width: 100%;
+        }
+
+
+        #footit {
+            margin-top: 6%;
+        }
+
+            #footit b {
+                font-size: 14px;
+                margin-right: 1%;
+            }
+
+        #footpre pre {
+            color: white;
+            font-size: 14px;
+        }
+
+        #footpre, #footcopy {
+            margin-top: 1%;
+        }
+
+
+
     </style>
 </head>
 
 <body>
 
-    <div class="container-fluid" id="ShowData" v-cloak>
-        <div>
+    <div class="container-fluid  p-0" id="ShowData" v-cloak>
+
+        <nav id="mynav">
+            <div class="row opacity-25 p-0 " id="navall">
+                <div class="col-1 p-0"></div>
+                <div class="col-2 d-flex align-items-center" id="brand">
+                    Nail IT
+                </div>
+                <div class="col-3">
+                    <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
+                        <li><a href="/YiPLib/Fliter.html"> 美 甲 查 詢 </a></li>
+                        <li><a href="/Community/Index"> 美 甲 小 天 地 </a></li>
+                        <li><a href="#"> 關 於 我 們 </a></li>
+                    </ul>
+                </div>
+                <div class="col-4 pt-3">
+                    <p class="navend1">登入 / 會員中心</p>
+                </div>
+                <div class="col-1 d-flex align-items-center justify-content-end navend2">
+                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
+                    <img id="noti mr-0" src="../images/notification.png">
+                </div>
+                <div class="col-1 p-0"></div>
+            </div>
+        </nav>
+
+        <!--<div>
             <nav class="row FixPad">
                 <div class="col">
                 </div>
@@ -422,10 +556,10 @@
                 <div class="col">
                 </div>
             </nav>
-        </div>
+        </div>-->
 
 
-        <div class="row">
+        <div class="row" style="padding-top:90px">
             <div class="col-1"></div>
             <div class="col-11">
                 <div>
@@ -507,8 +641,8 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                            <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
-                            <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -745,12 +879,12 @@
                 </div>
 
                 <!--<div class="row">
-        <div class="col-1"></div>
-        <div class="col-10">
-            <p class="Blackline ratingimgpd"></p>
-        </div>
-        <div class="col-1"></div>
-    </div>-->
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <p class="Blackline ratingimgpd"></p>
+                </div>
+                <div class="col-1"></div>
+            </div>-->
 
             </div>
 
@@ -768,11 +902,167 @@
             </div>
 
         </div>
+
+        <footer class="footer " style="height:320px;">
+            <div class="row p-0">
+                <div class="col-1 "></div>
+                <div class="col-10">
+                    <div id="footit">
+                        <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
+                        <b>檢舉</b>
+                        <b>隱私權政策</b>
+                        <b>防詐騙宣導</b>
+                    </div>
+                    <div id="footpre">
+                        <pre>
+地址：408台中市南屯區公益路二段51號18樓
+客服信箱：Nailit@gmail.com
+客服電話： 04 -2326-5860
+        </pre>
+                    </div>
+                    <div id="footcopy">
+                        <p style="font-size: 12px;font-family:Franklin Gothic Book;">
+                            Copyright ©2022 MSIT44TEAM1
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </footer>
+
+
     </div>
 
-
+    <script src="../YueJs/loginCheck.js"></script>
 
     <script>
+        let GetNowurl = window.location.href;
+        let Nowurl = new URL(GetNowurl);
+        let ManicuristID = Nowurl.searchParams.get('id');
+        let GetManicuristID;
+        Pre();
+        async function Pre() {
+            await YueloginCheck();
+            console.log("nowMember" + nowMember);
+            console.log("GetManicuristID" + GetManicuristID);
+
+            GetManicuristID = nowMember;
+            GetData(GetManicuristID);
+        }
+
+        function GetData(GetManicuristID) {
+            $.ajax({
+                type: "get",
+                url: "/api/Manicurist/" + GetManicuristID,
+                success: function (e) {
+                    ShowData.DesignList = e;
+                    PercantStar = e.manicuristScore;
+                    FloatStar = (PercantStar * 20) + '%';
+                    ShowData.width = FloatStar;
+                    if (e.manicuristPublic == false) {
+                        ShowData.PoblicAdress = false;
+                    } else if (e.manicuristPublic == true) {
+                        ShowData.PoblicAdress = true;
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
+                success: function (e) {
+                    for (demoset in e) {
+                        ShowData.DemoSetList.push(e[demoset]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/Demo/" + GetManicuristID,
+                success: function (e) {
+                    for (demo in e) {
+                        ShowData.DemoList.push(e[demo]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetManicuristComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.Comment.push(e[q]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetMainDemoSetTable/" + GetManicuristID,
+                success: function (e) {
+                    console.log(e);
+                    for (maindemo in e) {
+                        ShowData.MainDemoCover.push(e[maindemo]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetDateLTHComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.SortDateLTH.push(e[q]);
+                    }
+                    //console.log(e);
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetDateHTLComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.SortDateHTL.push(e[q]);
+                    }
+                    //console.log(e);
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetRateLTHComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.SortRateLTH.push(e[q]);
+                    }
+                    //console.log(e);
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetRateHTLComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.SortRateHTL.push(e[q]);
+                    }
+                    //console.log(e);
+                }
+            });
+        }
 
         let PercantStar;
         let FloatStar;
@@ -881,129 +1171,10 @@
             }
         }).$mount('#ShowData');
 
-        let GetNowurl = window.location.href;
-        let Nowurl = new URL(GetNowurl);
-        //let GetManicuristID = Nowurl.searchParams.get('id');
-        let ManicuristID = Nowurl.searchParams.get('id');
-        //let ManicuristID;
-        let GetManicuristID;
-        if (ManicuristID != null) {
-            GetManicuristID = ManicuristID;
-        } else {
-            GetManicuristID = nowMember;
-        }
 
 
-        $.ajax({
-            type: "get",
-            url: "/api/Manicurist/" + GetManicuristID,
-            success: function (e) {
-                ShowData.DesignList = e;
-                PercantStar = e.manicuristScore;
-                FloatStar = (PercantStar * 20) + '%';
-                ShowData.width = FloatStar;
-                if (e.manicuristPublic == false) {
-                    ShowData.PoblicAdress = false;
-                } else if (e.manicuristPublic == true) {
-                    ShowData.PoblicAdress = true;
-                }
-            }
-        });
 
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
-            success: function (e) {
-                for (demoset in e) {
-                    ShowData.DemoSetList.push(e[demoset]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/Demo/" + GetManicuristID,
-            success: function (e) {
-                for (demo in e) {
-                    ShowData.DemoList.push(e[demo]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetManicuristComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.Comment.push(e[q]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetMainDemoSetTable/" + GetManicuristID,
-            success: function (e) {
-                console.log(e);
-                for (maindemo in e) {
-                    ShowData.MainDemoCover.push(e[maindemo]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetDateLTHComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.SortDateLTH.push(e[q]);
-                }
-                //console.log(e);
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetDateHTLComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.SortDateHTL.push(e[q]);
-                }
-                //console.log(e);
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetRateLTHComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.SortRateLTH.push(e[q]);
-                }
-                //console.log(e);
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetRateHTLComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.SortRateHTL.push(e[q]);
-                }
-                //console.log(e);
-            }
-        });
+ 
 
 
 

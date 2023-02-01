@@ -24,7 +24,7 @@ namespace NailIt.Controllers.YueyueControllers
         public int LoginCheck()
         {
             string theKey=Request.Cookies[".AspNetCore.Session"];
-            if (theKey == "")
+            if(HttpContext.Session.GetString("NailLogin")==null|| theKey == null)
                 return -1;
             Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
             var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member.MemberId;
