@@ -427,7 +427,11 @@
         <div class="row">
             <div class="col-1"></div>
             <div class="col-11">
-                <a href="#">路徑</a>
+                <div>
+                    <a href="/TanTanLib/html/cover.html">首頁</a>
+                    <span>></span>
+                    <a href="Fliter.html">美甲查詢</a>
+                </div>
             </div>
 
         </div>
@@ -502,8 +506,8 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                            <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
-                            <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -740,12 +744,12 @@
                 </div>
 
                 <!--<div class="row">
-        <div class="col-1"></div>
-        <div class="col-10">
-            <p class="Blackline ratingimgpd"></p>
-        </div>
-        <div class="col-1"></div>
-    </div>-->
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <p class="Blackline ratingimgpd"></p>
+                    </div>
+                    <div class="col-1"></div>
+                </div>-->
 
             </div>
 
@@ -754,7 +758,8 @@
                 <div class="col-10">
                     <div>
                         <p class="produce">電話：{{DesignList.manicuristSalonPhone}}</p>
-                        <p class="produce">地址：{{DesignList.manicuristAddress}}</p>
+                        <p class="produce" v-if="PoblicAdress">地址：{{DesignList.manicuristAddress}}</p>
+                        <p class="produce" v-else="PoblicAdress">地址：{{DesignList.manicuristCounty}}{{DesignList.manicuristTownship}}</p>
                         <p class="produce">證照：{{DesignList.manicuristLicense}}</p>
                     </div>
                 </div>
@@ -764,9 +769,135 @@
         </div>
     </div>
 
-
+    <script src="../YueJs/loginCheck.js"></script>
 
     <script>
+        let GetNowurl = window.location.href;
+        let Nowurl = new URL(GetNowurl);
+        let ManicuristID = Nowurl.searchParams.get('id');
+        let GetManicuristID;
+        Pre();
+        async function Pre() {
+            await YueloginCheck();
+            console.log("nowMember" + nowMember);
+            console.log("GetManicuristID" + GetManicuristID);
+
+            GetManicuristID = nowMember;
+            GetData(GetManicuristID);
+        }
+
+        function GetData(GetManicuristID) {
+            $.ajax({
+                type: "get",
+                url: "/api/Manicurist/" + GetManicuristID,
+                success: function (e) {
+                    ShowData.DesignList = e;
+                    PercantStar = e.manicuristScore;
+                    FloatStar = (PercantStar * 20) + '%';
+                    ShowData.width = FloatStar;
+                    if (e.manicuristPublic == false) {
+                        ShowData.PoblicAdress = false;
+                    } else if (e.manicuristPublic == true) {
+                        ShowData.PoblicAdress = true;
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
+                success: function (e) {
+                    for (demoset in e) {
+                        ShowData.DemoSetList.push(e[demoset]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/Demo/" + GetManicuristID,
+                success: function (e) {
+                    for (demo in e) {
+                        ShowData.DemoList.push(e[demo]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetManicuristComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.Comment.push(e[q]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetMainDemoSetTable/" + GetManicuristID,
+                success: function (e) {
+                    console.log(e);
+                    for (maindemo in e) {
+                        ShowData.MainDemoCover.push(e[maindemo]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetDateLTHComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.SortDateLTH.push(e[q]);
+                    }
+                    //console.log(e);
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetDateHTLComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.SortDateHTL.push(e[q]);
+                    }
+                    //console.log(e);
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetRateLTHComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.SortRateLTH.push(e[q]);
+                    }
+                    //console.log(e);
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/YiPComment/GetRateHTLComment/" + GetManicuristID,
+                success: function (e) {
+                    for (let q = 0; q < e.length; q++) {
+                        e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
+                        e[q].Commentwid = (e[q].commentScore * 20) + '%';
+                        ShowData.SortRateHTL.push(e[q]);
+                    }
+                    //console.log(e);
+                }
+            });
+        }
 
         let PercantStar;
         let FloatStar;
@@ -820,7 +951,7 @@
             console.log(ShowData.SearchString);
             $.ajax({
                 type: "get",
-                url: "/api/DemoSet/GetSearchTable/" + ManicuristID + "?search=" + ShowData.SearchString,
+                url: "/api/DemoSet/GetSearchTable/" + GetManicuristID + "?search=" + ShowData.SearchString,
                 success: function (e) {
                     ShowData.DemoSetList = [];
                     for (DS in e) {
@@ -864,7 +995,8 @@
                     SortDateHTL: [],
                     SortRateHTL: [],
                     SortRateLTH: [],
-                    SearchString:"",
+                    SearchString: "",
+                    PoblicAdress: false,
                 }
             },
             methods: {
@@ -874,116 +1006,10 @@
             }
         }).$mount('#ShowData');
 
-        let GetNowurl = window.location.href;
-        let Nowurl = new URL(GetNowurl);
-        let GetManicuristID = Nowurl.searchParams.get('id');
-        //let ManicuristID = 2;
 
-        $.ajax({
-            type: "get",
-            url: "/api/Manicurist/" + GetManicuristID,
-            success: function (e) {
-                ShowData.DesignList = e;
-                PercantStar = e.manicuristScore;
-                FloatStar = (PercantStar * 20) + '%';
-                ShowData.width = FloatStar;
-            }
-        });
 
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
-            success: function (e) {
-                for (demoset in e) {
-                    ShowData.DemoSetList.push(e[demoset]);
-                }
-            }
-        });
 
-        $.ajax({
-            type: "get",
-            url: "/api/Demo/" + GetManicuristID,
-            success: function (e) {
-                for (demo in e) {
-                    ShowData.DemoList.push(e[demo]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetManicuristComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.Comment.push(e[q]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetMainDemoSetTable/" + GetManicuristID,
-            success: function (e) {
-                console.log(e);
-                for (maindemo in e) {
-                    ShowData.MainDemoCover.push(e[maindemo]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetDateLTHComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.SortDateLTH.push(e[q]);
-                }
-                //console.log(e);
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetDateHTLComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.SortDateHTL.push(e[q]);
-                }
-                //console.log(e);
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetRateLTHComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.SortRateLTH.push(e[q]);
-                }
-                //console.log(e);
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/YiPComment/GetRateHTLComment/" + GetManicuristID,
-            success: function (e) {
-                for (let q = 0; q < e.length; q++) {
-                    e[q].commentBuildTime = e[q].commentBuildTime.slice(0, 10);
-                    e[q].Commentwid = (e[q].commentScore * 20) + '%';
-                    ShowData.SortRateHTL.push(e[q]);
-                }
-                //console.log(e);
-            }
-        });
+ 
 
 
 

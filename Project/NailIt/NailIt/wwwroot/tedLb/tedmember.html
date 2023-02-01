@@ -69,10 +69,9 @@
             <div class="insert-content">
                 <span class="close111">&times;</span>
                 <p>請輸入驗證碼</p>
-                <input id="certifiednum" type="text" name="name" value="" />
+                <input class="form-control" id="certifiednum" type="text" name="name" value="" />
                 <br />
-                <br />
-                <button onclick="verifcert()">驗證</button>
+                <button class="btn" id="btnverif" onclick="verifcert()">驗證</button>
             </div>
         </div>
        
@@ -1131,13 +1130,13 @@
             app.verifcodelist.push($("#emailcertified").val());
             console.log(app.verifcodelist);
             console.log($("#emailcertified").val());
-            $.ajax({
-                type: "post",
-                url: "/api/Verifcode",
-                contentType: "application/json",
-                data: JSON.stringify(app.verifcodelist)
+            //$.ajax({
+            //    type: "post",
+            //    url: "/api/Verifcode",
+            //    contentType: "application/json",
+            //    data: JSON.stringify(app.verifcodelist)
 
-            })
+            //})
             alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼")
             setTimeout(function () { $("#insertverif").css("display", "block") }, 1000);
             //alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼");
@@ -1204,7 +1203,7 @@
             "manicuristIntro": null,
             "manicuristScore": null, "manicuristBankName": null, "manicuristBankNameBranch": null, "manicuristBankCompanyName": null
         }]
-        var removallist = [{ "removalPriceManicuristId": 2, "removalPriceB0": 0, "removalPriceB1": 0, "removalPriceB2": 0, "removalPriceB3": 0 }]
+        
         //新增美甲師資料
         function btninsertshopcert() {
             newshoplist[0].manicuristId = 4;
@@ -1222,21 +1221,11 @@
                 contentType: "application/json",
                 data: JSON.stringify(newshoplist[0]),
                 success: function () {
-                
-                }
-            })
-            removallist.removalPriceManicuristId = 4;
-            $.ajax({
-                type: "post",
-                url: "/api/RemovalTed",
-                contentType: "application/json",
-                data: JSON.stringify(removallist[0]),
-                success: function () {
-
                     window.location = "/tedLb/tedmember.html";
                     alert("美甲師功能已開通囉!!請到個人資訊查看~");
                 }
             })
+           
         }
 
    
