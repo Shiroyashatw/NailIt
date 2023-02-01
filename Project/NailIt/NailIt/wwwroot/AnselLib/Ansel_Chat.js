@@ -7,19 +7,28 @@ var scop = {
     chattingMsgsMenu: null, // for chattingMsg right click menu
     messageid: 0, // 目前開啟context menu的訊息Id
     memberid: 0, // 目前開啟context menu的人員Id
-    chattingMembers: [], // 有聊天記錄的人員清單, show在#chattingMembers
+    systemAccount: "systemAdmin",
+    systemNickname: "系統通知",
+    chattingMembers: [], // 有聊天記錄的人員清單, for 人員list過濾篩選器
     currentChatMemId: 0, // 目前聊天對象Id
 }
 //#region Function
 //#region Action
-var showRevokeBlock = function () {
-    // get memberId
+var showRevokeBlock = async function (obj) {
+    // get blacklistid
+    let blackid = $(obj).parent().data("blackid");
     // call api (deleteBlacklist)
-    // showChatMember() reload cahtting member
+    let result = await deleteBlacklist(blackid);
+    if (!!result) {
+        // remove the blacklist option
+        $(obj).parent().remove();
+        // showChatMember() reload cahtting member
+        showChatMember();
+    }
 }
 var showBlacklist = function () {
-    // call api get blacklist
     // show black list modal
+    $("#blacklistModal").modal("show");
 }
 var showAddBlack = async function () {
     // create black model 
@@ -32,6 +41,10 @@ var showAddBlack = async function () {
     if (!!result) {
         // remove member from display
         $(`div[data-memberid='${scop.memberid}']`).remove();
+        // remove from scop, for filter
+        let index = scop.chattingMembers.findIndex(x => x.memberId == scop.memberid);
+        scop.chattingMembers.splice(index, 1);
+
         // if chatting area show the member's message
         if (scop.memberid == scop.currentChatMemId) {
             $("#chattingMain").addClass("d-none");
@@ -43,7 +56,9 @@ var showNewMsg = function () {
     // call api (getNewMsg)
 
     // update chatting members
+    // BindingMemberRightMenu not include system
 
+    // if showing the member
     // (update message)
     // (call api for unread message)
 }
@@ -53,7 +68,8 @@ var showRevokeMsg = async function () {
     var result = await putMsgRevoke(scop.messageid);
     if (!!result) {
         // update message
-        $(`div[data-messageid='${scop.messageid}']`).children()[0].innerText = "訊息已收回";
+        $(`div[data-messageid='${scop.messageid}']`).prepend(`<span class="rounded px-3 py-2" style="border: 4px solid black;">訊息已收回</span>`);
+        $(`div[data-messageid='${scop.messageid}']`).children()[1].remove();
     }
 }
 // Showing my conversation with chosen member
@@ -70,6 +86,10 @@ var showSingleMemberMsg = async function (obj) {
     let messageDate;
     if (!!result) {
         chattingMain.classList.remove("d-none");
+        // can't send message to system
+        if (scop.currentChatMemId == 0) {
+            sendMsgArea.classList.add("d-none");
+        }
         chattingArea.innerHTML = "";
         // show messages
         for (const message of result) {
@@ -80,14 +100,15 @@ var showSingleMemberMsg = async function (obj) {
                     <div class="my-3 d-flex justify-content-center">
                         <span class="px-3 bg-secondary text-white rounded">${messageDate}</span>
                     </div>`;
-                $("#chattingArea").append(messageDateHTML)                
+                $("#chattingArea").append(messageDateHTML)
             }
-            await renderMessage(message);           
+            await renderMessage(message);
         }
         BindingMsgRightMenu($(".myMessage"));
+        // Scroll to buttom of message 
         setTimeout(() => {
             ShowChattingButtom();
-        }, "100")
+        }, "80")
     }
     // call api for unread message (putMsgRead)
     let result2 = await putMsgRead(scop.currentChatMemId);
@@ -108,12 +129,12 @@ var showSingleMemberMsg = async function (obj) {
                     </div>`;
                 $("#chattingArea").append(messageDateHTML)
             }
-            renderMessage(message);           
+            renderMessage(message);
         }
         // update chatting members, remove unread
-        $(`div[data-memberid='${scop.currentChatMemId}']`).children()[2].remove(); 
+        $(`div[data-memberid='${scop.currentChatMemId}']`).children()[2].remove();
         scrolltoId("unreadStart");
-    }    
+    }
 }
 // Sending image(s) message
 var showMyNewImg = async function (obj) {
@@ -133,12 +154,17 @@ var showMyNewImg = async function (obj) {
     if (!!result) {
         // show new message
         await renderMessage(result);
+        BindingMsgRightMenu($(`div[data-messageid="${result.messageId}"]`));
         // update chatting members
         await renderTheChatMember(result);
-        BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one        
+        BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
+        // here
+        // update scop.chattingMembers, for fliter
+
+        // Scroll to buttom of message 
         setTimeout(() => {
             ShowChattingButtom();
-        }, "100")
+        }, "80")
     }
 }
 // Sending message
@@ -161,14 +187,18 @@ var showMyNewMsg = async function () {
         // show new message
         result.messageTime = addHours(new Date(result.messageTime), -8);
         await renderMessage(result);
-        var lastMessage = $("#chattingArea").children()[$("#chattingArea").children().length-1];
+        var lastMessage = $("#chattingArea").children()[$("#chattingArea").children().length - 1];
         BindingMsgRightMenu([lastMessage]); // last one
         // update chatting members
         await renderTheChatMember(result);
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
+        // here
+        // update scop.chattingMembers, for fliter
+
+        // Scroll to buttom of message
         setTimeout(() => {
             ShowChattingButtom();
-        }, "100")
+        }, "80")
     }
 }
 var showChatMember = async function () {
@@ -177,13 +207,29 @@ var showChatMember = async function () {
     if (!!result) {
         // show chatting members        
         await renderChatMember(result);
-        BindingMemberRightMenu(document.getElementsByClassName("data-memberid"));
+        // system notic can't be add in blacklist, so there is a not()
+        BindingMemberRightMenu($(".data-memberid").not("div[data-memberid='0']"));
         scop.chattingMembers = result;
     }
 }
 //#endregion
 
 //#region render updates
+// 渲染黑名單
+var renderBlacklist = function (blacklist) {
+    if (blacklist.length == 0) {
+        $("#blacklistBody").append('<div class="d-flex justify-content-center">目前黑名單沒有資料</div>');
+    }
+
+    for (const black of blacklist) {
+        let blackHTML = `
+            <div class="d-flex justify-content-between" data-blackid="${black.blacklistId}">
+                <div>${black.memberAccount}(${black.memberNickname})</div>
+                <button onclick="showRevokeBlock(this)">解除</button>
+            </div>`;
+        $("#blacklistBody").append(blackHTML);
+    }
+}
 // 渲染人員對話記錄
 var renderMessage = async function (message) {
     let messageHTML = "";
@@ -198,10 +244,10 @@ var renderMessage = async function (message) {
                 </div>`;
         }
         // image message
-        else{
+        else {
             messageHTML = `
                 <div class="mb-1 d-flex" data-messageid="${message.messageId}">
-                    <span class="bg-secondary rounded px-1 py-1">${message.messageContent}</span>
+                    <span class="bg-secondary rounded mw-100 px-1 py-1">${message.messageContent}</span>
                     <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
                 </div>`;
         }
@@ -217,10 +263,10 @@ var renderMessage = async function (message) {
                 </div>`;
         }
         // image message
-        else{
+        else {
             messageHTML = `
                 <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="${message.messageId}">
-                    <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
+                    <span class="rounded mw-100" style="border: 4px solid black;">${message.messageContent}</span>
                     <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
                 </div>`;
         }
@@ -250,6 +296,11 @@ var renderTheChatMember = async function () {
 // 渲染對話記錄人員list
 var renderChatMember = async function (chatMembers) {
     for (const chatMember of chatMembers) {
+        // if it's from sysNotic or Notic
+        if (chatMember.memberId == 0) {
+            chatMember.memberAccount == scop.systemAccount;
+            chatMember.memberNickname == scop.systemNickname;
+        }
         let chatMemberHTML = `
         <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="${chatMember.memberId}" onclick="showSingleMemberMsg(this)">
             <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
@@ -274,16 +325,23 @@ var renderChatMember = async function (chatMembers) {
 //#endregion
 
 //#region call API
+var getBlacklist = async function () {
+    // call api get related data
+    var res = await BlacklistService.getBlacklist();
+    if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
+    // return list of user's blacklist configs
+    return res;
+}
 var postBlacklist = async function (blacklist) {
     // call api get related data
     var res = await BlacklistService.postBlacklist(blacklist);
     if (res.status != undefined) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
-    // return list of member msg for update member msg
+    // return the new blacklist config
     return res;
 }
-var deleteBlacklist = async function (builderId, targetId) {
+var deleteBlacklist = async function (blackId) {
     // call api get related data
-    var res = await BlacklistService.deleteBlacklist(builderId, targetId);
+    var res = await BlacklistService.deleteBlacklist(blackId);
     if (!res.status.toString().startsWith("2")) { alert(`[${res.status}]後端執行異常，請聯絡系統人員，感謝!`); return false; }
     return true;
 }
@@ -343,7 +401,7 @@ var postMsgImage = async function (imageFiles) {
     return res;
 }
 //#endregion
-function scrolltoId(id){
+function scrolltoId(id) {
     var access = document.getElementById(id);
     access.scrollIntoView();
 }
@@ -378,6 +436,7 @@ async function elmDataURLToLink(html) {
             if (imgTag.src.startsWith("data")) {
                 let urlImg = document.createElement("img");
                 urlImg.src = apiServer + imageURLs[index];
+                urlImg.classList.add("mw-100");
                 imgTag.before(urlImg);
                 imgTag.remove();
                 index++;
@@ -479,7 +538,7 @@ function ShowChattingButtom() {
 //#endregion
 
 document.addEventListener("DOMContentLoaded", async function () {
-    // $('#editArticleModal').modal({
+    // $('#blacklist').modal({
     //     show: true, // 預設開啟modal
     // })
 
@@ -493,6 +552,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     showChatMember()
 
     //#region Event Binding
+    // Initial blacklistModal show setting
+    $('#blacklistModal').on('show.bs.modal', async function (e) {
+        $("#blacklistBody").empty();
+        var result = await getBlacklist();
+        if (!!result) {
+            renderBlacklist(result);
+        }
+    });
+
     // Mousedown insert image at article editor. Don't preventDefault focus, or upload file can't find the plase to insert. 
     // Don't use onclick, focus already set on mouse down.
     $("#btnPostImage").on("mousedown", function (e) {
@@ -520,9 +588,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     scop.chattingMembersMenu = chattingMembersMenu;
     scop.chattingMsgsMenu = chattingMsgsMenu;
-
-    // Scroll to buttom of message 
-    // ShowChattingButtom();
 
     //#endregion
 });
