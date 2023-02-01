@@ -1610,6 +1610,7 @@
                 EndDate: "",
                 GetCertainDemoKey: "",
                 SearchString: "",
+                InsertCover:"",
             },
             methods: {
                 InsertDemo: function () {
@@ -1646,9 +1647,6 @@
                 },
 
                 PutM: function () {
-                    console.log("+++++++" + this.PutManicurist[0].manicuristId);
-                    console.log("+++++++" + this.PutManicurist[0].manicuristPic);
-                    console.log("+++++++" + this.PutManicurist[0].manicuristIntro);
                     $.ajax({
                         type: "put",
                         url: "/api/Manicurist/" + GetManicuristID,
