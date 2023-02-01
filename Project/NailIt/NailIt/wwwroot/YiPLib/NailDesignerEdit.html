@@ -15,7 +15,6 @@
     <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
-    <script src="/"></script>
 
     <style>
         .slider-nav {
@@ -1252,7 +1251,7 @@
 
     </div>
 
-
+    <script src="../YueJs/loginCheck.js"></script>
 
     <script>
         //let ManicuristID = 2;
@@ -1260,10 +1259,107 @@
         let Nowurl = new URL(GetNowurl);
         let ManicuristID = Nowurl.searchParams.get('id');
         let GetManicuristID;
-        if (ManicuristID != null) {
-            GetManicuristID = ManicuristID;
-        } else {
+        Pre();
+        async function Pre() {
+            await YueloginCheck();
+            console.log("nowMember" + nowMember);
+            console.log("GetManicuristID" + GetManicuristID);
+
             GetManicuristID = nowMember;
+            GetData(GetManicuristID);
+        }
+
+        function GetData(GetManicuristID) {
+            $.ajax({
+                type: "get",
+                url: "/api/Manicurist/" + GetManicuristID,
+                success: function (e) {
+                    ShowData.DesignList = e;
+                    PercantStar = e.manicuristScore;
+                    FloatStar = (PercantStar * 20) + '%';
+                    ShowData.width = FloatStar;
+                    ShowData.PutManicurist[0].manicuristIntro = e.manicuristIntro;
+                    ShowData.PutManicurist[0].manicuristPic = e.manicuristPic;
+                    //console.log(e.manicuristId);
+                    ShowData.PutManicurist[0].manicuristId = e.manicuristId;
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
+                success: function (e) {
+                    for (demoset in e) {
+                        ShowData.DemoSetList.push(e[demoset]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/TagTable",
+                success: function (e) {
+                    //console.log(e);
+                    ShowData.TagList = e;
+                    for (let p = 0; p < 9; p++) {
+                        ShowData.FixTag[p] = e[p].tagName;
+                        //console.log(e[p].tagName);
+                        //console.log(ShowData.FixTag);
+                    }
+                    var TagLenth = [];
+                    var Gettag = [];
+                    //Gettag[0] = Math.floor(Math.random() * e.length - 1) + 1;
+                    for (let i = 0; i < e.length; i++) {
+                        TagLenth[i] = i;
+                    }
+                    //console.log(TagLenth);
+                    while (Gettag.length != 9) {
+                        //for (let x = 0; x < 10; x++) {
+                        var Rd = Math.floor(Math.random() * e.length - 1) + 1;
+                        var Posi = TagLenth.indexOf(Rd);
+                        //console.log("亂數為：" + Rd + "位置為：" + Posi);
+                        //console.log("現在陣列為" + TagLenth);
+                        if (Posi == -1) {
+                            //Temp = Temp + 1;
+                            continue;
+                        } else {
+                            //Gettag[x - Temp] = Rd;
+                            Gettag.push(Rd);
+                            TagLenth.splice(Posi, 1);
+                        }
+                    }
+                    //console.log(Gettag);
+                    //console.log(Gettag.length);
+                    //console.log(e[0].tagName);
+                    for (let g = 0; g < 9; g++) {
+                        ShowData.NineTag.push(e[Gettag[g]].tagName);
+                        //console.log(e[Gettag[g]].tagName);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/color",
+                success: function (e) {
+                    console.log(e);
+                    //ShowData.FixColor = e;
+                    for (color in e) {
+                        ShowData.FixColor.push(e[color]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/PCodeTable",
+                success: function (e) {
+                    console.log(e);
+                    for (code in e) {
+                        ShowData.CodeC.push(e[code]);
+                    }
+                }
+            });
         }
 
         let PercantStar;
@@ -1498,7 +1594,7 @@
                 TagStxt: "",
                 TagTtxt: "",
                 CodeC: [],
-                PutManicurist: [{ "manicuristId": GetManicuristID, "manicuristPic": "", "manicuristIntro": "" }],
+                PutManicurist: [{ "manicuristId": "", "manicuristPic": "", "manicuristIntro": "" }],
                 preview: true,
                 Editing: false,
                 TagList: [],
@@ -1545,11 +1641,14 @@
                 BackEdit: function () {
                     this.preview = false;
                     this.Editing = true;
-                    console.log(PostDemo[0].demoSetId);
-                    console.log("ID");
+                    //console.log(PostDemo[0].demoSetId);
+                    //console.log("ID");
                 },
 
                 PutM: function () {
+                    console.log("+++++++" + this.PutManicurist[0].manicuristId);
+                    console.log("+++++++" + this.PutManicurist[0].manicuristPic);
+                    console.log("+++++++" + this.PutManicurist[0].manicuristIntro);
                     $.ajax({
                         type: "put",
                         url: "/api/Manicurist/" + GetManicuristID,
@@ -1626,94 +1725,7 @@
             }
         })
 
-        $.ajax({
-            type: "get",
-            url: "/api/Manicurist/" + GetManicuristID,
-            success: function (e) {
-                ShowData.DesignList = e;
-                PercantStar = e.manicuristScore;
-                FloatStar = (PercantStar * 20) + '%';
-                ShowData.width = FloatStar;
-                ShowData.PutManicurist[0].manicuristIntro = e.manicuristIntro;
-                ShowData.PutManicurist[0].manicuristPic = e.manicuristPic;
-            }
-        });
 
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
-            success: function (e) {
-                for (demoset in e) {
-                    ShowData.DemoSetList.push(e[demoset]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/TagTable",
-            success: function (e) {
-                //console.log(e);
-                ShowData.TagList = e;
-                for (let p = 0; p < 9; p++) {
-                    ShowData.FixTag[p] = e[p].tagName;
-                    //console.log(e[p].tagName);
-                    //console.log(ShowData.FixTag);
-                }
-                var TagLenth = [];
-                var Gettag = [];
-                //Gettag[0] = Math.floor(Math.random() * e.length - 1) + 1;
-                for (let i = 0; i < e.length; i++) {
-                    TagLenth[i] = i;
-                }
-                //console.log(TagLenth);
-                while (Gettag.length != 9) {
-                    //for (let x = 0; x < 10; x++) {
-                    var Rd = Math.floor(Math.random() * e.length - 1) + 1;
-                    var Posi = TagLenth.indexOf(Rd);
-                    //console.log("亂數為：" + Rd + "位置為：" + Posi);
-                    //console.log("現在陣列為" + TagLenth);
-                    if (Posi == -1) {
-                        //Temp = Temp + 1;
-                        continue;
-                    } else {
-                        //Gettag[x - Temp] = Rd;
-                        Gettag.push(Rd);
-                        TagLenth.splice(Posi, 1);
-                    }
-                }
-                //console.log(Gettag);
-                //console.log(Gettag.length);
-                //console.log(e[0].tagName);
-                for (let g = 0; g < 9; g++) {
-                    ShowData.NineTag.push(e[Gettag[g]].tagName);
-                    //console.log(e[Gettag[g]].tagName);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/color",
-            success: function (e) {
-                console.log(e);
-                //ShowData.FixColor = e;
-                for (color in e) {
-                    ShowData.FixColor.push(e[color]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/PCodeTable",
-            success: function (e) {
-                console.log(e);
-                for (code in e) {
-                    ShowData.CodeC.push(e[code]);
-                }
-            }
-        });
 
         let inputfile;
         async function Getfile(e) {
