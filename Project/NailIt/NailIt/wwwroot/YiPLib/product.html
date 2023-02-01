@@ -391,7 +391,7 @@
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
 
-                                <input type="hidden" name="MemberId" value="1">
+                                <input type="hidden" name="MemberId" value="">
                                 <input type="hidden" name="ManicuristId" value="">
                                 <input type="hidden" name="OrderType" value="true">
                                 <input type="hidden" name="OrderOrderTime" value="">
@@ -419,7 +419,7 @@
                         <div class="form-container row">
                             <div class="step-container pt-20 pl-20 col-9">
                                 <!-- 綠界金流表單 -->
-                                
+
 
                             </div>
                             <div class="step-container col-3">
@@ -488,9 +488,7 @@
     </div>
 
     <div class="cash isHide">
-        <form id="cashform"
-            action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"
-            method="post">
+        <form id="cashform" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="post">
             <input type="hidden" name="MerchantID" value="3002607">
             <br />
             <input type="hidden" name="MerchantTradeNo" value="DX20230127114112152C">
@@ -506,8 +504,7 @@
             <br />
             <input type="hidden" name="ItemName" value="">
             <br />
-            <input type="hidden" name="ReturnURL"
-                value="https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL">
+            <input type="hidden" name="ReturnURL" value="https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL">
             <br />
             <input type="hidden" id="" name="ChoosePayment" value="Credit">
             <br />
@@ -669,11 +666,12 @@
 
     <script>
         // 抓取登入者ID
-        // YueloginCheck()
-        // setTimeout(() => {
-        //     console.log(nowMember)
-        // }, 2000);
-        //console.log(nowMember)
+        async function pre() {
+            await YueloginCheck()
+            $('input[name="MemberId"]').val(nowMember)
+            console.log(nowMember)
+        }
+        pre()
         // 抓取基本資料 
         getbasicinfo()
         // 放入可選擇的預約日期

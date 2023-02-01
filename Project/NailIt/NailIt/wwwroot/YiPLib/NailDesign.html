@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <link rel="stylesheet" href="../css/product.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
@@ -954,7 +955,7 @@
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
 
-                                <input type="hidden" name="MemberId" value="1">
+                                <input type="hidden" name="MemberId" value="">
                                 <input type="hidden" name="ManicuristId" value="">
                                 <input type="hidden" name="OrderType" value="true">
                                 <input type="hidden" name="OrderOrderTime" value="">
@@ -1031,7 +1032,7 @@
             <button type="submit" id="btnCashSend">送出</button>
         </form>
     </div>
-    
+
     <script>
         let PercantStar;
         let FloatStar;
@@ -1308,7 +1309,7 @@
 
         }
         function step3() {
-            var checktime = $('input[name="planId"]').prop('checked')
+            var checktime = $('input[name="planId"]:checked').val();
 
             // undefined
             if (checktime == undefined || checktime == false) {
@@ -1346,38 +1347,23 @@
     <!-- 引用日曆 JS -->
     <script src="../js/calendar.js"></script>
     <script src="../js/calendarscript.js"></script>
-
+    <script src="../YueJs/loginCheck.js"></script>
     <!-- 引用 商品資料 可預約日期 -->
     <script src="../js/getData.js"></script>
     <script>
+        // 抓取登入者ID
+        async function pre() {
+            await YueloginCheck()
+            $('input[name="MemberId"]').val(nowMember)
+            console.log(nowMember)
+        }
+        pre()
         getManicuristData()
         getReserveDate()
         getReserveTime()
         getOrderPartC()
+        OrderDetail()
         postOrder()
-    </script>
-    <script>
-        $('#step3btn').on('click', function () {
-            $('.rescheck').empty();
-            let rdate = $('input[name="planId"]').attr("date")
-            let rtime = $('input[name="planId"]').attr("time")
-            let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
-            let rremovec = $('select[name="OrderRemovalC"]').find("option:selected").text()
-            let ritem = $('select[name="OrderItem"]').find("option:selected").text()
-            let ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
-            let rprice = $('input[name="OrderPrice"]').val()
-            let rdep = $('input[name="OrderDeposit"]').val()
-            $('.rescheck').append(`
-        <p>預約日期:${rdate} 時間:${rtime}</p>
-        <p>施作部位:${rparc}</p>
-        <p>卸甲:${rremovec}</p>
-        <p>施作項目:${ritem}</p>
-        <p>造型:${ritemName}</p>
-        <p>預估價位:NT$${rprice}</p>
-        <p>訂金:NT$${rdep}</p>
-        `);
-
-        })
     </script>
 
 </body>
