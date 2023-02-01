@@ -368,7 +368,7 @@
                 <div class="content" id="my-appointment">
                     <div class="switch-div">
                         <button class="switch-btn" id="switch-ing" onclick="orderstat(event,'ing','switch-ing')">預約中</button>
-                        <button class="switch-btn" id="switch-confirm" onclick="orderstat(event,'confirm','switch-confirm')">預約確認</button>
+                        <button class="switch-btn" id="switch-confirm" onclick="orderstat(event,'confirm','switch-confirm')">預約已確認</button>
                         <button class="switch-btn" id="switch-finish" onclick="orderstat(event,'finish','switch-finish')">已完成</button>
                         <button class="switch-btn" id="switch-cancel" onclick="orderstat(event,'cancel','switch-cancel')">已取消</button>
                     </div>
@@ -432,7 +432,8 @@
                             <div class="product-container">
                                 <div class="product-picture"><img v-bind:src="rig.demoSetCover" alt=""></div>
                                 <div class="product-information"><p>{{rig.orderItemName}}</p><p style="color:gray" class="productdetil">{{rig.demoSetContent}}</p><p class="productdetil">預約日期:{{rig.orderOrderTime}}</p></div>
-                                <div class="btn-order-stat"><pre>訂金 NT${{rig.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'rigorder'+[key]" onclick="Getorderrig(this)" data-target="#showdetilcheck" href="#">詳情</a></P><button class="check-btn">已完成</button></div>
+                                <div class="btn-order-stat"><pre>訂金 NT${{rig.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'rigorder'+[key]" onclick="Getorderrig(this)" data-target="#showdetilcheck" href="#">詳情</a></P>
+                                <button v-if="rig.orderStateC == 'A1'" v-bind:id="'oodd'+rig.orderId" onclick="ordercompli(this)" class="check-btn">已完成</button><button v-else="rig.orderStateC == 'A2'" style="background-color:gray" class="check-btn">預約中</button></div>
                             </div>
                             <!-- 訂單詳情完成-->
                             <div class="modal fade" id="showdetilcheck" tabindex="-1" role="dialog" aria-labelledby="showdetilcheck" aria-hidden="true">
@@ -486,7 +487,7 @@
                                 <div class="product-picture"><img v-bind:src="fin.demoSetCover" alt=""></div>
                                 <div class="product-information"><p>{{fin.orderItemName}}</p><p style="color:gray" class="productdetil">{{fin.demoSetContent}}</p><p class="productdetil">完成日期:{{fin.orderCompleteTime}}</p></div>
                                 <div class="btn-cancel-order"><button class="cancel-btn">再預約</button></div>
-                                <div class="btn-order-stat"><pre>訂金 NT${{fin.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'orderfin'+[key]" onclick="Getorderfin(this)" data-target="#showdetilfin" href="#">詳情</a></P><button disabled="disabled" class="ing-btn">已評價</button></div>
+                                <div class="btn-order-stat"><pre>訂金 NT${{fin.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'orderfin'+[key]" onclick="Getorderfin(this)" data-target="#showdetilfin" href="#">詳情</a></P><button v-if="fin.orderStateC == 'A4'" disabled="disabled" class="ing-btn">未評價</button><button v-else="fin.orderStateC == 'A5'" disabled="disabled" class="ing-btn">已評價</button></div>
                             </div>
                             <!-- 訂單詳情-->
                             <div class="modal fade" id="showdetilfin" tabindex="-1" role="dialog" aria-labelledby="showdetilfin" aria-hidden="true">
@@ -656,7 +657,7 @@
                             <div v-for="(item,key) in evafinlist">
                                 <div class="ratings">
                                     <div class="emptystar">★★★★★</div>
-                                    <div class="fullstar">★★★★★</div>
+                                    <div v-bind:style="{'width': item.commentScore}" class="fullstar">★★★★★</div>
                                 </div>
                                 <div class="finished-text"><h6>{{item.commentContent}}</h6></div>
                                 <div><pre>評價日期: {{item.commentBuildTime}}</pre></div>
@@ -790,7 +791,7 @@
                                 </div>
                                 <div class="ratings">
                                     <div class="emptystar">★★★★★</div>
-                                    <div class="fullstar">★★★★★</div>
+                                    <div v-bind:style="{'width': item.commentScore}" class="fullstar">★★★★★</div>
                                 </div>
                                 <div class="finished-text"><h6>{{item.commentContent}}</h6></div>
                                 <div><pre>評價日期: {{item.commentBuildTime}}</pre></div>
@@ -833,7 +834,7 @@
                                                         <label for="remove">卸甲:</label><h6 id="remove-noticefin"></h6>
                                                     </div>
                                                     <div>
-                                                        <label for="item">預約項目(手):</label><h6 id="item-noticefin"></h6>
+                                                        <label for="item">預約項目:</label><h6 id="item-noticefin"></h6>
                                                     </div>
                                                     <div>
                                                         <label for="pay">預估金額:</label><h6 id="pay-noticefin"></h6>
@@ -1130,13 +1131,13 @@
             app.verifcodelist.push($("#emailcertified").val());
             console.log(app.verifcodelist);
             console.log($("#emailcertified").val());
-            //$.ajax({
-            //    type: "post",
-            //    url: "/api/Verifcode",
-            //    contentType: "application/json",
-            //    data: JSON.stringify(app.verifcodelist)
+            $.ajax({
+                type: "post",
+                url: "/api/Verifcode",
+                contentType: "application/json",
+                data: JSON.stringify(app.verifcodelist)
 
-            //})
+            })
             alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼")
             setTimeout(function () { $("#insertverif").css("display", "block") }, 1000);
             //alert("我們已寄送驗證碼到您的信箱-請到信箱確認驗證碼");
@@ -1278,7 +1279,30 @@
             }
             return n;
         }
-        //開通美甲師判斷
+       //完成訂單
+        function ordercompli(e) {
+            var complit = e.id;
+            var num = 0;
+            for (var i = 4; i < complit.length; i++) {
+                if (complit[i].toString().indexOf('0') < 0) {
+                    num = i;
+                    break;
+                }
+            }
+            var realid = complit.substr(num, complit.length - num);
+            var stat = ["A4"];
+            if (confirm('是否確定訂單已完成?') == true) {
+                $.ajax({
+                    type: "put",
+                    url: "/api/OrderTED/" + realid,
+                    contentType: "application/json",
+                    data: JSON.stringify(stat),
+                    success: function () {
+                        window.location = "/tedLb/tedmember.html";
+                    }
+                })
+            }
+        }
 
     </script>
   

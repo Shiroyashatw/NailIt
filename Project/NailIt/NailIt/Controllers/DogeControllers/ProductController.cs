@@ -60,7 +60,7 @@ namespace NailIt.Controllers.DogeControllers
             _db.OrderTables.Add(orderTable);
             await _db.SaveChangesAsync();
 
-            var res = _db.OrderTables.FirstOrDefault(r => r.PlanId == orderTable.PlanId );
+            var res = _db.OrderTables.FirstOrDefault(r => r.PlanId == orderTable.PlanId && r.OrderOrderTime == orderTable.OrderOrderTime );
             plan.OrderId = res.OrderId;
             await _db.SaveChangesAsync();
             return Content("OK");

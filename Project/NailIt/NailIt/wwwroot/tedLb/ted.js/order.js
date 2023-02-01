@@ -38,9 +38,9 @@ $.ajax({
             }
             if (e[i].orderStateC == "A0") {
                 (ood.inglist).push(e[i]);
-            } else if (e[i].orderStateC == 'A1') {
+            } else if (e[i].orderStateC == 'A1' || e[i].orderStateC == 'A2') {
                 (ood.rightlist).push(e[i]);
-            } else if (e[i].orderStateC == 'A2') {
+            } else if (e[i].orderStateC == 'A4' || e[i].orderStateC == 'A5') {
                 e[i].orderCompleteTime = e[i].orderCompleteTime.replace('T', ' ');
                 (ood.finlist).push(e[i]);
             } else if (e[i].orderStateC == 'A6') {
@@ -106,12 +106,13 @@ function cancelorderbtn(e) {
     }
     var realid = cancelid.substr(num, cancelid.length - num);
 
-  
+    var ooder = ["A6"];
     if (confirm('是否確定要取消預約?') == true) {
         $.ajax({
             type: "put",
             url: "/api/OrderTED/" + realid,
-            data: JSON.stringify('"orderStateC":"A6"'),
+            contentType:"application/json",
+            data: JSON.stringify(ooder),
         success: function () {
             window.location = "/tedLb/tedmember.html";
         alert('已取消訂單');
