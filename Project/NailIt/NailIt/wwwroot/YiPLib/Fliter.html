@@ -172,6 +172,98 @@
                 background: #D0CECE;
             }
 
+            /*DD*/
+        #mynav {
+            width: 100%;
+            height: 90px;
+            position: fixed;
+            font-weight: bold;
+            font-size: 16px;
+            background-color: white;
+            opacity: .9;
+            z-index: 9999;
+        }
+
+        #navall > div {
+            /* background-color: blue; */
+            max-height: 100%;
+            /* 待研究 */
+            height: 90px;
+        }
+
+        #brand {
+            font-family: Cascadia Mono SemiBold;
+            font-size: 30px;
+            color: black;
+            height: 100%;
+        }
+
+        .navmid {
+            /* background-color: blue; */
+            height: 100%;
+        }
+
+            .navmid > li {
+                display: inline;
+                color: black;
+            }
+
+                .navmid > li > a {
+                    color: black;
+                }
+
+                    .navmid > li > a:hover {
+                        text-decoration-line: underline;
+                        text-decoration-thickness: 1.5px;
+                        text-underline-offset: 7px;
+                    }
+
+        .navend1 {
+            /* background-color: darksalmon; */
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .navend2 > img {
+            width: 25px;
+            /* background-color: blue; */
+        }
+
+        #hid {
+            background-color: white;
+            border: 0px solid white;
+            height: 60px;
+            margin: 1% 0%;
+        }
+
+
+        footer {
+            margin-top: 7%;
+            background-color: rgb(0, 0, 0);
+            color: white;
+            width: 100%;
+        }
+
+
+        #footit {
+            margin-top: 6%;
+        }
+
+            #footit b {
+                font-size: 14px;
+                margin-right: 1%;
+            }
+
+        #footpre pre {
+            color: white;
+            font-size: 14px;
+        }
+
+        #footpre, #footcopy {
+            margin-top: 1%;
+        }
+
+
 
     </style>
 </head>
@@ -179,12 +271,38 @@
 <body>
 
     <div class="container-fluid" id="app">
-        <div class="row">
+
+        <nav id="mynav">
+            <div class="row opacity-25 " id="navall">
+                <div class="col-1"></div>
+                <div class="col-2 d-flex align-items-center" id="brand">
+                    Nail IT
+                </div>
+                <div class="col-3">
+                    <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
+                        <li><a href="#"> 美 甲 查 詢 </a></li>
+                        <li><a href="#"> 美 甲 小 天 地 </a></li>
+                        <li><a href="#"> 關 於 我 們 </a></li>
+                    </ul>
+                </div>
+                <div class="col-4 pt-3">
+                    <p class="navend1">登入 / 會員中心</p>
+                </div>
+                <div class="col-1 d-flex align-items-center justify-content-end navend2">
+                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
+                    <img id="noti mr-0" src="../images/notification.png">
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </nav>
+
+
+        <div class="row" style="padding-top:90px">
             <div class="col-1"></div>
             <!--Left bar-->
             <div class="col-2">
                 <div>
-                    <a>首頁</a>
+                    <a href="/TanTanLib/html/cover.html">首頁</a>
                     <span>></span>
                     <a href="Fliter.html">美甲查詢</a>
                 </div>
@@ -210,7 +328,7 @@
                     <br />
                     <div v-for="(item,key) in Colors" class="d-inline-flex">
                         <label class="DisplayCircle mx-1" v-bind:style="ColorStyle[key]">
-                            <input class="ColorsRadio" type="radio" v-bind:value="Colors[key].colorId" onclick="ShowColor(this)" />
+                            <input class="ColorsRadio" type="radio" v-bind:value="Colors[key].colorId-1" onclick="ShowColor(this)" />
                         </label>
                     </div>
                 </div>
@@ -248,8 +366,8 @@
                         </div>
                     </div>
                     <!--<div>
-                        <button onclick="SeachPrice()">範圍查詢</button>
-                    </div>-->
+                    <button onclick="SeachPrice()">範圍查詢</button>
+                </div>-->
                 </div>
                 <div class="mt-2">
                     <label>施作部位</label>
@@ -287,10 +405,13 @@
                 </div>
                 <div>
                     <p>現在搜尋的條件為：{{QueryCondition}}</p>
-                    <p>共計{{QueryLength}}件商品</p>
+                    <p v-if="QueryLength">共計{{QueryLength}}件商品</p>
+                </div>
+                <div>
+                    <p v-if="QueryNone">查無結果</p>
                 </div>
                 <!--預設-->
-                <div class="d-flex Coverdiv">
+                <div class="d-flex Coverdiv" v-if="QueryResault">
                     <div v-for="(item,key) in DemoSet">
                         <img class="Cover" v-bind:src="DemoSet[key].demoSetCover" />
                         <p>{{DemoSet[key].demoSetName}}</p>
@@ -317,8 +438,46 @@
 
 
 
+
         </div>
+
+        <!--<footer class="footer" style="height:320px;">-->
+        <div class="row">
+            <footer class="footer" style="height:320px;">
+
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <div id="footit">
+                        <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
+                        <b>檢舉</b>
+                        <b>隱私權政策</b>
+                        <b>防詐騙宣導</b>
+                    </div>
+                    <div id="footpre">
+                        <pre>
+地址：408台中市南屯區公益路二段51號18樓
+客服信箱：Nailit@gmail.com
+客服電話： 04 -2326-5860
+        </pre>
+                    </div>
+                    <div id="footcopy">
+                        <p style="font-size: 12px;font-family:Franklin Gothic Book;">
+                            Copyright ©2022 MSIT44TEAM1
+                        </p>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+        </footer>
+        </div>
+
+
+
+
+
     </div>
+
+
+
 
     <!--vue-->
     <script>
@@ -350,7 +509,9 @@
                     Manicurist: [],
                     ShowQueryM: false,
                     QueryCondition: "尚未選擇",
-                    QueryLength: "",
+                    QueryLength: 0,
+                    QueryNone: false,
+                    QueryResault: true,
                 }
             },
             methods: {
@@ -362,16 +523,32 @@
 
     </script>
 
-    <!--range-->
+    <!--接網址-->
     <script>
 
+        let getUrlString = location.href;
+        let url = new URL(getUrlString);
+        let searchCountry = url.searchParams.get('Country');
+        let searchArea = url.searchParams.get('Area');
+        let searchColor = url.searchParams.get('Color');
+        let searchTag = url.searchParams.get('FixTag');
+        let searchMinPrice = url.searchParams.get('Min');
+        let searchMaxPrice = url.searchParams.get('Max');
+        let searchPart = url.searchParams.get('Part');
+        let searchSearchString = url.searchParams.get('search');
+        let searchM = url.searchParams.get('name');
+
+    </script>
+
+    <!--range-->
+    <script>
         const fromSlider = document.querySelector('#FromSlider');
         const toSlider = document.querySelector('#ToSlider');
         const fromInput = document.querySelector('#Frommininput');
         const toInput = document.querySelector('#Frommaxinput');
         //const controlSlider = document.querySelector('.SliderControl');
-        console.log(fromSlider);
-        console.log(toSlider);
+        //console.log(fromSlider);
+        //console.log(toSlider);
         //fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
         //toSlider.style.backgroundColor = '#25daa5';
         setToggleAccessible(toSlider);
@@ -403,14 +580,14 @@
             const fromPosition = from.value - to.min;
             const toPosition = to.value - to.min;
             controlSlider.style.background = `linear-gradient(
-                    to right,
-                    ${sliderColor} 0%,
-                    ${sliderColor} ${(fromPosition) / (rangeDistance) * 100}%,
-                    ${rangeColor} ${((fromPosition) / (rangeDistance)) * 100}%,
-                    ${rangeColor} ${(toPosition) / (rangeDistance) * 100}%,
-                    ${sliderColor} ${(toPosition) / (rangeDistance) * 100}%,
-                    ${sliderColor} 100%
-                )`;
+                                to right,
+                                ${sliderColor} 0%,
+                                ${sliderColor} ${(fromPosition) / (rangeDistance) * 100}%,
+                                ${rangeColor} ${((fromPosition) / (rangeDistance)) * 100}%,
+                                ${rangeColor} ${(toPosition) / (rangeDistance) * 100}%,
+                                ${sliderColor} ${(toPosition) / (rangeDistance) * 100}%,
+                                ${sliderColor} 100%
+                            )`;
         }
 
         function controlFromInput(fromSlider, fromInput, toInput, controlSlider) {
@@ -537,21 +714,19 @@
             type: "get",
             url: "/api/PCodeTable",
             success: function (e) {
-                console.log(e);
+                //console.log(e);
                 app.CCode = e;
             }
         });
 
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetDemoSet",
-            success: function (e) {
-                //console.log(e);
-                //app.CCode = e;
-                app.DemoSet = e;
-                app.QueryLength = e.length;
-            }
-        });
+        //$.ajax({
+        //    type: "get",
+        //    url: "/api/DemoSet/GetDemoSet",
+        //    success: function (e) {
+        //        app.DemoSet = e;
+        //        app.QueryLength = e.length;
+        //    }
+        //});
 
         $.ajax({
             type: "get",
@@ -586,21 +761,29 @@
                 await app.Area.push(app.AreaList[e.value][Area].AreaName);
             }
             app.ShowAreas = true;
-            console.log(app.City[e.value]);
+            //console.log(app.City[e.value]);
             let AreaStr;
             AreaStr = app.City[e.value].replace("臺", "台");
-            app.QueryCondition = AreaStr;
+            app.QueryCondition = app.City[e.value];
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetCountyDemo/?Country=" + AreaStr,
                 success: function (e) {
-                    console.log(e.length);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    //console.log(e.length);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -612,37 +795,53 @@
 
 
         function ShowArea(e) {
-            console.log(e.value)
+            //console.log(e.value)
             app.QueryCondition = e.value;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetAreaDemo/?Area=" + e.value,
                 success: function (e) {
-                    console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    //console.log(e);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
 
         function ShowColor(e) {
             console.log(e.value);
-            app.QueryCondition = app.Colors[e.value - 1].colorName;
+            app.QueryCondition = app.Colors[e.value].colorName;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetColorDemo/?Color=" + e.value,
                 success: function (e) {
-                    console.log(e);
-                    app.DemoSet = [];
-                    app.Manicurist = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    //console.log(e);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.DemoSet = [];
+                        app.Manicurist = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -654,13 +853,21 @@
                 type: "get",
                 url: "/api/DemoSet/GetFixTagDemo/?FixTag=" + e.value,
                 success: function (e) {
-                    console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    //console.log(e);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -686,19 +893,27 @@
             //console.log("MIN"+app.SearchMin);
             //console.log(app.SearchMax);
             app.SearchMin = e;
-            console.log(app.SearchMin);
+            //console.log(app.SearchMin);
             app.QueryCondition = `${app.SearchMin}元至${app.SearchMax}元`;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
                 success: function (e) {
-                    console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    //console.log(e);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -714,18 +929,26 @@
                 url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
                 success: function (e) {
                     console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
 
         function ShowPart(e) {
-            //console.log(e.value);
+            console.log(e.value);
             app.QueryCondition = app.CCode[e.value.substr(1, 1)].codeRepresent;
 
             $.ajax({
@@ -733,12 +956,20 @@
                 url: "/api/DemoSet/GetPart/?Part=" + e.value,
                 success: function (e) {
                     console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -755,12 +986,20 @@
                 type: "get",
                 url: "/api/DemoSet/GetSearchAllTable?search=" + app.SearchString,
                 success: function (e) {
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (DS in e) {
-                        app.DemoSet.push(e[DS]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (DS in e) {
+                            app.DemoSet.push(e[DS]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
             console.log(app.DemoSet);
@@ -774,12 +1013,20 @@
                 type: "get",
                 url: "/api/Manicurist?name=" + app.SearchM,
                 success: function (e) {
-                    app.DemoSet = [];
-                    app.Manicurist = [];
-                    for (M in e) {
-                        app.Manicurist.push(e[M]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.DemoSet = [];
+                        app.Manicurist = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (M in e) {
+                            app.Manicurist.push(e[M]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
             app.ShowQueryM = true;
@@ -787,40 +1034,41 @@
 
     </script>
 
-    <!--接網址-->
-    <script>
-
-        let getUrlString = location.href;
-        let url = new URL(getUrlString);
-        let searchCountry = url.searchParams.get('Country');
-        let searchArea = url.searchParams.get('Area');
-        let searchColor = url.searchParams.get('Color');
-        let searchTag = url.searchParams.get('FixTag');
-        let searchMinPrice = url.searchParams.get('Min');
-        let searchMaxPrice = url.searchParams.get('Max');
-        let searchPart = url.searchParams.get('Part');
-        let searchSearchString = url.searchParams.get('search');
-        let searchM = url.searchParams.get('name');
-
-    </script>
-
     <!--網址-->
     <script>
 
+        function GetDefultDemo() {
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetDemoSet",
+                success: function (e) {
+                    app.DemoSet = e;
+                    app.QueryLength = e.length;
+                }
+            });
+        }
+
         function URLShowCountry() {
             app.QueryCondition = searchCountry;
-
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetCountyDemo/?Country=" + searchCountry,
                 success: function (e) {
                     console.log(e.length);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -832,31 +1080,56 @@
                 url: "/api/DemoSet/GetAreaDemo/?Area=" + searchArea,
                 success: function (e) {
                     console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
 
-        function URLShowColor() {
-            //console.log(e.value);
-            //app.QueryCondition = app.Colors[e.value - 1].colorName;
-            app.QueryCondition = searchColor;
+        async function URLShowColor() {
+            let GetColorNum = searchColor - 1;
+            let ColorName = [];
+            await $.ajax({
+                type: "get",
+                url: "/api/Color",
+                success: function (e) {
+                    ColorName = e[GetColorNum].colorName;
+                }
+            });
+            
+            console.log(ColorName);
+            app.QueryCondition = ColorName;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetColorDemo/?Color=" + searchColor,
                 success: function (e) {
                     console.log(e);
-                    app.DemoSet = [];
-                    app.Manicurist = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.DemoSet = [];
+                        app.Manicurist = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -869,12 +1142,20 @@
                 url: "/api/DemoSet/GetFixTagDemo/?FixTag=" + searchTag,
                 success: function (e) {
                     console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -890,52 +1171,80 @@
                 url: "/api/DemoSet/GetPriceRange?Min=" + searchMinPrice + "&Max=" + searchMaxPrice,
                 success: function (e) {
                     console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
 
         function URLGetPriceMax() {
-            //console.log("MIN"+app.SearchMin);
-            //console.log(app.SearchMax);
-            //app.SearchMax = e;
-            //console.log(app.SearchMax);
             app.QueryCondition = `${searchMinPrice}元至${searchMaxPrice}元`;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetPriceRange?Min=" + searchMinPrice + "&Max=" + searchMaxPrice,
                 success: function (e) {
                     console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
 
         function URLShowPart() {
-            //console.log(e.value);
+            /*console.log(e.value);*/
             //app.QueryCondition = app.CCode[e.value.substr(1, 1)].codeRepresent;
-            app.QueryCondition = searchPart;
+            if (searchPart == 'C0') {
+                app.QueryCondition = "手";
+            }
+            if (searchPart == 'C1') {
+                app.QueryCondition = "腳";
+            }
+            if (searchPart == 'C2') {
+                app.QueryCondition = "手、腳";
+            }
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetPart/?Part=" + searchPart,
                 success: function (e) {
                     console.log(e);
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (demo in e) {
-                        app.DemoSet.push(e[demo]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
         }
@@ -947,12 +1256,20 @@
                 type: "get",
                 url: "/api/DemoSet/GetSearchAllTable?search=" + searchSearchString,
                 success: function (e) {
-                    app.Manicurist = [];
-                    app.DemoSet = [];
-                    for (DS in e) {
-                        app.DemoSet.push(e[DS]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (DS in e) {
+                            app.DemoSet.push(e[DS]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
             console.log(app.DemoSet);
@@ -965,12 +1282,20 @@
                 type: "get",
                 url: "/api/Manicurist?name=" + searchM,
                 success: function (e) {
-                    app.DemoSet = [];
-                    app.Manicurist = [];
-                    for (M in e) {
-                        app.Manicurist.push(e[M]);
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.DemoSet = [];
+                        app.Manicurist = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (M in e) {
+                            app.Manicurist.push(e[M]);
+                        }
+                        app.QueryLength = e.length;
                     }
-                    app.QueryLength = e.length;
                 }
             });
             app.ShowQueryM = true;
@@ -982,15 +1307,15 @@
 
     <!--if not null-->
     <script>
-        console.log(searchCountry);
-        console.log(searchArea);
-        console.log(searchColor);
-        console.log(searchTag);
-        console.log(searchMinPrice);
-        console.log(searchMaxPrice);
-        console.log(searchPart);
-        console.log(searchSearchString);
-        console.log(searchM);
+        //console.log(searchCountry);
+        //console.log(searchArea);
+        //console.log(searchColor);
+        //console.log(searchTag);
+        //console.log(searchMinPrice);
+        //console.log(searchMaxPrice);
+        //console.log(searchPart);
+        //console.log(searchSearchString);
+        //console.log(searchM);
 
         if (searchCountry != null) {
             URLShowCountry();
@@ -1022,6 +1347,10 @@
 
         if (searchM != null) {
             URLSearchM();
+        }
+
+        if (searchM == null && searchCountry == null && searchArea == null && searchColor == null && searchTag == null && searchMinPrice == null && searchMaxPrice == null && searchPart == null && searchSearchString == null) {
+            GetDefultDemo();
         }
 
     </script>

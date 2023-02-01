@@ -63,14 +63,14 @@ namespace NailIt.Controllers.AnselControllers
             foreach (var article in articles)
             {
                 var replyReport = _context.ReportTables.
-                    Where(r => r.ReportPlaceC == "D6").
+                    Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D6").
                     ToList();
                 var articleReplyReportCount = replyReport.
                     Join(_context.ReplyTables,
                         report => report.ReportItem,
                         reply => reply.ReplyId,
-                        (report, reply) => new { articleId = reply.ArticleId }).
-                    Where(r => r.articleId == article.ArticleId).
+                        (report, reply) => new { reply.ArticleId }).
+                    Where(r => r.ArticleId == article.ArticleId).
                     Count();
                 article.ArticleReplyCount -= articleReplyReportCount;
             }

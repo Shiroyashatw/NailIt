@@ -20,7 +20,8 @@ var scop = {
 
 //#region Function
 //#region Action
-// Edit article upload image(jpg/png) file change event 
+// Edit article upload image(jpg/png) file change event
+// insert image into draft 
 var showInsertImage = async function (obj) {
     var file = $(obj).prop('files')[0];
     var reader = new FileReader();
@@ -908,7 +909,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         else $("#ModelArticleLike").css("color", "rgb(108, 117, 125)");
         $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
         $("#ModalArticleTitle").children()[0].innerText = article.article.articleTitle;
-        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.YYYYMMDD();
+        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.localYYYYMMDD();
         if (article.article.articleLastEdit != article.article.articleBuildTime)
             $("#ModalArticleTitle").children()[1].innerText += "(已編輯)";
         $("#ModalArticleContent").html(article.article.articleContent);

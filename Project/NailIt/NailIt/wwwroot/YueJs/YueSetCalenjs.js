@@ -11,13 +11,14 @@ async function calenSendGet() {
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YuePlanTables/"+nowMember, requestOptions)
+	await fetch("https://localhost:44308/api/YuePlanTables/"+nowMember, requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			calenResult = result;
-			calenSet();
+			
 		})
 		.catch(error => console.log('error', error));
+	await calenSet();
 	loadScript("./YueJs/YueCalen.js", buildCalen, buildCalen);
 }
 
@@ -325,6 +326,10 @@ function planSendPost()
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 
+	if (oneTime.value == "") {
+		toastr.warning("請輸入時間");
+		return;
+	}
 	var raw = JSON.stringify({
 		"manicuristId": nowMember,
 		"orderId": null,
@@ -487,7 +492,7 @@ function planAddMonth()
 	planAddMonthSendPost(resultArray);
 }
 
-function planAddMonthSendPost(resultArray)
+async function planAddMonthSendPost(resultArray)
 {
 	var sendPostData = [];
 	for (var x of resultArray)
@@ -507,15 +512,13 @@ function planAddMonthSendPost(resultArray)
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YuePlanTables/", requestOptions)
+	await fetch("https://localhost:44308/api/YuePlanTables/", requestOptions)
 		.then(response => response.text())
 		.then(result => console.log(result))
 		.catch(error => console.log('error', error));
+	await calenSendGet();
+	calenSetMonth(nowMonth)
+	closeInfoModal();
+	toastr.success("已批次增加行程");
 
-	setTimeout(() => {
-		calenSendGet();
-		setTimeout(() => { calenSetMonth(nowMonth); closeInfoModal(); }, 100);
-		toastr.success("已批次增加行程");
-
-	}, 200)
 }

@@ -94,7 +94,12 @@ function completeLoop(search=false) {
 							width: 30%;
 						"
 					>
-						<br />
+						<a
+							style="color:red"
+							class="reserveDetail"
+							href="#"
+							onclick="reportComplete(`+ i +`)"
+							>檢舉訂單</a><br/ >
 						<span> <b> 訂金：NT$`+ x.order_Deposit+` </b> </span>
 						<br /><br />
 						<a
@@ -126,7 +131,6 @@ function getCompleteDetail(i, str) {
 	var thisOrderId = "";
 	var thisOrderTime = "";
 	var thisStartTime = "";
-	var myTitle = "";
 	thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 	thisOrderTime = x.order_AcceptTime.substring(0, 10) + " " + x.order_AcceptTime.substring(11, 19);
 	thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
@@ -183,10 +187,12 @@ function getCompleteDetail(i, str) {
 		reserveCompleteYes.style.visibility = "hidden";
 		reserveCompleteback.style.right = "3%";
 	}
+	infoModal.style.width = "30%";
+	infoModal.style.height = "62%";
 	infoModal.showModal();
 }
 
-function reserveCompleteSendPut(id, state) {
+async function reserveCompleteSendPut(id, state) {
 	console.log(id);
 	var raw = "";
 	var requestOptions = {
@@ -195,15 +201,90 @@ function reserveCompleteSendPut(id, state) {
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueOrderTables/" + id + "/" + state + "/", requestOptions)
+	await fetch("https://localhost:44308/api/YueOrderTables/" + id + "/" + state + "/", requestOptions)
 		.then(response => response.text())
 		.then(result => console.log(result))
 		.catch(error => console.log('error', error));
-
-	setTimeout(() => {
-		reserveCompleteSendGet();
-	}, 300)
+	
+	reserveCompleteSendGet();
 	closeInfoModal();
 	toastr.success("訂單已完成");
 }
+
+function reportComplete(i)
+{
 	
+	infoModal.innerHTML = `<span>檢舉事由</span> 
+<select id="reportReason">
+	<option value="K0">不準時</option>
+	<option value="K1">反悔</option>
+</select><br /><br/ ><span>檢舉詳情描述(最多兩百字)</span><br/ >
+<textarea id="reportContent" style="width:95%;height:60%"></textarea><br />
+<input
+							style="
+								border: 0cm;
+								width: 28%;
+								color: antiquewhite;
+								background-color: black;
+								margin-top:2%;
+								margin-right: 7%;
+								margin-left:30%;
+							"
+							type="button"
+							value="取消"
+						onclick="closeInfoModal()";
+						/>
+						<input
+							style="
+								border: 0cm;
+								width: 28%;
+								background-color: #ff6733;
+								color: white;
+							"
+							type="button"
+							value="預約確認"
+							onclick="completeSendReport(`+i+`)";
+						/>`;
+	infoModal.style.width = "37%";
+	infoModal.style.height = "51%";
+	infoModal.showModal();
+}
+
+async function completeSendReport(i)
+{
+	var x = completeData[i];
+	console.log(x);
+
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+
+	var raw = JSON.stringify({
+		"ReportBuilder": nowMember,
+		"ReportTarget": x.member_ID,
+		"ReportItem": x.order_ID,
+		"ReportPlaceC": "D2",
+		"ReportReasonC": reportReason.value,
+		"ReportContent": reportContent.value,
+		"ReportBuildTime": "1999-01-01",
+		"ReportCheckTime": null,
+		"ManagerId": null,
+		"ReportResult": null,	});
+
+
+	var requestOptions = {
+		method: 'PUT',
+		headers: myHeaders,
+		body: raw,
+		redirect: 'follow'
+	};
+
+
+	await fetch("https://localhost:44308/api/YueReportTables/", requestOptions)
+		.then(response => response.text())
+		.then(result => console.log(result))
+		.catch(error => console.log('error', error));
+	toastr.success("已成功送出檢舉");
+	reserveCompleteSendGet();
+	closeInfoModal();
+	
+}

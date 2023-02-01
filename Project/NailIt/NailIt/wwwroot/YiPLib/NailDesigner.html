@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <script src="../YueJs/loginCheck.js"></script>
 
     <style>
         .slider-nav {
@@ -427,7 +428,11 @@
         <div class="row">
             <div class="col-1"></div>
             <div class="col-11">
-                <a href="#">路徑</a>
+                <div>
+                    <a href="/TanTanLib/html/cover.html">首頁</a>
+                    <span>></span>
+                    <a href="Fliter.html">美甲查詢</a>
+                </div>
             </div>
 
         </div>
@@ -754,7 +759,8 @@
                 <div class="col-10">
                     <div>
                         <p class="produce">電話：{{DesignList.manicuristSalonPhone}}</p>
-                        <p class="produce">地址：{{DesignList.manicuristAddress}}</p>
+                        <p class="produce" v-if="PoblicAdress">地址：{{DesignList.manicuristAddress}}</p>
+                        <p class="produce" v-else="PoblicAdress">地址：{{DesignList.manicuristCounty}}{{DesignList.manicuristTownship}}</p>
                         <p class="produce">證照：{{DesignList.manicuristLicense}}</p>
                     </div>
                 </div>
@@ -820,7 +826,7 @@
             console.log(ShowData.SearchString);
             $.ajax({
                 type: "get",
-                url: "/api/DemoSet/GetSearchTable/" + ManicuristID + "?search=" + ShowData.SearchString,
+                url: "/api/DemoSet/GetSearchTable/" + GetManicuristID + "?search=" + ShowData.SearchString,
                 success: function (e) {
                     ShowData.DemoSetList = [];
                     for (DS in e) {
@@ -864,7 +870,8 @@
                     SortDateHTL: [],
                     SortRateHTL: [],
                     SortRateLTH: [],
-                    SearchString:"",
+                    SearchString: "",
+                    PoblicAdress: false,
                 }
             },
             methods: {
@@ -876,8 +883,16 @@
 
         let GetNowurl = window.location.href;
         let Nowurl = new URL(GetNowurl);
-        let GetManicuristID = Nowurl.searchParams.get('id');
-        //let ManicuristID = 2;
+        //let GetManicuristID = Nowurl.searchParams.get('id');
+        let ManicuristID = Nowurl.searchParams.get('id');
+        //let ManicuristID;
+        let GetManicuristID;
+        if (ManicuristID != null) {
+            GetManicuristID = ManicuristID;
+        } else {
+            GetManicuristID = nowMember;
+        }
+
 
         $.ajax({
             type: "get",
@@ -887,6 +902,11 @@
                 PercantStar = e.manicuristScore;
                 FloatStar = (PercantStar * 20) + '%';
                 ShowData.width = FloatStar;
+                if (e.manicuristPublic == false) {
+                    ShowData.PoblicAdress = false;
+                } else if (e.manicuristPublic == true) {
+                    ShowData.PoblicAdress = true;
+                }
             }
         });
 

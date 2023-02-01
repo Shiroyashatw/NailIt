@@ -24,6 +24,7 @@ var mydata = new Vue({
         noticescope: [],
         noticetime: [],
         //增加通知
+        nownotice: "",
         noticepost: [{
             "noticeScope": 0, "noticeTitle": "HAHAHA", "noticeContent": "HAHAHA",
             "noticeBuildTime": "2023-01-25T15:41:38.329Z", "noticePushTime": "2023-01-25T15:4", "noticeState": false, "noticeManagerId": 1
@@ -55,13 +56,242 @@ var mydata = new Vue({
         membernum: "", memberpage: "",
         membermodel: "",
         onemember: [{}],
+        memget: [{ "memberId": 0, "memberManicurist": "nope", "memberStatus": 0 }],
+        //5.管理員-----------------------------------------------------------------------------------------------------------------------------------------------------
+        manager: [{}],
+        managernum: "", managerpage: "",
+        managermodel: "",
+        onemanager: [{}],
+        managerput: [{ "managerId": 1, "managerPassword": "1234", "managerName": "string11", "managerPurview": 1 }],
+        nowmanagerId: "",
+        managerpost: [{ "managerAccount": "", "managerPassword": "", "managerName": "", "managerPurview": "", "managerBuildTime": "" }],
+        managerget: [{ "managerId": 0, "managerName": "$", "managerPurview": 3 }],
 
-    },
-
-
+    }
 })
 
+
+////5.管理員--------------------------------------------------------------------------------------------------------------------------------
+//GET 篩選會員資料表
+function selman() {
+    // managerget: [{ "managerId": 0, "managerName": "$", "managerPurview": 3 }],
+    var managerId = $("#managerid").val();
+    var managerName = $("#managername").val();
+    //value="0">一般會員,value="1">店家／設計師,value="2">全體
+    var managerPurview = $("#managerlimit").val();
+
+    console.log(managerId);
+    console.log(managerName);
+    console.log(managerPurview);
+
+    //會員編號
+    if (managerId == "") {
+        mydata.managerget[0].managerId = 0;
+    } else {
+        mydata.managerget[0].managerId = managerId;
+    }
+    //會員類型
+    if (managerName == "") {
+        mydata.managerget[0].managerName = "$";
+    } else {
+        mydata.managerget[0].managerName = managerName;
+    }
+    //會員狀態
+    mydata.managerget[0].managerPurview = managerPurview;
+
+    var urlmanresult = mydata.managerget[0].managerId + "/" + mydata.managerget[0].managerName + "/" + mydata.managerget[0].managerPurview;
+    console.log(urlmanresult)
+
+    $.ajax({
+        type: "get",
+        url: "/api/ManagerTables/condition/" + urlmanresult,
+        success: function (e) {
+            mydata.manager = e;
+            console.log(e);
+            //員工總項目 跟 訂單頁數
+            mydata.managernum = e.length;
+            if (mydata.managernum >= 5) {
+                mydata.managerpage = Math.ceil(mydata.managernum / 5)
+            } else {
+                mydata.managerpage = 1
+            };
+        }
+    })
+
+    mydata.managerget[0].managerId = 0;
+    mydata.managerget[0].managerName = "$";
+    mydata.managerget[0].managerPurview = 3;
+}
+
+//獲得最新的managerId
+function addmanmem() {
+    //新增日期
+    $("#addmandate").prop('value', notdate);
+
+    //員工編號
+    var managerdata = mydata.manager;
+    var nowmanagerId = mydata.manager[(managerdata.length - 1)].managerId;
+    mydata.nowmanagerId = nowmanagerId + 1;
+}
+
+//POST 會員資料表
+function savemanager() {
+    //新增日期
+    var addnotdate = new Date();
+    mydata.managerpost[0].managerBuildTime = addnotdate;
+    console.log(mydata.managerpost[0]);
+    $.ajax({
+        type: "post",
+        async: false,
+        url: "/api/ManagerTables",
+        contentType: "application/json",
+        data: JSON.stringify(mydata.managerpost[0]),
+        success: function () {
+            window.location = "/TanTanLib/html/backstage.html"
+            var tabcontent;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabcontent[4].style.display = "block";
+
+        }
+
+    });
+}
+
+//PUT 會員資料表
+function putmanager(e) {
+    mydata.managermodel = e.value;
+    console.log(mydata.managermodel);
+    mydata.managerput[0].managerId = mydata.managermodel;
+    mydata.managerput[0].managerPassword = mydata.onemanager[0].managerPassword;
+    mydata.managerput[0].managerName = mydata.onemanager[0].managerName;
+    mydata.managerput[0].managerPurview = mydata.onemanager[0].managerPurview;
+    console.log(mydata.managerput[0]);
+    $.ajax({
+        type: "put",
+        url: "/api/ManagerTables/put/" + mydata.managermodel,
+        contentType: "application/json",
+        data: JSON.stringify(mydata.managerput[0]),
+        success: function () {
+            window.location = "/TanTanLib/html/backstage.html"
+            var tabcontent;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabcontent[4].style.display = "block";
+        }
+    })
+}
+
+//GET會員資料表
+$.ajax({
+    type: "get",
+    url: "/api/ManagerTables",
+    success: function (e) {
+        mydata.manager = e;
+        console.log(e);
+
+        //訂單總項目 跟 訂單頁數
+        mydata.managernum = e.length;
+        if (mydata.managernum >= 5) {
+            mydata.managerpage = Math.ceil(mydata.managernum / 5)
+        } else {
+            mydata.managerpage = 1
+        };
+    }
+})
+
+//DELETE會員資料表
+function delmanmem(e) {
+    mydata.managermodel = e.value;
+    console.log(mydata.managermodel);
+
+    $.ajax({
+        type: "delete",
+        url: "/api/ManagerTables/" + mydata.managermodel,
+        success: function () {
+            window.location = "/TanTanLib/html/backstage.html"
+            var tabcontent;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabcontent[4].style.display = "block";
+
+        }
+    })
+}
+
+//GET單一會員資料表
+function reviewman(e) {
+    mydata.managermodel = e.value;
+    console.log(mydata.managermodel);
+    $.ajax({
+        type: "get",
+        url: "/api/ManagerTables/oneget/" + mydata.managermodel,
+        success: function (e) {
+            mydata.onemanager = e;
+            console.log(e);
+        }
+
+    })
+}
+
 ////4.會員--------------------------------------------------------------------------------------------------------------------------------
+//GET 篩選會員資料表
+function selmem() {
+    // memget: [{ "memberId": 0, "memberManicurist": "nope", "memberStatus": 0}],
+    var memberId = $("#memid").val();
+    var memberManicurist = $("#memtype").val();
+    //value="0">一般會員,value="1">店家／設計師,value="2">全體
+    var memberStatus = $("#memstate").val();
+
+    console.log(memberId);
+    console.log(memberManicurist);
+    console.log(memberStatus);
+
+    //會員編號
+    if (memberId == "") {
+        mydata.memget[0].memberId = 0;
+    } else {
+        mydata.memget[0].memberId = memberId;
+    }
+    //會員類型
+    if (memberManicurist == "nope") {
+        mydata.memget[0].memberManicurist = "nope";
+    } else {
+        mydata.memget[0].memberManicurist = memberManicurist;
+    }
+    //會員狀態
+    mydata.memget[0].memberStatus = memberStatus;
+
+    var urlmemresult = mydata.memget[0].memberId + "/" + mydata.memget[0].memberManicurist + "/" + mydata.memget[0].memberStatus;
+    console.log(urlmemresult)
+
+    $.ajax({
+        type: "get",
+        url: "/api/MemberTables2/condition/" + urlmemresult,
+        success: function (e) {
+            mydata.member = e;
+            console.log(e);
+            //訂單總項目 跟 訂單頁數
+            mydata.membernum = e.length;
+            if (mydata.membernum >= 5) {
+                mydata.memberpage = Math.ceil(mydata.membernum / 5)
+            } else {
+                mydata.memberpage = 1
+            };
+        }
+    })
+
+    mydata.memget[0].memberId = 0;
+    mydata.memget[0].memberManicurist = "nope";
+    mydata.memget[0].urlmemresult = 0;
+}
+
 //GET會員資料表
 $.ajax({
     type: "get",
@@ -69,19 +299,8 @@ $.ajax({
     success: function (e) {
         mydata.member = e;
         console.log(e);
-        //是否是店家或美甲師
-        for (var i = 0; i < mydata.member.length; i++) {
-            if (mydata.member[i].memberManicurist == false) {
-                mydata.member[i].memberManicurist = "一般會員"
-            } else { mydata.member[i].memberManicurist = "店家／美甲師" }
-        }
 
-        //是否已停權
-        for (var i = 0; i < mydata.member.length; i++) {
-            if (mydata.member[i].memberReportpoint >= 20) {
-                mydata.member[i].memberReportpoint = "已停權"
-            } else { mydata.member[i].memberReportpoint = "使用中" }
-        }
+
         //訂單總項目 跟 訂單頁數
         mydata.membernum = e.length;
         if (mydata.membernum >= 5) {
@@ -114,10 +333,10 @@ function reviewmem(e) {
                     y += mydata.onemember[x].memberReportId + "、";
                     console.log(mydata.onemember[x].memberReportId);
                 }
-                var str = y.substring(0, y.length-1)
+                var str = y.substring(0, y.length - 1)
                 mydata.onemember[0].memberReportId = str;
                 console.log(mydata.onemember[0].memberReportId);
-                
+
 
             }
         }
@@ -497,7 +716,7 @@ function changereviewreport(e) {
     console.log(now);
     mydata.reportput[0].reportId = mydata.reportmodel;
     mydata.reportput[0].reportCheckTime = now;
-    mydata.reportput[0].managerId = 9;
+    mydata.reportput[0].managerId = 1;
     console.log(mydata.reportput[0]);
     $.ajax({
         type: "put",
@@ -579,6 +798,8 @@ function delnotice(e) {
         url: "/api/NoticeTables/delete/" + mydata.noticemodel,
         success: function () {
             window.location = "/TanTanLib/html/backstage.html"
+            var tabcontent;
+            tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
@@ -629,21 +850,13 @@ function reviewnotice(e) {
 
 };
 
-//ADD  系統通知單一系統通知建立時間
-var addnotdate = new Date();
-if (addnotdate.getHours().length == 2) {
-    var notdatehours = addnotdate.getHours();
-} else { var notdatehours = addnotdate.getHours().toString().padStart(2, '0') }
-if (addnotdate.getMinutes().length == 2) {
-    var notdatemin = addnotdate.getMinutes();
-} else { var notdatemin = addnotdate.getMinutes().toString().padStart(2, '0') }
-
-var notdate = addnotdate.getFullYear() + "-" + addnotdate.getMonth() + 1 + "-" + addnotdate.getDate() + " " + notdatehours + ":" + notdatemin;
-
+//系統通知單一系統通知建立時間
 function addnoticedate() {
 
     $("#adddate").prop('value', notdate);
-
+    var noticedata = mydata.notice;
+    var nownoticId = mydata.notice[(noticedata.length - 1)].noticeId;
+    mydata.nownotice = nownoticId + 1;
 
 }
 
@@ -893,14 +1106,19 @@ function selnotice() {
 }
 
 
+//----------------------------------------------------------------------
+//現在時間
+var addnotdate = new Date();
+if (addnotdate.getHours().length == 2) {
+    var notdatehours = addnotdate.getHours();
+} else { var notdatehours = addnotdate.getHours().toString().padStart(2, '0') }
+if (addnotdate.getMinutes().length == 2) {
+    var notdatemin = addnotdate.getMinutes();
+} else { var notdatemin = addnotdate.getMinutes().toString().padStart(2, '0') }
+var notdate;
+addnotdate.getDate().length == 2 ? notdate = addnotdate.getDate() : notdate = addnotdate.getDate().toString().padStart(2, '0');
+var notMonth = addnotdate.getMonth() + 1;
+addnotdate.getMonth().length == 2 ? notMonth = notMonth + 1 : notMonth = notMonth.toString().padStart(2, '0');
 
-
-
-
-
-
-
-
-
-
+var notdate = addnotdate.getFullYear() + "-" + notMonth + "-" + notdate + " " + notdatehours + ":" + notdatemin;
 

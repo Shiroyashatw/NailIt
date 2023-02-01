@@ -438,7 +438,11 @@
         <div class="row">
             <div class="col-1"></div>
             <div class="col-11">
-                <a href="#">路徑</a>
+                <div>
+                    <a href="/TanTanLib/html/cover.html">首頁</a>
+                    <span>></span>
+                    <a href="Fliter.html">美甲查詢</a>
+                </div>
             </div>
 
         </div>
@@ -453,7 +457,7 @@
         </div>-->
 
 
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-1"></div>
             <div class="col-3">
                 <div id="photoframe">
@@ -553,10 +557,8 @@
                     <div class="col-6">
                     </div>
                     <div class="col-4">
-                        <!--<form>
-                            <input class="Searchbar" type="text" placeholder="作品,標籤">
-                            <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>-->
+                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                        <button class="Searchbtn" onclick="SearchIT()"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -606,7 +608,7 @@
                         </div>
 
                         <div class="DisFlex" id="SortRight">
-                            <p class="DisInLine">共計12條評論 頁數1/1</p>
+                            <p class="DisInLine">共計{{Comment.length}}條評論 頁數1/1</p>
                             <button class="CBtn">上一頁</button>
                             <button class="CBtn">下一頁</button>
                         </div>
@@ -769,7 +771,8 @@
                 <div class="col-10">
                     <div>
                         <p class="produce">電話：{{DesignList.manicuristSalonPhone}}</p>
-                        <p class="produce">地址：{{DesignList.manicuristAddress}}</p>
+                        <p class="produce" v-if="PoblicAdress">地址：{{DesignList.manicuristAddress}}</p>
+                        <p class="produce" v-else="PoblicAdress">地址：{{DesignList.manicuristCounty}}{{DesignList.manicuristTownship}}</p>
                         <p class="produce">證照：{{DesignList.manicuristLicense}}</p>
                     </div>
                 </div>
@@ -1029,6 +1032,21 @@
             console.log(ShowData.DemoSetList);
         }
 
+        function SearchIT() {
+            console.log(ShowData.SearchString);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetSearchTable/" + GetManicuristID + "?search=" + ShowData.SearchString,
+                success: function (e) {
+                    ShowData.MainDemoCover = [];
+                    for (DS in e) {
+                        ShowData.MainDemoCover.push(e[DS]);
+                    }
+                }
+            });
+            console.log(ShowData.MainDemoCover);
+        }
+
 
         const ShowData = new Vue({
             el: '#ShowData',
@@ -1047,6 +1065,7 @@
                     SortRateHTL: [],
                     SortRateLTH: [],
                     SearchString: "",
+                    PoblicAdress: false,
                 }
             },
             methods: {
@@ -1070,6 +1089,13 @@
                 PercantStar = e.manicuristScore;
                 FloatStar = (PercantStar * 20) + '%';
                 ShowData.width = FloatStar;
+                //console.log(e.manicuristPublic);
+                if (e.manicuristPublic == false) {
+                    ShowData.PoblicAdress = false;
+                } else if (e.manicuristPublic == true) {
+                    ShowData.PoblicAdress = true;
+                }
+                
             }
         });
 

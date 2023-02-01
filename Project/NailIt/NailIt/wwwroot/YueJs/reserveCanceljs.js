@@ -60,6 +60,7 @@ function cancelLoop(search=false) {
 	var answer = "";
 	var thisOrderTime = ""
 	for (var x of cancelData) {
+		console.log(x);
 		if (search) {
 			if (searchStart.value == "" || searchEnd.value == "") {
 				let myDate = new Date();
@@ -161,5 +162,7 @@ function getCancelDetail(i) {
 							value="返回"
 						/>
 			</div>`;
+	infoModal.style.width = "30%";
+	infoModal.style.height = "62%";
 	infoModal.showModal();
 }

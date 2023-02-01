@@ -72,21 +72,37 @@ namespace NailIt.Controllers.AnselControllers
                     MessageRead = s.SysNoticeState
                 }
                 )).ToList();
-            var notices = (from notice in _context.NoticeTables
-                           where notice.NoticeScope == 2 || notice.NoticeScope == scop
-                           join read in _context.NoticeReadTables on notice.NoticeId equals read.NoticeId into lg
-                           from noticRead in lg.DefaultIfEmpty()
-                           select new AllMessage(new
-                           {
-                               MessageSrc = "NoticeTables",
-                               MessageId = notice.NoticeId,
-                               MessageSender = 0,
-                               MessageReceiver = loginId,
-                               MessageContent = $"[{notice.NoticeTitle}]{notice.NoticeContent}",
-                               MessageTime = notice.NoticePushTime,
-                               MessageRead = noticRead == null ? false : true
-                           })
-                           ).ToList();
+            var notices = _context.NoticeTables.Where(n => n.NoticeScope == 2 || n.NoticeScope == scop).
+                Join(_context.NoticeReadTables,
+                l => l.NoticeId,
+                r => r.NoticeId,
+                (l, r) => new AllMessage(new
+                {
+                    MessageSrc = "NoticeTables",
+                    MessageId = l.NoticeId,
+                    MessageSender = 0,
+                    MessageReceiver = loginId,
+                    MessageContent = $"[{l.NoticeTitle}]{l.NoticeContent}",
+                    MessageTime = l.NoticePushTime,
+                    MessageRead = r.NoticeReadRead
+                }
+                )).ToList();
+            // 如果未讀沒有建入NoticeReadTables，使用left join
+            // var notices = (from notice in _context.NoticeTables
+            //                where notice.NoticeScope == 2 || notice.NoticeScope == scop
+            //                join read in _context.NoticeReadTables on notice.NoticeId equals read.NoticeId into lg
+            //                from noticRead in lg.DefaultIfEmpty()
+            //                select new AllMessage(new
+            //                {
+            //                    MessageSrc = "NoticeTables",
+            //                    MessageId = notice.NoticeId,
+            //                    MessageSender = 0,
+            //                    MessageReceiver = loginId,
+            //                    MessageContent = $"[{notice.NoticeTitle}]{notice.NoticeContent}",
+            //                    MessageTime = notice.NoticePushTime,
+            //                    MessageRead = (noticRead == null) ? false : noticRead.NoticeReadRead
+            //                })
+            //                ).ToList();
             var resultList = messages.Union(sysNotices.Union(notices)).ToList();
             // the message i sent, it's read for me.
             var tempList = resultList.Where(a => a.MessageSender == loginId).ToList();
@@ -99,7 +115,7 @@ namespace NailIt.Controllers.AnselControllers
 
         // Exclude those be placed on blacklist
         // Get list of chatting with members with latest message content, sent time and message unreadCount
-        private List<dynamic> getCattingList(List<AllMessage> messages, int? loginId)
+        private List<dynamic> getChattingList(List<AllMessage> messages, int? loginId)
         {
             var blacklist = _context.MessageBlacklistTables.Where(m => m.BlacklistBuilder == loginId).ToList();
             var removeBlack = (from m in messages
@@ -150,11 +166,10 @@ namespace NailIt.Controllers.AnselControllers
                 }
             }
             // left join memberTable, get MemberAccount and MemberNickname
-            var leftJoinMember = myMessages.
-                Join(_context.MemberTables,
-                    l => l.memberId,
-                    r => r.MemberId,
-                    (l, r) => new
+            var leftJoinMember = (from l in myMessages
+                                join member in _context.MemberTables on l.memberId equals member.MemberId into lg
+                                from r in lg.DefaultIfEmpty()
+                select new
                     {
                         l.memberId,
                         l.MessageContent,
@@ -178,7 +193,7 @@ namespace NailIt.Controllers.AnselControllers
 
             // Exclude those be placed on blacklist.
             // Get list of chatting with members with latest message content, sent time and message unreadCount.
-            var myMessages = getCattingList(allMessage, loginId);
+            var myMessages = getChattingList(allMessage, loginId);
 
             return Ok(myMessages.OrderBy(r => r.MessageTime));
         }
@@ -218,7 +233,7 @@ namespace NailIt.Controllers.AnselControllers
             {
                 // Exclude those be placed on blacklist.
                 // Get list of chatting with members with latest message content, sent time and message unreadCount.
-                var myMessages = getCattingList(newMessages, loginId);
+                var myMessages = getChattingList(newMessages, loginId);
                 return Ok(myMessages.OrderBy(r => r.MessageTime));
             }
 
@@ -249,16 +264,20 @@ namespace NailIt.Controllers.AnselControllers
                     {
                         item.SysNoticeState = true;
                     }
-                    // NoticeReadTables insert the read config 
-                    var unreadNotice = unreadMessage.Where(u => u.MessageSrc == "NoticeTables").ToList();
+                    // NoticeReadTables
+                    var unreadNotice = _context.NoticeReadTables.Where(n => n.NoticeReadRead == false && n.NoticeReadMember == loginId).ToList();
+                    // var unreadNotice = unreadMessage.Where(u => u.MessageSrc == "NoticeTables").ToList();// 如果未讀沒有建入NoticeReadTables,已讀使用insert
                     foreach (var item in unreadNotice)
                     {
-                        var noticeRead = new NoticeReadTable();
-                        noticeRead.NoticeId = 0;
-                        noticeRead.NoticeId = item.MessageId;
-                        noticeRead.NoticeReadMember = (int)loginId;
-                        noticeRead.NoticeReadRead = true;
-                        _context.NoticeReadTables.Add(noticeRead);
+                        item.NoticeReadRead = true;
+
+                        // 如果未讀沒有建入NoticeReadTables,已讀使用insert
+                        // var noticeRead = new NoticeReadTable();
+                        // noticeRead.NoticeReadId = 0;
+                        // noticeRead.NoticeId = item.MessageId;
+                        // noticeRead.NoticeReadMember = (int)loginId;
+                        // noticeRead.NoticeReadRead = true;
+                        // _context.NoticeReadTables.Add(noticeRead);
                     }
                 }
                 else
@@ -272,9 +291,10 @@ namespace NailIt.Controllers.AnselControllers
                 }
                 await _context.SaveChangesAsync();
                 t.Commit();
+                return Ok(unreadMessage.OrderBy(r => r.MessageTime));
             }
 
-            return Ok(unreadMessage.OrderBy(r => r.MessageTime));
+            return Ok(unreadMessage);
         }
 
         // PUT: api/Chat/PutMsgRevoke/1
@@ -361,6 +381,8 @@ namespace NailIt.Controllers.AnselControllers
                     // use messageId be image name
                     string imageName = $"{message.MessageId}-{i + 1}.png";
                     message.MessageContent += $"<img class='mw-100' src='{baseUri}/AnselLib/ChatImage/{imageName}'>";
+                    // 如果多張圖片，需要<br>換行，才不會有多餘的空白
+                    if (i != frm.Files.Count - 1) { message.MessageContent += "<br>"; }
                     chatSaveImage(imageName, frm.Files[i]);
                 }
                 await _context.SaveChangesAsync();

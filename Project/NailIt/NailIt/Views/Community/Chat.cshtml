@@ -33,11 +33,11 @@
 
 @* context menu for chattingMembers *@
 <div id="chattingMembersMenu" class="context-menu">
-    <div class="item">封鎖加入黑名單</div>
+    <div class="item" onclick="showAddBlack()">封鎖加入黑名單</div>
 </div>
 @* context menu for chattingArea *@
 <div id="chattingAreaMenu" class="context-menu">
-    <div class="item">回收訊息</div>
+    <div class="item" onclick="showRevokeMsg()">回收訊息</div>
 </div>
 
 <div class="row">
@@ -46,7 +46,7 @@
             <input id="searchChatMember" class="w-100" type="text" placeholder="帳號查詢">
             <div class="pt-3 d-flex align-items-center">
                 <h6 class="font-weight-bold pr-2 m-0">聊天室</h6>
-                <button class="btn btn-light  btn-sm">黑名單</button>
+                <button class="btn btn-light btn-sm" onclick="showBlacklist()">黑名單</button>
             </div>
         </div>
         <div id="chattingMembers">
@@ -82,7 +82,7 @@
             </div> *@
         </div>
     </div>
-    <div class="col-8 px-0 pt-2 border-left">
+    <div id="chattingMain" class="col-8 px-0 pt-2 border-left d-none">
         <div class="pb-2 px-1 px-sm-4 d-flex align-items-center" style="height:10vh;">
             <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"
                 style="aspect-ratio:1;color: #fff;width:50px">
@@ -95,50 +95,80 @@
             </div>
         </div>
         <div id="chattingArea" class="border-bottom px-4" style="height:65vh;overflow-y: scroll;">
-            <div class="data-messageid mb-1 d-flex" data-messageid="1">
+            @* <div class="my-3 d-flex justify-content-center">                    
+                <span class="px-3 bg-secondary text-white rounded">2023-01-31</span>
+            </div>
+            <div class="mb-1 d-flex" data-messageid="1">
                 <span class="bg-secondary text-white rounded px-3 py-2">階層式樣式表是一種用來為結構化文件添加樣式的電腦語言，由W3C定義和維護。CSS3現在已被大部分現代瀏覽器支援，而下一版的CSS4仍在開發中。
                     CSS不僅可以靜態地修飾網頁，還可以配合各種手稿語言動態地對網頁各元素進行格式化。</span>
                 <span class="col-2 px-2 align-self-end">16:40</span>
             </div>
-            <div class="data-messageid mb-1 d-flex" data-messageid="1">
+            <div class="mb-1 d-flex" data-messageid="1">
                 <span class="bg-secondary text-white rounded px-3 py-2">Lorem ipsum dolor sit, amet consectetur
                     adipisicing elit. Quidem consequuntur praesentium nostrum ipsam voluptates possimus, minus ducimus
                     veniam dolores consectetur.</span>
                 <span class="col-2 px-2 align-self-end">16:40</span>
             </div>
-            <div class="data-messageid mb-1 d-flex" data-messageid="1">
+            <div class="mb-1 d-flex" data-messageid="1">
                 <span class="bg-secondary text-white rounded px-3 py-2">aaa</span>
                 <span class="col-2 px-2 align-self-end">16:40</span>
             </div>
-            <div class="data-messageid mb-1 d-flex" data-messageid="1">
+            <div class="mb-1 d-flex" data-messageid="1">
                 <span class="bg-secondary rounded px-1 py-1"><img class="mw-100"
                         src="https://localhost:5001/AnselLib/ArticleImage/1067.png" alt=""></span>
                 <span class="col-2 px-2 align-self-end">16:40</span>
             </div>
 
-            <div class="data-messageid mb-1 d-flex flex-row-reverse" data-messageid="1">
+            <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="1">
                 <span class="rounded px-3 py-2" style="border: 4px solid black;">Lorem ipsum dolor sit, amet consectetur
                     adipisicing elit. Quidem consequuntur praesentium nostrum ipsam voluptates possimus, minus ducimus
                     veniam dolores consectetur.</span>
                 <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
             </div>
-            <div class="data-messageid mb-1 d-flex flex-row-reverse" data-messageid="1">
+            <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="1">
                 <span class="rounded px-3 py-2" style="border: 4px solid black;">aaa</span>
                 <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
             </div>
-            <div class="data-messageid mb-1 d-flex flex-row-reverse" data-messageid="1">
+            <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="1">
                 <span class="rounded" style="border: 4px solid black;"><img class="mw-100"
                         src="https://localhost:5001/AnselLib/ArticleImage/1067.png" alt=""></span>
                 <span class="col-2 px-2 align-self-end" style="text-align:right">16:40</span>
+            </div> *@
+        </div>
+        <div id="sendMsgArea" class="d-flex">
+            @* 使用textarea防止貼上圖片 *@
+            @* <textarea class="col-11" id="draftMessagetextarea" placeholder="輸入訊息"></textarea> *@
+            <div id="draftMessage" class="col-11 editable" contenteditable="true" placeholder="輸入訊息" style=" overflow-y: auto;"></div>
+            <div class="col-1 d-flex flex-column justify-content-around align-items-center">
+                <i id="btnPostImage" class="fa-solid fa-image cursor-pointer"></i>
+                <input type='file' id="postImage" onchange="showMyNewImg(this)" accept="image/jpeg, image/png" style="display: none;" multiple/>
+
+                <span class="cursor-pointer material-symbols-outlined" onclick="showMyNewMsg()">send</span>
             </div>
         </div>
-        <div style="" class="d-flex">
-            @* 使用textarea防止貼上圖片 *@
-            <div id="draftMessage" class="col-11 editable" contenteditable="true" placeholder="輸入訊息" style=" overflow-y: auto;"></div>
-            @* <textarea class="col-11" id="draftMessagetextarea" placeholder="輸入訊息"></textarea> *@
-            <div class="col-1 d-flex flex-column justify-content-around align-items-center">
-                <i class="fa-solid fa-image cursor-pointer"></i>
-                <span class="cursor-pointer material-symbols-outlined" onclick="showMyNewMsg()">send</span>
+    </div>
+</div>
+
+
+<!-- The Modal blacklist -->
+<div class="modal fade" id="blacklistModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">黑名單</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="blacklistBody" class="modal-body" style="max-height: calc(100vh - 190px); overflow-y: auto;">
+                @* <div class="d-flex justify-content-between" data-blackid="1">
+                    <div>Account(nickName)</div>
+                    <button>解除</button>
+                </div>
+                <div class="d-flex justify-content-between" data-blackid="2">
+                    <div>Account2(nickName2)</div>
+                    <button>解除</button>
+                </div> *@
             </div>
         </div>
     </div>
