@@ -31,6 +31,9 @@
     min-height: 10vh;
     max-height: 40vh;
 }
+#emptySendMsgArea{
+    min-height: 10vh;
+}
 /* #draftMessagetextarea {
     border: none;
     outline: none;

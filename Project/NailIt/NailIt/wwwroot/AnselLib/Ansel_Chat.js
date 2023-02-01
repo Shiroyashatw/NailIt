@@ -7,8 +7,6 @@ var scop = {
     chattingMsgsMenu: null, // for chattingMsg right click menu
     messageid: 0, // 目前開啟context menu的訊息Id
     memberid: 0, // 目前開啟context menu的人員Id
-    systemAccount: "systemAdmin",
-    systemNickname: "系統通知",
     chattingMembers: [], // 有聊天記錄的人員清單, for 人員list過濾篩選器
     currentChatMemId: 0, // 目前聊天對象Id
 }
@@ -88,11 +86,15 @@ var showSingleMemberMsg = async function (obj) {
     let result = await getSingleMemberMsg(scop.currentChatMemId);
     let messageDate;
     if (!!result) {
-        chattingMain.classList.remove("d-none");
+        chattingMain.classList.remove("d-none");        
+        sendMsgArea.classList.add("d-flex");
         sendMsgArea.classList.remove("d-none");
+        emptySendMsgArea.classList.add("d-none");
         // can't send message to system
         if (scop.currentChatMemId == 0) {
             sendMsgArea.classList.add("d-none");
+            sendMsgArea.classList.remove("d-flex");
+            emptySendMsgArea.classList.remove("d-none");
         }
         chattingArea.innerHTML = "";
         // show messages
@@ -307,11 +309,6 @@ var renderChatMember = async function (chatMembers) {
 
     $("#chattingMembers").empty();
     for (const chatMember of chatMembers) {
-        // if it's from sysNotic or Notic
-        if (chatMember.memberId == 0) {
-            chatMember.memberAccount == scop.systemAccount;
-            chatMember.memberNickname == scop.systemNickname;
-        }
         let chatMemberHTML = `
         <div class="data-memberid cursor-pointer d-flex align-items-center px-3 py-2 w-100" data-memberid="${chatMember.memberId}" onclick="showSingleMemberMsg(this)">
             <div class="d-flex justify-content-center align-items-center bg-secondary rounded-circle"

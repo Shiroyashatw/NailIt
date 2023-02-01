@@ -176,8 +176,10 @@ namespace NailIt.Controllers.AnselControllers
                         l.MessageTime,
                         l.unreadCount,
                         l.msgTimeDiff,
-                        r.MemberAccount,
-                        r.MemberNickname
+                        memberAccount = r?.MemberAccount ?? "systemAdmin",
+                        memberNickname = r?.MemberNickname  ?? "系統通知"
+                        // memberAccount = (r?.MemberAccount != null) ? r.MemberAccount : "",
+                        // memberNickname = (r?.MemberNickname != null) ? r.MemberNickname : ""
                     }
                 ).ToList();
             return ((IEnumerable<dynamic>)leftJoinMember).ToList();
