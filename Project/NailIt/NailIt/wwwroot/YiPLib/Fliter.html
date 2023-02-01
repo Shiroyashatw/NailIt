@@ -200,11 +200,21 @@
 
 
         /*DD*/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
         #mynav {
             width: 100%;
             height: 90px;
             position: fixed;
-            font-weight: bold;
+            background-position-x: 0px;
             font-size: 16px;
             background-color: white;
             opacity: .9;
@@ -225,6 +235,8 @@
             height: 100%;
         }
 
+
+
         .navmid {
             /* background-color: blue; */
             height: 100%;
@@ -237,6 +249,7 @@
 
                 .navmid > li > a {
                     color: black;
+                    font-weight: bold;
                 }
 
                     .navmid > li > a:hover {
@@ -249,12 +262,15 @@
             /* background-color: darksalmon; */
             font-size: 14px;
             text-align: right;
+            font-weight: bold;
         }
 
         .navend2 > img {
             width: 25px;
             /* background-color: blue; */
         }
+
+        /* 頁尾---------------------------------------------------------- */
 
         #hid {
             background-color: white;
@@ -265,15 +281,13 @@
 
 
         footer {
+            width: 100%;
             margin-top: 7%;
             background-color: rgb(0, 0, 0);
             color: white;
             width: 100%;
         }
 
-        #AllText{
-            margin-left:9%;
-        }
 
         #footit {
             margin-top: 6%;
@@ -294,24 +308,23 @@
         }
 
 
-
     </style>
 </head>
 
 <body>
 
-    <div class="container-fluid" id="app">
+    <div class="container-fluid  p-0" id="app">
 
         <nav id="mynav">
-            <div class="row opacity-25 " id="navall">
-                <div class="col-1"></div>
+            <div class="row opacity-25 p-0 " id="navall">
+                <div class="col-1 p-0"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
                     Nail IT
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
-                        <li><a href="#"> 美 甲 查 詢 </a></li>
-                        <li><a href="#"> 美 甲 小 天 地 </a></li>
+                        <li><a href="/YiPLib/Fliter.html"> 美 甲 查 詢 </a></li>
+                        <li><a href="/Community/Index"> 美 甲 小 天 地 </a></li>
                         <li><a href="#"> 關 於 我 們 </a></li>
                     </ul>
                 </div>
@@ -322,7 +335,7 @@
                     <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
                     <img id="noti mr-0" src="../images/notification.png">
                 </div>
-                <div class="col-1"></div>
+                <div class="col-1 p-0"></div>
             </div>
         </nav>
 
@@ -475,12 +488,11 @@
 
 
         </div>
-    
-        <!--<footer class="footer" style="height:320px;">-->
-        <div class="row">
-            <footer class="footer" style="height:320px;">
-                <div class="col-1"></div>
-                <div class="col-8" id="AllText">
+
+        <footer class="footer " style="height:320px;">
+            <div class="row p-0">
+                <div class="col-1 "></div>
+                <div class="col-10">
                     <div id="footit">
                         <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
                         <b>檢舉</b>
@@ -500,14 +512,15 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-1"></div>
+            </div>
+
+
         </footer>
-        </div>
 
 
 
 
-</div>
+    </div>
 
 
 

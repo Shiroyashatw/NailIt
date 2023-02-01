@@ -397,13 +397,148 @@
             word-wrap: break-word;
         }
 
+        /*DD*/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #mynav {
+            width: 100%;
+            height: 90px;
+            position: fixed;
+            background-position-x: 0px;
+            font-size: 16px;
+            background-color: white;
+            opacity: .9;
+            z-index: 9999;
+        }
+
+        #navall > div {
+            /* background-color: blue; */
+            max-height: 100%;
+            /* 待研究 */
+            height: 90px;
+        }
+
+        #brand {
+            font-family: Cascadia Mono SemiBold;
+            font-size: 30px;
+            color: black;
+            height: 100%;
+        }
+
+
+
+        .navmid {
+            /* background-color: blue; */
+            height: 100%;
+        }
+
+            .navmid > li {
+                display: inline;
+                color: black;
+            }
+
+                .navmid > li > a {
+                    color: black;
+                    font-weight: bold;
+                }
+
+                    .navmid > li > a:hover {
+                        text-decoration-line: underline;
+                        text-decoration-thickness: 1.5px;
+                        text-underline-offset: 7px;
+                    }
+
+        .navend1 {
+            /* background-color: darksalmon; */
+            font-size: 14px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .navend2 > img {
+            width: 25px;
+            /* background-color: blue; */
+        }
+
+        /* 頁尾---------------------------------------------------------- */
+
+        #hid {
+            background-color: white;
+            border: 0px solid white;
+            height: 60px;
+            margin: 1% 0%;
+        }
+
+
+        footer {
+            width: 100%;
+            margin-top: 7%;
+            background-color: rgb(0, 0, 0);
+            color: white;
+            width: 100%;
+        }
+
+
+        #footit {
+            margin-top: 6%;
+        }
+
+            #footit b {
+                font-size: 14px;
+                margin-right: 1%;
+            }
+
+        #footpre pre {
+            color: white;
+            font-size: 14px;
+        }
+
+        #footpre, #footcopy {
+            margin-top: 1%;
+        }
+
+
+
     </style>
 </head>
 
 <body>
 
-    <div class="container-fluid" id="ShowData" v-cloak>
-        <div>
+    <div class="container-fluid  p-0" id="ShowData" v-cloak>
+
+        <nav id="mynav">
+            <div class="row opacity-25 p-0 " id="navall">
+                <div class="col-1 p-0"></div>
+                <div class="col-2 d-flex align-items-center" id="brand">
+                    Nail IT
+                </div>
+                <div class="col-3">
+                    <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
+                        <li><a href="/YiPLib/Fliter.html"> 美 甲 查 詢 </a></li>
+                        <li><a href="/Community/Index"> 美 甲 小 天 地 </a></li>
+                        <li><a href="#"> 關 於 我 們 </a></li>
+                    </ul>
+                </div>
+                <div class="col-4 pt-3">
+                    <p class="navend1">登入 / 會員中心</p>
+                </div>
+                <div class="col-1 d-flex align-items-center justify-content-end navend2">
+                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
+                    <img id="noti mr-0" src="../images/notification.png">
+                </div>
+                <div class="col-1 p-0"></div>
+            </div>
+        </nav>
+
+        <!--<div>
             <nav class="row FixPad">
                 <div class="col">
                 </div>
@@ -421,10 +556,10 @@
                 <div class="col">
                 </div>
             </nav>
-        </div>
+        </div>-->
 
 
-        <div class="row">
+        <div class="row" style="padding-top:90px">
             <div class="col-1"></div>
             <div class="col-11">
                 <div>
@@ -744,12 +879,12 @@
                 </div>
 
                 <!--<div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-10">
-                        <p class="Blackline ratingimgpd"></p>
-                    </div>
-                    <div class="col-1"></div>
-                </div>-->
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <p class="Blackline ratingimgpd"></p>
+                </div>
+                <div class="col-1"></div>
+            </div>-->
 
             </div>
 
@@ -767,6 +902,36 @@
             </div>
 
         </div>
+
+        <footer class="footer " style="height:320px;">
+            <div class="row p-0">
+                <div class="col-1 "></div>
+                <div class="col-10">
+                    <div id="footit">
+                        <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
+                        <b>檢舉</b>
+                        <b>隱私權政策</b>
+                        <b>防詐騙宣導</b>
+                    </div>
+                    <div id="footpre">
+                        <pre>
+地址：408台中市南屯區公益路二段51號18樓
+客服信箱：Nailit@gmail.com
+客服電話： 04 -2326-5860
+        </pre>
+                    </div>
+                    <div id="footcopy">
+                        <p style="font-size: 12px;font-family:Franklin Gothic Book;">
+                            Copyright ©2022 MSIT44TEAM1
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </footer>
+
+
     </div>
 
     <script src="../YueJs/loginCheck.js"></script>
