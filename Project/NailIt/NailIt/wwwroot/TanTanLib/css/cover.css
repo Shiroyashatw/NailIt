@@ -57,6 +57,15 @@ html {
     text-underline-offset: 7px;
 }
 
+#brand a,
+#brand a:link,
+#brand a:visited,
+#brand a:active {
+    color: black;
+    text-decoration-line: none;
+}
+
+
 .navend1 {
     /* background-color: darksalmon; */
     font-size: 14px;
@@ -173,7 +182,9 @@ input{
     /* text-decoration-line:none; */
 }
 
-#Bblack:hover {
+
+
+#1:hover {
     color: white;
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
@@ -188,21 +199,22 @@ input{
 
 }
 
-.mytag button{
+.mytag .btn{
     background-color: white;
     color: black;
     font-weight: bold;
     border: 2px solid black; 
     height:60px;
     margin:1% 0%;
+    border-radius:0px;
 
   }
 
-  .mytag  button {
+  .mytag  .btn {
     transition-duration: 0.4s;
   }
   
-  .mytag   button:hover {
+  .mytag   .btn:hover {
     background-color:#D0CECE; 
     font-weight: bolder;
     
