@@ -13,6 +13,7 @@ var scop = {
 //#region Function
 //#region Action
 var showRevokeBlock = async function (obj) {
+    if (!checkLogin()) return;
     // get blacklistid
     let blackid = $(obj).parent().data("blackid");
     // call api (deleteBlacklist)
@@ -29,10 +30,12 @@ var showRevokeBlock = async function (obj) {
     }
 }
 var showBlacklist = function () {
+    if (!checkLogin()) return;
     // show black list modal
     $("#blacklistModal").modal("show");
 }
 var showAddBlack = async function () {
+    if (!checkLogin()) return;
     // create black model 
     let blacklist = new MessageBlacklistTable({
         blacklistBuilder: scop.loginId,
@@ -101,6 +104,7 @@ var showNewMsg = async function () {
 }
 // Revoking chosen message
 var showRevokeMsg = async function () {
+    if (!checkLogin()) return;
     // call api (putMsgRevoke)
     let result = await putMsgRevoke(scop.messageid);
     if (!!result) {
@@ -148,6 +152,7 @@ var showPersonAtEntry = async function (findMemberId) {
 }
 // Showing my conversation with chosen member
 var showSingleMemberMsg = async function (obj) {
+    if (!checkLogin()) return;
     // chosen css
     $(`div[data-memberid='${scop.currentChatMemId}']`).removeClass("chosen");
     $(obj).addClass("chosen");
@@ -218,6 +223,7 @@ var showSingleMemberMsg = async function (obj) {
 }
 // Sending image(s) message
 var showMyNewImg = async function (obj) {
+    if (!checkLogin()) return;
     // get file
     let files = $(obj).prop('files');
     let message = new MessageTable({
@@ -249,6 +255,7 @@ var showMyNewImg = async function (obj) {
 }
 // Sending message
 var showMyNewMsg = async function () {
+    if (!checkLogin()) return;
     if (!draftMessage.innerHTML.trim()) {
         return;
     }
@@ -331,7 +338,7 @@ var renderMessage = async function (message, slide) {
             messageHTML = `
                 <div class="mb-1" data-messageid="${message.messageId}" style="display: flex;">
                     <div class="d-flex">
-                        <span class="bg-secondary rounded mw-100 px-1 py-1">${message.messageContent}</span>
+                        <span class="bg-secondary rounded px-1 py-1">${message.messageContent}</span>
                         <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
                     </div>
                 </div>`;
@@ -340,7 +347,7 @@ var renderMessage = async function (message, slide) {
     // the message sent by me
     else {
         // text message
-        if (message.messageContent.indexOf("<img") == -1) {
+        if (message.messageContent.indexOf("<img") == -1 || typeof message.messageTime == "object") {
             messageHTML = `
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
@@ -354,7 +361,7 @@ var renderMessage = async function (message, slide) {
             messageHTML = `
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
-                        <span class="rounded mw-100" style="border: 4px solid black;">${message.messageContent}</span>
+                        <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
                         <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.indexOf("Z") != -1 ? message.messageTime.HHmm() : message.messageTime.localHHmm()}</span>
                     </div>
                 </div>`;
@@ -507,6 +514,14 @@ var postMsgImage = async function (imageFiles) {
 //#endregion
 
 //#region Custom tool function
+// Check if login ?
+var checkLogin = function () {
+    if (scop.loginId == 0) {
+        alert("請先登入!");
+        return false;
+    }
+    return true;
+}
 function updateThechattingMember(chatMember) {
     let chattingMember = chattingMembersSplice(scop.currentChatMemId);
     chattingMember.messageContent = chatMember.messageContent;
