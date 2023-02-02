@@ -1,5 +1,4 @@
-﻿var myCompleteResult;//get到的資料轉換前
-var completeData;
+﻿
 async function reserveCompleteSendGet() {
 	tedDiv.style.display = "none";
 	contentdiv.style.display = "block";
@@ -13,7 +12,7 @@ async function reserveCompleteSendGet() {
 	fetch("https://localhost:44308/api/YueOrderTables/"+nowMember+"/"+"A1"+"/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
-			myCompleteResult = result;
+			myResult = result;
 			reserveComplete();
 		})
 		.catch(error => console.log('error', error));
@@ -23,7 +22,7 @@ async function reserveCompleteSendGet() {
 
 
 function reserveComplete(search = false) {
-	completeData = JSON.parse(myCompleteResult);
+	myData = JSON.parse(myResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
@@ -52,11 +51,11 @@ function reserveComplete(search = false) {
 	searchEnd.value = mySearchEnd;
 }
 function completeLoop(search=false) {
-	if (completeData.length == 0) return `<br /><span style="padding-left:5%">目前無進行中訂單</span>`;
+	if (myData.length == 0) return `<br /><span style="padding-left:5%">目前無進行中訂單</span>`;
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
-	for (var x of completeData) {
+	for (var x of myData) {
 		if (search) {
 			if (searchStart.value == "" || searchEnd.value == "") {
 				let myDate = new Date();
@@ -71,14 +70,16 @@ function completeLoop(search=false) {
 				continue;
 			}
 		}
+		var maniTo = "../YipLib/NailDesign.html?id=" + x.manicurist_ID;
+		var picTo = x.order_Type == 0 ? maniTo : "../YipLib/product.html?=" + x.order_item;
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 		thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
 		answer += `<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 20%; height:170px">
-						<img src="`+ x.order_Cover +`"  width="90%" height="90%" style="margin-left: 3%" />
+						<img src="`+ x.order_Cover + `"  width="90%" height="90%" style="margin-left: 3%"  onclick="javascript:location.href='` + maniTo +`'" />
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
-						<span style="font-size: 120%"><b>`+ x.order_ItemName+`</b></span>
+						<span style="font-size: 120%"  onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName+`</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content+`</span>
 						<br /><br />
@@ -129,7 +130,7 @@ function completeLoop(search=false) {
 }
 
 function getCompleteDetail(i, str) {
-	var x = completeData[i];
+	var x = myData[i];
 	var thisOrderId = "";
 	var thisOrderTime = "";
 	var thisStartTime = "";
@@ -254,7 +255,7 @@ function reportComplete(i)
 
 async function completeSendReport(i)
 {
-	var x = completeData[i];
+	var x = myData[i];
 	console.log(x);
 
 	var myHeaders = new Headers();

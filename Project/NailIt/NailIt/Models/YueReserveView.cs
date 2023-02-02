@@ -26,5 +26,6 @@ namespace NailIt.Models
         public string order_removal { get; set; }
         public string demoSet_Content { get; set; }
         public string order_Cover { get; set; }
+        public int order_item { get; set; }
     }
 }

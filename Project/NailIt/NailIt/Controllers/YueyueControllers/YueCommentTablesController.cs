@@ -42,7 +42,7 @@ namespace NailIt.Controllers.YueyueControllers
            from subDemoSet in t1.DefaultIfEmpty()
            join Manicurist in _context.ManicuristTables on Order.ManicuristId equals Manicurist.ManicuristId into t2
            from subMamicurist in t2.DefaultIfEmpty()
-           where (Order.ManicuristId == Convert.ToInt32(id) && Order.OrderStateC == state)
+           where (Order.ManicuristId == Convert.ToInt32(id) && Order.OrderStateC == state && Comment.CommentType==true)
            select new YueCommentView()
            {
                order_ID = Order.OrderId,
@@ -87,6 +87,17 @@ namespace NailIt.Controllers.YueyueControllers
         {
             commentTable.CommentBuildTime = DateTime.Now;
             _context.CommentTables.Add(commentTable);
+
+            var mycomment = await (from co in _context.CommentTables
+                             where co.CommentType == true
+                             select co.CommentScore).ToListAsync();
+            double total=0;
+            foreach (double x in mycomment)
+            {
+                total += x;
+            }
+            var theMember = await _context.MemberTables.FindAsync(commentTable.CommentTarget);
+            theMember.MemberScore = (total / mycomment.Count);
             try
             {
                 await _context.SaveChangesAsync();
