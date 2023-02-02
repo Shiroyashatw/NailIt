@@ -39,6 +39,9 @@ let ritem
 let ritemName
 let rdep
 
+// 卸甲類型
+// 被選擇的卸甲類型
+const OrderRemovalC = $('select[name="OrderRemovalC"]')
 
 
 // 讀取基本資料 設計師資料 demoset資料 demo資料 再顯示在畫面上
@@ -85,10 +88,9 @@ function getbasicinfo() {
             }
 
             $('.demoSetPartC').text("服務項目:" + demoSetPartCtext)
-
+            // 施作項目和造型
             $('select[name="OrderItem"]').append(new Option("固定項目", Demosetres['demoSetId'])).attr('style','pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
-            $('select[name="OrderItemName"]').append(new Option(Demosetres['demoSetName'], Demosetres['demoSetName'])).attr('style','pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
-
+            $('select[name="OrderItemName"]').append(`<option value="${Demosetres['demoSetName']}" price="${Demosetres['demoSetPrice']}">${Demosetres['demoSetName']} NT$${Demosetres['demoSetPrice']}</option>`).attr('style','pointer-events: none;background-color: rgba(128, 128, 128, 0.3);')
             // 設計師頁面超連結
             $('#topmanicuristSalonName').text(Ores['manicuristSalonName'])
             $("#topmanicuristSalonName").attr("href", `NailDesign.html?id=${InputMid}`)
@@ -96,6 +98,7 @@ function getbasicinfo() {
             // 商品頁面超連結
             $('#topdemosetName').text(Demosetres['demoSetName'])
             $('#topdemosetName').attr("href", `product.html?id=${DSETID}`)
+            
             
             $('#productName').text(Demosetres['demoSetName'])
             $('#demoSetPrice').text("預估價格:" + Demosetres['demoSetPrice'])
@@ -114,8 +117,7 @@ function getbasicinfo() {
             $('.full_star').css({
                 "width": star
             })
-            demoSprice.text("NT$" + Demosetres['demoSetPrice']);
-            inputOprice.val(Demosetres['demoSetPrice']);
+
             demoSde.text("NT$" + Demosetres['demoSetDeposit'])
             $('.TextdemoSetDeposit').text("預估訂金: NT$" + Demosetres['demoSetDeposit'])
             inputOde.val(Demosetres['demoSetDeposit']);
@@ -142,14 +144,9 @@ function getbasicinfo() {
 
 // 設定可點選預約日期
 function getReserveDate() {
-    // console.log(id); // 1
-    // onsole.log(typeof(id)); // string
     $('#reservebtn, .lastMonth, .nextMonth,#Sendbtn').on('click', function () {
         // 讀取的設計師ID傳回設定
         $('input[name="MemberId"]').val();
-        if ($('input[name="MemberId"]').val() == '') {
-            alert("請先登入會員再進行預約")
-        }
         MID = $("input[name='ManicuristId']").attr('value')
         $.ajax({
             url: `https://localhost:44308/api/product/${MID}/reserve`,
@@ -287,8 +284,7 @@ function postOrder() {
     $('#btnsend').on('click', function () {
         $('input[name="OrderOrderTime"]').val(Tztoday);
         $('input[name="OrderStateC"]').val("A0");
-        let o = ritemName = $('select[name="OrderItemName"]').find("option:selected").val()
-        console.log(o)
+        
         var formdata = $('#form1').serializeArray();
         var returnArray = {}
         // var Yes = true
@@ -393,8 +389,6 @@ function getDemosetData() {
             demoSde.text("NT$" + deposit)
             inputOprice.val(price);
             inputOde.val(deposit);
-            // console.log(price)
-            // console.log(deposit)
         },
         error: err => {
             console.log(err)
@@ -446,22 +440,8 @@ function getOrderItem() {
                     OrderType.val(true)
                     getDemosetData()
                     OrderItemName.show();
-
-                    // price = OrderItemName.find("option:selected").attr('price')
-                    // deposit = OrderItemName.find("option:selected").attr('deposit')
-                    // console.log(OrderItemName.attr('price'))
-                    // console.log(price)
-                    // console.log(deposit)
-                    // demoSprice.text("預估金額:NT$" + price)
-                    // demoSde.text("訂金:NT$" + deposit)
-                    // inputOprice.val(price);
-                    // inputOde.val(deposit);
                 }
             })
-
-            // OrderItemName.change(function(){
-            //     console.log("SSS")
-            // })
         },
         error: err => {
             console.log(err)
@@ -478,12 +458,10 @@ function getRemovalPrice(mid) {
         async: true,
 
         success: res => {
-            const OrderRemovalC = $('select[name="OrderRemovalC"]')
             OrderRemovalC.append((`<option value="B0" price="${res["removalPriceB0"]}">不用卸甲 NT$${res["removalPriceB0"]}</option>`))
             OrderRemovalC.append((`<option value="B1" price="${res["removalPriceB1"]}">去指甲油(無凝膠) NT$${res["removalPriceB1"]}</option>`))
             OrderRemovalC.append((`<option value="B2" price="${res["removalPriceB2"]}">本店卸甲 NT$${res["removalPriceB2"]}</option>`))
             OrderRemovalC.append((`<option value="B3" price="${res["removalPriceB3"]}">他店卸甲 NT$${res["removalPriceB3"]}</option>`))
-            //console.log(res[''])
         },
         error: err => {
             console.log(err)
@@ -525,7 +503,7 @@ function OrderDetail() {
         console.log(rdate)
         let rtime = $('input[name="planId"]:checked').attr("time")
         let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
-        let rremovec = $('select[name="OrderRemovalC"]').find("option:selected").text()
+        let rremovec = OrderRemovalC.find("option:selected").text()
         ritem = $('select[name="OrderItem"]').find("option:selected").text()
         ritemName = $('select[name="OrderItemName"]').find("option:selected").val()
         console.log(ritem)
@@ -630,5 +608,26 @@ function postCash() {
     // %20 應該轉換成 +
 }
 
+// 計算 預估金額
+function calculate() {
+    let selectedOrderRemovalC
+    let selectedOrderItemName
+    let PriceTotal
+    $('#reservebtn').on('click',function(){
+        selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
+        selectedOrderItemName = $('select[name="OrderItemName"]').find("option:selected").attr('price')
+        PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
+        demoSprice.text("NT$" + PriceTotal);
+        inputOprice.val(PriceTotal);
+        //console.log(selectedOrderRemovalC)
+        //console.log(inputOprice.val())
+    })
+    OrderRemovalC.change(function(){
+        selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
+        PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
+        demoSprice.text("NT$" + PriceTotal);
+        inputOprice.val(PriceTotal);
+        //console.log(inputOprice.val())
+    })
 
-
+}
