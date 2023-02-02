@@ -89,7 +89,7 @@ namespace NailIt.Controllers.TanTanControllers
 
         // GET: api/OrderTables2/condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}
         [HttpGet("condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}")]
-        public async Task<ActionResult<dynamic>> GetOrderCondition(string OdateS, string OdateE, string reportP, string orderStateC ,int orderId)
+        public async Task<ActionResult<dynamic>> GetOrderCondition(string OdateS, string OdateE, string orderStateC ,int orderId)
         {
             var date1 = DateTime.Parse(OdateS);
             var date2 = DateTime.Parse(OdateE).AddMinutes(1439);
@@ -104,8 +104,8 @@ namespace NailIt.Controllers.TanTanControllers
                                         && a.OrderOrderTime <= Convert.ToDateTime(date2));
             }
 
-            if (orderStateC == "AA") { result = query; }
-            else { result = result.Where(a => a.OrderStateC == orderStateC); }
+            if (orderStateC != "AA") { result = result.Where(a => a.OrderStateC == orderStateC);}
+           
 
 
             if (orderId != 0) { result = result.Where(a => a.OrderId == orderId); }

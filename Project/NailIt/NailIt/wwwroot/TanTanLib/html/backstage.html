@@ -205,8 +205,8 @@
                             </div>
 
                             <!-- 通知項目標籤+上下頁------------------------------------------------------------------------------------------- -->
-                            <div id="tabtitle" class="py-2 my-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center  justify-content-start">
+                            <div id="tabtitle" class="py-2 my-3 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center  justify-content-start ">
                                     <b class="my-0 ml-2 mr-3">通知項目</b>
                                     <button data-toggle="modal" data-target="#addmesModal" class="myadd" onclick="addnoticedate()">新 增 通 知</button>
                                 </div>
@@ -345,7 +345,7 @@
                         </div>
                         <!-- 4會員管理------------------------------------------------------------------------------- -->
                         <div id="member" class="tabcontent" style="display:none">
-                            <b id="rigtil">後臺管理 ＞ 會員管理</b>
+                            <b id="rigtil">後臺管理 ＞ <u>會員管理</u></b>
                             <!-- 會員條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
                                 <div class="d-flex align-items-start justify-content-start">
@@ -389,7 +389,7 @@
                                     </div>
                                 </div>
                                 <div class="mr-1 d-flex justify-content-end align-items-center">
-                                    <button class="serbut" onclick="selman()">查詢</button>
+                                    <button class="serbut" onclick="selmem()">查詢</button>
                                 </div>
                             </div>
                             <!-- 會員項目標籤+上下頁------------------------------------------------------------------------------------------- -->
@@ -434,7 +434,7 @@
                             </div>
                         </div>
                         <!-- 5系統管理人員------------------------------------------------------------------------------- -->
-                        <div id="sysmem" class="tabcontent">
+                        <div id="sysmem" class="tabcontent" style="display:none">
                             <b id="rigtil">後臺管理 ＞<u>系統人員管理</u></b>
                             <!-- 員工條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
@@ -551,7 +551,7 @@
                         <label for="NO">審核不通過</label><br>
                     </div>
                     <div class="p-3 d-flex justify-content-end">
-                        <button type="button" class="mycancel mr-3" data-dismiss="modal">取消</button><button onclick="changereviewreport(this)" type="button" class="mysend">提交</button>
+                        <button type="button" class="mycancel mr-3" data-dismiss="modal">取消</button><button onclick="changereviewreport(this)" type="button" class="mysend" data-dismiss="modal">提交</button>
                     </div>
                     <!--v-on:click="reprevok"-->
                 </div>
