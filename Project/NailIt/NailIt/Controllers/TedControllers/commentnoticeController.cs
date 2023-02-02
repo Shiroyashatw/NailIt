@@ -43,6 +43,7 @@ namespace NailIt.Controllers.TedControllers
                         where o.ManicuristId == id
                         select new Evaorder()
                         {
+                            DemoSetId = a.DemoSetId,
                             CommentScore = co.CommentScore,
                             CommentContent = co.CommentContent,
                             CommentBuildTime = co.CommentBuildTime,
