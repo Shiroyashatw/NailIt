@@ -620,23 +620,29 @@ function postCash() {
 // 計算 預估金額
 function calculate() {
     let selectedOrderRemovalC
+    let selectedOrderItem
     let selectedOrderItemName
     let PriceTotal
-    $('#reservebtn').on('click', function () {
+    $('#reservebtn,#Sendbtn').on('click', function () {
         selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
+        //selectedOrderItem = $('select[name="OrderItemName"]').find("option:selected").attr('price')
         selectedOrderItemName = $('select[name="OrderItemName"]').find("option:selected").attr('price')
+        //console.log(selectedOrderItem)
         PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
         demoSprice.text("NT$" + PriceTotal);
         inputOprice.val(PriceTotal);
-        //console.log(selectedOrderRemovalC)
-        //console.log(inputOprice.val())
+        console.log(PriceTotal)
+        console.log(selectedOrderRemovalC)
+        console.log(inputOprice.val())
     })
     OrderRemovalC.change(function () {
         selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
         PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
         demoSprice.text("NT$" + PriceTotal);
         inputOprice.val(PriceTotal);
-        //console.log(inputOprice.val())
+        console.log(PriceTotal)
+        console.log(selectedOrderRemovalC)
+        console.log(inputOprice.val())
     })
 
 }
