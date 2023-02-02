@@ -160,11 +160,18 @@
         .Seemore {
             margin-left: 30px;
             margin-right: 30px;
+            overflow:hidden;
+
         }
 
         .Seemore:hover {
-            filter: grayscale(60%);
+            filter: grayscale(20%);
         }
+
+            .Seemore:hover > .Demoimg {
+                transition: 0.5s;
+                transform: scale(1.1);
+            }
 
         .Ribbon {
             position: absolute;
