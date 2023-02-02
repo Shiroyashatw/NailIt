@@ -16,16 +16,31 @@ var ood = new Vue({
 })
 function now3(nowMember) {
 
-$.ajax({
-    type: "get",
-    url: "/api/OrderTED/"+nowMember,
-    success: function (e) {
-        
-        for (var i = 0; i < e.length; i++) {
-            if (e[i].demoSetCover == null) {
-                e[i].demoSetCover = e[i].manicuristPic;
+    $.ajax({
+        type: "get",
+        url: "/api/OrderTED/" + nowMember,
+        success: function (e) {
+
+            for (var i = 0; i < e.length; i++) {
+                if (e[i].demoSetCover == null) {
+                    e[i].demoSetCover = e[i].manicuristPic;
+                }
+                if (e[i].manicuristPublic == false) {
+                    
+                var nummm = 0;
+                    for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                        if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >=0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                            (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+                          
+                        nummm = j;
+                        break;
+                    }
+
+                }    
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
             }
             e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
            
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
@@ -62,6 +77,7 @@ $.ajax({
 })
 }
 function Getorder(e) {
+    console.log(ood.inglist[(e.id).substr(5, 1)].manicuristAddress);
         $("#salonname").text(ood.inglist[(e.id).substr(5, 1)].manicuristSalonName);
         $("#number-ing").text(ood.inglist[(e.id).substr(5, 1)].orderId)
         $("#date-ing").text(ood.inglist[(e.id).substr(5, 1)].orderOrderTime);
@@ -69,7 +85,8 @@ function Getorder(e) {
         $("#remove-ing").text(ood.inglist[(e.id).substr(5, 1)].orderRemovalC);   
         $("#item-ing").text(ood.inglist[(e.id).substr(5, 1)].orderItemName);   
         $("#pay-ing").text('NT$'+ood.inglist[(e.id).substr(5, 1)].orderPrice);   
-        $("#rent-ing").text('NT$'+ood.inglist[(e.id).substr(5, 1)].orderDeposit);
+        $("#rent-ing").text('NT$' + ood.inglist[(e.id).substr(5, 1)].orderDeposit);
+        $("#addre-ing").text(ood.inglist[(e.id).substr(5, 1)].manicuristAddress);
 }
 function Getorderrig(e) {
     $("#salonname-rig").text(ood.rightlist[(e.id).substr(8, 1)].manicuristSalonName);
@@ -80,6 +97,7 @@ function Getorderrig(e) {
     $("#item-rig").text(ood.rightlist[(e.id).substr(8, 1)].orderItemName);
     $("#pay-rig").text('NT$' + ood.rightlist[(e.id).substr(8, 1)].orderPrice);
     $("#rent-rig").text('NT$' + ood.rightlist[(e.id).substr(8, 1)].orderDeposit);
+    $("#addre-rig").text(ood.rightlist[(e.id).substr(8, 1)].manicuristAddress);
 }
 function Getorderfin(e) {
     $("#salonname-fin").text(ood.finlist[(e.id).substr(8, 1)].manicuristSalonName);
@@ -91,6 +109,8 @@ function Getorderfin(e) {
     $("#item-fin").text(ood.finlist[(e.id).substr(8, 1)].orderItemName);
     $("#pay-fin").text('NT$' + ood.finlist[(e.id).substr(8, 1)].orderPrice);
     $("#rent-fin").text('NT$' + ood.finlist[(e.id).substr(8, 1)].orderDeposit);
+    $("#addre-fin").text(ood.finlist[(e.id).substr(8, 1)].manicuristAddress);
+
 }
 function Getordercancel(e) {
     $("#salonname-cancel").text(ood.cancellist[(e.id).substr(11, 1)].manicuristSalonName);
@@ -102,6 +122,8 @@ function Getordercancel(e) {
     $("#item-cancel").text(ood.cancellist[(e.id).substr(11, 1)].orderItemName);
     $("#pay-cancel").text('NT$' + ood.cancellist[(e.id).substr(11, 1)].orderPrice);
     $("#rent-cancel").text('NT$' + ood.cancellist[(e.id).substr(11, 1)].orderDeposit);
+    $("#addre-cancel").text(ood.cancellist[(e.id).substr(11, 1)].manicuristAddress);
+
 }
 //取消預約
 function cancelorderbtn(e) {
