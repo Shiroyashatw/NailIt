@@ -371,6 +371,12 @@ var showMoreArticle = async function () {
     else moreArticles = await getArticles();
     renderArticles(moreArticles);
 }
+// send message to chosen member
+var sendMemberMsg = function () {
+    if (!checkLogin()) return;
+    // link to page
+    window.location.href = `https://localhost:5001/Community/chat/${scop.articleAuthorId}`;
+}
 // show articles of one person (my or other)
 var showMyMain = async function (own) {
     if (own) if (!checkLogin()) return;
@@ -380,12 +386,16 @@ var showMyMain = async function (own) {
     $('#searchInput').val("");
     $('#order').val("latest");
     // update main area
+    $("#memberInfo").children().show();
+    $("#btnMoreArticle").removeAttr("disabled");    
     if (own) {
         $("#mainTitle").html("我的");
         scop.articleAuthorId = scop.loginId;
-    } else $("#mainTitle").hide();
-    $("#memberInfo").children().show();
-    $("#btnMoreArticle").removeAttr("disabled");
+        $("#btnSendMsg").addClass("d-none");
+    } else{
+        $("#mainTitle").hide();
+        $("#btnSendMsg").removeClass("d-none");
+    }
     await getMyArticles();
     $("#avatar").addClass("d-flex");
     $("#avatar").children()[0].innerText = scop.articles.member.memberAccount[0];
