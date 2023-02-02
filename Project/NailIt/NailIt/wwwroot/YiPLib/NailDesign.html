@@ -639,7 +639,7 @@
             </div>
             <div class="col-2">
                 <!--<div style="height: 80%;"></div>-->
-                <button id="Sendbtn" onclick="alertform()">預約</button>
+                <button id="Sendbtn">預約</button>
             </div>
             <div class="col-1">
             </div>
@@ -1043,36 +1043,32 @@
                     <div id="step1" class="container step1-choseitem">
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
-                                <p>
-                                    施作部位:
-                                    <select name="OrderPartC">
-                                    </select>
-                                </p>
-                                <p>
-                                    卸甲:
-                                    <select name="OrderRemovalC">
-                                        <option value="B0">不用卸甲</option>
-                                        <option value="B1">去指甲油(無凝膠)</option>
-                                        <option value="B2">本店卸甲</option>
-                                        <option value="B3">他店卸甲</option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目:
-                                    <select name="OrderItem">
-
-                                    </select>
-                                </p>
-                                <p>
-                                    造型:
-                                    <select name="OrderItemName">
-                                    </select>
-                                </p>
-
-                                <p class="demoSetPrice"></p>
-                                <input type="hidden" name="OrderPrice" value="">
-                                <p class="demoSetDeposit"></p>
-                                <input type="hidden" name="OrderDeposit" value="">
+                                <div class="itemBx col-12">
+                                    <label class="">施作部位:</label>
+                                    <select class="" name="OrderPartC"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">卸甲:</label>
+                                    <select class="" name="OrderRemovalC"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">施作項目:</label>
+                                    <select class="" name="OrderItem"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">造型:</label>
+                                    <select class="" name="OrderItemName"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">預估金額:</label>
+                                    <label class="demoSetPrice"></label>
+                                    <input type="hidden" name="OrderPrice" value="">
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">訂金:</label>
+                                    <label class="demoSetDeposit"></label>
+                                    <input type="hidden" name="OrderDeposit" value="">
+                                </div>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -1560,6 +1556,14 @@
             console.log(nowMember)
         }
         pre()
+        $('#Sendbtn').on('click', function () {
+            if (nowMember == -1) {
+                alert("請先登入會員，再進行預約")
+            }
+            else {
+                alertform()
+            }
+        })
         getManicuristData()
         getReserveDate()
         getReserveTime()

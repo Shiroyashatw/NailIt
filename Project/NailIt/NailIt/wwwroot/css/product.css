@@ -117,7 +117,7 @@
 #alert_div,
 #repalert_div {
   position: fixed;
-  top: 10%;
+  top: 18%;
   left: 20%;
   background-color: white;
   width: 800px;
@@ -134,7 +134,7 @@
     top: 0%;
   }
   to {
-    top: 10%;
+    top: 18%;
   }
 }
 
@@ -143,7 +143,7 @@
     top: 0%;
   }
   to {
-    top: 10%;
+    top: 18%;
   }
 }
 #hohodiv,
@@ -237,6 +237,17 @@
 .form-info .step-container {
   padding: 0;
 }
+.form-info .step-container .itemBx {
+  margin: 0.5rem 0;
+}
+.form-info .step-container .itemBx label {
+  width: 75px;
+  text-align: left;
+  padding: 0;
+}
+.form-info .step-container .itemBx select, .form-info .step-container .itemBx input {
+  width: 150px;
+}
 .form-info .step-container .calendar {
   width: 95%;
   -webkit-user-select: none;
@@ -315,6 +326,13 @@
 .form-info .step-container .time-container .container {
   padding-top: 50px;
 }
+.form-info .step-container .time-container .container .remark {
+  font-size: 14px;
+  padding-right: 0.2rem;
+}
+.form-info .step-container .time-container .container .remark p {
+  margin: 0.1rem 0;
+}
 .form-info .step-container .time-container #radio input[type=radio] {
   display: none;
 }
@@ -340,11 +358,11 @@
   border-radius: 5px;
 }
 .form-info .step-container .time-container #radio .btnnotclick {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(128, 128, 128, 0.8);
 }
 .form-info .step-container .time-container #radio .btnnotclick:hover {
   color: #333;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(128, 128, 128, 0.8);
 }
 .form-info .step-container .form-footerbtn {
   text-align: center;
