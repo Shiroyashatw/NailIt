@@ -2,12 +2,27 @@
     el: "#mydata2",
     data: {
         city: [{}],
-        region: [{}],
+        region: [{ "ZipCode": "","AreaName":""}],
         cityselected: null,
-        namesearch:"",
+        namesearch: "",
+        color: [{}]
+    }
+})
+//獲得所有顏色
+
+$.ajax({
+    type: "get",
+    async: false,
+    url: "/api/ColorTables2",
+    success: function (e) {
+        console.log(e);
+        mydata2.color = e;
+
+
     }
 })
 
+//獲得所有城市
 $.ajax({
     type: "get",
     url: "CityCountyData.json",
@@ -20,29 +35,31 @@ $.ajax({
                 value: key,
                 text: e[key].CityName
             }));
-
+        
 
         }
-
     }
 
 })
-
-$("#region").click(function () {
-
+//獲得所有區域
+$("#city").click(function () {
+    $("#region").empty();
     $.ajax({
         type: "get",
         url: "CityCountyData.json",
-        async: true,
+        async: false,
         success: function (e) {
             console.log(e);
+            
             mydata2.city = e;
             console.log(mydata2.cityselected);
+            
             if (mydata2.cityselected != null) {
                 console.log(mydata2.cityselected);
-
-                for (var key in e[mydata2.cityselected].AreaList) {
+                
+                for (var key in mydata2.city[mydata2.cityselected].AreaList) {
                     console.log(e[mydata2.cityselected].AreaList[key].AreaName)
+                    
                     $('#region').append($('<option>', {
                         value: e[mydata2.cityselected].AreaList[key].ZipCode,
                         text: e[mydata2.cityselected].AreaList[key].AreaName
@@ -54,10 +71,10 @@ $("#region").click(function () {
     })
 });
 
-$("#searchButton").click(function () {
-    $("#searchB").prop("href","YiPLib/fliter.html?search=聖誕節")
-    //"/YiPLib/fliter.html?search=mydata2.namesearch"
-})
+//$("#searchButton").click(function () {
+//    $("#searchB").prop("href","YiPLib/fliter.html?search=聖誕節")
+//    //"/YiPLib/fliter.html?search=mydata2.namesearch"
+//})
 
 
 
