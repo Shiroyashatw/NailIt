@@ -1,7 +1,5 @@
 ﻿preDo();
 var nowId;
-var memberData;
-var memberResult;
 function preDo() {
 	clickEye();
 }
@@ -18,7 +16,7 @@ function clickEye() {
 	}
 }
 
-function login() {
+async function login() {
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 
@@ -30,7 +28,7 @@ function login() {
 		redirect: 'follow'
 	};
 
-	fetch("https://localhost:44308/api/YueMember/", requestOptions)
+	await fetch("https://localhost:44308/api/YueMember/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
 			if ("noAC" == result)
@@ -40,7 +38,9 @@ function login() {
 			else
 				toastr.success("登入成功");
 		}
-			).catch(error => console.log('error', error));
+	).catch(error => console.log('error', error));
+
+	window.history.back();
 
 }
 
@@ -150,12 +150,12 @@ async function resetPP(myId)
 
 	await fetch("https://localhost:44308/api/MemberTables/" + myId, requestOptions)
 		.then(response => response.text())
-		.then(result => memberResult = result)
+		.then(result => myResult = result)
 		.catch(error => console.log('error', error));
-	memberData = JSON.parse(memberResult);
+	myData = JSON.parse(myResult);
 	closeInfoModal();
 
-	infoModal.innerHTML = `<span>您的帳號&nbsp&nbsp</span><input id="ACInput" readonly type="text"  value="` + memberData.memberAccount +`" />
+	infoModal.innerHTML = `<span>您的帳號&nbsp&nbsp</span><input id="ACInput" readonly type="text"  value="` + myData.memberAccount +`" />
 							<br /><br />
 							<span>請輸入密碼&nbsp&nbsp<span><input id="pwReInput" type="password" ><br /><br />
 							<span>再輸入一次&nbsp&nbsp</span><input id="pwReInput2" type="password"  />
@@ -195,8 +195,8 @@ async function pwResetSendPut()
 	if (pwReInput.value != pwReInput2.value) { toastr.warning("兩次輸入的密碼需一樣。"); return }
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
-	memberData.MemberPassword = pwReInput.value;
-	var raw = JSON.stringify(memberData);
+	myData.MemberPassword = pwReInput.value;
+	var raw = JSON.stringify(myData);
 
 	var requestOptions = {
 		method: 'PUT',
@@ -205,7 +205,7 @@ async function pwResetSendPut()
 		redirect: 'follow'
 	};
 
-	await fetch("https://localhost:44308/api/MemberTables/" + memberData.memberId, requestOptions)
+	await fetch("https://localhost:44308/api/MemberTables/" + myData.memberId, requestOptions)
 		.then(response => response.text())
 		.then(result=>console.log(result))
 		.catch(error => console.log('error', error));

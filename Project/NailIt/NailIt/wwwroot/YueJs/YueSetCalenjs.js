@@ -1,6 +1,6 @@
 ﻿
-var calenResult;
-var calenData;
+var myResult;
+var myData;
 var nowDay;
 var mySelectTime;
 var nowMonth;
@@ -15,7 +15,7 @@ async function calenSendGet() {
 
 	await fetch("https://localhost:44308/api/YuePlanTables/"+nowMember, requestOptions)
 		.then(response => response.text())
-		.then(result=>calenResult = result)
+		.then(result=>myResult = result)
 		.catch(error => console.log('error', error));
 	await calenSet();
 	loadScript("../YueJs/YueCalen.js", buildCalen, buildCalen);
@@ -23,7 +23,7 @@ async function calenSendGet() {
 
 function calenSet()
 {
-	calenData = JSON.parse(calenResult);
+	myData = JSON.parse(myResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞時間設定</div>
 				<div 
 					 class="tag"
@@ -131,7 +131,7 @@ function calenSetDay(selectedTime)
 							<th style="width: 200px; text-align: center">預定</th>
 							<th style="width: 200px; text-align: center"></th>
 						</tr>`;
-	for (var x of calenData)
+	for (var x of myData)
 	{
 		var myDing = x.orderId == null ? "尚未預定" : "已預定";
 		var aColor = myDing == "尚未預定" ? "gray" : "";
@@ -232,7 +232,7 @@ function calenSetMonth(month)
 							<th style="width: 200px; text-align: center">預定</th>
 							<th style="width: 200px; text-align: center"></th>
 						</tr>`;
-	for (var x of calenData) {
+	for (var x of myData) {
 		if (x.planStartTime.substring(5, 7) != nowMonth) continue;
 		var myDing = x.orderId == null ? "尚未預定" : "已預定";
 		var aColor = myDing == "尚未預定" ? "gray" : "";
@@ -359,7 +359,7 @@ function planSendPost()
 function planSendDelete(flag)
 {
 	deleteArray = new Array;
-	for (var x of calenData)
+	for (var x of myData)
 	{
 		if (document.getElementById("plan" + x.planId) == null) continue;
 		if (document.getElementById("plan" + x.planId).checked == true)
