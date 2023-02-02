@@ -101,6 +101,7 @@
                                 <div class="myreser m-2">
                                     <select style="width:100%;" id="region">
                                         <option value="" selected>縣市未選取</option>
+
                                     </select>
                                 </div>
                             </div>
@@ -112,7 +113,7 @@
                                         <input type="text" class="searchTerm" style="width:100%;" placeholder="請輸入店家 / 美甲師名稱" v-model="namesearch">
                                     </div>
                                     <div class="searchButton" style="width:8%; height:100%;">
-                                        <a id="searchB"><img class="pb-1 " src="../images/search.png"></a>
+                                        <a id="searchB" href="YiPLib/fliter.html?search=聖誕節"><img class="pb-1 " src="../images/search.png"></a>
                                     </div>
                                 </div>
                             </div>
@@ -191,77 +192,15 @@
                         <div class="col-10">
                             <div>
                                 <b class="mytite">SEARCH&thinsp;</b>
-                                <div class="seatitle mt-4 d-flex  align-items-center"><b class="ml-4">顏色</b></div>
-                                <div class="d-flex align-items-center justify-content-center" style="width:100%;">
-                                    <div class="mt-2 colordot" style="width:90%;">
-                                        <div class="coldot d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <a style="background-color:#5D5D5D;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=1">灰色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:black;" id="Bblack"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=2">黑色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#754E43;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=3">咖啡色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#E1C9B1;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=4">奶茶色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#F2F2F2;border:solid gray 1px;color: black;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=5">白色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#DFBCB6;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=6">粉色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#875D73;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=7">紫色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#2B497B;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=8">藍色</a>
-                                            </div>
-                                        </div>
-                                        <div class="coldot d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <a style="background-color:#A0C2AA;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=9">綠色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#FFE590;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=10">黃色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#E29466;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=11">橘色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#B65F4B;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=12">紅色</a>
-                                            </div>
-                                            <div>
-                                                <a class="colcir colmix d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=13">漸層色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#FFFFFF;border:solid gray 1px;color: black;"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle" href="/YiPLib/fliter.html?Color=14">透明色</a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#FFFFFF"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle"></a>
-                                            </div>
-                                            <div>
-                                                <a style="background-color:#FFFFFF"
-                                                   class="colcir d-flex align-items-center justify-content-center rounded-circle"></a>
-                                            </div>
+                                <div class="seatitle mt-4 mx-2 d-flex  align-items-center"><b class="ml-4">顏色</b></div>
+                                <div class="m-4 d-flex align-items-center justify-content-center" style="width:90%;">
+
+                                    <div class="coldot mt-2 d-flex align-items-center justify-content-center" style="flex-wrap:wrap">
+                                        <div class="m-4" v-for="(item,key) in color">
+                                            <a class="colcir d-flex align-items-center justify-content-center rounded-circle" v-bind:style="{backgroundColor:color[key].colorCss}">{{color[key].colorName}}</a>
                                         </div>
                                     </div>
+
                                 </div>
                                 <!-- 標籤列--------------------------------------------------------------------------------------------- -->
                                 <div class="seatitle mt-5 d-flex align-items-center"><b class="ml-4">標籤</b></div>
@@ -331,7 +270,7 @@
 
     <!-- 插入JS檔 -->
 
-    <script src="/TanTanLib/js/City.js"></script>
+    <script src="/TanTanLib//js/cover.js"></script>
 </body>
 
 </html>
