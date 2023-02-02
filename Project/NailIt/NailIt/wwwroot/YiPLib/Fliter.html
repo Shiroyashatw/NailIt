@@ -198,6 +198,40 @@
             outline:none;
         }
 
+        .Clickme {
+            border: hidden;
+            position: absolute;
+            /*top: -60px;*/
+            /*margin-left: 70px;*/
+            /*margin-right: 70px;*/
+            left: 25px;
+            top: 130px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 50px;
+            padding-right: 50px;
+            /*width:100px;*/
+            text-align: center;
+            background-color: white;
+            color: black;
+            z-index: 99;
+            visibility: hidden;
+        }
+
+            .Clickme:hover {
+                background-color: black;
+                color: white;
+                z-index: 99;
+            }
+
+        .Seemore:hover > .Clickme {
+            visibility: visible;
+        }
+
+        .Seemore:hover {
+            filter: grayscale(60%);
+        }
+
 
         /*DD*/
         * {
@@ -306,6 +340,7 @@
         #footpre, #footcopy {
             margin-top: 1%;
         }
+
 
 
     </style>
@@ -432,19 +467,17 @@
                     </div>
                     <div id="Sortdiv" class="d-flex">
                         <select v-model="Query" onchange="ChangeQuery(this)" id="SortSelect">
-                            <option value="none" selected disabled hidden>請選擇</option>
+                            <option value="none" selected disabled hidden>查尋</option>
                             <option value="QueryM">查詢工作室</option>
                             <option value="QueryNT">查詢名稱/標籤</option>
                         </select>
                         <div v-if="NowQuery=='QueryNT'" class="mx-2">
                             <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
                             <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
-                            <!--<button class="ClearBtn ml-1 px-2" onclick="ClearSearch()">清除</button>-->
                         </div>
                         <div v-if="NowQuery=='QueryM'" class="mx-2">
                             <input class="Searchbar" type="text" placeholder="工作室" v-model="SearchM">
                             <button class="Searchbtn" onclick="SearchM()"><i class="fa fa-search"></i></button>
-                            <!--<button class="ClearBtn ml-1 px-2" onclick="ClearSearch()">清除</button>-->
                         </div>
                         <div>
                             <button class="ClearBtn ml-1 px-2" onclick="ClearSearch()">清除</button>
@@ -461,7 +494,10 @@
                 <!--預設-->
                 <div class="d-flex Coverdiv" v-if="QueryResault">
                     <div v-for="(item,key) in DemoSet">
-                        <img class="Cover" v-bind:src="DemoSet[key].demoSetCover" />
+                        <div class="Seemore">
+                            <img class="Cover" v-bind:src="DemoSet[key].demoSetCover" />
+                            <button class="Clickme" onclick="Checkit(this)" v-bind:value="DemoSet[key].demoSetId">查看</button>
+                        </div>
                         <p>{{DemoSet[key].demoSetName}}</p>
                         <p>{{DemoSet[key].demoSetPrice}}</p>
                     </div>
@@ -470,7 +506,10 @@
                 <!--預設END-->
                 <div class="d-flex Coverdiv" v-if="ShowQueryM">
                     <div v-for="(item,key) in Manicurist">
-                        <img class="Cover" v-bind:src="Manicurist[key].manicuristPic" />
+                        <div class="Seemore">
+                            <img class="Cover" v-bind:src="Manicurist[key].manicuristPic" />
+                            <button class="Clickme" onclick="CheckM(this)" v-bind:value="Manicurist[key].manicuristId">查看</button>
+                        </div>
                         <p>{{Manicurist[key].manicuristSalonName}}</p>
                         <p>{{Manicurist[key].manicuristCounty}}</p>
                     </div>
@@ -1088,6 +1127,15 @@
             app.DemoSet = app.DefultDemo;
             app.SearchString = "";
             app.SearchM = "";
+            app.QueryCondition = "尚未選擇";
+        }
+
+        function Checkit(e) {
+            window.location = "product.html?id=" + e.value;
+        }
+
+        function CheckM(e) {
+            window.location = "NailDesign.html?id=" + e.value;
         }
 
     </script>

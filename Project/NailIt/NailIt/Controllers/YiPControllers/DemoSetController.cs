@@ -43,7 +43,14 @@ namespace NailIt.Controllers.YiPControllers
         {
             Context.DemoSetTables.Add(DemoSetTable);
             await Context.SaveChangesAsync();
-            //return CreatedAtAction("GetDataSetTable", new { id = DemoSetTable.DemoSetId }, DemoSetTable);
+            var result = Context.DemoSetTables.FirstOrDefault(r => r.ManicuristId == DemoSetTable.ManicuristId && r.DemoSetName == DemoSetTable.DemoSetName);
+            DemoTable insret = new DemoTable
+            {
+                DemoSetId = result.DemoSetId,
+                DemoPic = result.DemoSetCover
+            };
+            Context.DemoTables.Add(insret);
+            await Context.SaveChangesAsync();
             return Ok();
         }
 

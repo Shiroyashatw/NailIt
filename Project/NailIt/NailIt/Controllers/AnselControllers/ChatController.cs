@@ -136,7 +136,7 @@ namespace NailIt.Controllers.AnselControllers
                                             // r.MessageRead,
                                             unreadCount = g.Where(x => x.MessageRead == false).Count()
                                         }).FirstOrDefault()
-                        ).ToList();
+                        ).OrderByDescending(x => x.MessageTime).ToList();
             var myMessages = new List<dynamic>();
             foreach (var message in messageList)
             {
@@ -167,18 +167,20 @@ namespace NailIt.Controllers.AnselControllers
             }
             // left join memberTable, get MemberAccount and MemberNickname
             var leftJoinMember = (from l in myMessages
-                                join member in _context.MemberTables on l.memberId equals member.MemberId into lg
-                                from r in lg.DefaultIfEmpty()
-                select new
-                    {
-                        l.memberId,
-                        l.MessageContent,
-                        l.MessageTime,
-                        l.unreadCount,
-                        l.msgTimeDiff,
-                        r.MemberAccount,
-                        r.MemberNickname
-                    }
+                                  join member in _context.MemberTables on l.memberId equals member.MemberId into lg
+                                  from r in lg.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      l.memberId,
+                                      l.MessageContent,
+                                      l.MessageTime,
+                                      l.unreadCount,
+                                      l.msgTimeDiff,
+                                      memberAccount = r?.MemberAccount ?? "systemAdmin",
+                                      memberNickname = r?.MemberNickname ?? "系統通知"
+                                      // memberAccount = (r?.MemberAccount != null) ? r.MemberAccount : "",
+                                      // memberNickname = (r?.MemberNickname != null) ? r.MemberNickname : ""
+                                  }
                 ).ToList();
             return ((IEnumerable<dynamic>)leftJoinMember).ToList();
         }
