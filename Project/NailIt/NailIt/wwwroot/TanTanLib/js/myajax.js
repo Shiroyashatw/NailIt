@@ -1,4 +1,6 @@
 
+
+
 var mydata = new Vue({
     el: "#mydata",
     data: {
@@ -182,6 +184,7 @@ function putmanager(e) {
                 tabcontent[i].style.display = "none";
             }
             tabcontent[4].style.display = "block";
+
         }
     })
 }
@@ -724,6 +727,9 @@ function changereviewreport(e) {
         contentType: "application/json",
         data: JSON.stringify(mydata.reportput[0]),
         success: function () {
+            window.location = "/TanTanLib/html/backstage.html"
+            var tabcontent;
+            tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
@@ -802,10 +808,10 @@ function delnotice(e) {
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
+               
             }
-            tabcontent[1].style.display = "block";
-
-            alert("OK");
+            
+            
         }
     })
 }
@@ -879,7 +885,7 @@ function savenotice() {
         contentType: "application/json",
         data: JSON.stringify(mydata.noticepost[0]),
         success: function () {
-
+            window.location = "/TanTanLib/html/backstage.html"
             var tabcontent;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (var i = 0; i < tabcontent.length; i++) {

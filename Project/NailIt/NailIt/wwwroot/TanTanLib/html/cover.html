@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <link rel="stylesheet" href="../css/cover.css">
+    <link rel="stylesheet" href="/TanTanLib/css/cover.css">
 
 </head>
 
@@ -22,7 +22,7 @@
             <div class="row opacity-25 p-0 " id="navall">
                 <div class="col-1 p-0"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
-                    Nail IT
+                    <a href="/YiPLib/Fliter.html"> Nail IT</a>
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
@@ -87,34 +87,36 @@
                 <div class="row">
                     <div class="col-1 p-0"></div>
                     <div class="col-10">
-                        <div class="myreser m-4  mt-4 d-flex justify-content-between">
-                            <div class="resertite" style="width:25%;">
+                        <div class="myreser d-flex justify-content-start " style=" flex-wrap: wrap;">
+                            <div class="resertite mx-4 mb-0 mt-4" style="width:300px;">
                                 <b>城市</b>
                                 <div class="myreser m-2">
                                     <select style="width:100%;" id="city" v-model="cityselected">
-                                        <option value="" selected>請選擇縣市</option>
+                                        <option value="pickone" selected>請選擇縣市</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="resertite" style="width:25%;">
+                            <div class="resertite mx-4 mb-0 mt-4" style="width:300px">
                                 <b>區域</b>
                                 <div class="myreser m-2">
-                                    <select style="width:100%;" id="region">
+                                    <select style="width:100%;" id="region" v-model="regionselected">
                                         <option value="" selected>縣市未選取</option>
 
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="resertite" style="width:40%;">
+                            <div class="resertite mx-4 mb-0 mt-4" style="width:510px;">
                                 <b>店家 / 美甲師名稱</b>
                                 <div class="myreser m-2 d-flex align-items-center">
                                     <div style="width:100%;">
                                         <input type="text" class="searchTerm" style="width:100%;" placeholder="請輸入店家 / 美甲師名稱" v-model="namesearch">
                                     </div>
-                                    <div class="searchButton" style="width:8%; height:100%;">
-                                        <a id="searchB" href="YiPLib/fliter.html?search=聖誕節"><img class="pb-1 " src="../images/search.png"></a>
-                                    </div>
+                                    <a id="searchB" v-bind:href="'/YiPLib/Fliter.html?Area='+regionname+'&Country='+cityname+'&Manicurist='+namesearch">
+                                        <div class="searchButton" style="width:8%; height:100%;">
+                                            <img class="pb-1 " src="../images/search.png">
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -131,9 +133,9 @@
                     <div class="col-10">
                         <div>
                             <div class="mt-3"><b class="mytite">TOP5&thinsp;</b></div>
-                            <div class="d-flex justify-content-between" style="width:100%;">
-                                <div class="m-4 mt-4 d-flex justify-content-between" style="width:100%;">
-                                    <div>
+                            <div class="mt-3 d-flex justify-content-around" style="width:100%;">
+                                <div class="mt-4 d-flex justify-content-center" style="width: 100%; flex-wrap: wrap;">
+                                    <div class="mr-4">
                                         <div class="top5pic">
                                             <img src="../images/TOP-1.jpg" alt="">
                                         </div>
@@ -142,7 +144,7 @@
                                             <p>&thinsp;NT$1600</p>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="mx-3">
                                         <div class="top5pic">
                                             <img src="../images/TOP-1.jpg" alt="">
                                         </div>
@@ -151,7 +153,7 @@
                                             <p>&thinsp;NT$1600</p>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="mx-3">
                                         <div class="top5pic">
                                             <img src="../images/TOP-1.jpg" alt="">
                                         </div>
@@ -160,7 +162,7 @@
                                             <p>&thinsp;NT$1600</p>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="mx-3">
                                         <div class="top5pic">
                                             <img src="../images/TOP-1.jpg" alt="">
                                         </div>
@@ -169,7 +171,7 @@
                                             <p>&thinsp;NT$1600</p>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="mx-3">
                                         <div class="top5pic">
                                             <img src="../images/TOP-1.jpg" alt="">
                                         </div>
@@ -192,46 +194,30 @@
                         <div class="col-10">
                             <div>
                                 <b class="mytite">SEARCH&thinsp;</b>
-                                <div class="seatitle mt-4 mx-2 d-flex  align-items-center"><b class="ml-4">顏色</b></div>
-                                <div class="m-4 d-flex align-items-center justify-content-center" style="width:90%;">
+                                <div class="seatitle mt-4 mx-2 d-flex align-items-center"><b class="ml-4">顏色</b></div>
+                                <div class="m-4 d-flex align-items-center justify-content-center justify-content-between" style="width:90%;">
 
                                     <div class="coldot mt-2 d-flex align-items-center justify-content-center" style="flex-wrap:wrap">
-                                        <div class="m-4" v-for="(item,key) in color">
-                                            <a class="colcir d-flex align-items-center justify-content-center rounded-circle" v-bind:style="{backgroundColor:color[key].colorCss}">{{color[key].colorName}}</a>
+                                        <div class="m-4" v-for="(item,key) in colors">
+                                            <a v-bind:id= "colors[key].colorId-1"
+                                               v-bind:href="'/YiPLib/fliter.html?Color='+colors[key].colorId" class="colcir d-flex align-items-center justify-content-center rounded-circle"
+                                               v-bind:style="colorstyle[key]">{{colors[key].colorName}}</a>
                                         </div>
                                     </div>
 
                                 </div>
                                 <!-- 標籤列--------------------------------------------------------------------------------------------- -->
                                 <div class="seatitle mt-5 d-flex align-items-center"><b class="ml-4">標籤</b></div>
-                                <div class="mt-4 d-flex align-items-center justify-content-center" style="width:100%;">
-                                    <div class="mytag d-flex align-items-center justify-content-between" style="width:90%;">
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=純色'">純色</button>
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=漸層'">漸層</button>
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=碎花'">碎花</button>
-                                    </div>
+                                <div class="m-5 d-flex align-items-center justify-content-between" style="width: 90%; flex-wrap: wrap">
+
+                                        <div class="mx-3 mb-3 mt-1 mytag d-flex align-items-center justify-content-center" v-for="(item,key) in tag">
+                                            <a v-bind:href="'/YiPLib/fliter.html?FixTag='+tag[key].tagName" class="btn d-flex align-items-center justify-content-center" style="width:330px;" >
+                                                {{tag[key].tagName}}
+                                            </a>
+                                        </div>
+
                                 </div>
-                                <div class="d-flex align-items-center justify-content-center" style="width:100%;">
-                                    <div class="mytag d-flex align-items-center justify-content-between" style="width:90%;">
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=幾何'">幾何</button>
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=立體'">立體</button>
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=可愛風'">可愛風</button>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-center" style="width:100%;">
-                                    <div class="mytag d-flex align-items-center justify-content-between" style="width:90%;">
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=知性風'">知性風</button>
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=華麗風'">華麗風</button>
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=POP風'">POP風</button>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-center" style="width:100%;">
-                                    <div class="mytag d-flex align-items-center justify-content-between" style="width:90%;">
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=亮片'">亮片</button>
-                                        <button style="width:30%;" onclick="location.href='/YiPLib/fliter.html?FixTag=鑽石'">鑽石</button>
-                                        <button id="hid" style="width:30%;"></button>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>

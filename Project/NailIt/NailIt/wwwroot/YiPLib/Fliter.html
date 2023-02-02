@@ -26,23 +26,35 @@
         }
 
         .DisplayCircle:hover {
-        border-radius: 0%;
+/*        border-radius: 0%;
              width: 25px;
-             height: 25px;
-             transition: 1s;
+             height: 25px;*/
+            /*border: solid red 5px;*/
+             /*transition: 1s;*/
         cursor:pointer;
         }
-        .TagLabel {
+
+            .TagLabel {
+                border: solid gray 1px;
+                border-radius: 10px;
+                padding-top: 1px;
+                padding-bottom: 1px;
+                font-size: 13px;
+            }
+
+        .TagLabel:hover{
+            background-color:gray;
+            color:white;
+        }
+
+        .NowLabel {
             border: solid gray 1px;
             border-radius: 10px;
             padding-top: 1px;
             padding-bottom: 1px;
             font-size: 13px;
-        }
-
-        .TagLabel:hover{
-            background-color:gray;
-            color:white;
+            background-color: gray;
+            color: white;
         }
 
         /*range*/
@@ -115,11 +127,15 @@
         }
         /*range-end-*/
 
-        .heart{
-            font-size:13px;
-            position:absolute;
-            color:red;
-            margin-top:-36px;
+        .heart {
+            font-size: 7px;
+            position: absolute;
+            color: red;
+            font-weight: bold;
+            /*top:4px;*/
+            margin-top: 4px;
+            margin-left: -0.5px;
+            /*margin-top:-36px;*/
         }
 
         #Ctitle {
@@ -155,17 +171,6 @@
             float: left;
             max-width:100px;
             height:35px;
-        }
-
-        .ClearBtn {
-            border: none;
-            background-color: black;
-            color: white;
-            padding-top: 1px;
-            padding-bottom: 1px;
-            padding-left: 5px;
-            padding-right: 5px;
-            height: 35px;
         }
 
         .Searchbtn {
@@ -246,7 +251,53 @@
             font-weight: bold;
         }
 
+        .ForSingle {
+            padding: 3px;
+            color: rgb(230 51 73);
+            transition: all .3s linear;
+            cursor:pointer;
+        }
 
+            .ForSingle:hover {
+                background-color: rgb(230 51 73);
+                color: rgb(255 233 236);
+            }
+
+        .SingleUderLine {
+            border-bottom: solid 1pt rgb(230 51 73);
+        }
+
+        .ForCombo {
+            padding: 3px;
+            color: rgb(71 189 101);
+            transition: all .3s linear;
+            cursor: pointer;
+        }
+
+            .ForCombo:hover {
+                /*background-color: rgb(211 241 201);*/
+                background-color: rgb(71 189 101);
+                /*color: rgb(71 189 101);*/
+                color: rgb(211 241 201);
+            }
+
+        .ComboUderLine {
+            border-bottom: solid 1pt rgb(71 189 101);
+        }
+
+        .ForClear {
+            cursor: pointer;
+            padding: 3px;
+            color: rgb(105 121 204);
+            transition: all .3s linear;
+        }
+
+            .ForClear:hover {
+                background-color: rgb(105 121 204);
+                color: rgb(209 215 244);
+            }
+
+        
         /*DD*/
         * {
             margin: 0;
@@ -355,6 +406,8 @@
             margin-top: 1%;
         }
 
+        
+
 
 
     </style>
@@ -399,6 +452,39 @@
                     <label class="LinkNow" href="Fliter.html">美甲查詢</label>
                 </div>
                 <div class="mt-3">
+                    <div v-if="SelectMethod == 'ShowSingle'">
+                        <label class="ForSingle SingleUderLine">
+                            單選查詢
+                            <input class="TagRadio" type="radio" />
+                        </label>
+                        <label class="ForCombo" onclick="ChangeToCombo()">
+                            複選查詢
+                            <input class="TagRadio" type="radio" />
+                        </label>
+                        <label class="ForClear" onclick="ClearSearch()">
+                            清除
+                        </label>
+                        <!--<div>
+        <button class="ClearBtn ml-1 px-2" onclick="ClearSearch()">清除</button>
+    </div>-->
+                    </div>
+                    <div v-if="SelectMethod == 'ShowCombo'">
+                        <label class="ForSingle" onclick="ChangeToSingle()">
+                            單選查詢
+                            <input class="TagRadio" type="radio" />
+                        </label>
+                        <label class="ForCombo ComboUderLine">
+                            複選查詢
+                            <input class="TagRadio" type="radio" />
+                        </label>
+                        <label class="ForClear" onclick="ClearSearch()">
+                            清除
+                            <input class="TagRadio" type="radio" />
+                        </label>
+                    </div>
+                </div>
+                    <!--First Left bar Start-->
+                <div v-if="SelectMethod == 'ShowSingle'">
                     <div>
                         <label>地區</label>
                         <div>
@@ -459,8 +545,8 @@
                             </div>
                         </div>
                         <!--<div>
-                            <button onclick="SeachPrice()">範圍查詢</button>
-                        </div>-->
+                <button onclick="SeachPrice()">範圍查詢</button>
+            </div>-->
                     </div>
                     <div class="mt-2">
                         <label>施作部位</label>
@@ -473,19 +559,18 @@
                     </div>
                 </div>
                 <!--Second Left bar Start-->
-                <div class="mt-3">
-                    <p>複合查詢</p>
+                <div v-if="SelectMethod == 'ShowCombo'">
                     <div>
                         <label>地區</label>
                         <div>
                             <div>
-                                <select v-model="QueryArray.City">
+                                <select id="SecCoun" onchange="SecShowCoun(this)">
                                     <option value="none" selected disabled hidden>請選擇縣市</option>
                                     <option v-for="(item,key) in City" v-bind:value="[key]">{{City[key]}}</option>
                                 </select>
                             </div>
                             <div class="mt-2">
-                                <select v-model="QueryArray.Area" v-if="QueryArray.City">
+                                <select v-model="QueryArray.Area" v-if="SecShowArea">
                                     <option value="none" selected disabled hidden>請選擇地區</option>
                                     <option v-if="Area" v-for="(item,key) in Area" v-bind:value="Area[key]">{{item}}</option>
                                 </select>
@@ -497,14 +582,20 @@
                         <br />
                         <div v-for="(item,key) in Colors" class="d-inline-flex">
                             <label class="DisplayCircle mx-1" v-bind:style="ColorStyle[key]">
-                                <input class="ColorsRadio" type="radio" v-bind:value="Colors[key].colorId-1" v-model="QueryArray.Color" />
+                                <pre class="heart" v-if="Displayheart[key]"> ❤</pre>
+                                <input class="ColorsRadio" type="radio" v-bind:value="Colors[key].colorId" v-bind:name="Colors[key].colorId-1" v-model="QueryArray.Color" onclick="ShowHeart(this)"/>
                             </label>
                         </div>
                     </div>
                     <div>
                         <label>標籤</label>
-                        <div>
-                            <label class="px-3  mx-1 TagLabel" v-for="(item,key) in Tag">
+                        <br />
+                        <div v-for="(item,key) in Tag" class="d-inline-flex">
+                            <label class="px-3  mx-1 TagLabel" v-if="TagisActive[key]">
+                                {{Tag[key].tagName}}
+                                <input class="TagRadio" type="radio" v-bind:value="Tag[key].tagName" v-model="QueryArray.FixedTag" v-bind:name="[key]" onclick="ActiveLabel(this)"/>
+                            </label>
+                            <label class="px-3  mx-1 NowLabel" v-else="TagisActive[key]">
                                 {{Tag[key].tagName}}
                                 <input class="TagRadio" type="radio" v-bind:value="Tag[key].tagName" v-model="QueryArray.FixedTag" />
                             </label>
@@ -529,20 +620,25 @@
                             </div>
                         </div>
                         <!--<div>
-                            <button onclick="SeachPrice()">範圍查詢</button>
-                        </div>-->
+                <button onclick="SeachPrice()">範圍查詢</button>
+            </div>-->
                     </div>
                     <div class="mt-2">
                         <label>施作部位</label>
-                        <div>
-                            <label class="px-3  mx-1 TagLabel" v-for="(item,key) in CCode">
+                        <br />
+                        <div v-for="(item,key) in CCode" class="d-inline-flex">
+                            <label class="px-3  mx-1 TagLabel" v-if="PartisActive[key]">
+                                {{CCode[key].codeRepresent}}
+                                <input class="TagRadio" type="radio" v-bind:value="CCode[key].codeId" v-model="QueryArray.Part" v-bind:name="[key]" onclick="ActivePart(this)"/>
+                            </label>
+                            <label class="px-3  mx-1 NowLabel" v-else="PartisActive[key]">
                                 {{CCode[key].codeRepresent}}
                                 <input class="TagRadio" type="radio" v-bind:value="CCode[key].codeId" v-model="QueryArray.Part" />
                             </label>
                         </div>
                     </div>
-                </div>
                 <button onclick="QryArray()">查詢</button>
+                </div>
                 <!--Second Left bar End-->
             </div>
             <!--Left bar End-->
@@ -567,9 +663,6 @@
                         <div v-if="NowQuery=='QueryM'" class="mx-2">
                             <input class="Searchbar" type="text" placeholder="工作室" v-model="SearchM">
                             <button class="Searchbtn" onclick="SearchM()"><i class="fa fa-search"></i></button>
-                        </div>
-                        <div>
-                            <button class="ClearBtn ml-1 px-2" onclick="ClearSearch()">清除</button>
                         </div>
                     </div>
                 </div>
@@ -693,6 +786,10 @@
                     QueryResault: true,
                     DefultDemo: [],
                     QueryArray: [],
+                    SecShowArea: false,
+                    SelectMethod: "ShowSingle",
+                    TagisActive: [],
+                    PartisActive:[],
                 }
             },
             methods: {
@@ -718,6 +815,7 @@
         let searchPart = url.searchParams.get('Part');
         let searchSearchString = url.searchParams.get('search');
         let searchM = url.searchParams.get('name');
+        let searchManicurist = url.searchParams.get('Manicurist');
 
     </script>
 
@@ -866,9 +964,10 @@
                 //console.log(e);
                 for (color in e) {
                     app.Colors.push(e[color]);
-                    app.ColorStyle.push({ backgroundColor: e[color].colorCss });
-                    //app.Displayheart[color].push(false);
+                    app.ColorStyle.push({ backgroundColor: e[color].colorCss, border: 'gray solid 1pt' });
+                    app.Displayheart.push(false);
                 }
+                //console.log(app.Displayheart);
                 //app.ColorStyle[12] = ({ background: 'linear-gradient(to right, #fffbd5, #b20a2c)' });
                 app.ColorStyle[4] = ({ backgroundColor: "#F2F2F2", border: 'gray solid 1pt' });
                 app.ColorStyle[12] = ({ backgroundImage: 'linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%)' });
@@ -883,11 +982,16 @@
             type: "get",
             url: "/api/TagTable",
             success: function (e) {
-                //console.log(e);
                 for (let g = 0; g < 10; g++) {
                     app.Tag.push(e[g]);
+                    app.TagisActive.push(true);
                 }
-                //console.log(app.Tag);
+
+                //for (Tag in e) {
+                //    app.Tag.push(e[Tag]);
+                //    app.TagisActive.push(true);
+                //}
+
             }
         });
 
@@ -897,6 +1001,10 @@
             success: function (e) {
                 //console.log(e);
                 app.CCode = e;
+                for (Part in e) {
+                    app.PartisActive.push(true);
+                }
+                
             }
         });
 
@@ -1002,7 +1110,7 @@
         }
 
         function ShowColor(e) {
-            console.log(e.value);
+            //console.log(e.value);
             app.QueryCondition = app.Colors[e.value].colorName;
             $.ajax({
                 type: "get",
@@ -1103,13 +1211,13 @@
             //console.log("MIN"+app.SearchMin);
             //console.log(app.SearchMax);
             app.SearchMax = e;
-            console.log(app.SearchMax);
+            //console.log(app.SearchMax);
             app.QueryCondition = `${app.SearchMin}元至${app.SearchMax}元`;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetPriceRange?Min=" + app.SearchMin + "&Max=" + app.SearchMax,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1129,14 +1237,14 @@
         }
 
         function ShowPart(e) {
-            console.log(e.value);
+            //console.log(e.value);
             app.QueryCondition = app.CCode[e.value.substr(1, 1)].codeRepresent;
 
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetPart/?Part=" + e.value,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1156,12 +1264,12 @@
         }
 
         function ChangeQuery(e) {
-            console.log(e.value);
+            //console.log(e.value);
             app.NowQuery = e.value;
         }
 
         function Searchit() {
-            console.log(app.SearchString);
+            //console.log(app.SearchString);
             app.QueryCondition = app.SearchString;
             $.ajax({
                 type: "get",
@@ -1183,12 +1291,12 @@
                     }
                 }
             });
-            console.log(app.DemoSet);
+            //console.log(app.DemoSet);
         }
 
         //要多寫一個FOR美甲師的陣列
         function SearchM() {
-            console.log(app.SearchM);
+            //console.log(app.SearchM);
             app.QueryCondition = app.SearchM;
             $.ajax({
                 type: "get",
@@ -1213,11 +1321,18 @@
             app.ShowQueryM = true;
         }
 
-        function ClearSearch() {
-            app.DemoSet = app.DefultDemo;
+        async function ClearSearch() {
+            app.DemoSet = [];
+            for (e in app.DefultDemo) {
+                await app.DemoSet.push(app.DefultDemo[e]);
+            }
+            //app.DemoSet = app.DefultDemo;
             app.SearchString = "";
             app.SearchM = "";
             app.QueryCondition = "尚未選擇";
+            app.QueryNone = false;
+            app.QueryResault = true;
+
         }
 
         function Checkit(e) {
@@ -1228,13 +1343,119 @@
             window.location = "NailDesign.html?id=" + e.value;
         }
 
+        function clearHeart() {
+            for (Num in app.Displayheart) {
+                app.Displayheart[Num] = false;
+            }
+        }
+
+        async function ShowHeart(e) {
+            await clearHeart();
+            app.Displayheart[e.name] = true;
+        }
+
+        function ChangeToCombo() {
+            clearHeart();
+            app.SelectMethod = 'ShowCombo';
+            ClearTagLabel();
+            ClearPartLabel();
+            ClearSearch();
+            app.Area = [];
+            app.ShowAreas = false;
+            app.SecShowArea = false;
+            app.SelectedCity = "none";
+            $('#SecCoun').val('none');
+        }
+
+        function ChangeToSingle() {
+            clearHeart();
+            app.SelectMethod = 'ShowSingle';
+            ClearTagLabel();
+            ClearPartLabel();
+            ClearSearch();
+            app.Area = [];
+            app.ShowAreas = false;
+            app.SelectedCity = "none";
+            app.QueryArray.City = "none";
+
+        }
+
+        function ClearTagLabel() {
+            for (Num in app.TagisActive) {
+                app.TagisActive[Num] = true;
+            }
+        }
+
+        async function ActiveLabel(e) {
+            await ClearTagLabel();
+            //console.log(e.name);
+            //console.log('--------' + app.TagisActive);
+            app.TagisActive[e.name] = false;
+        }
+
+        function ClearPartLabel() {
+            for (Num in app.PartisActive) {
+                app.PartisActive[Num] = true;
+            }
+        }
+
+        async function ActivePart(e) {
+            await ClearPartLabel();
+            //console.log(e.name);
+            app.PartisActive[e.name] = false;
+            //console.log(app.PartisActive);
+            //console.log(app.PartisActive[e.name]);
+        }
+
+
+        
+
+
     </script>
 
     <!--複合On-->
     <script>
         function QryArray() {
+            app.QueryArray.SearchMin = Number(app.QueryArray.SearchMin);
+            app.QueryArray.SearchMax = Number(app.QueryArray.SearchMax);
             console.log(app.QueryArray);
+            console.log(app.QueryArray.Color)
+            app.QueryCondition = "複合查詢";
+            $.ajax({
+                type: "get",
+                url: `/api/DemoSet/GetAllQuery?Area=${app.QueryArray.Area}&City=${app.QueryArray.City}&Color=${app.QueryArray.Color}&FixedTag=${app.QueryArray.FixedTag}&Part=${app.QueryArray.Part}&SearchMax=${app.QueryArray.SearchMax}&SearchMin=${app.QueryArray.SearchMin}`,
+                success: function (e) {
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.Manicurist = [];
+                        app.DemoSet = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (demo in e) {
+                            app.DemoSet.push(e[demo]);
+                        }
+                        app.QueryLength = e.length;
+                    }
+                }
+            });
         }
+
+
+        async function SecShowCoun(e) {
+            app.Area = [];
+            //console.log(app.AreaList);
+            for (Area in app.AreaList[e.value]) {
+                await app.Area.push(app.AreaList[e.value][Area].AreaName);
+            }
+            app.SecShowArea = true;
+            let SAreaStr;
+            SAreaStr = app.City[e.value].replace("臺", "台");
+            app.QueryArray.City = SAreaStr;
+        }
+
 
     </script>
 
@@ -1259,7 +1480,7 @@
                 type: "get",
                 url: "/api/DemoSet/GetCountyDemo/?Country=" + searchCountry,
                 success: function (e) {
-                    console.log(e.length);
+                    //console.log(e.length);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1284,7 +1505,7 @@
                 type: "get",
                 url: "/api/DemoSet/GetAreaDemo/?Area=" + searchArea,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1314,13 +1535,13 @@
                 }
             });
 
-            console.log(ColorName);
+            //console.log(ColorName);
             app.QueryCondition = ColorName;
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetColorDemo/?Color=" + searchColor,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1346,7 +1567,7 @@
                 type: "get",
                 url: "/api/DemoSet/GetFixTagDemo/?FixTag=" + searchTag,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1371,7 +1592,7 @@
                 type: "get",
                 url: "/api/DemoSet/GetPriceRange?Min=" + searchMinPrice + "&Max=" + searchMaxPrice,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1396,7 +1617,7 @@
                 type: "get",
                 url: "/api/DemoSet/GetPriceRange?Min=" + searchMinPrice + "&Max=" + searchMaxPrice,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1431,7 +1652,7 @@
                 type: "get",
                 url: "/api/DemoSet/GetPart/?Part=" + searchPart,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1473,7 +1694,7 @@
                     }
                 }
             });
-            console.log(app.DemoSet);
+            //console.log(app.DemoSet);
         }
 
         function URLSearchM() {
@@ -1483,6 +1704,33 @@
                 type: "get",
                 url: "/api/Manicurist?name=" + searchM,
                 success: function (e) {
+                    if (e.length == 0 || e == []) {
+                        app.QueryNone = true;
+                        app.QueryResault = false;
+                        app.QueryLength = false;
+                    } else {
+                        app.DemoSet = [];
+                        app.Manicurist = [];
+                        app.QueryResault = true;
+                        app.QueryNone = false;
+                        for (M in e) {
+                            app.Manicurist.push(e[M]);
+                        }
+                        app.QueryLength = e.length;
+                    }
+                }
+            });
+            app.ShowQueryM = true;
+        }
+
+        function URLSearchCertainM() {
+            //console.log(app.SearchM);
+            app.QueryCondition = "複合查詢";
+            $.ajax({
+                type: "get",
+                url: `/api/DemoSet/GetCertainQuery?Area=${searchArea}&Country=${searchCountry}&Manicurist=${searchManicurist}`,
+                success: function (e) {
+                    //console.log(e);
                     if (e.length == 0 || e == []) {
                         app.QueryNone = true;
                         app.QueryResault = false;
@@ -1518,11 +1766,15 @@
         //console.log(searchSearchString);
         //console.log(searchM);
 
-        if (searchCountry != null) {
+        if (searchManicurist != null) {
+            URLSearchCertainM();
+        }
+
+        if (searchCountry != null && searchManicurist == null) {
             URLShowCountry();
         }
 
-        if (searchArea != null) {
+        if (searchArea != null && searchManicurist == null) {
             URLShowArea();
         }
 

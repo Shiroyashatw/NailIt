@@ -148,6 +148,7 @@ namespace NailIt.Controllers.YiPControllers
                             DemoSetId = Demo.DemoSetId,
                             DemoSetName = Demo.DemoSetName,
                             DemoSetCover = Demo.DemoSetCover,
+                            DemoSetPrice = Demo.DemoSetPrice,
                             ManicuristCounty = Designer.ManicuristCounty
                             //DemoSetPartC = Demo.DemoSetPartC,
                             //DemoSetPrice = Demo.DemoSetPrice,
@@ -168,6 +169,7 @@ namespace NailIt.Controllers.YiPControllers
                             DemoSetId = Demo.DemoSetId,
                             DemoSetName = Demo.DemoSetName,
                             DemoSetCover = Demo.DemoSetCover,
+                            DemoSetPrice = Demo.DemoSetPrice,
                             ManicuristTownship = Designer.ManicuristTownship
                         };
 
@@ -232,6 +234,36 @@ namespace NailIt.Controllers.YiPControllers
                         select DemoSet;
 
             return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetAllQuery(string Area , string City , int Color , string FixedTag,string Part , int SearchMax , int SearchMin)
+        {
+            var query = from Demo in Context.DemoSetTables
+                        join Designer in Context.ManicuristTables
+                          on Demo.ManicuristId equals Designer.ManicuristId
+                        where Designer.ManicuristCounty.Contains(City) && Designer.ManicuristTownship.Contains(Area) && Demo.DemoSetColor == Color && (Demo.DemoSetTag1 == FixedTag || Demo.DemoSetTag2 == FixedTag || Demo.DemoSetTag3 == FixedTag || Demo.DemoSetTag4 == FixedTag) && Demo.DemoSetPartC == Part && Demo.DemoSetPrice >= SearchMin && Demo.DemoSetPrice <= SearchMax
+                        select new
+                        {
+                            DemoSetId = Demo.DemoSetId,
+                            DemoSetName = Demo.DemoSetName,
+                            DemoSetCover = Demo.DemoSetCover,
+                            DemoSetPrice = Demo.DemoSetPrice,
+                            ManicuristTownship = Designer.ManicuristTownship
+                        };
+
+            return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetCertainQuery(string Area, string Country, string Manicurist)
+        {
+            var query = from Designer
+                       in Context.ManicuristTables
+                        where Designer.ManicuristTownship.Contains(Area) && Designer.ManicuristCounty.Contains(Country) && Designer.ManicuristSalonName.Contains(Manicurist)
+                        select Designer;
+            return await query.ToListAsync();
+
         }
 
 
