@@ -1,9 +1,7 @@
-﻿var myCheckResult;//get到的資料轉換前
-var checkData;
-
-
+﻿
 async function reserveCheckSendGet() {
-
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
@@ -13,14 +11,14 @@ async function reserveCheckSendGet() {
 	fetch("https://localhost:44308/api/YueOrderTables/" + nowMember + "/" + "A0" + "/", requestOptions)//2要改為token(controller也要改)
 		.then(response => response.text())
 		.then(function (result) {
-			myCheckResult = result;
+			myResult = result;
 			reserveCheck();
 		})
 		.catch(error => console.log('error', error));
 }
 
 function reserveCheck(search = false) {
-	checkData = JSON.parse(myCheckResult);
+	myData = JSON.parse(myResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
@@ -29,7 +27,7 @@ function reserveCheck(search = false) {
 				<input id="searchStart" type="date" />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
 				<input id="searchEnd"	 type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCheck(true)" />
+				<img src="../YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCheck(true)" />
 				<br />
 				<div
 					id="removeNaildiv"
@@ -50,11 +48,11 @@ function reserveCheck(search = false) {
 }
 
 function checkLoop(search = false) {
-	if (checkData.length == 0) return `<br /><span style="padding-left:5%">目前無預約中訂單</span>`;
+	if (myData.length == 0) return `<br /><span style="padding-left:5%">目前無預約中訂單</span>`;
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
-	for (var x of checkData) {
+	for (var x of myData) {
 		if (search) {
 			if (searchStart.value == "" || searchEnd.value == "") {
 				let myDate = new Date();
@@ -69,14 +67,16 @@ function checkLoop(search = false) {
 				continue;
 			}
 		}
+		var maniTo = "../YipLib/NailDesign.html?id=" + x.manicurist_ID;
+		var picTo = x.order_Type == 0 ? maniTo : "../YipLib/product.html?=" + x.order_item;
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 		thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
 		answer +=`<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 20% ; height:170px">
-						<img src="`+ x.order_Cover+`" width="90%" height="90%" style="margin-left: 3%" />
+						<img src="`+ x.order_Cover + `" width="90%" height="90%" style="margin-left: 3%" onclick="javascript:location.href='` + maniTo +`'" />
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
-						<span style="font-size: 120%"><b>`+ x.order_ItemName+`</b></span>
+						<span style="font-size: 120%" onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName+`</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content + `</span>
 						<br /><br />
@@ -136,7 +136,7 @@ function checkLoop(search = false) {
 
 function getCheckDetail(i,str)
 {
-	var x = checkData[i];
+	var x = myData[i];
 	var thisOrderId = "";
 	var thisOrderTime = "";
 	var thisStartTime = "";

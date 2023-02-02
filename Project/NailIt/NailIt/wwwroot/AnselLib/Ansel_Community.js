@@ -247,18 +247,12 @@ var showSnackbar = function (text) {
 }
 // When the user clicks on the button,toggle between hiding and showing the dropdown content 
 var showDropdown = function (obj) {
-    if ($(obj).parent().children()[1].classList.contains("show")) {
-        // display none all dropdown-content
-        $(".dropdown-content").each((index, elem) => {
-            if (elem.classList.contains("show"))
-                elem.classList.remove("show");
-        });
-    } else {
-        // display none all dropdown-content
-        $(".dropdown-content").each((index, elem) => {
-            if (elem.classList.contains("show"))
-                elem.classList.remove("show");
-        });
+    // display none all dropdown-content
+    $(".dropdown-content").each((index, elem) => {
+        if (elem.classList.contains("show"))
+            elem.classList.remove("show");
+    });
+    if (!$(obj).parent().children()[1].classList.contains("show")) {
         // show the dropdown
         $(obj).parent().children()[1].classList.add("show");
     }

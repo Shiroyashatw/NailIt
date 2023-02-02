@@ -1,8 +1,8 @@
-﻿var myServiceResult;
-var serviceData;
-
+﻿
 async function serviceSendGet()
 {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
     var requestOptions = {
         method: 'GET',
@@ -12,7 +12,7 @@ async function serviceSendGet()
     fetch("https://localhost:44308/api/YueServiceTables/"+nowMember, requestOptions)
         .then(response => response.text())
         .then((function (result) {
-            myServiceResult = result;
+            myResult = result;
             serviceSet();
         }))
         .catch(error => console.log('error', error));
@@ -20,7 +20,7 @@ async function serviceSendGet()
 
 function serviceSet()
 {
-    serviceData = JSON.parse(myServiceResult);
+    myData = JSON.parse(myResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞工作項目設定</div>
 	<div
 	  id="removeNaildiv"
@@ -61,7 +61,7 @@ function serviceSet()
 	/>
 	<br /><br />
 	`+ serviceSetLoop()+"</table>";
-	for (var y in serviceData)
+	for (var y in myData)
 	{
 		document.getElementById("servicePartC" + y).style.color = "black";
 	}
@@ -71,7 +71,7 @@ function serviceSet()
 
 function serviceSetLoop()
 {
-	if (serviceData.length == 0) return `<br /><span style="padding-left:5%">目前還沒有自訂服務項目，趕快去新增吧</span>`;
+	if (myData.length == 0) return `<br /><span style="padding-left:5%">目前還沒有自訂服務項目，趕快去新增吧</span>`;
 	var i = 0;
 	var answer = `<table>
 		<tr>
@@ -83,7 +83,7 @@ function serviceSetLoop()
 			<th style="width: 150px"></th>
 		</tr>`;
 	var myBackground = "";
-	for (var x of serviceData)
+	for (var x of myData)
 	{
 		myBackground = (i % 2 == 0) ? "aliceblue" : "lightgray";
 		answer += `<tr style="height: 60px; background-color: ` + myBackground +`">
@@ -164,7 +164,7 @@ function serviceSetLoop()
 
 function changeService(i)
 {
-	var x = serviceData[i];
+	var x = myData[i];
 	infoModal.innerHTML = `<table>
 	  <tr>
 		<th style="width: 150px">施作部位</th>
@@ -356,7 +356,7 @@ function serviceAdd()
 
 function serviceSendPut(i)
 {
-	var x = serviceData[i];
+	var x = myData[i];
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 
@@ -447,7 +447,7 @@ function serviceDelete()
 function serviceDeleteLoop() {
 	var answer = "";
 	var i = 0;
-	for (var x of serviceData) {
+	for (var x of myData) {
 		if (document.getElementById("serviceCheckBox" + i).checked != true)
 		{
 			i++;
@@ -522,12 +522,12 @@ async function serviceSendDelete()
 		body: raw,
 		redirect: 'follow'
 	};
-	for (var i = 0; i < serviceData.length;i++)
+	for (var i = 0; i < myData.length;i++)
 	{
 		if (document.getElementById("serviceCheckBox" + i).checked == true)
 		{
-			console.log(serviceData);
-			await fetch("https://localhost:44308/api/YueServiceTables/"+serviceData[i].serviceId, requestOptions)
+			console.log(myData);
+			await fetch("https://localhost:44308/api/YueServiceTables/"+myData[i].serviceId, requestOptions)
 				.then(response => response.text())
 				.then(function (result) {
 					if (result)

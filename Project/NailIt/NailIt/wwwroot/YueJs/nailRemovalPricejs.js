@@ -1,26 +1,25 @@
-﻿var myRemovalResult;
-var removalData;
-
+﻿
 async function removalSendGet()
 {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
     };
 
-    fetch("https://localhost:44308/api/YueRemovalPriceTables/"+nowMember, requestOptions)
+   await fetch("https://localhost:44308/api/YueRemovalPriceTables/"+nowMember, requestOptions)
         .then(response => response.text())
-        .then(function (result) {
-            myRemovalResult = result;
-            removalSee();
-        })
-        .catch(error => console.log('error', error));
+        .then(result=>
+            myResult = result)
+		.catch(error => console.log('error', error));
+	removalSee();
 }
 
 function removalSee()
 {
-    removalData = JSON.parse(myRemovalResult);
+    myData = JSON.parse(myResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞工作項目設定</div>
 				<div
 					id="removeNaildiv"
@@ -45,7 +44,7 @@ function removalSee()
 								<input
 									id="removeNail1"
 									type="number"
-									value="`+ removalData.removalPriceB0 +`"
+									value="`+ myData.removalPriceB0 +`"
 									readonly
 									style="
 										border-radius: 4px;
@@ -61,7 +60,7 @@ function removalSee()
 								<input
 									id="removeNail2"
 									type="number"
-									value="`+ removalData.removalPriceB1+`"
+									value="`+ myData.removalPriceB1+`"
 									readonly
 									style="
 										border-radius: 4px;
@@ -77,7 +76,7 @@ function removalSee()
 								<input
 									id="removeNail3"
 									type="number"
-									value="`+ removalData.removalPriceB2+`"
+									value="`+ myData.removalPriceB2+`"
 									readonly
 									style="
 										border-radius: 4px;
@@ -98,7 +97,7 @@ function removalSee()
 										background-color: aliceblue;
 										border: 0ex;
 									"
-									value="`+ removalData.removalPriceB3+`"
+									value="`+ myData.removalPriceB3+`"
 									readonly
 								/>
 							</td>
@@ -158,8 +157,8 @@ function setRemoveNail(check) {
 
 function removalSendPut() {
 
-	if (removeNail1.value == removalData.removalPriceB0 && removeNail2.value == removalData.removalPriceB1 &&
-		removeNail3.value == removalData.removalPriceB2 && removeNail4.value == removalData.removalPriceB3)
+	if (removeNail1.value == myData.removalPriceB0 && removeNail2.value == myData.removalPriceB1 &&
+		removeNail3.value == myData.removalPriceB2 && removeNail4.value == myData.removalPriceB3)
 	{
 		toastr.warning("並未改變任何項目");
 		setRemoveNail(false);

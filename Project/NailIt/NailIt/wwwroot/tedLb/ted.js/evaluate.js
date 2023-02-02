@@ -1,4 +1,5 @@
-﻿var bb = new Vue({
+﻿
+var bb = new Vue({
     el: "#allevaluate",
     data:{
         evaluatelist: [],
@@ -11,17 +12,33 @@
         historyfinlist:[]
 }
 })
+function now4(nowMember) {
+
 $.ajax({
     type: "get",
-    url: "/api/OrderTED/1",
+    url: "/api/OrderTED/" + nowMember,
     success: function (e) {
 
         for (var i = 0; i < e.length; i++) {
             if (e[i].demoSetCover == null) {
                 e[i].demoSetCover = e[i].manicuristPic;
             }
-            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            if (e[i].manicuristPublic == false) {
 
+                var nummm = 0;
+                for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                    if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >= 0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                        (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+
+                        nummm = j;
+                        break;
+                    }
+
+                }
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
                 e[i].orderPartC = "手";
@@ -46,6 +63,7 @@ $.ajax({
         }
     }
 })
+}
 function Getevashowdetail(e) {
     var n = e.id.length;
     $("#salonname-evaing").text(bb.evaluatelist[(e.id).substr(7, n - 7)].manicuristSalonName);
@@ -57,6 +75,7 @@ function Getevashowdetail(e) {
     $("#item-evaing").text(bb.evaluatelist[(e.id).substr(7, n - 7)].orderItemName);
     $("#pay-evaing").text('NT$' + bb.evaluatelist[(e.id).substr(7, n - 7)].orderPrice);
     $("#rent-evaing").text('NT$' + bb.evaluatelist[(e.id).substr(7, n - 7)].orderDeposit);
+    $("#addre-evaing").text(bb.evaluatelist[(e.id).substr(7, n - 7)].manicuristAddress);
 }
 //新增評論
 function evainsertbtn(e) {
@@ -106,17 +125,32 @@ function evainsertbtn(e) {
     }
 }
 //會員本身完成的評論
+function now5(nowMember) {
 $.ajax({
     type: "get",
-    url: "/api/EvaTEDControllers/1",
+    url: "/api/EvaTEDControllers/"+nowMember,
     success: function (e) {
 
         for (var i = 0; i < e.length; i++) {
             if (e[i].demoSetCover == null) {
                 e[i].demoSetCover = e[i].manicuristPic;
             }
-            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            if (e[i].manicuristPublic == false) {
 
+                var nummm = 0;
+                for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                    if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >= 0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                        (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+
+                        nummm = j;
+                        break;
+                    }
+
+                }
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
                 e[i].orderPartC = "手";
@@ -144,6 +178,7 @@ $.ajax({
         }
     }
 })
+}
 
 function evafinbtnshow(e) {
     var x = (e.id).substr(10, e.id.length - 10);
@@ -156,17 +191,34 @@ function evafinbtnshow(e) {
     $("#item-evafin").text(bb.evafinlist[x].orderItemName);
     $("#pay-evafin").text('NT$' + bb.evafinlist[x].orderPrice);
     $("#rent-evafin").text('NT$' + bb.evafinlist[x].orderDeposit);
+    $("#addre-evafin").text(bb.evafinlist[x].manicuristAddress);
 }
+function now6(nowMember) {
+
 $.ajax({
     type: "get",
-    url: "/api/Commenting/1",
+    url: "/api/Commenting/"+nowMember,
     success: function (e) {
         for (var i = 0; i < e.length; i++) {
             if (e[i].demoSetCover == null) {
                 e[i].demoSetCover = e[i].manicuristPic;
             }
-            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            if (e[i].manicuristPublic == false) {
 
+                var nummm = 0;
+                for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                    if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >= 0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                        (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+
+                        nummm = j;
+                        break;
+                    }
+
+                }
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
                 e[i].orderPartC = "手";
@@ -191,16 +243,33 @@ $.ajax({
         }
     }
 })
+}
+function now7(nowMember) {
+
 $.ajax({
     type: "get",
-    url: "/api/commentnotice/1",
+    url: "/api/commentnotice/"+nowMember,
     success: function (e) {
         for (var i = 0; i < e.length; i++) {
             if (e[i].demoSetCover == null) {
                 e[i].demoSetCover = e[i].manicuristPic;
             }
-            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            if (e[i].manicuristPublic == false) {
 
+                var nummm = 0;
+                for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                    if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >= 0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                        (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+
+                        nummm = j;
+                        break;
+                    }
+
+                }
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
                 e[i].orderPartC = "手";
@@ -227,6 +296,7 @@ $.ajax({
         }
     }
 })
+}
 function noticeingbtn(e) {
     var x = (e.id).substr(9, e.id.length - 9);
     $("#salonname-noticeing").text(bb.historyinglist[x].manicuristSalonName);
@@ -238,6 +308,7 @@ function noticeingbtn(e) {
     $("#item-noticeing").text(bb.historyinglist[x].orderItemName);
     $("#pay-noticeing").text('NT$' + bb.historyinglist[x].orderPrice);
     $("#rent-noticeing").text('NT$' + bb.historyinglist[x].orderDeposit);
+    $("#addre-noticeing").text(bb.historyinglist[x].manicuristAddress);
 }
 function noticefinbtn(e) {
     var x = (e.id).substr(9, e.id.length - 9);
@@ -250,4 +321,5 @@ function noticefinbtn(e) {
     $("#item-noticefin").text(bb.historyfinlist[x].orderItemName);
     $("#pay-noticefin").text('NT$' + bb.historyfinlist[x].orderPrice);
     $("#rent-noticefin").text('NT$' + bb.historyfinlist[x].orderDeposit);
+    $("#addre-noticefin").text(bb.historyfinlist[x].manicuristAddress);
 }

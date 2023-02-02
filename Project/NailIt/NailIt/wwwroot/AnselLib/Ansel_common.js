@@ -1,14 +1,10 @@
 ﻿//#region Prototype
-function addHours(date, hours) {
-    date.setHours(date.getHours() + hours);
-    return date;
-}
 // Get date in "YYYY-MM-DD" ex:"2023-01-17"
 String.prototype.localYYYYMMDD = function () {
     if (this === undefined || this === null) {
         return '';
     }
-    let dt = addHours(new Date(this), 8);
+    let dt = new Date(this).addHours(8);
     let month = (dt.getMonth() + 1).toString().padStart(2, "0");
     let day = dt.getDate().toString().padStart(2, "0");
 
@@ -28,7 +24,7 @@ String.prototype.localHHmm = function () {
     if (this === undefined || this === null) {
         return '';
     }
-    let dt = addHours(new Date(this), 8);
+    let dt = new Date(this).addHours(8);
     let HH = dt.getHours().toString().padStart(2, "0");
     let mm = dt.getMinutes().toString().padStart(2, "0");
 
@@ -44,12 +40,18 @@ String.prototype.HHmm = function () {
 
     return `${HH}:${mm}`
 }
+// Date
+Date.prototype.addHours = function (hours) {
+    this.setHours(this.getHours() + hours);
+    return this;
+}
 // Get date in "YYYY-MM-DD" ex:"2023-01-17"
 Date.prototype.localYYYYMMDD = function () {
     if (this === undefined || this === null) {
         return '';
     }
-    let dt = addHours(this, 8);
+    let dt = this.addHours(8);
+    this.addHours(8);
     let month = (dt.getMonth() + 1).toString().padStart(2, "0");
     let day = dt.getDate().toString().padStart(2, "0");
 
@@ -68,7 +70,7 @@ Date.prototype.localHHmm = function () {
     if (this === undefined || this === null) {
         return '';
     }
-    let dt = addHours(this, 8);
+    let dt = this.addHours(8);
     let HH = dt.getHours().toString().padStart(2, "0");
     let mm = dt.getMinutes().toString().padStart(2, "0");
 
@@ -87,6 +89,18 @@ Date.prototype.HHmm = function () {
 
 
 //#region HTML element
+function getNodeHeight(node) {
+    var height, clone = node.cloneNode(true)
+    // hide the meassured (cloned) element
+    clone.style.cssText = "position:fixed; top:-9999px; opacity:0;"
+    // add the clone to the DOM 
+    document.body.appendChild(clone)
+    // meassure it
+    height = clone.clientHeight
+    // cleaup 
+    clone.parentNode.removeChild(clone)
+    return height
+}
 /**
  * 產生下拉選單(指定需求的name和value屬性)
  * @param {string} target id of select tag

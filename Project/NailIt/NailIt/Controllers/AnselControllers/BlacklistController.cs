@@ -24,7 +24,7 @@ namespace NailIt.Controllers.AnselControllers
 
         // GET: api/Blacklist
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MessageBlacklistTable>>> GetBlacklist()
+        public async Task<ActionResult> GetBlacklist()
         {
             var loginId = HttpContext.Session.GetInt32("loginId");
             var blacklist = await _context.MessageBlacklistTables.
@@ -40,7 +40,7 @@ namespace NailIt.Controllers.AnselControllers
                     r.MemberNickname
                 }
                 ).ToList();
-            return blacklist;
+            return Ok(joinMember);
         }
 
         // POST: api/Blacklist

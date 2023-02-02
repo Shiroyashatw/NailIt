@@ -15,7 +15,6 @@
     <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
-    <script src="/"></script>
 
     <style>
         .slider-nav {
@@ -153,17 +152,26 @@
         }
 
         .Demoimg {
-            margin-left: 30px;
-            margin-right: 30px;
             height: 250px;
             width: 250px;
             object-fit: cover;
             object-position: center;
         }
 
-        /*        .Seemore:hover {
-            filter: grayscale(60%);
-        }*/
+        .Seemore {
+            margin-left: 30px;
+            margin-right: 30px;
+            /*overflow: hidden;*/
+        }
+
+/*                .Seemore:hover {
+            filter: grayscale(0%);
+        }
+
+            .Seemore:hover > .Demoimg {
+                transition: 0.5s;
+                transform: scale(1.1);
+            }*/
 
         .Clickme {
             position: relative;
@@ -315,7 +323,7 @@
         }
 
         #EdChBt {
-            margin: 20px;
+            padding: 20px;
         }
 
         #ToSort {
@@ -395,7 +403,7 @@
 
         .DemoGroup {
             margin-left: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
 
         #file-uploader {
@@ -603,7 +611,7 @@
             color: white;
             position: relative;
             top: 35px;
-            left: 30px;
+            /*left: 30px;*/
             border: none;
             padding-top: 5px;
             padding-bottom: 5px;
@@ -616,7 +624,7 @@
             color: white;
             position: relative;
             top: 35px;
-            left: 30px;
+            /*left: 30px;*/
             border: none;
             padding-top: 5px;
             padding-bottom: 5px;
@@ -632,7 +640,7 @@
             top: -35px;
             left: 0px;
             /*width: 250px;*/
-            margin-left: 30px;
+            /*margin-left: 30px;*/
             /*margin-right: 30px;*/
             text-align: center;
             border: none;
@@ -675,37 +683,175 @@
         #DemolistTable {
             width: 250px;
         }
+
+        #avaLable {
+            /*border:1px solid red;*/
+            padding: 3px;
+            background-color: rgb(255 233 236);
+            color: rgb(230 51 73);
+        }
+
+        #inavaLable {
+            padding: 3px;
+            color: rgb(71 189 101);
+            background-color: rgb(211 241 201);
+        }
+
+                .LinkTo{
+            color:black;
+        }
+
+            .LinkTo:hover {
+                color: #FF6733;
+                text-decoration: none;
+            }
+
+        .LinkNow {
+            color: #FF6733;
+            font-weight: bold;
+        }
+
+
+        /*DD*/
+        .mynav {
+            width: 100%;
+            height: 90px;
+            position: fixed;
+            font-weight: bold;
+            font-size: 16px;
+            background-color: white;
+            opacity: .9;
+            z-index: 2;
+        }
+
+        #navall > div {
+            /* background-color: blue; */
+            max-height: 100%;
+            /* 待研究 */
+            height: 90px;
+        }
+
+        #brand {
+            font-family: Cascadia Mono SemiBold;
+            font-size: 30px;
+            color: black;
+            height: 100%;
+        }
+
+        .navmid {
+            /* background-color: blue; */
+            height: 100%;
+        }
+
+            .navmid > li {
+                display: inline;
+                color: black;
+            }
+
+                .navmid > li > a {
+                    color: black;
+                }
+
+                    .navmid > li > a:hover {
+                        text-decoration-line: underline;
+                        text-decoration-thickness: 1.5px;
+                        text-underline-offset: 7px;
+                    }
+
+        .navend1 {
+            /* background-color: darksalmon; */
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .navend2 > img {
+            width: 25px;
+            /* background-color: blue; */
+        }
+
+
+        /* 頁尾---------------------------------------------------------- */
+        .footdiv{
+            margin-left:8.5%;
+        }
+
+        #hid {
+            background-color: white;
+            border: 0px solid white;
+            height: 60px;
+            margin: 1% 0%;
+        }
+
+
+        footer {
+            width: 100%;
+            margin-top: 7%;
+            background-color: rgb(0, 0, 0);
+            color: white;
+            width: 100%;
+        }
+
+
+        #footit {
+            margin-top: 6%;
+        }
+
+            #footit b {
+                font-size: 14px;
+                margin-right: 1%;
+            }
+
+        #footpre pre {
+            color: white;
+            font-size: 14px;
+        }
+
+        #footpre, #footcopy {
+            margin-top: 1%;
+        }
+
+
+
     </style>
 </head>
 
 <body>
 
     <div class="container-fluid" id="ShowData" v-cloak>
-        <div>
-            <nav class="row FixPad">
-                <div class="col">
+
+            <div class="row opacity-25 mynav" id="navall">
+                <div class="col-1"></div>
+                <div class="col-2 d-flex align-items-center" id="brand">
+                    Nail IT
                 </div>
-                <div class="col-2">
-                    <a>Nail It</a>
+                <div class="col-3">
+                    <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
+                        <li><a href="#"> 美 甲 查 詢 </a></li>
+                        <li><a href="#"> 美 甲 小 天 地 </a></li>
+                        <li><a href="#"> 關 於 我 們 </a></li>
+                    </ul>
                 </div>
-                <div class="col-6">
-                    <button class="Btnpd">設計師作品</button>
-                    <button class="Btnpd">美甲天地</button>
-                    <button class="Btnpd">會員中心</button>
+                <div class="col-4 pt-3">
+                    <p class="navend1">登入 / 會員中心</p>
                 </div>
-                <div class="col-2">
-                    登入/會員中心
+                <div class="col-1 d-flex align-items-center justify-content-end navend2">
+                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
+                    <img id="noti mr-0" src="../images/notification.png">
                 </div>
-                <div class="col">
-                </div>
-            </nav>
-        </div>
+                <div class="col-1"></div>
+            </div>
 
 
-        <div class="row">
+        <div class="row" style="padding-top:90px">
             <div class="col-1"></div>
             <div class="col-11">
-                <a href="#">路徑</a>
+                <div>
+                    <a class="LinkTo" href="/TanTanLib/html/cover.html">首頁</a>
+                    <span>></span>
+                    <a class="LinkTo" href="Fliter.html">美甲查詢</a>
+                    <span>></span>
+                    <label class="LinkNow">{{DesignList.manicuristSalonName}}</label>
+                </div>
             </div>
 
         </div>
@@ -747,12 +893,12 @@
                     <textarea id="Infotext" maxlength="200" class="mt-3" placeholder="自我介紹" v-if="Editing" v-model="PutManicurist[0].manicuristIntro"></textarea>
                 </form>
                 <!--<div id="Score">
-                    <div class="ratings">
-                        <div class="Emptystar">★★★★★</div>
-                        <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
-                    </div>
-                    <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
-                </div>-->
+                <div class="ratings">
+                    <div class="Emptystar">★★★★★</div>
+                    <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
+                </div>
+                <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
+            </div>-->
             </div>
             <div class="col-2">
                 <!--<div style="height: 80%;"></div>-->
@@ -962,8 +1108,12 @@
                                 <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover">
                                 <button v-bind:value="[key]" data-toggle="modal" data-target="#PostPicModal" class="UploadDemo" onclick="GetCertainDemo(this)">相片</button>
                             </div>
-                            <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
-                            <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
+                            <div class="DemoGroup">
+                                <label id="inavaLable" v-if="DemoSetList[key].demoSetPublic">已上架</label>
+                                <label id="avaLable" v-else="DemoSetList[key].demoSetPublic">未上架</label>
+                                <p style="font-weight: bold;" class="d-inline">{{DemoSetList[key].demoSetName}}</p>
+                            </div>
+                            <p class="DemoGroup">NT${{DemoSetList[key].demoSetPrice}}</p>
                             <!--EditModal-->
                             <div class="modal fade" id="EditModal" data-keyboard="false" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -987,16 +1137,16 @@
                                                         <textarea required v-model="ThisFormData[0].demoSetContent" class="ExitEmpty" id="PutInFo" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                                                     </div>
                                                     <!--<div>
-                                                        <label for="UpDemoFile">照片：</label>
-                                                        <br />
-                                                        <div class="d-flex align-items-center">
-                                                            <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
-                                                            <label id="UpFileLabel" class="align-items-center">
-                                                                上傳檔案
-                                                                <input id="UpDemoFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
-                                                            </label>
-                                                        </div>
-                                                    </div>-->
+                                                    <label for="UpDemoFile">照片：</label>
+                                                    <br />
+                                                    <div class="d-flex align-items-center">
+                                                        <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
+                                                        <label id="UpFileLabel" class="align-items-center">
+                                                            上傳檔案
+                                                            <input id="UpDemoFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
+                                                        </label>
+                                                    </div>
+                                                </div>-->
                                                     <div class="py-2">
                                                         <label for="PutC">施作部位：</label>
                                                         <select id="PutC" v-model="ThisFormData[0].demoSetPartC" required>
@@ -1080,7 +1230,7 @@
                             <!--EditModalEnd-->
                             <!--DeleteModal-->
                             <div class="modal fade" id="DeleteModal" data-keyboard="false" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1104,7 +1254,7 @@
                             <!--DeleteModal End-->
                             <!--PostPicModal-->
                             <div class="modal fade" id="PostPicModal" data-keyboard="false" tabindex="-1" aria-labelledby="PostPicModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1245,16 +1395,147 @@
         </div>
 
 
+        <div class="row">
+            <footer class="footer" style="height:320px;">
+                <div class="col-1"></div>
+                <div class="col-10 footdiv">
+                    <div id="footit">
+                        <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
+                        <b>檢舉</b>
+                        <b>隱私權政策</b>
+                        <b>防詐騙宣導</b>
+                    </div>
+                    <div id="footpre">
+                        <pre>
+地址：408台中市南屯區公益路二段51號18樓
+客服信箱：Nailit@gmail.com
+客服電話： 04 -2326-5860
+        </pre>
+                    </div>
+                    <div id="footcopy">
+                        <p style="font-size: 12px;font-family:Franklin Gothic Book;">
+                            Copyright ©2022 MSIT44TEAM1
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
 
     </div>
 
-
+    <script src="../YueJs/loginCheck.js"></script>
 
     <script>
         //let ManicuristID = 2;
         let GetNowurl = window.location.href;
         let Nowurl = new URL(GetNowurl);
-        let GetManicuristID = Nowurl.searchParams.get('id');
+        let ManicuristID = Nowurl.searchParams.get('id');
+        let GetManicuristID;
+        Pre();
+        async function Pre() {
+            await YueloginCheck();
+            console.log("nowMember" + nowMember);
+            console.log("GetManicuristID" + GetManicuristID);
+
+            GetManicuristID = nowMember;
+            GetData(GetManicuristID);
+        }
+
+        function GetData(GetManicuristID) {
+            $.ajax({
+                type: "get",
+                url: "/api/Manicurist/" + GetManicuristID,
+                success: function (e) {
+                    ShowData.DesignList = e;
+                    PercantStar = e.manicuristScore;
+                    FloatStar = (PercantStar * 20) + '%';
+                    ShowData.width = FloatStar;
+                    ShowData.PutManicurist[0].manicuristIntro = e.manicuristIntro;
+                    ShowData.PutManicurist[0].manicuristPic = e.manicuristPic;
+                    //console.log(e.manicuristId);
+                    ShowData.PutManicurist[0].manicuristId = e.manicuristId;
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
+                success: function (e) {
+                    console.log(e);
+                    for (demoset in e) {
+                        ShowData.DemoSetList.push(e[demoset]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/TagTable",
+                success: function (e) {
+                    //console.log(e);
+                    ShowData.TagList = e;
+                    for (let p = 0; p < 9; p++) {
+                        ShowData.FixTag[p] = e[p].tagName;
+                        //console.log(e[p].tagName);
+                        //console.log(ShowData.FixTag);
+                    }
+                    var TagLenth = [];
+                    var Gettag = [];
+                    //Gettag[0] = Math.floor(Math.random() * e.length - 1) + 1;
+                    for (let i = 0; i < e.length; i++) {
+                        TagLenth[i] = i;
+                    }
+                    //console.log(TagLenth);
+                    while (Gettag.length != 9) {
+                        //for (let x = 0; x < 10; x++) {
+                        var Rd = Math.floor(Math.random() * e.length - 1) + 1;
+                        var Posi = TagLenth.indexOf(Rd);
+                        //console.log("亂數為：" + Rd + "位置為：" + Posi);
+                        //console.log("現在陣列為" + TagLenth);
+                        if (Posi == -1) {
+                            //Temp = Temp + 1;
+                            continue;
+                        } else {
+                            //Gettag[x - Temp] = Rd;
+                            Gettag.push(Rd);
+                            TagLenth.splice(Posi, 1);
+                        }
+                    }
+                    //console.log(Gettag);
+                    //console.log(Gettag.length);
+                    //console.log(e[0].tagName);
+                    for (let g = 0; g < 9; g++) {
+                        ShowData.NineTag.push(e[Gettag[g]].tagName);
+                        //console.log(e[Gettag[g]].tagName);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/color",
+                success: function (e) {
+                    //console.log(e);
+                    //ShowData.FixColor = e;
+                    for (color in e) {
+                        ShowData.FixColor.push(e[color]);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "/api/PCodeTable",
+                success: function (e) {
+                    //console.log(e);
+                    for (code in e) {
+                        ShowData.CodeC.push(e[code]);
+                    }
+                }
+            });
+        }
+
         let PercantStar;
         let FloatStar;
         let DemoLenth;
@@ -1487,7 +1768,7 @@
                 TagStxt: "",
                 TagTtxt: "",
                 CodeC: [],
-                PutManicurist: [{ "manicuristId": GetManicuristID, "manicuristPic": "", "manicuristIntro": "" }],
+                PutManicurist: [{ "manicuristId": "", "manicuristPic": "", "manicuristIntro": "" }],
                 preview: true,
                 Editing: false,
                 TagList: [],
@@ -1503,10 +1784,12 @@
                 EndDate: "",
                 GetCertainDemoKey: "",
                 SearchString: "",
+                InsertCover: [{ "demoSetId": GetManicuristID, "demoSetCover": "" }],
             },
             methods: {
                 InsertDemo: function () {
                     this.InsertDemoSet[0].manicuristId = GetManicuristID;
+                    this.InsertCover[0].manicuristId = GetManicuristID;
                     console.log(this.InsertDemoSet[0]);
                     if (this.InsertDemoSet[0].demoSetTag2 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag2 = this.TagStxt;
@@ -1514,7 +1797,6 @@
                     if (this.InsertDemoSet[0].demoSetTag3 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag3 = this.TagTtxt;
                     }
-
 
                     $.ajax({
                         type: "post",
@@ -1526,6 +1808,19 @@
                         }
                     })
 
+                    // $.ajax({
+                    //    type: "post",
+                    //    url: "/api/Demo",
+                    //    contentType: "application/json",
+                    //    data: JSON.stringify(this.InsertCover[0]),
+                    //    success: function () {
+                    //        window.location = "/YiPLib/NailDesignerEdit.html";
+                    //        console.log("sucessDemo");
+                    //    }
+                    //})
+
+
+
                 },
                 Previewing: function () {
                     this.preview = true;
@@ -1534,8 +1829,8 @@
                 BackEdit: function () {
                     this.preview = false;
                     this.Editing = true;
-                    console.log(PostDemo[0].demoSetId);
-                    console.log("ID");
+                    //console.log(PostDemo[0].demoSetId);
+                    //console.log("ID");
                 },
 
                 PutM: function () {
@@ -1615,94 +1910,7 @@
             }
         })
 
-        $.ajax({
-            type: "get",
-            url: "/api/Manicurist/" + GetManicuristID,
-            success: function (e) {
-                ShowData.DesignList = e;
-                PercantStar = e.manicuristScore;
-                FloatStar = (PercantStar * 20) + '%';
-                ShowData.width = FloatStar;
-                ShowData.PutManicurist[0].manicuristIntro = e.manicuristIntro;
-                ShowData.PutManicurist[0].manicuristPic = e.manicuristPic;
-            }
-        });
 
-        $.ajax({
-            type: "get",
-            url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
-            success: function (e) {
-                for (demoset in e) {
-                    ShowData.DemoSetList.push(e[demoset]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/TagTable",
-            success: function (e) {
-                //console.log(e);
-                ShowData.TagList = e;
-                for (let p = 0; p < 9; p++) {
-                    ShowData.FixTag[p] = e[p].tagName;
-                    //console.log(e[p].tagName);
-                    //console.log(ShowData.FixTag);
-                }
-                var TagLenth = [];
-                var Gettag = [];
-                //Gettag[0] = Math.floor(Math.random() * e.length - 1) + 1;
-                for (let i = 0; i < e.length; i++) {
-                    TagLenth[i] = i;
-                }
-                //console.log(TagLenth);
-                while (Gettag.length != 9) {
-                    //for (let x = 0; x < 10; x++) {
-                    var Rd = Math.floor(Math.random() * e.length - 1) + 1;
-                    var Posi = TagLenth.indexOf(Rd);
-                    //console.log("亂數為：" + Rd + "位置為：" + Posi);
-                    //console.log("現在陣列為" + TagLenth);
-                    if (Posi == -1) {
-                        //Temp = Temp + 1;
-                        continue;
-                    } else {
-                        //Gettag[x - Temp] = Rd;
-                        Gettag.push(Rd);
-                        TagLenth.splice(Posi, 1);
-                    }
-                }
-                //console.log(Gettag);
-                //console.log(Gettag.length);
-                //console.log(e[0].tagName);
-                for (let g = 0; g < 9; g++) {
-                    ShowData.NineTag.push(e[Gettag[g]].tagName);
-                    //console.log(e[Gettag[g]].tagName);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/color",
-            success: function (e) {
-                console.log(e);
-                //ShowData.FixColor = e;
-                for (color in e) {
-                    ShowData.FixColor.push(e[color]);
-                }
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/api/PCodeTable",
-            success: function (e) {
-                console.log(e);
-                for (code in e) {
-                    ShowData.CodeC.push(e[code]);
-                }
-            }
-        });
 
         let inputfile;
         async function Getfile(e) {
@@ -1782,6 +1990,7 @@
             console.log(CoverimgPath);
             $('#Previewphoto').attr('src', CoverimgPath);
             ShowData.PutUpCover[0].demoSetCover = CoverimgPath;
+            ShowData.InsertCover[0].demoSetCover = CoverimgPath;
         }
 
 

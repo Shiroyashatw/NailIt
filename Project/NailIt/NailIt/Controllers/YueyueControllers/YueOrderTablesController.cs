@@ -56,6 +56,7 @@ namespace NailIt.Controllers.YueyueControllers
                 plan_Remark = Plan.PlanRemark,
                 order_part = Code.CodeRepresent,
                 order_removal = Code2.CodeRepresent,
+                order_item=Order.OrderItem,
                 demoSet_Content = Order.OrderType == true ? subDemoSet.DemoSetContent : "",
                 order_Cover = Order.OrderType == true ? subDemoSet.DemoSetCover : subMamicurist.ManicuristPic
             };

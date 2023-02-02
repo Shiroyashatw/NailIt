@@ -1,10 +1,12 @@
-﻿var myScoreResult;//get到的資料轉換前
-var scoreData;//待評價頁面所get到的資料陣列
+﻿var myResult;//get到的資料轉換前
+var myData;//待評價頁面所get到的資料陣列
 var nowStar;//星星使用的參數
 var mySearchStart="";
 var mySearchEnd="";
 //網頁從送出get api開始
 async function reserveScoreSendGet() {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
@@ -14,7 +16,7 @@ async function reserveScoreSendGet() {
 	fetch("https://localhost:44308/api/YueOrderTables/" + nowMember + "/" + "A5" + "/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
-			myScoreResult = result;
+			myResult = result;
 			reserveScore();
 		})
 		.catch(error => console.log('error', error));
@@ -23,7 +25,7 @@ async function reserveScoreSendGet() {
 //生成頁面內容
 function reserveScore(search=false)
 {
-	scoreData = JSON.parse(myScoreResult);	
+	myData = JSON.parse(myResult);	
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
@@ -54,11 +56,11 @@ function reserveScore(search=false)
 //生成訂單內容
 function scoreLoop(search=false)
 {
-	if (scoreData.length == 0) return `<br /><span style="padding-left:5%">目前無待評價訂單</span>`;
+	if (myData.length == 0) return `<br /><span style="padding-left:5%">目前無待評價訂單</span>`;
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
-	for (var x of scoreData) {
+	for (var x of myData) {
 		if (search) {
 			if (searchStart.value == "" || searchEnd.value == "") {	
 				let myDate = new Date();
@@ -74,15 +76,17 @@ function scoreLoop(search=false)
 				continue;
 			}
 		}
+		var maniTo = "../YipLib/NailDesign.html?id=" + x.manicurist_ID;
+		var picTo = x.order_Type == 0 ? maniTo : "../YipLib/product.html?=" + x.order_item;
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 		thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
 		thisCompleteTime = x.order_CompleteTime.substring(0, 10) + " " + x.order_CompleteTime.substring(11, 19);
 		answer += `<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 20%">
-						<img src="`+ x.order_Cover + `" width="90%" style="margin-left: 3% ;height:170px;" />
+						<img src="`+ x.order_Cover + `" width="90%" style="margin-left: 3% ;height:170px;" onclick="javascript:location.href='` + maniTo +`'" />
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
-						<span style="font-size: 120%"><b>`+ x.order_ItemName + `</b></span>
+						<span style="font-size: 120%"  onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName + `</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content + `</span>
 						<br /><br />
@@ -129,7 +133,7 @@ function scoreLoop(search=false)
 //點開訂單詳情
 function getScoreDetail(i)
 {
-	var x = scoreData[i];
+	var x = myData[i];
 	var thisOrderId = "";
 	var thisOrderTime = "";
 	var thisStartTime = "";
@@ -181,7 +185,7 @@ function getScoreDetail(i)
 //送出comment
 function reserveScoreGo(i)
 {
-	var x = scoreData[i];
+	var x = myData[i];
 	var thisOrderId = "";
 	var thisCompleteTime = "";
 	var thisStartTime = "";
@@ -284,7 +288,7 @@ function starSet(i)
 //Post到comment表
 function reserveScoreSendPost(i)
 {
-	var postData = scoreData[i];
+	var postData = myData[i];
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 

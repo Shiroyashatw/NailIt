@@ -44,6 +44,7 @@ namespace NailIt.Controllers.TedControllers
                         where o.MemberId == id
                         select new Orderappointment()
                         {
+                            DemoSetId = a.DemoSetId,
                             MemberId =o.MemberId,
                             ManicuristId =o.ManicuristId,
                             OrderPartC = o.OrderPartC,
@@ -74,11 +75,19 @@ namespace NailIt.Controllers.TedControllers
         // PUT: api/OrderTED/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderTable(int id, string stat)
+        public async Task<IActionResult> PutOrderTable(int id, string[] newstat)
         {
             var orderTable = await _context.OrderTables.FindAsync(id);
-            orderTable.OrderStateC ="A6";
-            orderTable.OrderCancelTime = DateTime.Now;
+            if (newstat[0] == "A4")
+            {
+                orderTable.OrderCompleteTime = DateTime.Now;
+            }else if (newstat[0] == "A6")
+            {
+                orderTable.OrderCancelTime = DateTime.Now;
+
+            }
+            orderTable.OrderStateC = newstat[0];
+            
 
 
             try

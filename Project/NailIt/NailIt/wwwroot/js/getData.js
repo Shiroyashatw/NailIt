@@ -36,13 +36,20 @@ let Tztoday
 
 // 選擇的項目、訂金
 let ritem
+let ritemName
 let rdep
+
+// 卸甲類型
+// 被選擇的卸甲類型
+const OrderRemovalC = $('select[name="OrderRemovalC"]')
+
 
 // 讀取基本資料 設計師資料 demoset資料 demo資料 再顯示在畫面上
 // 一進畫面就進行讀取
 function getbasicinfo() {
     // 一進畫面就帶入商品ID 進檢舉商品
     $('input[name="ReportItem"]').val(DSETID);
+
     $.ajax({
         url: "https://localhost:44308/api/product/" + DSETID,
         method: 'GET',
@@ -56,21 +63,23 @@ function getbasicinfo() {
             var Ores = res[0]['o']
             var Demosetres = res[0]['demoset']
             var Colorres = res[0]['color'][0]
-            console.log(Colorres)
+            // console.log(Colorres)
             var demoSetPartCtext = ''
             var demoSetPartC = Demosetres['demoSetPartC']
 
             $('input[name="ManicuristId"]').val(Ores['manicuristId']);
+            const InputMid = $('input[name="ManicuristId"]').val();
+            getRemovalPrice(InputMid)
             // 被檢舉人也帶入抓到設計師ID
             $('input[name="ReportTarget"]').val(Ores['manicuristId']);
             // 施作部位判定
             if (demoSetPartC == "C0") {
                 demoSetPartCtext = "手"
-                $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC));
+                $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)).attr('style', 'pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
             }
             else if (demoSetPartC == "C1") {
                 demoSetPartCtext = "腳"
-                $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC));
+                $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)).attr('style', 'pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
             }
             else {
                 demoSetPartCtext = "手、腳"
@@ -79,13 +88,18 @@ function getbasicinfo() {
             }
 
             $('.demoSetPartC').text("服務項目:" + demoSetPartCtext)
-
-            $('select[name="OrderItem"]').append(new Option("固定項目", Demosetres['demoSetId']));
-            $('select[name="OrderItemName"]').append(new Option(Demosetres['demoSetName'], Demosetres['demoSetName']));
-
+            // 施作項目和造型
+            $('select[name="OrderItem"]').append(new Option("固定項目", Demosetres['demoSetId'])).attr('style', 'pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
+            $('select[name="OrderItemName"]').append(`<option value="${Demosetres['demoSetName']}" price="${Demosetres['demoSetPrice']}">${Demosetres['demoSetName']} NT$${Demosetres['demoSetPrice']}</option>`).attr('style', 'pointer-events: none;background-color: rgba(128, 128, 128, 0.3);')
+            // 設計師頁面超連結
             $('#topmanicuristSalonName').text(Ores['manicuristSalonName'])
+            $("#topmanicuristSalonName").attr("href", `NailDesign.html?id=${InputMid}`)
 
+            // 商品頁面超連結
             $('#topdemosetName').text(Demosetres['demoSetName'])
+            $('#topdemosetName').attr("href", `product.html?id=${DSETID}`)
+
+
             $('#productName').text(Demosetres['demoSetName'])
             $('#demoSetPrice').text("預估價格:" + Demosetres['demoSetPrice'])
             $('#demoSetContent').text(Demosetres['demoSetContent'])
@@ -103,9 +117,9 @@ function getbasicinfo() {
             $('.full_star').css({
                 "width": star
             })
-            demoSprice.text("預估金額:" + Demosetres['demoSetPrice']);
-            inputOprice.val(Demosetres['demoSetPrice']);
-            demoSde.text("訂金:NT$" + Demosetres['demoSetDeposit'])
+
+            demoSde.text("NT$" + Demosetres['demoSetDeposit'])
+            $('.TextdemoSetDeposit').text("預估訂金: NT$" + Demosetres['demoSetDeposit'])
             inputOde.val(Demosetres['demoSetDeposit']);
             // 放入圖片
             $('#show_big_photo').attr("src", res[0]['demo']['demoPic'])
@@ -130,10 +144,9 @@ function getbasicinfo() {
 
 // 設定可點選預約日期
 function getReserveDate() {
-    // console.log(id); // 1
-    // onsole.log(typeof(id)); // string
     $('#reservebtn, .lastMonth, .nextMonth,#Sendbtn').on('click', function () {
         // 讀取的設計師ID傳回設定
+        $('input[name="MemberId"]').val();
         MID = $("input[name='ManicuristId']").attr('value')
         $.ajax({
             url: `https://localhost:44308/api/product/${MID}/reserve`,
@@ -243,20 +256,22 @@ function getReserveTime() {
                         }
                         else {
                             if (month <= todaym && date <= todayd && hour < todayh) {
-                                $('#radio').append(`<label class="col-4"><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
+                                $('#radio').append(`<label class="col-4"><input  type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
                             }
                             else {
-                                $('#radio').append(`<label class="col-4"><input type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
+                                $('#radio').append(`<label class="col-4"><input class="plan" type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
                             }
                         }
 
                     }
                 }
+                getPlanRemark()
             },
             error: err => {
                 console.log(err)
             },
         });
+
     });
 }
 
@@ -282,6 +297,7 @@ function postOrder() {
                 returnArray[formdata[i]['name']] = false;
             }
         }
+        console.log(formdata)
         console.log(JSON.stringify(returnArray));
         // console.log(returnArray)
         // JSON datetime 格式
@@ -305,9 +321,9 @@ function postOrder() {
     })
 }
 
-// 讀取設計師資料
+// 讀取設計師資料 設計師頁面
 function getManicuristData() {
-    MID = url.searchParams.get('MID');
+    MID = url.searchParams.get('id');
     $.ajax({
         url: `https://localhost:44308/api/product/MID/${MID}`,
         method: "GET",
@@ -318,12 +334,12 @@ function getManicuristData() {
             // 設計師表
             var Mres = res[0]
             $('input[name="ManicuristId"]').val(Mres['manicuristId']);
-
+            getRemovalPrice(MID)
             // 施作部位直接加入
             $('select[name="OrderPartC"]').append(new Option("手", "C0"));
             $('select[name="OrderPartC"]').append(new Option("腳", "C1"));
         },
-        error: res => {
+        error: err => {
             console.log("N")
         },
     })
@@ -341,6 +357,15 @@ function getOrderPartC() {
         getDemosetData()
         getOrderItem()
 
+    })
+    OrderItemName.change(function () {
+        var price = OrderItemName.find("option:selected").attr('price')
+        var deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        demoSprice.text("NT$" + price)
+        demoSde.text("NT$" + deposit)
+        inputOprice.val(price);
+        inputOde.val(deposit);
     })
 }
 
@@ -363,18 +388,16 @@ function getDemosetData() {
             for (i = 0; i < res.length; i++) {
                 var DRes = res[i]
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
-                OrderItemName.append(`<option value="${DRes['demoSetName']}" price="${DRes['demoSetPrice']}" deposit="${DRes['demoSetDeposit']}">${DRes['demoSetName']}</option>`)
+                OrderItemName.append(`<option value="${DRes['demoSetName']}" price="${DRes['demoSetPrice']}" deposit="${DRes['demoSetDeposit']}">${DRes['demoSetName']} NT$${DRes['demoSetPrice']}</option>`)
             }
             OrderItemName.show();
             var price = OrderItemName.find("option:selected").attr('price')
             var deposit = OrderItemName.find("option:selected").attr('deposit')
 
-            demoSprice.text("預估金額:NT$" + price)
-            demoSde.text("訂金:NT$" + deposit)
+            demoSprice.text("NT$" + price)
+            demoSde.text("NT$" + deposit)
             inputOprice.val(price);
             inputOde.val(deposit);
-            // console.log(price)
-            // console.log(deposit)
         },
         error: err => {
             console.log(err)
@@ -398,7 +421,7 @@ function getOrderItem() {
             for (i = 0; i < res.length; i++) {
                 var Sres = res[i]
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
-                OrderItem.append(`<option value="${Sres['serviceId']}" price="${Sres['servicePrice']}" deposit="${Sres['seriveDeposit']}">${Sres['serviceName']}</option>`)
+                OrderItem.append(`<option value="${Sres['serviceId']}" price="${Sres['servicePrice']}" deposit="${Sres['seriveDeposit']}">${Sres['serviceName']} NT$${Sres['servicePrice']}</option>`)
             }
             var price
             var deposit
@@ -417,8 +440,8 @@ function getOrderItem() {
                     price = OrderItem.find("option:selected").attr('price')
                     deposit = OrderItem.find("option:selected").attr('deposit')
 
-                    demoSprice.text("預估金額:NT$" + price)
-                    demoSde.text("訂金:NT$" + deposit)
+                    demoSprice.text("NT$" + price)
+                    demoSde.text("NT$" + deposit)
                     inputOprice.val(price);
                     inputOde.val(deposit);
                 }
@@ -426,27 +449,60 @@ function getOrderItem() {
                     OrderType.val(true)
                     getDemosetData()
                     OrderItemName.show();
-
-                    // price = OrderItemName.find("option:selected").attr('price')
-                    // deposit = OrderItemName.find("option:selected").attr('deposit')
-                    // console.log(OrderItemName.attr('price'))
-                    // console.log(price)
-                    // console.log(deposit)
-                    // demoSprice.text("預估金額:NT$" + price)
-                    // demoSde.text("訂金:NT$" + deposit)
-                    // inputOprice.val(price);
-                    // inputOde.val(deposit);
                 }
             })
-
-            // OrderItemName.change(function(){
-            //     console.log("SSS")
-            // })
         },
         error: err => {
             console.log(err)
         }
     })
+}
+
+// 獲取設計師 卸甲價錢
+function getRemovalPrice(mid) {
+    $.ajax({
+        url: `https://localhost:44308/api/product/${mid}/RemovalPrice`,
+        method: "Get",
+        data: "json",
+        async: true,
+
+        success: res => {
+            OrderRemovalC.append((`<option value="B0" price="${res["removalPriceB0"]}">不用卸甲 NT$${res["removalPriceB0"]}</option>`))
+            OrderRemovalC.append((`<option value="B1" price="${res["removalPriceB1"]}">去指甲油(無凝膠) NT$${res["removalPriceB1"]}</option>`))
+            OrderRemovalC.append((`<option value="B2" price="${res["removalPriceB2"]}">本店卸甲 NT$${res["removalPriceB2"]}</option>`))
+            OrderRemovalC.append((`<option value="B3" price="${res["removalPriceB3"]}">他店卸甲 NT$${res["removalPriceB3"]}</option>`))
+        },
+        error: err => {
+            console.log(err)
+        }
+    })
+}
+
+function getPlanRemark() {
+    // $('input[name="planId"]:checked').on('click',function(){
+    //     console.log($(this).val());
+    // })
+    $('input[name="planId"]').on('click', function () {
+        const planid = $('input:radio[name="planId"]:checked').val();
+        $.ajax({
+            url: `https://localhost:44308/api/product/${planid}/Remark`,
+            method: "Get",
+            data: "json",
+            async: true,
+
+            success: res => {
+                console.log(res)
+                $('.remark').empty();
+                $('.remark').append(`<p>備註:</p>`);
+                $('.remark').append(`<p>${res['remark']}</p>`);
+                //console.log(res[''])
+            },
+            error: err => {
+                console.log(err)
+            }
+        })
+    })
+
 }
 
 function OrderDetail() {
@@ -456,15 +512,18 @@ function OrderDetail() {
         console.log(rdate)
         let rtime = $('input[name="planId"]:checked').attr("time")
         let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
-        let rremovec = $('select[name="OrderRemovalC"]').find("option:selected").text()
+        let rremovec = OrderRemovalC.find("option:selected").text()
         ritem = $('select[name="OrderItem"]').find("option:selected").text()
+        ritemName = $('select[name="OrderItemName"]').find("option:selected").val()
+        console.log(ritem)
+        console.log(ritemName)
         let rprice = $('input[name="OrderPrice"]').val()
         rdep = $('input[name="OrderDeposit"]').val()
         $('.rescheck').append(`
         <p>預約日期:${rdate} 時間:${rtime}</p>
         <p>施作部位:${rparc}</p>
         <p>卸甲:${rremovec}</p>
-        <p>施作項目:${ritem}</p>
+        <p>施作項目:${ritem} 造型:${ritemName}</p>
         <p>預估價位:NT$${rprice}</p>
         <p>訂金:NT$${rdep}</p>
         `);
@@ -487,8 +546,13 @@ function postCash() {
     // TotalAmount 付款金額
     // TradeDesc 商品描述
     // ItemName 商品名稱
-    // 上面五個須給值
-    $('input[name="ItemName"]').val(ritem);
+    // 上面五個須給值ritemName
+    if (ritem == "固定造型") {
+        $('input[name="ItemName"]').val(ritemName);
+    }
+    else {
+        $('input[name="ItemName"]').val(ritem);
+    }
     let itemName = $('input[name="ItemName"]').val();
 
     // console.log(itemName)
@@ -496,7 +560,7 @@ function postCash() {
     let MerchantTradeDate = $('input[name="MerchantTradeDate"]').val();
 
     //console.log(Tzdatetime)
-     
+
     $('input[name="MerchantTradeNo"]').val(`Nailit${Tzymd + Tztime}`);
     let MerchantTradeNo = $('input[name="MerchantTradeNo"]').val();
 
@@ -507,7 +571,7 @@ function postCash() {
     // let OrderResultURL = $('input[name="OrderResultURL"]').val();
     $('input[name="TotalAmount"]').val(rdep);
     let TotalAmount = $('input[name="TotalAmount"]').val();
-    
+
     let TradeDesc = $('input[name="TradeDesc"]').val();
 
     // CheckMacValue 檢查碼生成 上面參數都正確會傳放入 val()進去
@@ -517,14 +581,14 @@ function postCash() {
     y = y.replace("%20", "+")
     console.log(y)
     y = y.toLowerCase();
-    
+
     var hash = CryptoJS.SHA256(y).toString();
 
     hash = hash.toUpperCase()
     console.log(hash)
     $('input[name="CheckMacValue"]').val(hash)
 
-    //$('#cashform').submit();
+    $('#cashform').submit();
     // const apiURL = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
     // const data = { 
@@ -553,4 +617,32 @@ function postCash() {
     // %20 應該轉換成 +
 }
 
+// 計算 預估金額
+function calculate() {
+    let selectedOrderRemovalC
+    let selectedOrderItem
+    let selectedOrderItemName
+    let PriceTotal
+    $('#reservebtn,#Sendbtn').on('click', function () {
+        selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
+        //selectedOrderItem = $('select[name="OrderItemName"]').find("option:selected").attr('price')
+        selectedOrderItemName = $('select[name="OrderItemName"]').find("option:selected").attr('price')
+        //console.log(selectedOrderItem)
+        PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
+        demoSprice.text("NT$" + PriceTotal);
+        inputOprice.val(PriceTotal);
+        console.log(PriceTotal)
+        console.log(selectedOrderRemovalC)
+        console.log(inputOprice.val())
+    })
+    OrderRemovalC.change(function () {
+        selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
+        PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
+        demoSprice.text("NT$" + PriceTotal);
+        inputOprice.val(PriceTotal);
+        console.log(PriceTotal)
+        console.log(selectedOrderRemovalC)
+        console.log(inputOprice.val())
+    })
 
+}

@@ -25,6 +25,8 @@ namespace NailIt.Controllers.DogeControllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetProducts(int id)
         {
+            var res = _db.DemoSetTables.Find(id);
+            if (res == null) return NotFound();
             var query = from o in _db.ManicuristTables
                             // 利用 ManicuristId 設計師ID 兩表join
                         join demoset in _db.DemoSetTables
@@ -58,7 +60,7 @@ namespace NailIt.Controllers.DogeControllers
             _db.OrderTables.Add(orderTable);
             await _db.SaveChangesAsync();
 
-            var res = _db.OrderTables.FirstOrDefault(r => r.PlanId == orderTable.PlanId );
+            var res = _db.OrderTables.FirstOrDefault(r => r.PlanId == orderTable.PlanId && r.OrderOrderTime == orderTable.OrderOrderTime );
             plan.OrderId = res.OrderId;
             await _db.SaveChangesAsync();
             return Content("OK");
@@ -110,6 +112,38 @@ namespace NailIt.Controllers.DogeControllers
                       where m.ManicuristId == mid
                       select m;
             return await res.ToListAsync();
+        }
+        [HttpGet]
+        [Route("{mid:int}/RemovalPrice")]
+        public ActionResult<IEnumerable<RemovalPriceTable>> GetRemovelPrice(int mid)
+        {
+            // 搜尋傳入美甲師ID 搜尋卸甲價格表
+            var res = (from r in _db.RemovalPriceTables
+                      where r.RemovalPriceManicuristId == mid
+                      select r).SingleOrDefault();
+            
+            if (res == null)
+            {
+                return NotFound("無對應設計師卸甲價格");
+            }
+            return Ok(res);
+        }
+        [HttpGet]
+        [Route("{planid:int}/Remark")]
+        public ActionResult<IEnumerable<PlanTable>> GetPlanRemark(int planid)
+        {
+            var res = (from p in _db.PlanTables
+                       where p.PlanId == planid
+                       select new
+                       {
+                           Remark = p.PlanRemark
+                       }).SingleOrDefault();
+
+            if (res == null)
+            {
+                return NotFound("無對應行程表ID");
+            }
+            return Ok(res);
         }
     }
 }

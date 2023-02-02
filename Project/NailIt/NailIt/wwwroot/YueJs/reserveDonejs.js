@@ -1,6 +1,7 @@
-﻿var doneData;
-var myDoneResult;
+﻿
 async function reserveDoneSendGet() {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
@@ -11,7 +12,7 @@ async function reserveDoneSendGet() {
 	fetch("https://localhost:44308/api/YueCommentTables/" + nowMember + "/" + "A6" + "/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
-			myDoneResult = result;
+			myResult = result;
 			reserveDone();
 		})
 		.catch(error => console.log('error', error));
@@ -20,7 +21,7 @@ async function reserveDoneSendGet() {
 
 
 function reserveDone(search=false) {
-	doneData = JSON.parse(myDoneResult);
+	doneData = JSON.parse(myResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
@@ -69,7 +70,8 @@ function doneLoop(search=false) {
 				continue;
 			}
 		}
-		console.log(x);
+		var maniTo = "../YipLib/NailDesign.html?id=" + x.manicurist_ID;
+		var picTo = x.order_Type == 0 ? maniTo : "../YipLib/product.html?=" + x.order_item;
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 		thisOrderTime = x.comment_BuildTime.substring(0, 10) + " " + x.comment_BuildTime.substring(11, 19);
 		answer += `<div class="doneDiv">
@@ -79,10 +81,10 @@ function doneLoop(search=false) {
 					<span style="padding-left:2%;margin-top:10%;font-size:10px">評價時間：`+ thisOrderTime + `</span>
 					<div class="row" style="background-color:lightgray;width:96%;padding-top:2%;margin-left:2%;margin-bottom:2%">
 					<div style="margin-left: 3%; display: inline-block; width: 20% ;height:110px">
-						<img src="`+ x.order_Cover +`"width="90%" height="90%" style="margin-left: 3%" />
+						<img src="`+ x.order_Cover + `"width="90%" height="90%" style="margin-left: 3%" onclick="javascript:location.href='` + maniTo +`'"/>
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
-						<span style="font-size: 120%"><b>`+ x.order_ItemName + `</b></span>
+						<span style="font-size: 120%"  onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName + `</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content + `</span>
 						<br />
@@ -96,7 +98,12 @@ function doneLoop(search=false) {
 							width: 30%;
 						"
 					>
-						<br /><br />
+						<a
+							style="color:red"
+							class="reserveDetail"
+							href="#"
+							onclick="reportComplete(`+ i +`)"
+							>檢舉訂單</a><br /><br />
 						<a
 							class="reserveDetail"
 							href="#"
@@ -178,4 +185,81 @@ function getDoneDetail(i)
 	infoModal.style.width = "30%";
 	infoModal.style.height = "62%";
 	infoModal.showModal();
+}
+
+function reportDone(i)
+{
+	infoModal.innerHTML = `<span>檢舉事由</span> 
+<select id="reportReason">
+	<option value="K0">不準時</option>
+	<option value="K1">反悔</option>
+</select><br /><br/ ><span>檢舉詳情描述(最多兩百字)</span><br/ >
+<textarea id="reportContent" style="width:95%;height:60%"></textarea><br />
+<input
+							style="
+								border: 0cm;
+								width: 28%;
+								color: antiquewhite;
+								background-color: black;
+								margin-top:2%;
+								margin-right: 7%;
+								margin-left:30%;
+							"
+							type="button"
+							value="取消"
+						onclick="closeInfoModal()";
+						/>
+						<input
+							style="
+								border: 0cm;
+								width: 28%;
+								background-color: #ff6733;
+								color: white;
+							"
+							type="button"
+							value="預約確認"
+							onclick="doneSendReport(`+ i + `)";
+						/>`;
+	infoModal.style.width = "37%";
+	infoModal.style.height = "51%";
+	infoModal.showModal();
+}
+
+async function completeSendReport(i) {
+	var x = completeData[i];
+	console.log(x);
+
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+
+	var raw = JSON.stringify({
+		"ReportBuilder": nowMember,
+		"ReportTarget": x.member_ID,
+		"ReportItem": x.order_ID,
+		"ReportPlaceC": "D2",
+		"ReportReasonC": reportReason.value,
+		"ReportContent": reportContent.value,
+		"ReportBuildTime": "1999-01-01",
+		"ReportCheckTime": null,
+		"ManagerId": null,
+		"ReportResult": null,
+	});
+
+
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+		body: raw,
+		redirect: 'follow'
+	};
+
+
+	await fetch("https://localhost:44308/api/YueReportTables/", requestOptions)
+		.then(response => response.text())
+		.then(result => console.log(result))
+		.catch(error => console.log('error', error));
+	toastr.success("已成功送出檢舉");
+	reserveDoneSendGet();
+	closeInfoModal();
+
 }

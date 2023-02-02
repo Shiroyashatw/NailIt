@@ -26,7 +26,7 @@ namespace NailIt.Controllers.YueyueControllers
         public async Task<List<PlanTable>> GetPlanTable(int id)
         {
             var myPlan = from plan in _context.PlanTables
-                         where plan.ManicuristId == id
+                         where (plan.ManicuristId == id&&plan.PlanStartTime > DateTime.Now)
                          select plan;
 
             return await myPlan.ToListAsync();

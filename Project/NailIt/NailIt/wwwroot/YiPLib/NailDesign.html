@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <link rel="stylesheet" href="../css/product.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
@@ -68,9 +70,9 @@
             transition: all .3s linear;
         }
 
-            .ShapeColor:hover {
-                color: #7F7F7F;
-            }
+        .ShapeColor:hover {
+            color: #7F7F7F;
+        }
 
 
 
@@ -149,26 +151,51 @@
         }
 
         .Demoimg {
-            margin-left: 30px;
-            margin-right: 30px;
             height: 250px;
             width: 250px;
             object-fit: cover;
             object-position: center;
         }
 
+        .Seemore {
+            margin-left: 30px;
+            margin-right: 30px;
+            overflow: hidden;
+
+        }
+
         .Seemore:hover {
-            filter: grayscale(60%);
+            filter: grayscale(20%);
+        }
+
+        .Seemore:hover>.Demoimg {
+            transition: 0.5s;
+            transform: scale(1.1);
+        }
+
+        .Ribbon {
+            position: absolute;
+            color: white;
+            background-color: rgb(0, 0, 0, 0.4);
+            /*line-height: 28px;*/
+            /*text-align: center;*/
+            letter-spacing: 3px;
+            /*margin-top: 20px;*/
+            /*margin-left: -30px;*/
+            padding-top: 3px;
+            padding-bottom: 3px;
+            padding-left: 84.5px;
+            padding-right: 85px;
         }
 
         .Clickme {
-            border:hidden;
+            border: hidden;
             position: absolute;
             /*top: -60px;*/
             /*margin-left: 70px;*/
             /*margin-right: 70px;*/
-            left:70px;
-            top:190px;
+            left: 40px;
+            top: 190px;
             padding-top: 5px;
             padding-bottom: 5px;
             padding-left: 70px;
@@ -181,13 +208,13 @@
             visibility: hidden;
         }
 
-            .Clickme:hover {
-                background-color: black;
-                color: white;
-                z-index: 99;
-            }
+        .Clickme:hover {
+            background-color: black;
+            color: white;
+            z-index: 99;
+        }
 
-        .Seemore:hover > .Clickme {
+        .Seemore:hover>.Clickme {
             visibility: visible;
         }
 
@@ -255,9 +282,9 @@
             cursor: pointer;
         }
 
-            .Searchbtn:hover {
-                background: #D0CECE;
-            }
+        .Searchbtn:hover {
+            background: #D0CECE;
+        }
 
         #Sendbtn {
             color: white;
@@ -268,20 +295,20 @@
             /*height: 40px;*/
             padding-top: 6px;
             padding-bottom: 6px;
-            height:39px;
-            width:80%;
-            min-height:10%;
-            min-width:50px;
-/*            padding-left: 30%;
+            height: 39px;
+            width: 80%;
+            min-height: 10%;
+            min-width: 50px;
+            /*            padding-left: 30%;
             padding-right: 30%;*/
-            margin-top:210px;
-            min-width:contain;
-            min-height:contain;
+            margin-top: 210px;
+            min-width: contain;
+            min-height: contain;
         }
 
-            #Sendbtn:hover {
-                background-color: #7F7F7F;
-            }
+        #Sendbtn:hover {
+            background-color: #7F7F7F;
+        }
 
         #Insertdemo {
             color: white;
@@ -305,9 +332,10 @@
             cursor: pointer;
         }
 
-            #Editbtn:hover, #Insertdemo:hover {
-                background-color: #D0CECE;
-            }
+        #Editbtn:hover,
+        #Insertdemo:hover {
+            background-color: #D0CECE;
+        }
 
         #Checkbtn:hover {
             background-color: #fc8158;
@@ -340,9 +368,9 @@
             border: none;
         }
 
-            #SortSelectbox:focus {
-                outline: none;
-            }
+        #SortSelectbox:focus {
+            outline: none;
+        }
 
         .DisInLine {
             display: inline;
@@ -408,13 +436,163 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+
+        .LinkTo {
+            color: black;
+        }
+
+        .LinkTo:hover {
+            color: #FF6733;
+            text-decoration: none;
+        }
+
+        .LinkNow {
+            color: #FF6733;
+            font-weight: bold;
+        }
+
+
+        /*DD*/
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #mynav {
+            width: 100%;
+            height: 90px;
+            position: fixed;
+            background-position-x: 0px;
+            font-size: 16px;
+            background-color: white;
+            opacity: .9;
+            z-index: 9999;
+        }
+
+        #navall>div {
+            /* background-color: blue; */
+            max-height: 100%;
+            /* 待研究 */
+            height: 90px;
+        }
+
+        #brand {
+            font-family: Cascadia Mono SemiBold;
+            font-size: 30px;
+            color: black;
+            height: 100%;
+        }
+
+
+
+        .navmid {
+            /* background-color: blue; */
+            height: 100%;
+        }
+
+        .navmid>li {
+            display: inline;
+            color: black;
+        }
+
+        .navmid>li>a {
+            color: black;
+            font-weight: bold;
+        }
+
+        .navmid>li>a:hover {
+            text-decoration-line: underline;
+            text-decoration-thickness: 1.5px;
+            text-underline-offset: 7px;
+        }
+
+        .navend1 {
+            /* background-color: darksalmon; */
+            font-size: 14px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .navend2>img {
+            width: 25px;
+            /* background-color: blue; */
+        }
+
+        /* 頁尾---------------------------------------------------------- */
+
+        #hid {
+            background-color: white;
+            border: 0px solid white;
+            height: 60px;
+            margin: 1% 0%;
+        }
+
+
+        footer {
+            width: 100%;
+            margin-top: 7%;
+            background-color: rgb(0, 0, 0);
+            color: white;
+            width: 100%;
+        }
+
+
+        #footit {
+            margin-top: 6%;
+        }
+
+        #footit b {
+            font-size: 14px;
+            margin-right: 1%;
+        }
+
+        #footpre pre {
+            color: white;
+            font-size: 14px;
+        }
+
+        #footpre,
+        #footcopy {
+            margin-top: 1%;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container-fluid" id="ShowData" v-cloak>
-        <div>
+    <div class="container-fluid  p-0" id="ShowData" v-cloak>
+
+        <nav id="mynav">
+            <div class="row opacity-25 p-0 " id="navall">
+                <div class="col-1 p-0"></div>
+                <div class="col-2 d-flex align-items-center" id="brand">
+                    Nail IT
+                </div>
+                <div class="col-3">
+                    <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
+                        <li><a href="/YiPLib/Fliter.html"> 美 甲 查 詢 </a></li>
+                        <li><a href="/Community/Index"> 美 甲 小 天 地 </a></li>
+                        <li><a href="#"> 關 於 我 們 </a></li>
+                    </ul>
+                </div>
+                <div class="col-4 pt-3">
+                    <p class="navend1">登入 / 會員中心</p>
+                </div>
+                <div class="col-1 d-flex align-items-center justify-content-end navend2">
+                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
+                    <img id="noti mr-0" src="../images/notification.png">
+                </div>
+                <div class="col-1 p-0"></div>
+            </div>
+        </nav>
+
+
+        <!--<div>
             <nav class="row FixPad">
                 <div class="col">
                 </div>
@@ -432,28 +610,34 @@
                 <div class="col">
                 </div>
             </nav>
-        </div>
+        </div>-->
 
 
-        <div class="row">
+        <div class="row" style="padding-top:90px">
             <div class="col-1"></div>
             <div class="col-11">
-                <a href="#">路徑</a>
+                <div>
+                    <a class="LinkTo" href="/TanTanLib/html/cover.html">首頁</a>
+                    <span>></span>
+                    <a class="LinkTo" href="Fliter.html">美甲查詢</a>
+                    <span>></span>
+                    <label class="LinkNow">{{DesignList.manicuristSalonName}}</label>
+                </div>
             </div>
 
         </div>
 
 
         <!--<div class="row">
-            <div class="col-4"></div>
-            <div class="col-3" id="EdChBt">
-                <button id="Editbtn" v-on:click="GoToEdit">編輯</button>
-            </div>
-            <div class="col-5"></div>
-        </div>-->
+        <div class="col-4"></div>
+        <div class="col-3" id="EdChBt">
+            <button id="Editbtn" v-on:click="GoToEdit">編輯</button>
+        </div>
+        <div class="col-5"></div>
+    </div>-->
 
 
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-1"></div>
             <div class="col-3">
                 <div id="photoframe">
@@ -478,7 +662,7 @@
             </div>
             <div class="col-2">
                 <!--<div style="height: 80%;"></div>-->
-                <button id="Sendbtn" onclick="alertform()">預約</button>
+                <button id="Sendbtn">預約</button>
             </div>
             <div class="col-1">
             </div>
@@ -537,7 +721,10 @@
                         <div v-for="(item,key) in DemoSetList">
                             <div class="Seemore my-0">
                                 <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover" alt="Loading">
-                                <button onclick="Checkit(this)" v-bind:value="DemoSetList[key].demoSetId" class="Clickme">查看</button>
+                                <button onclick="Checkit(this)" v-bind:value="DemoSetList[key].demoSetId"
+                                    class="Clickme">
+                                    查看
+                                </button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
                             <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
@@ -553,10 +740,8 @@
                     <div class="col-6">
                     </div>
                     <div class="col-4">
-                        <!--<form>
-                            <input class="Searchbar" type="text" placeholder="作品,標籤">
-                            <button class="Searchbtn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>-->
+                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                        <button class="Searchbtn" onclick="SearchIT()"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -576,8 +761,12 @@
                     <div class="col-10 EventDemo">
                         <div v-for="(item,key) in MainDemoCover">
                             <div class="Seemore my-0">
+                                <div class="Ribbon">剩餘{{GetRestDay[key]}}天</div>
                                 <img class="Demoimg" v-bind:src="MainDemoCover[key].demoSetCover" alt="">
-                                <button onclick="Checkit(this)" v-bind:value="MainDemoCover[key].demoSetId" class="Clickme">查看</button>
+                                <button onclick="Checkit(this)" v-bind:value="MainDemoCover[key].demoSetId"
+                                    class="Clickme">
+                                    查看
+                                </button>
                             </div>
                             <p style="font-weight: bold;" class="DemoGroup">{{MainDemoCover[key].demoSetName}}</p>
                             <p class="DemoGroup">${{MainDemoCover[key].demoSetPrice}}</p>
@@ -606,7 +795,7 @@
                         </div>
 
                         <div class="DisFlex" id="SortRight">
-                            <p class="DisInLine">共計12條評論 頁數1/1</p>
+                            <p class="DisInLine">共計{{Comment.length}}條評論 頁數1/1</p>
                             <button class="CBtn">上一頁</button>
                             <button class="CBtn">下一頁</button>
                         </div>
@@ -630,14 +819,20 @@
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
-                                            <div class="ContextFullstar" v-bind:style="{width:Comment[key].Commentwid}">★★★★★</div>
+                                            <div class="ContextFullstar" v-bind:style="{width:Comment[key].Commentwid}">
+                                                ★★★★★
+                                            </div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{Comment[key].commentScore}}</p>
                                         </div>
                                     </div>
-                                    <div><p>評價日期：{{Comment[key].commentBuildTime}}</p></div>
-                                    <div><p id="CommentMessage">{{Comment[key].commentContent}}</p></div>
+                                    <div>
+                                        <p>評價日期：{{Comment[key].commentBuildTime}}</p>
+                                    </div>
+                                    <div>
+                                        <p id="CommentMessage">{{Comment[key].commentContent}}</p>
+                                    </div>
                                 </div>
 
                             </div>
@@ -656,14 +851,19 @@
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
-                                            <div class="ContextFullstar" v-bind:style="{width:SortDateLTH[key].Commentwid}">★★★★★</div>
+                                            <div class="ContextFullstar"
+                                                v-bind:style="{width:SortDateLTH[key].Commentwid}">★★★★★</div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{SortDateLTH[key].commentScore}}</p>
                                         </div>
                                     </div>
-                                    <div><p>評價日期：{{SortDateLTH[key].commentBuildTime}}</p></div>
-                                    <div><p id="CommentMessage">{{SortDateLTH[key].commentContent}}</p></div>
+                                    <div>
+                                        <p>評價日期：{{SortDateLTH[key].commentBuildTime}}</p>
+                                    </div>
+                                    <div>
+                                        <p id="CommentMessage">{{SortDateLTH[key].commentContent}}</p>
+                                    </div>
                                 </div>
 
                             </div>
@@ -682,14 +882,19 @@
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
-                                            <div class="ContextFullstar" v-bind:style="{width:SortDateHTL[key].Commentwid}">★★★★★</div>
+                                            <div class="ContextFullstar"
+                                                v-bind:style="{width:SortDateHTL[key].Commentwid}">★★★★★</div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{SortDateHTL[key].commentScore}}</p>
                                         </div>
                                     </div>
-                                    <div><p>評價日期：{{SortDateHTL[key].commentBuildTime}}</p></div>
-                                    <div><p id="CommentMessage">{{SortDateHTL[key].commentContent}}</p></div>
+                                    <div>
+                                        <p>評價日期：{{SortDateHTL[key].commentBuildTime}}</p>
+                                    </div>
+                                    <div>
+                                        <p id="CommentMessage">{{SortDateHTL[key].commentContent}}</p>
+                                    </div>
                                 </div>
 
                             </div>
@@ -708,14 +913,19 @@
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
-                                            <div class="ContextFullstar" v-bind:style="{width:SortRateHTL[key].Commentwid}">★★★★★</div>
+                                            <div class="ContextFullstar"
+                                                v-bind:style="{width:SortRateHTL[key].Commentwid}">★★★★★</div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{SortRateHTL[key].commentScore}}</p>
                                         </div>
                                     </div>
-                                    <div><p>評價日期：{{SortRateHTL[key].commentBuildTime}}</p></div>
-                                    <div><p id="CommentMessage">{{SortRateHTL[key].commentContent}}</p></div>
+                                    <div>
+                                        <p>評價日期：{{SortRateHTL[key].commentBuildTime}}</p>
+                                    </div>
+                                    <div>
+                                        <p id="CommentMessage">{{SortRateHTL[key].commentContent}}</p>
+                                    </div>
                                 </div>
 
                             </div>
@@ -734,14 +944,19 @@
                                     <div class="d-flex align-items-center mt-3">
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
-                                            <div class="ContextFullstar" v-bind:style="{width:SortRateLTH[key].Commentwid}">★★★★★</div>
+                                            <div class="ContextFullstar"
+                                                v-bind:style="{width:SortRateLTH[key].Commentwid}">★★★★★</div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{SortRateLTH[key].commentScore}}</p>
                                         </div>
                                     </div>
-                                    <div><p>評價日期：{{SortRateLTH[key].commentBuildTime}}</p></div>
-                                    <div><p id="CommentMessage">{{SortRateLTH[key].commentContent}}</p></div>
+                                    <div>
+                                        <p>評價日期：{{SortRateLTH[key].commentBuildTime}}</p>
+                                    </div>
+                                    <div>
+                                        <p id="CommentMessage">{{SortRateLTH[key].commentContent}}</p>
+                                    </div>
                                 </div>
 
                             </div>
@@ -755,12 +970,12 @@
                 </div>
 
                 <!--<div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-10">
-                        <p class="Blackline ratingimgpd"></p>
-                    </div>
-                    <div class="col-1"></div>
-                </div>-->
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <p class="Blackline ratingimgpd"></p>
+                </div>
+                <div class="col-1"></div>
+            </div>-->
 
             </div>
 
@@ -769,7 +984,10 @@
                 <div class="col-10">
                     <div>
                         <p class="produce">電話：{{DesignList.manicuristSalonPhone}}</p>
-                        <p class="produce">地址：{{DesignList.manicuristAddress}}</p>
+                        <p class="produce" v-if="PoblicAdress">地址：{{DesignList.manicuristAddress}}</p>
+                        <p class="produce" v-else="PoblicAdress">
+                            地址：{{DesignList.manicuristCounty}}{{DesignList.manicuristTownship}}
+                        </p>
                         <p class="produce">證照：{{DesignList.manicuristLicense}}</p>
                     </div>
                 </div>
@@ -777,6 +995,37 @@
             </div>
 
         </div>
+
+
+        <footer class="footer " style="height:320px;">
+            <div class="row p-0">
+                <div class="col-1 "></div>
+                <div class="col-10">
+                    <div id="footit">
+                        <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
+                        <b>檢舉</b>
+                        <b>隱私權政策</b>
+                        <b>防詐騙宣導</b>
+                    </div>
+                    <div id="footpre">
+                        <pre>
+地址：408台中市南屯區公益路二段51號18樓
+客服信箱：Nailit@gmail.com
+客服電話： 04 -2326-5860
+        </pre>
+                    </div>
+                    <div id="footcopy">
+                        <p style="font-size: 12px;font-family:Franklin Gothic Book;">
+                            Copyright ©2022 MSIT44TEAM1
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </footer>
+
+
     </div>
 
     <!-- 預約表單 Sendbtn 按鈕 -->
@@ -817,36 +1066,32 @@
                     <div id="step1" class="container step1-choseitem">
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
-                                <p>
-                                    施作部位:
-                                    <select name="OrderPartC">
-                                    </select>
-                                </p>
-                                <p>
-                                    卸甲:
-                                    <select name="OrderRemovalC">
-                                        <option value="B0">不用卸甲</option>
-                                        <option value="B1">去指甲油(無凝膠)</option>
-                                        <option value="B2">本店卸甲</option>
-                                        <option value="B3">他店卸甲</option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目:
-                                    <select name="OrderItem">
-                                        
-                                    </select>
-                                </p>
-                                <p>
-                                    造型:
-                                    <select name="OrderItemName">
-                                    </select>
-                                </p>
-
-                                <p class="demoSetPrice"></p>
-                                <input type="hidden" name="OrderPrice" value="">
-                                <p class="demoSetDeposit"></p>
-                                <input type="hidden" name="OrderDeposit" value="">
+                                <div class="itemBx col-12">
+                                    <label class="">施作部位:</label>
+                                    <select class="" name="OrderPartC"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">卸甲:</label>
+                                    <select class="" name="OrderRemovalC"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">施作項目:</label>
+                                    <select class="" name="OrderItem"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">造型:</label>
+                                    <select class="" name="OrderItemName"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">預估金額:</label>
+                                    <label class="demoSetPrice"></label>
+                                    <input type="hidden" name="OrderPrice" value="">
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">訂金:</label>
+                                    <label class="demoSetDeposit"></label>
+                                    <input type="hidden" name="OrderDeposit" value="">
+                                </div>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -907,7 +1152,8 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step1()">上一步</button>
-                                        <button id="step3btn" class="stepbtn" type="button" onclick="step3()">下一步</button>
+                                        <button id="step3btn" class="stepbtn" type="button"
+                                            onclick="step3()">下一步</button>
                                     </div>
 
                                 </div>
@@ -920,7 +1166,7 @@
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
 
-                                <input type="hidden" name="MemberId" value="1">
+                                <input type="hidden" name="MemberId" value="">
                                 <input type="hidden" name="ManicuristId" value="">
                                 <input type="hidden" name="OrderType" value="true">
                                 <input type="hidden" name="OrderOrderTime" value="">
@@ -936,7 +1182,7 @@
                                     <div class="btn-box">
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step2()">上一步</button>
-                                        <button id="btnsend" class="stepbtn" type="button" onclick="step4()">送出預約</button>
+                                        <button id="btnsend" class="stepbtn" type="button" onclick="">送出預約</button>
                                     </div>
                                 </div>
                             </div>
@@ -947,7 +1193,7 @@
                     <div id="step4" class="container step4-res isHide">
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
-                                <p>預約成功，請耐心等待預約設計師回覆</p>
+
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -963,6 +1209,38 @@
                 </form>
             </div>
         </div>
+
+
+    </div>
+
+    <!-- 綠界表單 -->
+    <div class="cash isHide">
+        <form id="cashform" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="post">
+            <input type="hidden" name="MerchantID" value="3002607">
+            <br />
+            <input type="hidden" name="MerchantTradeNo" value="">
+            <!--  -->
+            <br />
+            <input type="hidden" name="MerchantTradeDate" value="2023/01/27 11:41:12">
+            <br />
+            <input type="hidden" name="PaymentType" value="aio">
+            <br />
+            <input type="hidden" name="TotalAmount" value="">
+            <br />
+            <input type="hidden" name="TradeDesc" value="NAILIT美甲預約">
+            <br />
+            <input type="hidden" name="ItemName" value="">
+            <br />
+            <input type="hidden" name="ReturnURL" value="https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL">
+            <br />
+            <input type="hidden" id="" name="ChoosePayment" value="Credit">
+            <br />
+            <input type="hidden" id="" name="CheckMacValue" value="">
+            <br />
+            <input type="hidden" id="" name="EncryptType" value="1">
+            <br />
+            <button type="submit" id="btnCashSend">送出</button>
+        </form>
     </div>
 
     <script>
@@ -1029,6 +1307,21 @@
             console.log(ShowData.DemoSetList);
         }
 
+        function SearchIT() {
+            console.log(ShowData.SearchString);
+            $.ajax({
+                type: "get",
+                url: "/api/DemoSet/GetSearchTable/" + GetManicuristID + "?search=" + ShowData.SearchString,
+                success: function (e) {
+                    ShowData.MainDemoCover = [];
+                    for (DS in e) {
+                        ShowData.MainDemoCover.push(e[DS]);
+                    }
+                }
+            });
+            console.log(ShowData.MainDemoCover);
+        }
+
 
         const ShowData = new Vue({
             el: '#ShowData',
@@ -1043,10 +1336,12 @@
                     Comment: [],
                     SortDateLTH: [],
                     Sort: "Default",
-                    SortDateHTL:[],
+                    SortDateHTL: [],
                     SortRateHTL: [],
                     SortRateLTH: [],
                     SearchString: "",
+                    PoblicAdress: false,
+                    GetRestDay: [],
                 }
             },
             methods: {
@@ -1070,6 +1365,13 @@
                 PercantStar = e.manicuristScore;
                 FloatStar = (PercantStar * 20) + '%';
                 ShowData.width = FloatStar;
+                //console.log(e.manicuristPublic);
+                if (e.manicuristPublic == false) {
+                    ShowData.PoblicAdress = false;
+                } else if (e.manicuristPublic == true) {
+                    ShowData.PoblicAdress = true;
+                }
+
             }
         });
 
@@ -1112,6 +1414,13 @@
                 console.log(e);
                 for (maindemo in e) {
                     ShowData.MainDemoCover.push(e[maindemo]);
+                    let StT = e[maindemo].demoSetMainStartTime.slice(0, 10).replace('-', '/').replace('-', '/');
+                    let EdT = e[maindemo].demoSetMainEndTime.slice(0, 10).replace('-', '/').replace('-', '/');
+                    let StTD = new Date(StT);
+                    let EdTD = new Date(EdT);
+                    let diff = EdTD - StTD;
+                    console.log(diff / 86400000);
+                    ShowData.GetRestDay.push(diff / 86400000);
                 }
             }
         });
@@ -1171,124 +1480,119 @@
 
 
     </script>
-<!-- 表單頁面切換 -->
-<script>
-    function alertform() {
-        document.getElementById("hohodiv").className = "isShow";
-        document.getElementById("alert_div").className = "isShow";
+    <!-- 表單頁面切換 -->
+    <script>
+        function alertform() {
+            document.getElementById("hohodiv").className = "isShow";
+            document.getElementById("alert_div").className = "isShow";
 
-        $('.Progress .line:nth-child(1) .step').css({
-            "background-color": "#FF6733",
-            "color": "#333",
-            "transition": ".3s"
-        })
-    }
-    function Closeform() {
-        document.getElementById("alert_div").className = "isHide";
-        document.getElementById("hohodiv").className = "isHide";
-    }
-    function step1() {
-        document.getElementById("step1").className = "isShow";
-        document.getElementById("step2").className = "isHide";
-
-        $('.Progress .line:nth-child(2) .step').css({
-            "background-color": "#fff",
-            "color": "#3498db",
-            "transition": ".3s"
-        })
-        
-    }
-    function step2() {
-        document.getElementById("step1").className = "isHide";
-        document.getElementById("step2").className = "isShow";
-        document.getElementById("step3").className = "isHide";
-        document.getElementById("step4").className = "isHide";
-
-        $('.Progress .line:nth-child(2) .step').css({
-            "background-color": "#FF6733",
-            "color": "#333",
-            "transition": ".3s"
-        })
-
-        $('.Progress .line:nth-child(3) .step').css({
-            "background-color": "#fff",
-            "color": "#3498db",
-            "transition": ".3s"
-        })
-
-    }
-    function step3() {
-        var checktime = $('input[name="planId"]').prop('checked')
-
-        // undefined
-        if (checktime == undefined || checktime == false) {
-            alert("尚未選取預約日期及時間")
+            $('.Progress .line:nth-child(1) .step').css({
+                "background-color": "rgb(255 233 236)",
+                "color": "rgb(230 51 73)",
+                "transition": ".3s"
+            })
         }
-        else {
-            document.getElementById("step1").className = "isHide";
+        function Closeform() {
+            document.getElementById("alert_div").className = "isHide";
+            document.getElementById("hohodiv").className = "isHide";
+        }
+        function step1() {
+            document.getElementById("step1").className = "isShow";
             document.getElementById("step2").className = "isHide";
-            document.getElementById("step3").className = "isShow";
+
+            $('.Progress .line:nth-child(2) .step').css({
+                "background-color": "#fff",
+                "color": "#3498db",
+                "transition": ".3s"
+            })
+
+        }
+        function step2() {
+            document.getElementById("step1").className = "isHide";
+            document.getElementById("step2").className = "isShow";
+            document.getElementById("step3").className = "isHide";
             document.getElementById("step4").className = "isHide";
 
+            $('.Progress .line:nth-child(2) .step').css({
+                "background-color": "rgb(255 233 236)",
+                "color": "rgb(230 51 73)",
+                "transition": ".3s"
+            })
+
             $('.Progress .line:nth-child(3) .step').css({
-            "background-color": "#FF6733",
-            "color": "#333",
-            "transition": ".3s"
-        })
+                "background-color": "#fff",
+                "color": "#3498db",
+                "transition": ".3s"
+            })
+
         }
-        
+        function step3() {
+            var checktime = $('input[name="planId"]:checked').val();
 
-    }
-    function step4() {
-        document.getElementById("step1").className = "isHide";
-        document.getElementById("step2").className = "isHide";
-        document.getElementById("step3").className = "isHide";
-        document.getElementById("step4").className = "isShow";
+            // undefined
+            if (checktime == undefined || checktime == false) {
+                alert("尚未選取預約日期及時間")
+            }
+            else {
+                document.getElementById("step1").className = "isHide";
+                document.getElementById("step2").className = "isHide";
+                document.getElementById("step3").className = "isShow";
+                document.getElementById("step4").className = "isHide";
 
-        $('.Progress .line:nth-child(4) .step').css({
-            "background-color": "#FF6733",
-            "color": "#333",
-            "transition": ".3s"
+                $('.Progress .line:nth-child(3) .step').css({
+                    "background-color": "rgb(255 233 236)",
+                    "color": "rgb(230 51 73)",
+                    "transition": ".3s"
+                })
+            }
+
+
+        }
+        function step4() {
+            document.getElementById("step1").className = "isHide";
+            document.getElementById("step2").className = "isHide";
+            document.getElementById("step3").className = "isHide";
+            document.getElementById("step4").className = "isShow";
+
+            $('.Progress .line:nth-child(4) .step').css({
+                "background-color": "rgb(255 233 236)",
+                "color": "rgb(230 51 73)",
+                "transition": ".3s"
+            })
+        }
+    </script>
+
+    <!-- 引用日曆 JS -->
+    <script src="../js/calendar.js"></script>
+    <script src="../js/calendarscript.js"></script>
+    <script src="../YueJs/loginCheck.js"></script>
+    <!-- 引用 商品資料 可預約日期 -->
+    <script src="../js/getData.js"></script>
+    <script>
+        // 抓取登入者ID
+        async function pre() {
+            await YueloginCheck()
+            $('input[name="MemberId"]').val(nowMember)
+            console.log(nowMember)
+        }
+        pre()
+        $('#Sendbtn').on('click', function () {
+            if (nowMember == -1) {
+                alert("請先登入會員，再進行預約")
+            }
+            else {
+                alertform()
+            }
         })
-    }
-</script>
+        getManicuristData()
+        calculate()
+        getReserveDate()
+        getReserveTime()
+        getOrderPartC()
+        OrderDetail()
+        postOrder()
+    </script>
 
-<!-- 引用日曆 JS -->
-<script src="../js/calendar.js"></script>
-<script src="../js/calendarscript.js"></script>
-
-<!-- 引用 商品資料 可預約日期 -->
-<script src="../js/getData.js"></script>
-<script>
-    getManicuristData()
-    getReserveDate()
-    getReserveTime()
-    getOrderPartC()
-    postOrder()
-</script>
-<script>
-    $('#step3btn').on('click', function () {
-        $('.rescheck').empty();
-        let rdate = $('input[name="planId"]').attr("date")
-        let rtime = $('input[name="planId"]').attr("time")
-        let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
-        let rremovec =  $('select[name="OrderRemovalC"]').find("option:selected").text()
-        let ritem = $('select[name="OrderItem"]').find("option:selected").text()
-        let ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
-        let rprice = $('input[name="OrderPrice"]').val()
-        let rdep = $('input[name="OrderDeposit"]').val()
-        $('.rescheck').append(`
-        <p>預約日期:${rdate} 時間:${rtime}</p>
-        <p>施作部位:${rparc}</p>
-        <p>卸甲:${rremovec}</p>
-        <p>施作項目:${ritem}</p>
-        <p>造型:${ritemName}</p>
-        <p>預估價位:NT$${rprice}</p>
-        <p>訂金:NT$${rdep}</p>
-        `);
-
-    })
-</script>
-    
 </body>
+
 </html>

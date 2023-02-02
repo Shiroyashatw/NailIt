@@ -1,9 +1,7 @@
-﻿var myCancelResult;
-var cancelData;
-
-
+﻿
 async function reserveCancelSendGet() {
-
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
@@ -14,7 +12,7 @@ async function reserveCancelSendGet() {
 	fetch("https://localhost:44308/api/YueOrderTables/" + nowMember + "/" + "A7" + "/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
-			myCancelResult = result;
+			myResult = result;
 			reserveCancel();
 		})
 		.catch(error => console.log('error', error));
@@ -23,7 +21,7 @@ async function reserveCancelSendGet() {
 
 
 function reserveCancel(search = false) {
-	cancelData = JSON.parse(myCancelResult);
+	myData = JSON.parse(myResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
@@ -54,12 +52,12 @@ function reserveCancel(search = false) {
 }
 
 function cancelLoop(search=false) {
-	if (cancelData.length == 0) return `<br /><span style="padding-left:5%">目前無已取消訂單</span>`;
+	if (myData.length == 0) return `<br /><span style="padding-left:5%">目前無已取消訂單</span>`;
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
 	var thisOrderTime = ""
-	for (var x of cancelData) {
+	for (var x of myData) {
 		console.log(x);
 		if (search) {
 			if (searchStart.value == "" || searchEnd.value == "") {
@@ -75,14 +73,16 @@ function cancelLoop(search=false) {
 				continue;
 			}
 		}
+		var maniTo = "../YipLib/NailDesign.html?id="+x.manicurist_ID;
+		var picTo = x.order_Type == 0 ? maniTo : "../YipLib/product.html?=" + x.order_item;
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 		thisOrderTime = x.order_CancelTime.substring(0, 10) + " " + x.order_CancelTime.substring(11, 19);
 		answer +=`<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 20%; height:170px">
-						<img src="`+ x.order_Cover +`"width="90%" height="90%" style="margin-left: 3%" />
+						<img src="`+ x.order_Cover + `"width="90%" height="90%" style="margin-left: 3%" onclick="javascript:location.href='` + maniTo +`'" />
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
-						<span style="font-size: 120%"><b>`+ x.order_ItemName +`</b></span>
+						<span style="font-size: 120%" onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName +`</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content+`</span>
 						<br /><br />
@@ -116,7 +116,7 @@ function cancelLoop(search=false) {
 		return answer;
 }
 function getCancelDetail(i) {
-	var x = cancelData[i];
+	var x = myData[i];
 	var thisOrderId = "";
 	var thisOrderTime = "";
 	var thisStartTime = "";
