@@ -89,6 +89,18 @@ Date.prototype.HHmm = function () {
 
 
 //#region HTML element
+function getNodeHeight(node) {
+    var height, clone = node.cloneNode(true)
+    // hide the meassured (cloned) element
+    clone.style.cssText = "position:fixed; top:-9999px; opacity:0;"
+    // add the clone to the DOM 
+    document.body.appendChild(clone)
+    // meassure it
+    height = clone.clientHeight
+    // cleaup 
+    clone.parentNode.removeChild(clone)
+    return height
+}
 /**
  * 產生下拉選單(指定需求的name和value屬性)
  * @param {string} target id of select tag

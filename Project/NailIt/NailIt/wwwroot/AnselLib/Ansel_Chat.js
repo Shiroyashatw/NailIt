@@ -74,11 +74,11 @@ var showNewMsg = async function () {
         // Reload ChatMembers 對話人員目錄
         showChatMember();
         // If the person i'm chatting with, send new message.
-        if (result.findIndex(x=>x.memberId == scop.currentChatMemId) > -1) {            
+        if (result.findIndex(x => x.memberId == scop.currentChatMemId) > -1) {
             // update message, get the new message, read the member's message
             // call api for unread message (putMsgRead)
             let result2 = await putMsgRead(scop.currentChatMemId);
-            if (!!result2 && result2.length > 0) {                
+            if (!!result2 && result2.length > 0) {
                 // show messages
                 for (const message of result2) {
                     // print Date
@@ -95,11 +95,7 @@ var showNewMsg = async function () {
                 // update chatting members, remove unread red mark
                 $(`div[data-memberid='${scop.currentChatMemId}']`).children()[2].remove();
             }
-            
-            // Scroll to bottom of message 
-            setTimeout(() => {
-                ShowChattingBottom();
-            }, "80")
+
         }
     }
 }
@@ -237,7 +233,7 @@ var showMyNewImg = async function (obj) {
     let result = await postMsgImage(formdata);
     if (!!result) {
         // show new message
-        await renderMessage(result);
+        await renderMessage(result, true);
         BindingMsgRightMenu($(`div[data-messageid="${result.messageId}"]`));
         // update chatting members
         await renderTheChatMember(result);
@@ -246,9 +242,9 @@ var showMyNewImg = async function (obj) {
         updateThechattingMember(result);
 
         // Scroll to bottom of message 
-        setTimeout(() => {
-            ShowChattingBottom();
-        }, "80")
+        // setTimeout(() => {
+        //     ShowChattingBottom();
+        // }, "80")
     }
 }
 // Sending message
@@ -269,8 +265,8 @@ var showMyNewMsg = async function () {
         // clear textarea
         draftMessage.innerHTML = "";
         // show new message
-        result.messageTime = addHours(new Date(result.messageTime), -8);
-        await renderMessage(result);
+        result.messageTime = new Date(result.messageTime).addHours(-8);
+        await renderMessage(result, true);
         let lastMessage = $("#chattingArea").children()[$("#chattingArea").children().length - 1];
         BindingMsgRightMenu([lastMessage]); // last one
         // update chatting members
@@ -280,9 +276,9 @@ var showMyNewMsg = async function () {
         updateThechattingMember(result);
 
         // Scroll to bottom of message
-        setTimeout(() => {
-            ShowChattingBottom();
-        }, "80")
+        // setTimeout(() => {
+        //     ShowChattingBottom();
+        // }, "80")
     }
 }
 var showChatMember = async function () {
@@ -323,17 +319,21 @@ var renderMessage = async function (message, slide) {
         // text message
         if (message.messageContent.indexOf("<img") == -1) {
             messageHTML = `
-                <div class="mb-1 d-flex" data-messageid="${message.messageId}">
-                    <span class="bg-secondary text-white rounded px-3 py-2">${message.messageContent}</span>                    
-                    <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
+                <div class="mb-1" data-messageid="${message.messageId}">
+                    <div class="d-flex">
+                        <span class="bg-secondary text-white rounded px-3 py-2">${message.messageContent}</span>                    
+                        <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
+                    </div>
                 </div>`;
         }
         // image message
         else {
             messageHTML = `
-                <div class="mb-1 d-flex" data-messageid="${message.messageId}">
-                    <span class="bg-secondary rounded mw-100 px-1 py-1">${message.messageContent}</span>
-                    <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
+                <div class="mb-1" data-messageid="${message.messageId}" style="display: flex;">
+                    <div class="d-flex">
+                        <span class="bg-secondary rounded mw-100 px-1 py-1">${message.messageContent}</span>
+                        <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
+                    </div>
                 </div>`;
         }
     }
@@ -342,26 +342,38 @@ var renderMessage = async function (message, slide) {
         // text message
         if (message.messageContent.indexOf("<img") == -1) {
             messageHTML = `
-                <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="${message.messageId}">
-                    <span class="rounded px-3 py-2" style="border: 4px solid black;">${message.messageContent}</span>
-                    <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
+                <div class="myMessage mb-1" data-messageid="${message.messageId}">
+                    <div class="d-flex flex-row-reverse">
+                        <span class="rounded px-3 py-2" style="border: 4px solid black;">${message.messageContent}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
+                    </div>
                 </div>`;
         }
         // image message
         else {
             messageHTML = `
-                <div class="myMessage mb-1 d-flex flex-row-reverse" data-messageid="${message.messageId}">
-                    <span class="rounded mw-100" style="border: 4px solid black;">${message.messageContent}</span>
-                    <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.indexOf("Z") != -1 ? message.messageTime.HHmm() : message.messageTime.localHHmm()}</span>
+                <div class="myMessage mb-1" data-messageid="${message.messageId}">
+                    <div class="d-flex flex-row-reverse">
+                        <span class="rounded mw-100" style="border: 4px solid black;">${message.messageContent}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.indexOf("Z") != -1 ? message.messageTime.HHmm() : message.messageTime.localHHmm()}</span>
+                    </div>
                 </div>`;
         }
     }
     // append with slideDown
     if (slide) {
-        $(messageHTML).appendTo("#chattingArea").slideDown("slow");
-        // $("#chattingArea").append(messageHTML).slideDown();
-        return;  
+        // add a temp space to show slideDown
+        var newElm = document.createElement("div");
+        newElm.innerHTML = messageHTML;
+        htmlHeight = getNodeHeight(newElm) + "px";
+        await $(`<div id='tempMsg'style='height:${htmlHeight}'></div>`).appendTo("#chattingArea")
+        await ShowChattingBottom();
+        await $(messageHTML).css("display", "none").appendTo("#chattingArea").slideDown("slow");
+        $("#tempMsg").remove();
+
+        return;
     }
+
     $("#chattingArea").append(messageHTML);
 }
 // 更新對話記錄人員list
@@ -637,7 +649,7 @@ const normalizePozition = (mouseX, mouseY, area, contextMenu) => {
 
     return { normalizedX, normalizedY };
 }
-function ShowChattingBottom() {
+async function ShowChattingBottom() {
     let chattingArea = document.querySelector('#chattingArea');
     chattingArea.scrollTop = chattingArea.scrollHeight - chattingArea.clientHeight;
 }
