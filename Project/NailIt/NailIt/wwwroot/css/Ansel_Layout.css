@@ -4,7 +4,67 @@
 .default-margin{
     margin-top:90px
 }
-/* 頁首 */
+
+.unread-badge-message{
+    position: absolute;
+    top: 32px;
+    left: 63px;
+    width: 10px;
+    height: 10px;
+}
+.unread-badge-sysNotic{
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    width: 10px;
+    height: 10px;
+}
+
+/* dropdown sysNotic---------------------------------------------------------- */
+/*#region Dropdown*/
+.dropbtn {
+    /* background-color: #04AA6D; */
+    /* color: white; */
+    /* padding: 16px; */
+    /* font-size: 16px; */
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* .dropbtn:hover, .dropbtn:focus {
+  } */
+  .dropdown {
+    float: right;
+    position: relative;
+    /* display: inline-block; */
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    /* min-width: 160px; */
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    right: 0;
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 5px 10px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+  }
+  
+  .dropdown a:hover {
+    background-color: #ddd;
+  }
+  
+  /*#endregion*/
+
+/* 頁首---------------------------------------------------------- */
 * {
     margin: 0;
     padding: 0;
@@ -75,7 +135,7 @@ html {
     font-weight: bold;
 }
 
-.navend2>img {
+.navend2 img {
     width: 25px;
     /* background-color: blue; */
 

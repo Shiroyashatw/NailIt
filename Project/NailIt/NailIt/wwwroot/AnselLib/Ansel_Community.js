@@ -248,7 +248,7 @@ var showSnackbar = function (text) {
 // When the user clicks on the button,toggle between hiding and showing the dropdown content 
 var showDropdown = function (obj) {
     // display none all dropdown-content
-    $(".dropdown-content").each((index, elem) => {
+    $(".dropdown-content-community").each((index, elem) => {
         if (elem.classList.contains("show"))
             elem.classList.remove("show");
     });
@@ -431,8 +431,8 @@ var renderNewReply = function (reply) {
                         <i class="fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>
                         <span>${reply.replyLikesCount}</span>
                         <div class="dropdown">
-                            <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis-vertical"></i>
-                            <div class="dropdown-content">
+                            <i onclick="showDropdown(this)" class="dropbtn-community fa-solid fa-ellipsis-vertical"></i>
+                            <div class="dropdown-content dropdown-content-community">
                                 <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal(this)">刪除</a>
                             </div>
                         </div>
@@ -460,8 +460,8 @@ var renderReplaies = function () {
         replyHTML += `
                     <span>${reply.reply.replyLikesCount}</span>
                     <div class="dropdown">
-                        <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis-vertical"></i>
-                        <div class="dropdown-content">
+                        <i onclick="showDropdown(this)" class="dropbtn-community fa-solid fa-ellipsis-vertical"></i>
+                        <div class="dropdown-content dropdown-content-community">
         `;
         // Can edit and delete own reply
         if (reply.reply.memberId == scop.loginId) {
@@ -814,8 +814,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn')) {
-            $(".dropdown-content").each((index, elem) => {
+        if (!event.target.matches('.dropbtn-community')) {
+            $(".dropdown-content-community").each((index, elem) => {
+                if (elem.classList.contains("show"))
+                    elem.classList.remove("show");
+            });
+        }
+
+        // nav 上的sysNotic下拉
+        if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
+            $(".dropdown-content-sysNotic").each((index, elem) => {
                 if (elem.classList.contains("show"))
                     elem.classList.remove("show");
             });
