@@ -9,8 +9,7 @@ async function YueloginCheck() {
 
 	await fetch("https://localhost:44308/api/LoginCheck", requestOptions)
 		.then(response => response.text())
-		.then(result => theId = result)
+		.then(result=>theId = result)
 		.catch(error => console.log('error', error));
-
 	nowMember = theId;
 }

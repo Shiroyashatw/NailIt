@@ -1,6 +1,8 @@
 ﻿var doneData;
 var myDoneResult;
 async function reserveDoneSendGet() {
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',

@@ -169,7 +169,7 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
 #alert_div,
 #repalert_div {
     position: fixed;
-    top: 10%;
+    top: 18%;
     left: 20%;
     background-color: white;
     width: 800px;
@@ -185,7 +185,7 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
     }
 
     to {
-        top: 10%;
+        top: 18%;
     }
 }
 
@@ -308,7 +308,17 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
     .step-container {
         //border: 1px solid salmon;
         padding: 0;
-
+        .itemBx {
+            margin: .5rem 0;
+            label {
+                width: 75px;
+                text-align: left;
+                padding: 0;
+            }
+            select,input {
+                width: 150px;
+            }
+        }
         // 日曆 CSS
         .calendar {
             width: 95%;
@@ -402,6 +412,13 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
         .time-container {
             .container {
                 padding-top: 50px;
+                .remark {
+                    font-size: 14px;
+                    padding-right: .2rem;
+                    p {
+                        margin: .1rem 0;
+                    }
+                }
             }
 
             #radio input[type="radio"] {
@@ -434,10 +451,10 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
             }
 
             #radio .btnnotclick{
-                background-color: $btnnotclcik;
+                background-color: rgba(128, 128, 128, 0.8);
                 &:hover {
                     color: #333;
-                    background-color: $btnnotclcik;
+                    background-color: rgba(128, 128, 128, 0.8);
                 }
             }
         }

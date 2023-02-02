@@ -3,7 +3,8 @@ var checkData;
 
 
 async function reserveCheckSendGet() {
-
+	tedDiv.style.display = "none";
+	contentdiv.style.display = "block";
 	await YueloginCheck();
 	var requestOptions = {
 		method: 'GET',
@@ -29,7 +30,7 @@ function reserveCheck(search = false) {
 				<input id="searchStart" type="date" />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
 				<input id="searchEnd"	 type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCheck(true)" />
+				<img src="../YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCheck(true)" />
 				<br />
 				<div
 					id="removeNaildiv"

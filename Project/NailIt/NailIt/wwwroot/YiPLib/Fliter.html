@@ -198,6 +198,54 @@
             outline:none;
         }
 
+        .Clickme {
+            border: hidden;
+            position: absolute;
+            /*top: -60px;*/
+            /*margin-left: 70px;*/
+            /*margin-right: 70px;*/
+            left: 25px;
+            top: 130px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 50px;
+            padding-right: 50px;
+            /*width:100px;*/
+            text-align: center;
+            background-color: white;
+            color: black;
+            z-index: 99;
+            visibility: hidden;
+        }
+
+            .Clickme:hover {
+                background-color: black;
+                color: white;
+                z-index: 99;
+            }
+
+        .Seemore:hover > .Clickme {
+            visibility: visible;
+        }
+
+        .Seemore:hover {
+            filter: grayscale(60%);
+        }
+
+        .LinkTo {
+            color: black;
+        }
+
+            .LinkTo:hover {
+                color: #FF6733;
+                text-decoration: none;
+            }
+
+        .LinkNow {
+            color: #FF6733;
+            font-weight: bold;
+        }
+
 
         /*DD*/
         * {
@@ -308,6 +356,7 @@
         }
 
 
+
     </style>
 </head>
 
@@ -345,84 +394,159 @@
             <!--Left bar-->
             <div class="col-2">
                 <div>
-                    <a href="/TanTanLib/html/cover.html">首頁</a>
+                    <a class="LinkTo" href="/TanTanLib/html/cover.html">首頁</a>
                     <span>></span>
-                    <a href="Fliter.html">美甲查詢</a>
+                    <label class="LinkNow" href="Fliter.html">美甲查詢</label>
                 </div>
                 <div class="mt-3">
-                    <label>地區</label>
                     <div>
+                        <label>地區</label>
                         <div>
-                            <select v-model="SelectedCity" onchange="ShowCountry(this)">
-                                <option value="none" selected disabled hidden>請選擇縣市</option>
-                                <option v-for="(item,key) in City" v-bind:value="[key]">{{City[key]}}</option>
-                            </select>
-                        </div>
-                        <div class="mt-2">
-                            <select v-model="SelectedArea" v-if="ShowAreas" onchange="ShowArea(this)">
-                                <option value="none" selected disabled hidden>請選擇地區</option>
-                                <option v-if="Area" v-for="(item,key) in Area" v-bind:value="Area[key]">{{item}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <label>色彩</label>
-                    <br />
-                    <div v-for="(item,key) in Colors" class="d-inline-flex">
-                        <label class="DisplayCircle mx-1" v-bind:style="ColorStyle[key]">
-                            <input class="ColorsRadio" type="radio" v-bind:value="Colors[key].colorId-1" onclick="ShowColor(this)" />
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label>標籤</label>
-                    <div>
-                        <label class="px-3  mx-1 TagLabel" v-for="(item,key) in Tag">
-                            {{Tag[key].tagName}}
-                            <input class="TagRadio" type="radio" v-bind:value="Tag[key].tagName" onclick="ShowTag(this)" />
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label>價格</label>
-                    <div class="RangeContainer">
-                        <div class="SliderControl">
-                            <!--<input id="FromSlider" type="range" v-bind:value="MinPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice" />-->
-                            <input id="FromSlider" type="range" v-model="SearchMin" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
-                            <!--<input id="ToSlider" type="range" v-bind:value="MaxPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice" />-->
-                            <input id="ToSlider" type="range" v-model="SearchMax" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
-                        </div>
-                        <div class="FromControl">
-                            <div class="ControlContainer">
-                                <div class="FromLabel">Min</div>
-                                <!--<input id="Frommininput" class="Frominput" type="number" value="10" min="0" max="100" />-->
-                                <!--<input id="Frommininput" class="Frominput" type="number" v-bind:value="MinPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice"/>-->
-                                <input id="Frommininput" class="Frominput" type="number" v-model="SearchMin" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                            <div>
+                                <select v-model="SelectedCity" onchange="ShowCountry(this)">
+                                    <option value="none" selected disabled hidden>請選擇縣市</option>
+                                    <option v-for="(item,key) in City" v-bind:value="[key]">{{City[key]}}</option>
+                                </select>
                             </div>
-                            <div class="ControlContainer">
-                                <div class="FromLabel">Max</div>
-                                <!--<input id="Frommaxinput" class="FromMaxinput" type="number" value="40" min="0" max="100" />-->
-                                <!--<input id="Frommaxinput" class="FromMaxinput" type="number" v-bind:value="MaxPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice"/>-->
-                                <input id="Frommaxinput" class="FromMaxinput" type="number" v-model="SearchMax" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                            <div class="mt-2">
+                                <select v-model="SelectedArea" v-if="ShowAreas" onchange="ShowArea(this)">
+                                    <option value="none" selected disabled hidden>請選擇地區</option>
+                                    <option v-if="Area" v-for="(item,key) in Area" v-bind:value="Area[key]">{{item}}</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <!--<div>
-                    <button onclick="SeachPrice()">範圍查詢</button>
-                </div>-->
-                </div>
-                <div class="mt-2">
-                    <label>施作部位</label>
+                    <div class="mt-2">
+                        <label>色彩</label>
+                        <br />
+                        <div v-for="(item,key) in Colors" class="d-inline-flex">
+                            <label class="DisplayCircle mx-1" v-bind:style="ColorStyle[key]">
+                                <input class="ColorsRadio" type="radio" v-bind:value="Colors[key].colorId-1" onclick="ShowColor(this)" />
+                            </label>
+                        </div>
+                    </div>
                     <div>
-                        <label class="px-3  mx-1 TagLabel" v-for="(item,key) in CCode">
-                            {{CCode[key].codeRepresent}}
-                            <input class="TagRadio" type="radio" v-bind:value="CCode[key].codeId" onclick="ShowPart(this)" />
-                        </label>
+                        <label>標籤</label>
+                        <div>
+                            <label class="px-3  mx-1 TagLabel" v-for="(item,key) in Tag">
+                                {{Tag[key].tagName}}
+                                <input class="TagRadio" type="radio" v-bind:value="Tag[key].tagName" onclick="ShowTag(this)" />
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label>價格</label>
+                        <div class="RangeContainer">
+                            <div class="SliderControl">
+                                <!--<input id="FromSlider" type="range" v-bind:value="MinPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice" />-->
+                                <input id="FromSlider" type="range" v-model="SearchMin" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                                <!--<input id="ToSlider" type="range" v-bind:value="MaxPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice" />-->
+                                <input id="ToSlider" type="range" v-model="SearchMax" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                            </div>
+                            <div class="FromControl">
+                                <div class="ControlContainer">
+                                    <div class="FromLabel">Min</div>
+                                    <!--<input id="Frommininput" class="Frominput" type="number" value="10" min="0" max="100" />-->
+                                    <!--<input id="Frommininput" class="Frominput" type="number" v-bind:value="MinPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice"/>-->
+                                    <input id="Frommininput" class="Frominput" type="number" v-model="SearchMin" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                                </div>
+                                <div class="ControlContainer">
+                                    <div class="FromLabel">Max</div>
+                                    <!--<input id="Frommaxinput" class="FromMaxinput" type="number" value="40" min="0" max="100" />-->
+                                    <!--<input id="Frommaxinput" class="FromMaxinput" type="number" v-bind:value="MaxPrice" v-bind:min="MinPrice" v-bind:max="MaxPrice"/>-->
+                                    <input id="Frommaxinput" class="FromMaxinput" type="number" v-model="SearchMax" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div>
+                            <button onclick="SeachPrice()">範圍查詢</button>
+                        </div>-->
+                    </div>
+                    <div class="mt-2">
+                        <label>施作部位</label>
+                        <div>
+                            <label class="px-3  mx-1 TagLabel" v-for="(item,key) in CCode">
+                                {{CCode[key].codeRepresent}}
+                                <input class="TagRadio" type="radio" v-bind:value="CCode[key].codeId" onclick="ShowPart(this)" />
+                            </label>
+                        </div>
                     </div>
                 </div>
+                <!--Second Left bar Start-->
+                <div class="mt-3">
+                    <p>複合查詢</p>
+                    <div>
+                        <label>地區</label>
+                        <div>
+                            <div>
+                                <select v-model="QueryArray.City">
+                                    <option value="none" selected disabled hidden>請選擇縣市</option>
+                                    <option v-for="(item,key) in City" v-bind:value="[key]">{{City[key]}}</option>
+                                </select>
+                            </div>
+                            <div class="mt-2">
+                                <select v-model="QueryArray.Area" v-if="QueryArray.City">
+                                    <option value="none" selected disabled hidden>請選擇地區</option>
+                                    <option v-if="Area" v-for="(item,key) in Area" v-bind:value="Area[key]">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <label>色彩</label>
+                        <br />
+                        <div v-for="(item,key) in Colors" class="d-inline-flex">
+                            <label class="DisplayCircle mx-1" v-bind:style="ColorStyle[key]">
+                                <input class="ColorsRadio" type="radio" v-bind:value="Colors[key].colorId-1" v-model="QueryArray.Color" />
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label>標籤</label>
+                        <div>
+                            <label class="px-3  mx-1 TagLabel" v-for="(item,key) in Tag">
+                                {{Tag[key].tagName}}
+                                <input class="TagRadio" type="radio" v-bind:value="Tag[key].tagName" v-model="QueryArray.FixedTag" />
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label>價格</label>
+                        <div class="RangeContainer">
+                            <div class="SliderControl">
+                                <input id="FromSlider" type="range" v-model="QueryArray.SearchMin" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                                <input id="ToSlider" type="range" v-model="QueryArray.SearchMax" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                            </div>
+                            <div class="FromControl">
+                                <div class="ControlContainer">
+                                    <div class="FromLabel">Min</div>
+                                    <input id="Frommininput" class="Frominput" type="number" v-model="QueryArray.SearchMin" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                                </div>
+                                <div class="ControlContainer">
+                                    <div class="FromLabel">Max</div>
+                                    <input id="Frommaxinput" class="FromMaxinput" type="number" v-model="QueryArray.SearchMax" v-bind:min="MinPrice" v-bind:max="MaxPrice" />
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div>
+                            <button onclick="SeachPrice()">範圍查詢</button>
+                        </div>-->
+                    </div>
+                    <div class="mt-2">
+                        <label>施作部位</label>
+                        <div>
+                            <label class="px-3  mx-1 TagLabel" v-for="(item,key) in CCode">
+                                {{CCode[key].codeRepresent}}
+                                <input class="TagRadio" type="radio" v-bind:value="CCode[key].codeId" v-model="QueryArray.Part" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="QryArray()">查詢</button>
+                <!--Second Left bar End-->
             </div>
             <!--Left bar End-->
+
             <div class="col-1"></div>
             <!--Demo-->
             <div class="col-7 mt-3">
@@ -432,19 +556,17 @@
                     </div>
                     <div id="Sortdiv" class="d-flex">
                         <select v-model="Query" onchange="ChangeQuery(this)" id="SortSelect">
-                            <option value="none" selected disabled hidden>請選擇</option>
+                            <option value="none" selected disabled hidden>查詢</option>
                             <option value="QueryM">查詢工作室</option>
                             <option value="QueryNT">查詢名稱/標籤</option>
                         </select>
                         <div v-if="NowQuery=='QueryNT'" class="mx-2">
                             <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
                             <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
-                            <!--<button class="ClearBtn ml-1 px-2" onclick="ClearSearch()">清除</button>-->
                         </div>
                         <div v-if="NowQuery=='QueryM'" class="mx-2">
                             <input class="Searchbar" type="text" placeholder="工作室" v-model="SearchM">
                             <button class="Searchbtn" onclick="SearchM()"><i class="fa fa-search"></i></button>
-                            <!--<button class="ClearBtn ml-1 px-2" onclick="ClearSearch()">清除</button>-->
                         </div>
                         <div>
                             <button class="ClearBtn ml-1 px-2" onclick="ClearSearch()">清除</button>
@@ -461,7 +583,10 @@
                 <!--預設-->
                 <div class="d-flex Coverdiv" v-if="QueryResault">
                     <div v-for="(item,key) in DemoSet">
-                        <img class="Cover" v-bind:src="DemoSet[key].demoSetCover" />
+                        <div class="Seemore">
+                            <img class="Cover" v-bind:src="DemoSet[key].demoSetCover" />
+                            <button class="Clickme" onclick="Checkit(this)" v-bind:value="DemoSet[key].demoSetId">查看</button>
+                        </div>
                         <p>{{DemoSet[key].demoSetName}}</p>
                         <p>{{DemoSet[key].demoSetPrice}}</p>
                     </div>
@@ -470,7 +595,10 @@
                 <!--預設END-->
                 <div class="d-flex Coverdiv" v-if="ShowQueryM">
                     <div v-for="(item,key) in Manicurist">
-                        <img class="Cover" v-bind:src="Manicurist[key].manicuristPic" />
+                        <div class="Seemore">
+                            <img class="Cover" v-bind:src="Manicurist[key].manicuristPic" />
+                            <button class="Clickme" onclick="CheckM(this)" v-bind:value="Manicurist[key].manicuristId">查看</button>
+                        </div>
                         <p>{{Manicurist[key].manicuristSalonName}}</p>
                         <p>{{Manicurist[key].manicuristCounty}}</p>
                     </div>
@@ -525,7 +653,7 @@
 
 
 
-    
+
 
 
 
@@ -563,7 +691,8 @@
                     QueryLength: 0,
                     QueryNone: false,
                     QueryResault: true,
-                    DefultDemo:[],
+                    DefultDemo: [],
+                    QueryArray: [],
                 }
             },
             methods: {
@@ -632,14 +761,14 @@
             const fromPosition = from.value - to.min;
             const toPosition = to.value - to.min;
             controlSlider.style.background = `linear-gradient(
-                                to right,
-                                ${sliderColor} 0%,
-                                ${sliderColor} ${(fromPosition) / (rangeDistance) * 100}%,
-                                ${rangeColor} ${((fromPosition) / (rangeDistance)) * 100}%,
-                                ${rangeColor} ${(toPosition) / (rangeDistance) * 100}%,
-                                ${sliderColor} ${(toPosition) / (rangeDistance) * 100}%,
-                                ${sliderColor} 100%
-                            )`;
+                                    to right,
+                                    ${sliderColor} 0%,
+                                    ${sliderColor} ${(fromPosition) / (rangeDistance) * 100}%,
+                                    ${rangeColor} ${((fromPosition) / (rangeDistance)) * 100}%,
+                                    ${rangeColor} ${(toPosition) / (rangeDistance) * 100}%,
+                                    ${sliderColor} ${(toPosition) / (rangeDistance) * 100}%,
+                                    ${sliderColor} 100%
+                                )`;
         }
 
         function controlFromInput(fromSlider, fromInput, toInput, controlSlider) {
@@ -1088,6 +1217,23 @@
             app.DemoSet = app.DefultDemo;
             app.SearchString = "";
             app.SearchM = "";
+            app.QueryCondition = "尚未選擇";
+        }
+
+        function Checkit(e) {
+            window.location = "product.html?id=" + e.value;
+        }
+
+        function CheckM(e) {
+            window.location = "NailDesign.html?id=" + e.value;
+        }
+
+    </script>
+
+    <!--複合On-->
+    <script>
+        function QryArray() {
+            console.log(app.QueryArray);
         }
 
     </script>
@@ -1167,7 +1313,7 @@
                     ColorName = e[GetColorNum].colorName;
                 }
             });
-            
+
             console.log(ColorName);
             app.QueryCondition = ColorName;
             $.ajax({
@@ -1220,10 +1366,6 @@
         }
 
         function URLGetPriceMin() {
-            //console.log("MIN"+app.SearchMin);
-            //console.log(app.SearchMax);
-            //app.SearchMin = e;
-            //console.log(app.SearchMin);
             app.QueryCondition = `${searchMinPrice}元至${searchMaxPrice}元`;
             $.ajax({
                 type: "get",
@@ -1413,6 +1555,7 @@
         }
 
     </script>
+
 
 
 </body>

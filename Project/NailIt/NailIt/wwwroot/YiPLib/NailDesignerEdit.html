@@ -152,17 +152,26 @@
         }
 
         .Demoimg {
-            margin-left: 30px;
-            margin-right: 30px;
             height: 250px;
             width: 250px;
             object-fit: cover;
             object-position: center;
         }
 
-        /*        .Seemore:hover {
-            filter: grayscale(60%);
-        }*/
+        .Seemore {
+            margin-left: 30px;
+            margin-right: 30px;
+            /*overflow: hidden;*/
+        }
+
+/*                .Seemore:hover {
+            filter: grayscale(0%);
+        }
+
+            .Seemore:hover > .Demoimg {
+                transition: 0.5s;
+                transform: scale(1.1);
+            }*/
 
         .Clickme {
             position: relative;
@@ -314,7 +323,7 @@
         }
 
         #EdChBt {
-            margin: 20px;
+            padding: 20px;
         }
 
         #ToSort {
@@ -394,7 +403,7 @@
 
         .DemoGroup {
             margin-left: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
 
         #file-uploader {
@@ -602,7 +611,7 @@
             color: white;
             position: relative;
             top: 35px;
-            left: 30px;
+            /*left: 30px;*/
             border: none;
             padding-top: 5px;
             padding-bottom: 5px;
@@ -615,7 +624,7 @@
             color: white;
             position: relative;
             top: 35px;
-            left: 30px;
+            /*left: 30px;*/
             border: none;
             padding-top: 5px;
             padding-bottom: 5px;
@@ -631,7 +640,7 @@
             top: -35px;
             left: 0px;
             /*width: 250px;*/
-            margin-left: 30px;
+            /*margin-left: 30px;*/
             /*margin-right: 30px;*/
             text-align: center;
             border: none;
@@ -675,26 +684,44 @@
             width: 250px;
         }
 
+        #avaLable {
+            /*border:1px solid red;*/
+            padding: 3px;
+            background-color: rgb(255 233 236);
+            color: rgb(230 51 73);
+        }
+
+        #inavaLable {
+            padding: 3px;
+            color: rgb(71 189 101);
+            background-color: rgb(211 241 201);
+        }
+
+                .LinkTo{
+            color:black;
+        }
+
+            .LinkTo:hover {
+                color: #FF6733;
+                text-decoration: none;
+            }
+
+        .LinkNow {
+            color: #FF6733;
+            font-weight: bold;
+        }
+
+
         /*DD*/
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        #mynav {
+        .mynav {
             width: 100%;
             height: 90px;
             position: fixed;
-            background-position-x: 0px;
+            font-weight: bold;
             font-size: 16px;
             background-color: white;
             opacity: .9;
-            z-index: 9999;
+            z-index: 2;
         }
 
         #navall > div {
@@ -711,8 +738,6 @@
             height: 100%;
         }
 
-
-
         .navmid {
             /* background-color: blue; */
             height: 100%;
@@ -725,7 +750,6 @@
 
                 .navmid > li > a {
                     color: black;
-                    font-weight: bold;
                 }
 
                     .navmid > li > a:hover {
@@ -738,7 +762,6 @@
             /* background-color: darksalmon; */
             font-size: 14px;
             text-align: right;
-            font-weight: bold;
         }
 
         .navend2 > img {
@@ -746,7 +769,11 @@
             /* background-color: blue; */
         }
 
+
         /* 頁尾---------------------------------------------------------- */
+        .footdiv{
+            margin-left:8.5%;
+        }
 
         #hid {
             background-color: white;
@@ -790,18 +817,17 @@
 
 <body>
 
-    <div class="container-fluid  p-0" id="ShowData" v-cloak>
+    <div class="container-fluid" id="ShowData" v-cloak>
 
-        <nav id="mynav">
-            <div class="row opacity-25 p-0 " id="navall">
-                <div class="col-1 p-0"></div>
+            <div class="row opacity-25 mynav" id="navall">
+                <div class="col-1"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
                     Nail IT
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
-                        <li><a href="/YiPLib/Fliter.html"> 美 甲 查 詢 </a></li>
-                        <li><a href="/Community/Index"> 美 甲 小 天 地 </a></li>
+                        <li><a href="#"> 美 甲 查 詢 </a></li>
+                        <li><a href="#"> 美 甲 小 天 地 </a></li>
                         <li><a href="#"> 關 於 我 們 </a></li>
                     </ul>
                 </div>
@@ -812,38 +838,19 @@
                     <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
                     <img id="noti mr-0" src="../images/notification.png">
                 </div>
-                <div class="col-1 p-0"></div>
+                <div class="col-1"></div>
             </div>
-        </nav>
-
-        <!--<div>
-            <nav class="row FixPad">
-                <div class="col">
-                </div>
-                <div class="col-2">
-                    <a>Nail It</a>
-                </div>
-                <div class="col-6">
-                    <button class="Btnpd">設計師作品</button>
-                    <button class="Btnpd">美甲天地</button>
-                    <button class="Btnpd">會員中心</button>
-                </div>
-                <div class="col-2">
-                    登入/會員中心
-                </div>
-                <div class="col">
-                </div>
-            </nav>
-        </div>-->
 
 
         <div class="row" style="padding-top:90px">
             <div class="col-1"></div>
             <div class="col-11">
                 <div>
-                    <a href="/TanTanLib/html/cover.html">首頁</a>
+                    <a class="LinkTo" href="/TanTanLib/html/cover.html">首頁</a>
                     <span>></span>
-                    <a href="Fliter.html">美甲查詢</a>
+                    <a class="LinkTo" href="Fliter.html">美甲查詢</a>
+                    <span>></span>
+                    <label class="LinkNow">{{DesignList.manicuristSalonName}}</label>
                 </div>
             </div>
 
@@ -1101,8 +1108,12 @@
                                 <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover">
                                 <button v-bind:value="[key]" data-toggle="modal" data-target="#PostPicModal" class="UploadDemo" onclick="GetCertainDemo(this)">相片</button>
                             </div>
-                            <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
-                            <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
+                            <div class="DemoGroup">
+                                <label id="inavaLable" v-if="DemoSetList[key].demoSetPublic">已上架</label>
+                                <label id="avaLable" v-else="DemoSetList[key].demoSetPublic">未上架</label>
+                                <p style="font-weight: bold;" class="d-inline">{{DemoSetList[key].demoSetName}}</p>
+                            </div>
+                            <p class="DemoGroup">NT${{DemoSetList[key].demoSetPrice}}</p>
                             <!--EditModal-->
                             <div class="modal fade" id="EditModal" data-keyboard="false" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -1219,7 +1230,7 @@
                             <!--EditModalEnd-->
                             <!--DeleteModal-->
                             <div class="modal fade" id="DeleteModal" data-keyboard="false" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1243,7 +1254,7 @@
                             <!--DeleteModal End-->
                             <!--PostPicModal-->
                             <div class="modal fade" id="PostPicModal" data-keyboard="false" tabindex="-1" aria-labelledby="PostPicModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1384,10 +1395,10 @@
         </div>
 
 
-        <footer class="footer " style="height:320px;">
-            <div class="row p-0">
-                <div class="col-1 "></div>
-                <div class="col-10">
+        <div class="row">
+            <footer class="footer" style="height:320px;">
+                <div class="col-1"></div>
+                <div class="col-10 footdiv">
                     <div id="footit">
                         <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
                         <b>檢舉</b>
@@ -1407,10 +1418,8 @@
                         </p>
                     </div>
                 </div>
-            </div>
-
-
-        </footer>
+            </footer>
+        </div>
 
 
     </div>
@@ -1453,6 +1462,7 @@
                 type: "get",
                 url: "/api/DemoSet/GetDemoSetTable/" + GetManicuristID,
                 success: function (e) {
+                    console.log(e);
                     for (demoset in e) {
                         ShowData.DemoSetList.push(e[demoset]);
                     }
@@ -1506,7 +1516,7 @@
                 type: "get",
                 url: "/api/color",
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     //ShowData.FixColor = e;
                     for (color in e) {
                         ShowData.FixColor.push(e[color]);
@@ -1518,7 +1528,7 @@
                 type: "get",
                 url: "/api/PCodeTable",
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     for (code in e) {
                         ShowData.CodeC.push(e[code]);
                     }
@@ -1774,11 +1784,12 @@
                 EndDate: "",
                 GetCertainDemoKey: "",
                 SearchString: "",
-                InsertCover:"",
+                InsertCover: [{ "demoSetId": GetManicuristID, "demoSetCover": "" }],
             },
             methods: {
                 InsertDemo: function () {
                     this.InsertDemoSet[0].manicuristId = GetManicuristID;
+                    this.InsertCover[0].manicuristId = GetManicuristID;
                     console.log(this.InsertDemoSet[0]);
                     if (this.InsertDemoSet[0].demoSetTag2 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag2 = this.TagStxt;
@@ -1786,7 +1797,6 @@
                     if (this.InsertDemoSet[0].demoSetTag3 == "自訂") {
                         this.InsertDemoSet[0].demoSetTag3 = this.TagTtxt;
                     }
-
 
                     $.ajax({
                         type: "post",
@@ -1797,6 +1807,19 @@
                             window.location = "/YiPLib/NailDesignerEdit.html";
                         }
                     })
+
+                    // $.ajax({
+                    //    type: "post",
+                    //    url: "/api/Demo",
+                    //    contentType: "application/json",
+                    //    data: JSON.stringify(this.InsertCover[0]),
+                    //    success: function () {
+                    //        window.location = "/YiPLib/NailDesignerEdit.html";
+                    //        console.log("sucessDemo");
+                    //    }
+                    //})
+
+
 
                 },
                 Previewing: function () {
@@ -1967,6 +1990,7 @@
             console.log(CoverimgPath);
             $('#Previewphoto').attr('src', CoverimgPath);
             ShowData.PutUpCover[0].demoSetCover = CoverimgPath;
+            ShowData.InsertCover[0].demoSetCover = CoverimgPath;
         }
 
 
