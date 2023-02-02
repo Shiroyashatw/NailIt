@@ -31,6 +31,7 @@ namespace NailIt.Controllers.YiPControllers
 
         }
 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<ManicuristTable>>> GetThisManicuristTable(int id)
         {

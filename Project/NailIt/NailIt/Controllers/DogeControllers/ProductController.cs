@@ -98,10 +98,10 @@ namespace NailIt.Controllers.DogeControllers
         [Route("MID/dset/{mid:int}/{opartc}")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetDemosetdata(int mid, string opartc)
         {
-            var res = from dset in _db.DemoSetTables
+            var res = (from dset in _db.DemoSetTables
                       where dset.ManicuristId == mid && dset.DemoSetPublic == true 
                       && (dset.DemoSetPartC == opartc || dset.DemoSetPartC == "C2")
-                      select dset;
+                      select dset);
             return await res.ToListAsync();
         }
         [HttpGet]
