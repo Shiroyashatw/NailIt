@@ -57,8 +57,10 @@
                 <p class="navend1">登入 / 會員中心</p>
             </div>
             <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                <img class="mt-1 mr-3 cursor-pointer" id="chat" src="~/images/chat-box.png" onclick="showChatPage()">
-                <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+                <div style="position:relative">
+                    <img class="mt-1 mr-3 cursor-pointer" id="chat" src="~/images/chat-box.png" onclick="showChatPage()">
+                    <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+                </div>
                 <div class="dropdown">
                     <img class="cursor-pointer dropbtn-sysNotic" src="~/images/notification.png" onclick="showSysNotic()">
                     <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
