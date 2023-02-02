@@ -75,11 +75,11 @@ function getbasicinfo() {
             // 施作部位判定
             if (demoSetPartC == "C0") {
                 demoSetPartCtext = "手"
-                $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)).attr('style','pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
+                $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)).attr('style', 'pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
             }
             else if (demoSetPartC == "C1") {
                 demoSetPartCtext = "腳"
-                $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)).attr('style','pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
+                $('select[name="OrderPartC"]').append(new Option(demoSetPartCtext, demoSetPartC)).attr('style', 'pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
             }
             else {
                 demoSetPartCtext = "手、腳"
@@ -89,17 +89,17 @@ function getbasicinfo() {
 
             $('.demoSetPartC').text("服務項目:" + demoSetPartCtext)
             // 施作項目和造型
-            $('select[name="OrderItem"]').append(new Option("固定項目", Demosetres['demoSetId'])).attr('style','pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
-            $('select[name="OrderItemName"]').append(`<option value="${Demosetres['demoSetName']}" price="${Demosetres['demoSetPrice']}">${Demosetres['demoSetName']} NT$${Demosetres['demoSetPrice']}</option>`).attr('style','pointer-events: none;background-color: rgba(128, 128, 128, 0.3);')
+            $('select[name="OrderItem"]').append(new Option("固定項目", Demosetres['demoSetId'])).attr('style', 'pointer-events: none;background-color: rgba(128, 128, 128, 0.3);');
+            $('select[name="OrderItemName"]').append(`<option value="${Demosetres['demoSetName']}" price="${Demosetres['demoSetPrice']}">${Demosetres['demoSetName']} NT$${Demosetres['demoSetPrice']}</option>`).attr('style', 'pointer-events: none;background-color: rgba(128, 128, 128, 0.3);')
             // 設計師頁面超連結
             $('#topmanicuristSalonName').text(Ores['manicuristSalonName'])
             $("#topmanicuristSalonName").attr("href", `NailDesign.html?id=${InputMid}`)
-            
+
             // 商品頁面超連結
             $('#topdemosetName').text(Demosetres['demoSetName'])
             $('#topdemosetName').attr("href", `product.html?id=${DSETID}`)
-            
-            
+
+
             $('#productName').text(Demosetres['demoSetName'])
             $('#demoSetPrice').text("預估價格:" + Demosetres['demoSetPrice'])
             $('#demoSetContent').text(Demosetres['demoSetContent'])
@@ -284,7 +284,7 @@ function postOrder() {
     $('#btnsend').on('click', function () {
         $('input[name="OrderOrderTime"]').val(Tztoday);
         $('input[name="OrderStateC"]').val("A0");
-        
+
         var formdata = $('#form1').serializeArray();
         var returnArray = {}
         // var Yes = true
@@ -321,7 +321,7 @@ function postOrder() {
     })
 }
 
-// 讀取設計師資料
+// 讀取設計師資料 設計師頁面
 function getManicuristData() {
     MID = url.searchParams.get('id');
     $.ajax({
@@ -339,7 +339,7 @@ function getManicuristData() {
             $('select[name="OrderPartC"]').append(new Option("手", "C0"));
             $('select[name="OrderPartC"]').append(new Option("腳", "C1"));
         },
-        error: res => {
+        error: err => {
             console.log("N")
         },
     })
@@ -357,6 +357,15 @@ function getOrderPartC() {
         getDemosetData()
         getOrderItem()
 
+    })
+    OrderItemName.change(function () {
+        var price = OrderItemName.find("option:selected").attr('price')
+        var deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        demoSprice.text("NT$" + price)
+        demoSde.text("NT$" + deposit)
+        inputOprice.val(price);
+        inputOde.val(deposit);
     })
 }
 
@@ -379,7 +388,7 @@ function getDemosetData() {
             for (i = 0; i < res.length; i++) {
                 var DRes = res[i]
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
-                OrderItemName.append(`<option value="${DRes['demoSetName']}" price="${DRes['demoSetPrice']}" deposit="${DRes['demoSetDeposit']}">${DRes['demoSetName']}</option>`)
+                OrderItemName.append(`<option value="${DRes['demoSetName']}" price="${DRes['demoSetPrice']}" deposit="${DRes['demoSetDeposit']}">${DRes['demoSetName']} NT$${DRes['demoSetPrice']}</option>`)
             }
             OrderItemName.show();
             var price = OrderItemName.find("option:selected").attr('price')
@@ -412,7 +421,7 @@ function getOrderItem() {
             for (i = 0; i < res.length; i++) {
                 var Sres = res[i]
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
-                OrderItem.append(`<option value="${Sres['serviceId']}" price="${Sres['servicePrice']}" deposit="${Sres['seriveDeposit']}">${Sres['serviceName']}</option>`)
+                OrderItem.append(`<option value="${Sres['serviceId']}" price="${Sres['servicePrice']}" deposit="${Sres['seriveDeposit']}">${Sres['serviceName']} NT$${Sres['servicePrice']}</option>`)
             }
             var price
             var deposit
@@ -613,7 +622,7 @@ function calculate() {
     let selectedOrderRemovalC
     let selectedOrderItemName
     let PriceTotal
-    $('#reservebtn').on('click',function(){
+    $('#reservebtn').on('click', function () {
         selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
         selectedOrderItemName = $('select[name="OrderItemName"]').find("option:selected").attr('price')
         PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
@@ -622,7 +631,7 @@ function calculate() {
         //console.log(selectedOrderRemovalC)
         //console.log(inputOprice.val())
     })
-    OrderRemovalC.change(function(){
+    OrderRemovalC.change(function () {
         selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
         PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
         demoSprice.text("NT$" + PriceTotal);
