@@ -123,7 +123,7 @@ namespace NailIt.Controllers.TedControllers
             mail.Subject = "Nailit 美甲師功能開通";
             mail.SubjectEncoding = Encoding.UTF8;
             mail.IsBodyHtml = true;
-            mail.Body = "這是您的驗證碼" + Convert.ToString(verificationcode[1]);
+            mail.Body ="Hello 尊貴的會員你好"+"<br/>"+"<br/>"+"這是您的驗證碼" + Convert.ToString(verificationcode[1])+"<br/>"+"利用此驗證碼驗證成功就能開通美甲師功能囉!!";
             mail.BodyEncoding = Encoding.UTF8;
 
 

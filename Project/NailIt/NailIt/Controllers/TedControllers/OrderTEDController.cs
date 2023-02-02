@@ -44,6 +44,7 @@ namespace NailIt.Controllers.TedControllers
                         where o.MemberId == id
                         select new Orderappointment()
                         {
+                            DemoSetId = a.DemoSetId,
                             MemberId =o.MemberId,
                             ManicuristId =o.ManicuristId,
                             OrderPartC = o.OrderPartC,

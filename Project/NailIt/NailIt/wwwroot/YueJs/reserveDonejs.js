@@ -1,5 +1,4 @@
-﻿var doneData;
-var myDoneResult;
+﻿
 async function reserveDoneSendGet() {
 	tedDiv.style.display = "none";
 	contentdiv.style.display = "block";
@@ -13,7 +12,7 @@ async function reserveDoneSendGet() {
 	fetch("https://localhost:44308/api/YueCommentTables/" + nowMember + "/" + "A6" + "/", requestOptions)
 		.then(response => response.text())
 		.then(function (result) {
-			myDoneResult = result;
+			myResult = result;
 			reserveDone();
 		})
 		.catch(error => console.log('error', error));
@@ -22,7 +21,7 @@ async function reserveDoneSendGet() {
 
 
 function reserveDone(search=false) {
-	doneData = JSON.parse(myDoneResult);
+	doneData = JSON.parse(myResult);
 	contentdiv.innerHTML = `<div id="innerTitle">美甲師功能＞訂單管理</div>
 				<br /><br />
 				<label style="margin-bottom: 1%"
@@ -71,7 +70,8 @@ function doneLoop(search=false) {
 				continue;
 			}
 		}
-		console.log(x);
+		var maniTo = "../YipLib/NailDesign.html?id=" + x.manicurist_ID;
+		var picTo = x.order_Type == 0 ? maniTo : "../YipLib/product.html?=" + x.order_item;
 		thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 		thisOrderTime = x.comment_BuildTime.substring(0, 10) + " " + x.comment_BuildTime.substring(11, 19);
 		answer += `<div class="doneDiv">
@@ -81,10 +81,10 @@ function doneLoop(search=false) {
 					<span style="padding-left:2%;margin-top:10%;font-size:10px">評價時間：`+ thisOrderTime + `</span>
 					<div class="row" style="background-color:lightgray;width:96%;padding-top:2%;margin-left:2%;margin-bottom:2%">
 					<div style="margin-left: 3%; display: inline-block; width: 20% ;height:110px">
-						<img src="`+ x.order_Cover +`"width="90%" height="90%" style="margin-left: 3%" />
+						<img src="`+ x.order_Cover + `"width="90%" height="90%" style="margin-left: 3%" onclick="javascript:location.href='` + maniTo +`'"/>
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
-						<span style="font-size: 120%"><b>`+ x.order_ItemName + `</b></span>
+						<span style="font-size: 120%"  onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName + `</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content + `</span>
 						<br />

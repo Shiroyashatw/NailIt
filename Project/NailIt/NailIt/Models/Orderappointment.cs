@@ -29,5 +29,6 @@ namespace NailIt.Models
         public int MemberId { get; set; }
         public int ManicuristId { get; set; }
         public string MemberName { get; set; }
+        public int DemoSetId { get; set; }
     }
 }
