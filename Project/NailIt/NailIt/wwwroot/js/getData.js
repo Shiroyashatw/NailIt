@@ -39,6 +39,12 @@ let ritem
 let ritemName
 let rdep
 
+//
+let selectedOrderRemovalC
+let selectedOrderItem
+let selectedOrderItemName
+let PriceTotal
+
 // 卸甲類型
 // 被選擇的卸甲類型
 const OrderRemovalC = $('select[name="OrderRemovalC"]')
@@ -345,27 +351,36 @@ function getManicuristData() {
     })
 }
 
+
+
 function getOrderPartC() {
     $('#Sendbtn').on('click', function () {
         OpartCval = OpartC.find("option:selected").val();
         getDemosetData()
         getOrderItem()
-
+        calculateprice()
     })
     OpartC.change(function () {
         OpartCval = OpartC.find("option:selected").val();
         getDemosetData()
         getOrderItem()
-
+        calculateprice()
+    })
+    OrderRemovalC.change(function () {
+        calculateprice()
+    })
+    OrderItem.change(function () {
+        calculateprice()
     })
     OrderItemName.change(function () {
-        var price = OrderItemName.find("option:selected").attr('price')
-        var deposit = OrderItemName.find("option:selected").attr('deposit')
+        calculateprice()
+        // var price = OrderItemName.find("option:selected").attr('price')
+        // var deposit = OrderItemName.find("option:selected").attr('deposit')
 
-        demoSprice.text("NT$" + price)
-        demoSde.text("NT$" + deposit)
-        inputOprice.val(price);
-        inputOde.val(deposit);
+        // demoSprice.text("NT$" + price)
+        // demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        // inputOde.val(deposit);
     })
 }
 
@@ -375,7 +390,7 @@ function getDemosetData() {
         url: `https://localhost:44308/api/product/MID/dset/${MID}/${OpartCval}`,
         method: "GET",
         dataType: "json",
-        async: true,
+        async: false,
         success: res => {
             DsetRes = res;
             // console.log(res)
@@ -390,14 +405,15 @@ function getDemosetData() {
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
                 OrderItemName.append(`<option value="${DRes['demoSetName']}" price="${DRes['demoSetPrice']}" deposit="${DRes['demoSetDeposit']}">${DRes['demoSetName']} NT$${DRes['demoSetPrice']}</option>`)
             }
-            OrderItemName.show();
-            var price = OrderItemName.find("option:selected").attr('price')
-            var deposit = OrderItemName.find("option:selected").attr('deposit')
 
-            demoSprice.text("NT$" + price)
-            demoSde.text("NT$" + deposit)
-            inputOprice.val(price);
-            inputOde.val(deposit);
+            OrderItemName.show();
+            //var price = OrderItemName.find("option:selected").attr('price')
+            //var deposit = OrderItemName.find("option:selected").attr('deposit')
+
+            // demoSprice.text("NT$" + price)
+            // demoSde.text("NT$" + deposit)
+            // inputOprice.val(price);
+            // inputOde.val(deposit);
         },
         error: err => {
             console.log(err)
@@ -410,7 +426,7 @@ function getOrderItem() {
         url: `https://localhost:44308/api/product/MID/service/${MID}/${OpartCval}`,
         method: "GET",
         dataType: "json",
-        async: true,
+        async: false,
         success: res => {
             OrderItem.empty();
             console.log(DsetRes)
@@ -436,18 +452,19 @@ function getOrderItem() {
                     OrderItemName.empty();
 
                     OrderItemName.append(new Option(itemName, itemName));
+                    calculateprice()
+                    // price = OrderItem.find("option:selected").attr('price')
+                    // deposit = OrderItem.find("option:selected").attr('deposit')
 
-                    price = OrderItem.find("option:selected").attr('price')
-                    deposit = OrderItem.find("option:selected").attr('deposit')
-
-                    demoSprice.text("NT$" + price)
-                    demoSde.text("NT$" + deposit)
-                    inputOprice.val(price);
-                    inputOde.val(deposit);
+                    // demoSprice.text("NT$" + price)
+                    // demoSde.text("NT$" + deposit)
+                    // inputOprice.val(price);
+                    // inputOde.val(deposit);
                 }
                 else {
                     OrderType.val(true)
                     getDemosetData()
+                    calculateprice()
                     OrderItemName.show();
                 }
             })
@@ -619,30 +636,28 @@ function postCash() {
 
 // 計算 預估金額
 function calculate() {
-    let selectedOrderRemovalC
-    let selectedOrderItem
-    let selectedOrderItemName
-    let PriceTotal
     $('#reservebtn,#Sendbtn').on('click', function () {
-        selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
-        //selectedOrderItem = $('select[name="OrderItemName"]').find("option:selected").attr('price')
-        selectedOrderItemName = $('select[name="OrderItemName"]').find("option:selected").attr('price')
-        //console.log(selectedOrderItem)
-        PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
-        demoSprice.text("NT$" + PriceTotal);
-        inputOprice.val(PriceTotal);
-        console.log(PriceTotal)
-        console.log(selectedOrderRemovalC)
-        console.log(inputOprice.val())
+        calculateprice()
     })
     OrderRemovalC.change(function () {
-        selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
-        PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
-        demoSprice.text("NT$" + PriceTotal);
-        inputOprice.val(PriceTotal);
-        console.log(PriceTotal)
-        console.log(selectedOrderRemovalC)
-        console.log(inputOprice.val())
+        calculateprice()
     })
+}
 
+function calculateprice() {
+    selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
+    selectedOrderItem = $('select[name="OrderItem"]').find("option:selected").attr('price')
+    selectedOrderItemName = $('select[name="OrderItemName"]').find("option:selected").attr('price')
+    if (selectedOrderItem == undefined) {
+        selectedOrderItem = 0
+    }
+    if (selectedOrderItemName == undefined) {
+        selectedOrderItemName = 0
+    }
+    PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName) + parseInt(selectedOrderItem)
+    demoSprice.text("NT$" + PriceTotal);
+    inputOprice.val(PriceTotal);
+    console.log("卸甲價錢" + selectedOrderRemovalC)
+    console.log("施作項目" + selectedOrderItem)
+    console.log("造型" + selectedOrderItemName)
 }
