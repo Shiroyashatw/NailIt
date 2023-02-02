@@ -156,10 +156,16 @@
         .Seemore {
             margin-left: 30px;
             margin-right: 30px;
+            overflow:hidden;
         }
         .Seemore:hover {
-            filter: grayscale(60%);
+            filter: grayscale(20%);
         }
+
+            .Seemore:hover > .Demoimg {
+                transition:0.5s;
+                transform: scale(1.1);
+            }
 
 /*            .Seemore:hover > .Ribbon {
                 visibility:hidden;
@@ -417,6 +423,20 @@
             word-wrap: break-word;
         }
 
+        .LinkTo {
+            color: black;
+        }
+
+            .LinkTo:hover {
+                color: #FF6733;
+                text-decoration: none;
+            }
+
+        .LinkNow {
+            color: #FF6733;
+            font-weight: bold;
+        }
+
         /*DD*/
         * {
             margin: 0;
@@ -583,9 +603,11 @@
             <div class="col-1"></div>
             <div class="col-11">
                 <div>
-                    <a href="/TanTanLib/html/cover.html">首頁</a>
+                    <a class="LinkTo" href="/TanTanLib/html/cover.html">首頁</a>
                     <span>></span>
-                    <a href="Fliter.html">美甲查詢</a>
+                    <a class="LinkTo" href="Fliter.html">美甲查詢</a>
+                    <span>></span>
+                    <label class="LinkNow">{{DesignList.manicuristSalonName}}</label>
                 </div>
             </div>
 

@@ -444,7 +444,7 @@ button[value=newcounnt]:hover{
     margin:auto;
     padding:20px;
     border:1px solid #888;
-    width:40%;
+    width:30%;
     height:85%;
 }
 .close2 {
@@ -492,7 +492,16 @@ html {
     font-size: 16px;
     background-color: white;
     opacity: .9;
-    z-index: 9999;
+    z-index: 1040 !important;
+}
+
+.fade{
+    z-index:1050 !important;
+}
+
+.modal {
+    z-index: 9999 !important;
+
 }
 
 #navall > div {
@@ -579,4 +588,9 @@ footer {
 
 #footpre, #footcopy {
     margin-top: 1%;
+}
+
+
+#newsolanname, #newsolanaddress, #newshopphone, #newintoshop, #newshoplicen {
+    max-width: 70%;
 }

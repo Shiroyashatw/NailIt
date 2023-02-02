@@ -167,9 +167,9 @@
                     <!-- header-item 放置點擊連結順序 -->
                     <div class="header-item" style="display: flex;">
                         <div class="link"><a href="#">首頁</a><i class="bi bi-chevron-right"></i></div>
-                        <div class="link"><a href="#">美甲查詢</a><i class="bi bi-chevron-right"></i></div>
-                        <div class="link"><a href="#" id="topmanicuristSalonName"></a><i
-                                class="bi bi-chevron-right"></i></div>
+                        <div class="link"><a href="Fliter.html">美甲查詢</a><i class="bi bi-chevron-right"></i></div>
+                        <div class="link"><a href="" id="topmanicuristSalonName"></a><i class="bi bi-chevron-right"></i>
+                        </div>
                         <div class="link"><a href="#" id="topdemosetName"></a></div>
                     </div>
                     <!-- middle-item 中間資訊欄 照片加文字 -->
@@ -204,7 +204,7 @@
                                     <button type="button" id="reportbtn" onclick="repalertform()">檢舉此商品</button>
                                 </div>
                                 <div class="reservebtn">
-                                    <button type="button" id="reservebtn" onclick="alertform()">預約</button>
+                                    <button type="button" id="reservebtn">預約</button>
                                 </div>
                             </div>
                         </div>
@@ -231,14 +231,9 @@
                                     <p class="star"></p>
                                 </div>
                             </div>
-                            <!-- <div class="ratings">
-                                <div class="empty_star">★★★★★</div>
-                                <div class="full_star">★★★★★<span>5</span></div>
-                            </div> -->
-
                             <p class="botphone"></p>
                             <p id="botadress"></p>
-                            <p class="demoSetDeposit"></p>
+                            <p class="TextdemoSetDeposit"></p>
                         </div>
                     </div>
                 </div>
@@ -286,37 +281,32 @@
                     <div id="step1" class="container step1-choseitem">
                         <div class="form-container row">
                             <div class="step-container pt-3 pl-4 col-9">
-                                <p>
-                                    施作部位:
-                                    <select name="OrderPartC">
-                                    </select>
-                                </p>
-                                <p>
-                                    卸甲:
-                                    <select name="OrderRemovalC">
-                                        <option value="B0">不用卸甲</option>
-                                        <option value="B1">去指甲油(無凝膠)</option>
-                                        <option value="B2">本店卸甲</option>
-                                        <option value="B3">他店卸甲</option>
-                                    </select>
-                                </p>
-                                <p>
-                                    施作項目:
-                                    <select name="OrderItem">
-
-                                    </select>
-                                </p>
-                                <p>
-                                    造型:
-                                    <select name="OrderItemName">
-
-                                    </select>
-                                </p>
-
-                                <p class="demoSetPrice"></p>
-                                <input type="hidden" name="OrderPrice" value="">
-                                <p class="demoSetDeposit"></p>
-                                <input type="hidden" name="OrderDeposit" value="">
+                                <div class="itemBx col-12">
+                                    <label class="">施作部位:</label>
+                                    <select class="" name="OrderPartC"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">卸甲:</label>
+                                    <select class="" name="OrderRemovalC"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">施作項目:</label>
+                                    <select class="" name="OrderItem"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">造型:</label>
+                                    <select class="" name="OrderItemName"></select>
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">預估金額:</label>
+                                    <label class="demoSetPrice"></label>
+                                    <input type="hidden" name="OrderPrice" value="">
+                                </div>
+                                <div class="itemBx col-12">
+                                    <label class="">訂金:</label>
+                                    <label class="demoSetDeposit"></label>
+                                    <input type="hidden" name="OrderDeposit" value="">
+                                </div>
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -369,6 +359,9 @@
                                                 <!-- <p>可預約時間:</p> -->
                                                 <!-- <label class="col-4"><input type="radio" name="label" value=""><span class="round button">9:00</span></label> -->
                                             </div>
+                                            <div class="remark">
+
+                                            </div>
                                         </div>
                                     </div>
 
@@ -419,8 +412,6 @@
                         <div class="form-container row">
                             <div class="step-container pt-20 pl-20 col-9">
                                 <!-- 綠界金流表單 -->
-
-
                             </div>
                             <div class="step-container col-3">
                                 <div class="time-container h-75">
@@ -545,24 +536,14 @@
 
     </footer>
 
-    <!-- <form action="">
-        下訂會員編號。
-        <input type="text" name="MemberId"> 寫死
-        卸甲類型
-        <input type="text" name="OrderRemovalC"> 寫死(好像不用帶入)
-        訂單類型
-        <input type="text" name="OrderType"> 商品頁面寫死
-        
-    </form> -->
-
     <script>
         function alertform() {
             document.getElementById("hohodiv").className = "isShow";
             document.getElementById("alert_div").className = "isShow";
 
             $('.Progress .line:nth-child(1) .step').css({
-                "background-color": "#3498db",
-                "color": "#FF6733",
+                "background-color": "rgb(255 233 236)",
+                "color": "rgb(230 51 73)",
                 "transition": ".3s"
             })
         }
@@ -588,8 +569,8 @@
             document.getElementById("step4").className = "isHide";
 
             $('.Progress .line:nth-child(2) .step').css({
-                "background-color": "#3498db",
-                "color": "#FF6733",
+                "background-color": "rgb(255 233 236)",
+                "color": "rgb(230 51 73)",
                 "transition": ".3s"
             })
 
@@ -614,8 +595,8 @@
                 document.getElementById("step4").className = "isHide";
 
                 $('.Progress .line:nth-child(3) .step').css({
-                    "background-color": "#3498db",
-                    "color": "#FF6733",
+                    "background-color": "rgb(255 233 236)",
+                    "color": "rgb(230 51 73)",
                     "transition": ".3s"
                 })
             }
@@ -629,8 +610,8 @@
             document.getElementById("step4").className = "isShow";
 
             $('.Progress .line:nth-child(4) .step').css({
-                "background-color": "#3498db",
-                "color": "#FF6733",
+                "background-color": "rgb(255 233 236)",
+                "color": "rgb(230 51 73)",
                 "transition": ".3s"
             })
         }
@@ -674,11 +655,19 @@
         pre()
         // 抓取基本資料 
         getbasicinfo()
+        $('#reservebtn').on('click', function () {
+            if (nowMember == -1) {
+                alert("請先登入會員，再進行預約")
+            }
+            else {
+                alertform()
+            }
+        })
+        calculate()
         // 放入可選擇的預約日期
         getReserveDate()
         // 取得可放入的預約時間
         getReserveTime()
-
         OrderDetail()
         // 傳送表單資料
         postOrder()

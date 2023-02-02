@@ -30,6 +30,7 @@ namespace NailIt.Models
         public DateTime CommentBuildTime { get; set; }
         public string MemberName { get; set; }
         public int MemberId { get; set; }
-        public int ManicuristId { get; set; }   
+        public int ManicuristId { get; set; }
+        public int DemoSetId { get; set; }
     }
 }

@@ -23,8 +23,22 @@ $.ajax({
             if (e[i].demoSetCover == null) {
                 e[i].demoSetCover = e[i].manicuristPic;
             }
-            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            if (e[i].manicuristPublic == false) {
 
+                var nummm = 0;
+                for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                    if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >= 0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                        (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+
+                        nummm = j;
+                        break;
+                    }
+
+                }
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
                 e[i].orderPartC = "手";
@@ -61,6 +75,7 @@ function Getevashowdetail(e) {
     $("#item-evaing").text(bb.evaluatelist[(e.id).substr(7, n - 7)].orderItemName);
     $("#pay-evaing").text('NT$' + bb.evaluatelist[(e.id).substr(7, n - 7)].orderPrice);
     $("#rent-evaing").text('NT$' + bb.evaluatelist[(e.id).substr(7, n - 7)].orderDeposit);
+    $("#addre-evaing").text(bb.evaluatelist[(e.id).substr(7, n - 7)].manicuristAddress);
 }
 //新增評論
 function evainsertbtn(e) {
@@ -120,8 +135,22 @@ $.ajax({
             if (e[i].demoSetCover == null) {
                 e[i].demoSetCover = e[i].manicuristPic;
             }
-            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            if (e[i].manicuristPublic == false) {
 
+                var nummm = 0;
+                for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                    if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >= 0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                        (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+
+                        nummm = j;
+                        break;
+                    }
+
+                }
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
                 e[i].orderPartC = "手";
@@ -162,6 +191,7 @@ function evafinbtnshow(e) {
     $("#item-evafin").text(bb.evafinlist[x].orderItemName);
     $("#pay-evafin").text('NT$' + bb.evafinlist[x].orderPrice);
     $("#rent-evafin").text('NT$' + bb.evafinlist[x].orderDeposit);
+    $("#addre-evafin").text(bb.evafinlist[x].manicuristAddress);
 }
 function now6(nowMember) {
 
@@ -173,8 +203,22 @@ $.ajax({
             if (e[i].demoSetCover == null) {
                 e[i].demoSetCover = e[i].manicuristPic;
             }
-            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            if (e[i].manicuristPublic == false) {
 
+                var nummm = 0;
+                for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                    if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >= 0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                        (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+
+                        nummm = j;
+                        break;
+                    }
+
+                }
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
                 e[i].orderPartC = "手";
@@ -210,8 +254,22 @@ $.ajax({
             if (e[i].demoSetCover == null) {
                 e[i].demoSetCover = e[i].manicuristPic;
             }
-            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            if (e[i].manicuristPublic == false) {
 
+                var nummm = 0;
+                for (var j = 3; j < e[i].manicuristAddress.length; j++) {
+                    if (((e[i].manicuristAddress)[j]).toString().indexOf('區') >= 0 || (e[i].manicuristAddress)[j].indexOf('市') >= 0 ||
+                        (e[i].manicuristAddress)[j].indexOf('鎮') >= 0 || (e[i].manicuristAddress)[j].indexOf('鄉') >= 0) {
+
+                        nummm = j;
+                        break;
+                    }
+
+                }
+                e[i].manicuristAddress = (e[i].manicuristAddress).substr(0, nummm + 1);
+            }
+            e[i].orderOrderTime = e[i].orderOrderTime.replace('T', ' ');
+            e[i].demoSetCover = "../YiPLib/" + e[i].demoSetCover; 
             e[i].orderId = (e[i].orderId).toString().padStart(8, '0');
             if (e[i].orderPartC == 'C0') {
                 e[i].orderPartC = "手";
@@ -250,6 +308,7 @@ function noticeingbtn(e) {
     $("#item-noticeing").text(bb.historyinglist[x].orderItemName);
     $("#pay-noticeing").text('NT$' + bb.historyinglist[x].orderPrice);
     $("#rent-noticeing").text('NT$' + bb.historyinglist[x].orderDeposit);
+    $("#addre-noticeing").text(bb.historyinglist[x].manicuristAddress);
 }
 function noticefinbtn(e) {
     var x = (e.id).substr(9, e.id.length - 9);
@@ -262,4 +321,5 @@ function noticefinbtn(e) {
     $("#item-noticefin").text(bb.historyfinlist[x].orderItemName);
     $("#pay-noticefin").text('NT$' + bb.historyfinlist[x].orderPrice);
     $("#rent-noticefin").text('NT$' + bb.historyfinlist[x].orderDeposit);
+    $("#addre-noticefin").text(bb.historyfinlist[x].manicuristAddress);
 }
