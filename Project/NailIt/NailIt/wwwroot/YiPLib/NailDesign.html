@@ -437,6 +437,21 @@
             word-wrap: break-word;
         }
 
+        .LinkTo{
+            color:black;
+        }
+
+            .LinkTo:hover {
+                color: #FF6733;
+                text-decoration: none;
+            }
+
+        .LinkNow {
+            color: #FF6733;
+            font-weight: bold;
+        }
+
+
         /*DD*/
         * {
             margin: 0;
@@ -603,9 +618,11 @@
             <div class="col-1"></div>
             <div class="col-11">
                 <div>
-                    <a href="/TanTanLib/html/cover.html">首頁</a>
+                    <a class="LinkTo" href="/TanTanLib/html/cover.html">首頁</a>
                     <span>></span>
-                    <a href="Fliter.html">美甲查詢</a>
+                    <a class="LinkTo" href="Fliter.html">美甲查詢</a>
+                    <span>></span>
+                    <label class="LinkNow">{{DesignList.manicuristSalonName}}</label>
                 </div>
             </div>
 
