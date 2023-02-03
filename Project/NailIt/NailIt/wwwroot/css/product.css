@@ -343,8 +343,8 @@
 }
 .form-info .step-container .time-container #radio .button {
   display: inline-block;
-  margin: 0 5px 10px 0;
-  padding: 5px 10px;
+  margin: 0 5px 5px 0;
+  padding: 5px 5px;
   background: #f7f7f7;
   color: #333;
   cursor: pointer;
@@ -372,6 +372,7 @@
   justify-content: center;
 }
 .form-info .step-container .form-footerbtn .btn-box button {
+  padding: 0.2rem 0.4rem;
   border: 0;
 }
 .form-info .step-container .form-footerbtn .btn-box .cancelbtn {
