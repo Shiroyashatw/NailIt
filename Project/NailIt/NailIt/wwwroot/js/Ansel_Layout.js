@@ -91,6 +91,7 @@ async function getLoginInfo() {
 document.addEventListener("DOMContentLoaded", async function () {
     // Get login member Info from backend
     await getLoginInfo();
+    await showCheckNotic();
 
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {

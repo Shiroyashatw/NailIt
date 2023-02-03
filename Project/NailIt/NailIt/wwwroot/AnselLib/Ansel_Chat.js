@@ -110,8 +110,7 @@ var showRevokeMsg = async function () {
     let result = await putMsgRevoke(scop.messageid);
     if (!!result) {
         // update message
-        $(`div[data-messageid='${scop.messageid}']`).children().children()[0].remove();
-        $(`div[data-messageid='${scop.messageid}']`).children().prepend(`<span class="rounded px-3 py-2" style="border: 4px solid black;">訊息已收回</span>`);
+        $(`div[data-messageid='${scop.messageid}']`).children(":first").children(":first").replaceWith(`<span class="rounded px-3 py-2" style="border: 4px solid black;">訊息已收回</span>`);
     }
 }
 // Enter specific person while enter into chatting page

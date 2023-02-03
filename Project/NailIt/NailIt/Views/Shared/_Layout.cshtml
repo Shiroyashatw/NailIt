@@ -14,32 +14,6 @@
 </head>
 
 <body>
-    @* <header>
-    <nav class="d-flex justify-content-center navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white
-    border-bottom box-shadow">
-    <div class="col-sm-10 row">
-    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Nail IT</a>
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-    <ul class="navbar-nav flex-grow-1">
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">美甲查詢</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Community" asp-action="Index">美甲小天地</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">關於我們</a>
-    </li>
-    </ul>
-    </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false" aria-label="Toggle navigation" style="margin-left:auto">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    </div>
-    </nav>
-    </header> *@
     <nav id="mynav">
         <div class="row opacity-25 p-0 " id="navall">
             <div class="col-1 p-0"></div>
@@ -65,9 +39,7 @@
                     <img class="cursor-pointer dropbtn-sysNotic" src="~/images/notification.png" onclick="showSysNotic()">
                     <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
                     <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
-                        @* <a class="drop-item">系統訊息內容1</a> *@
-                        @* <a class="drop-item">系統訊息內容2</a> *@
-                        @* <a class="drop-item">系統訊息內容3</a> *@
+                        <a class="drop-item">--目前沒有未讀系統訊息--</a>
                     </div>
                 </div>
             </div>
@@ -81,11 +53,6 @@
         </main>
     </div>
 
-    @* <footer class="footer text-muted d-flex justify-content-center bg-dark">
-    <div class="col-sm-10">
-    &copy; 2023 - NailIT - <a asp-area="" asp-controller="Home" asp-action="About">關於我們</a>
-    </div>
-    </footer> *@
     <footer class="" style="height:320px;">
         <div class="row p-0">
             <div class="col-1 "></div>
