@@ -77,10 +77,33 @@ namespace NailIt.Controllers.TedControllers
         [HttpPost]
         public async Task<ActionResult<CommentTable>> PostCommentTable(CommentTable commentTable)
         {
+
+
             commentTable.CommentBuildTime = DateTime.Now;
             _context.CommentTables.Add(commentTable);
-            await _context.SaveChangesAsync();
+          
 
+            var newsc = (from aa in _context.CommentTables where aa.CommentTarget == commentTable.CommentTarget select aa.CommentScore).ToList();
+
+            double score = 0;
+            foreach (var c in newsc)
+            {
+                score += c;
+            }
+            score += commentTable.CommentScore;
+
+            var mannewsc = await _context.ManicuristTables.FindAsync(commentTable.CommentTarget);
+            mannewsc.ManicuristScore = score / (newsc.Count + 1);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch 
+            {
+
+                return NoContent();
+            }
+            
             return CreatedAtAction("GetCommentTable", new { id = commentTable.CommentId }, commentTable);
         }
 

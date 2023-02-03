@@ -1,16 +1,75 @@
-/* 因為nav浮起，mzrgin多餘空間，避免頁面內容被nav擋住 */
-
-
-.default-margin{
-    margin-top:90px
+/* 因為nav浮起，margin多餘空間，避免頁面內容被nav擋住 */
+.default-margin {
+    margin-top: 90px
 }
-/* 頁首 */
+
+.unread-badge-message {
+    position: absolute;
+    top: 1px;
+    left: 16px;
+    width: 10px;
+    height: 10px;
+}
+
+.unread-badge-sysNotic {
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    width: 10px;
+    height: 10px;
+}
+
+/* dropdown sysNotic---------------------------------------------------------- */
+/*#region Dropdown*/
+.dropbtn {
+    /* background-color: #04AA6D; */
+    /* color: white; */
+    /* padding: 16px; */
+    /* font-size: 16px; */
+    border: none;
+    cursor: pointer;
+}
+
+/* .dropbtn:hover, .dropbtn:focus {
+  } */
+.dropdown {
+    float: right;
+    position: relative;
+    /* display: inline-block; */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    /* min-width: 160px; */
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    right: 0;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 5px 10px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+}
+
+.dropdown a:hover {
+    background-color: #ddd;
+}
+
+/*#endregion*/
+
+/* 頁首---------------------------------------------------------- */
 * {
     margin: 0;
     padding: 0;
 }
 
-body{
+body {
     margin-bottom: 0;
 }
 
@@ -23,7 +82,7 @@ html {
     width: 100%;
     height: 90px;
     position: fixed;
-    background-position-x:0px;
+    background-position-x: 0px;
     font-size: 16px;
     background-color: white;
     opacity: .9;
@@ -54,12 +113,11 @@ html {
 .navmid>li {
     display: inline;
     color: black;
-
 }
 
- .navmid > li > a {
-   color: black;
-   font-weight: bold;
+.navmid>li>a {
+    color: black;
+    font-weight: bold;
 }
 
 .navmid>li>a:hover {
@@ -68,6 +126,15 @@ html {
     text-underline-offset: 7px;
 }
 
+#brand a,
+#brand a:link,
+#brand a:visited,
+#brand a:active {
+    color: black;
+    text-decoration-line: none;
+}
+
+
 .navend1 {
     /* background-color: darksalmon; */
     font-size: 14px;
@@ -75,21 +142,20 @@ html {
     font-weight: bold;
 }
 
-.navend2>img {
+.navend2 img { /* 因為notice有修改格式 */
     width: 25px;
     /* background-color: blue; */
-
 }
 
 
 /* 頁尾---------------------------------------------------------- */
 
-#hid{    
-    background-color:white; 
-    border: 0px solid white; 
-    height:60px;
-    margin:1% 0%;
-    }
+#hid {
+    background-color: white;
+    border: 0px solid white;
+    height: 60px;
+    margin: 1% 0%;
+}
 
 
 footer {
@@ -101,21 +167,21 @@ footer {
 }
 
 
-#footit{
-    margin-top:6%;
+#footit {
+    margin-top: 6%;
 }
 
-#footit b{
+#footit b {
     font-size: 14px;
-    margin-right:1%;
+    margin-right: 1%;
 }
 
-#footpre pre{
+#footpre pre {
     color: white;
     font-size: 14px;
 }
 
-#footpre,#footcopy{
-    margin-top:1%;
+#footpre,
+#footcopy {
+    margin-top: 1%;
 }
-

@@ -17,25 +17,30 @@ var showSysNotic = async function () {
     // check unread system notice
     let result = await putMsgRead(0);
     if (!!result && result.length > 0) {
+        $(".unread-badge-sysNotic").addClass("d-none");
+        $("#sysNoticDropDown").empty();
         //在dropDown印出unread system notice
         for (const message of result) {
-            let sysNoticHTML = ``;
+            let sysNoticHTML = `<a class="drop-sysNotic-item">${message.messageContent}</a>`;
+            $("#sysNoticDropDown").append(sysNoticHTML);
         }
     }
     // Show dropDown, When the user clicks on the button,toggle between hiding and showing the dropdown content 
-    $("#sysNoticDropDown").slideToggle();
+    $("#sysNoticDropDown").addClass("show");
 }
 var showCheckNotic = async function () {
     if (!checkLogin()) return;
     let result = await getMembersMsg();
     if (!!result) {
         if (result.findIndex(x => x.unreadCount > 0 && x.memberId == 0) > -1) {
-            console.log("有系統訊息")
-            // 顯示紅點點 
+            $(".unread-badge-sysNotic").removeClass("d-none");
+        }else{
+            $(".unread-badge-sysNotic").addClass("d-none");
         }
         if (result.findIndex(x => x.unreadCount > 0 && x.memberId != 0) > -1) {
-            console.log("有其他會員訊息")
-            // 顯示紅點點        
+            $(".unread-badge-message").removeClass("d-none");
+        }else{
+            $(".unread-badge-message").addClass("d-none");
         }
     }
 }
@@ -65,22 +70,18 @@ var checkLogin = function () {
 
 document.addEventListener("DOMContentLoaded", function () {
     scop.loginId = 1;//$("#loginId").val();
-    showCheckNotic()
 
-    // When the user clicks on the button,toggle between hiding and showing the dropdown content 
-    var showDropdown = function (obj) {
-        // display none all dropdown-content
-        $(".dropdown-content").each((index, elem) => {
-            if (elem.classList.contains("show"))
-                elem.classList.remove("show");
-        });
-        if (!$(obj).parent().children()[1].classList.contains("show")) {
-            // show the dropdown
-            $(obj).parent().children()[1].classList.add("show");
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
+            $(".dropdown-content-sysNotic").each((index, elem) => {
+                if (elem.classList.contains("show"))
+                    elem.classList.remove("show");
+            });
         }
     }
 
     // check is there any new message for me per 10sec
-    // setInterval(showCheckNotic, 10*1000);
+    setInterval(showCheckNotic, 10*1000);
 
 });

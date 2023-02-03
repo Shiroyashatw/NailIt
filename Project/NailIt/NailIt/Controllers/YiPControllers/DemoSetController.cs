@@ -23,7 +23,10 @@ namespace NailIt.Controllers.YiPControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetDemoSet()
         {
-            return await Context.DemoSetTables.ToListAsync();
+            var query = from Demo in Context.DemoSetTables
+                        where Demo.DemoSetPublic == true
+                        select Demo;
+            return await query.ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -130,7 +133,7 @@ namespace NailIt.Controllers.YiPControllers
         public async Task<ActionResult<IEnumerable<dynamic>>> GetSearchAllTable(string search)
         {
             var query = from DemoSet in Context.DemoSetTables
-                        where DemoSet.DemoSetName.Contains(search) || DemoSet.DemoSetTag1.Contains(search) || DemoSet.DemoSetTag2.Contains(search) || DemoSet.DemoSetTag3.Contains(search) || DemoSet.DemoSetTag4.Contains(search)
+                        where (DemoSet.DemoSetName.Contains(search) || DemoSet.DemoSetTag1.Contains(search) || DemoSet.DemoSetTag2.Contains(search) || DemoSet.DemoSetTag3.Contains(search) || DemoSet.DemoSetTag4.Contains(search) ) && DemoSet.DemoSetPublic == true
                         select DemoSet;
 
             return await query.ToListAsync();
@@ -142,7 +145,7 @@ namespace NailIt.Controllers.YiPControllers
             var query = from Demo in Context.DemoSetTables
                         join Designer in Context.ManicuristTables
                           on Demo.ManicuristId equals Designer.ManicuristId
-                        where Designer.ManicuristCounty.Contains(Country)
+                        where Designer.ManicuristCounty.Contains(Country) && Demo.DemoSetPublic == true
                         select new
                         {
                             DemoSetId = Demo.DemoSetId,
@@ -163,7 +166,7 @@ namespace NailIt.Controllers.YiPControllers
             var query = from Demo in Context.DemoSetTables
                         join Designer in Context.ManicuristTables
                           on Demo.ManicuristId equals Designer.ManicuristId
-                        where Designer.ManicuristTownship.Contains(Area)
+                        where Designer.ManicuristTownship.Contains(Area) && Demo.DemoSetPublic == true
                         select new
                         {
                             DemoSetId = Demo.DemoSetId,
@@ -180,7 +183,7 @@ namespace NailIt.Controllers.YiPControllers
         public async Task<ActionResult<IEnumerable<dynamic>>> GetColorDemo(int Color)
         {
             var query = from DemoSet in Context.DemoSetTables
-                        where DemoSet.DemoSetColor == Color
+                        where DemoSet.DemoSetColor == Color && DemoSet.DemoSetPublic == true
                         select DemoSet;
 
             return await query.ToListAsync();
@@ -190,7 +193,7 @@ namespace NailIt.Controllers.YiPControllers
         public async Task<ActionResult<IEnumerable<dynamic>>> GetFixTagDemo(string FixTag)
         {
             var query = from DemoSet in Context.DemoSetTables
-                        where DemoSet.DemoSetTag1 == FixTag || DemoSet.DemoSetTag2 == FixTag || DemoSet.DemoSetTag3 == FixTag || DemoSet.DemoSetTag4 == FixTag
+                        where (DemoSet.DemoSetTag1 == FixTag || DemoSet.DemoSetTag2 == FixTag || DemoSet.DemoSetTag3 == FixTag || DemoSet.DemoSetTag4 == FixTag ) && DemoSet.DemoSetPublic == true
                         select DemoSet;
 
             return await query.ToListAsync();
@@ -220,7 +223,7 @@ namespace NailIt.Controllers.YiPControllers
         public async Task<ActionResult<IEnumerable<dynamic>>> GetPriceRange(int Min , int Max)
         {
             var query = from DemoSet in Context.DemoSetTables
-                        where DemoSet.DemoSetPrice>=Min && DemoSet.DemoSetPrice<=Max 
+                        where DemoSet.DemoSetPrice>=Min && DemoSet.DemoSetPrice<=Max && DemoSet.DemoSetPublic == true
                         select DemoSet;
 
             return await query.ToListAsync();
@@ -230,7 +233,7 @@ namespace NailIt.Controllers.YiPControllers
         public async Task<ActionResult<IEnumerable<dynamic>>> GetPart(string Part)
         {
             var query = from DemoSet in Context.DemoSetTables
-                        where DemoSet.DemoSetPartC == Part
+                        where DemoSet.DemoSetPartC == Part && DemoSet.DemoSetPublic == true
                         select DemoSet;
 
             return await query.ToListAsync();

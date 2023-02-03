@@ -248,7 +248,7 @@ var showSnackbar = function (text) {
 // When the user clicks on the button,toggle between hiding and showing the dropdown content 
 var showDropdown = function (obj) {
     // display none all dropdown-content
-    $(".dropdown-content").each((index, elem) => {
+    $(".dropdown-content-community").each((index, elem) => {
         if (elem.classList.contains("show"))
             elem.classList.remove("show");
     });
@@ -371,6 +371,12 @@ var showMoreArticle = async function () {
     else moreArticles = await getArticles();
     renderArticles(moreArticles);
 }
+// send message to chosen member
+var sendMemberMsg = function () {
+    if (!checkLogin()) return;
+    // link to page
+    window.location.href = `https://localhost:5001/Community/chat/${scop.articleAuthorId}`;
+}
 // show articles of one person (my or other)
 var showMyMain = async function (own) {
     if (own) if (!checkLogin()) return;
@@ -380,12 +386,16 @@ var showMyMain = async function (own) {
     $('#searchInput').val("");
     $('#order').val("latest");
     // update main area
+    $("#memberInfo").children().show();
+    $("#btnMoreArticle").removeAttr("disabled");    
     if (own) {
         $("#mainTitle").html("我的");
         scop.articleAuthorId = scop.loginId;
-    } else $("#mainTitle").hide();
-    $("#memberInfo").children().show();
-    $("#btnMoreArticle").removeAttr("disabled");
+        $("#btnSendMsg").addClass("d-none");
+    } else{
+        $("#mainTitle").hide();
+        $("#btnSendMsg").removeClass("d-none");
+    }
     await getMyArticles();
     $("#avatar").addClass("d-flex");
     $("#avatar").children()[0].innerText = scop.articles.member.memberAccount[0];
@@ -431,8 +441,8 @@ var renderNewReply = function (reply) {
                         <i class="fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>
                         <span>${reply.replyLikesCount}</span>
                         <div class="dropdown">
-                            <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis-vertical"></i>
-                            <div class="dropdown-content">
+                            <i onclick="showDropdown(this)" class="dropbtn-community fa-solid fa-ellipsis-vertical"></i>
+                            <div class="dropdown-content dropdown-content-community">
                                 <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal(this)">刪除</a>
                             </div>
                         </div>
@@ -460,8 +470,8 @@ var renderReplaies = function () {
         replyHTML += `
                     <span>${reply.reply.replyLikesCount}</span>
                     <div class="dropdown">
-                        <i onclick="showDropdown(this)" class="dropbtn fa-solid fa-ellipsis-vertical"></i>
-                        <div class="dropdown-content">
+                        <i onclick="showDropdown(this)" class="dropbtn-community fa-solid fa-ellipsis-vertical"></i>
+                        <div class="dropdown-content dropdown-content-community">
         `;
         // Can edit and delete own reply
         if (reply.reply.memberId == scop.loginId) {
@@ -814,8 +824,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn')) {
-            $(".dropdown-content").each((index, elem) => {
+        if (!event.target.matches('.dropbtn-community')) {
+            $(".dropdown-content-community").each((index, elem) => {
+                if (elem.classList.contains("show"))
+                    elem.classList.remove("show");
+            });
+        }
+
+        // nav 上的sysNotic下拉
+        if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
+            $(".dropdown-content-sysNotic").each((index, elem) => {
                 if (elem.classList.contains("show"))
                     elem.classList.remove("show");
             });
