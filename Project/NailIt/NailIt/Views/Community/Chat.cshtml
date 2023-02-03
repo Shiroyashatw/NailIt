@@ -2,9 +2,6 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor hca
 @{
     ViewData["Title"] = "信息中心";
-    //int loginId = hca.HttpContext.Session.GetInt32("loginId") ?? 0;
-    //string loginAccount = hca.HttpContext.Session.GetString("loginAccount") ?? "Guest";
-    //string loginNickname = hca.HttpContext.Session.GetString("loginNickname") ?? "Guest";
     int findMemberId = ViewBag.FindMemberId;
     string findMemberAccount = ViewBag.FindMemberAccount ?? "";
     string findMemberNickname = ViewBag.FindMemberNickname ?? "";
@@ -25,9 +22,6 @@
 }
 
 @* invisible infornation *@
-@*<input id="loginId" type="text" value="@loginId" class="d-none">
-<input id="loginAccount" type="text" value="@loginAccount" class="d-none">
-<input id="loginNickname" type="text" value="@loginNickname" class="d-none">*@
 <input id="findMemberId" type="text" value="@findMemberId" class="d-none">
 <input id="findMemberAccount" type="text" value="@findMemberAccount" class="d-none">
 <input id="findMemberNickname" type="text" value="@findMemberNickname" class="d-none">

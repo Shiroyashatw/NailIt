@@ -2,9 +2,6 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor hca
 @{
     ViewData["Title"] = "美甲小天地";
-    //int loginId = hca.HttpContext.Session.GetInt32("loginId") ?? 0;
-    //string loginAccount = hca.HttpContext.Session.GetString("loginAccount") ?? "Guest";
-    //string loginNickname = hca.HttpContext.Session.GetString("loginNickname") ?? "Guest";
 }
 @section Head{
     <!-- Google Icons -->
@@ -21,10 +18,6 @@
     <script src="~/AnselLib/Ansel_Community.js"></script>
 }
 
-@* invisible infornation *@
-@*<input id="loginId" type="text" value="@loginId" class="d-none">
-<input id="loginAccount" type="text" value="@loginAccount" class="d-none">
-<input id="loginNickname" type="text" value="@loginNickname" class="d-none">*@
 
 <div class="">
     @* <nav aria-label="breadcrumb">

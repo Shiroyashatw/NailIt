@@ -10,6 +10,7 @@ using NailIt.Models;
 using static System.Collections.Specialized.BitVector32;
 using System.Web;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NailIt.Controllers.YueyueControllers;
 
 namespace NailIt.Controllers
 {
@@ -26,10 +27,8 @@ namespace NailIt.Controllers
         public IActionResult Index()
         {
             // setup login user info
-            //httpContextAccessor.HttpContext.Session.SetInt32(key, int_value);
-            HttpContext.Session.SetInt32("loginId", 1);
-            HttpContext.Session.SetString("loginAccount", "Ansel Siao");
-            HttpContext.Session.SetString("loginNickname", "Larryyy");
+            var LoginMemberInfo = LoginCheck()[0];
+            HttpContext.Session.SetInt32("loginId", LoginMemberInfo.MemberId);
 
             return View();
         }
@@ -38,9 +37,8 @@ namespace NailIt.Controllers
         public IActionResult Chat(int? id)
         {
             // setup login user info
-            HttpContext.Session.SetInt32("loginId", 1);
-            HttpContext.Session.SetString("loginAccount", "Ansel Siao");
-            HttpContext.Session.SetString("loginNickname", "Larryyy");
+            var LoginMemberInfo = LoginCheck()[0];
+            HttpContext.Session.SetInt32("loginId", LoginMemberInfo.MemberId);
 
             // if comes with memberId which user want to talk to
             ViewBag.FindMemberId = (id != null) ? id : -1;
@@ -52,6 +50,16 @@ namespace NailIt.Controllers
             }
 
             return View();
+        }
+
+        public List<MemberTable> LoginCheck()
+        {
+            string theKey = Request.Cookies[".AspNetCore.Session"];
+            if (HttpContext.Session.GetString("NailLogin") == null || theKey == null)
+                return null;
+            Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
+            var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
+            return theId.ToList();
         }
 
     }
