@@ -13,6 +13,7 @@ async function YueloginCheck() {
 		.then(result => daMember = JSON.parse(result)[0])
 		.catch(error => console.log('error', error));
 	nowMember = daMember.memberId;
+	
 	nowAccount = daMember.memberAccount;
 	nowNickName = daMember.memberNickname;
 }
