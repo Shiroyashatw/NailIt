@@ -87,21 +87,20 @@ async function getLoginInfo() {
     navScop.loginNickname = nowNickName;
 }
 
+// Close the dropdown if the user clicks outside of it
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
+        $(".dropdown-content-sysNotic").each((index, elem) => {
+            if (elem.classList.contains("show"))
+                elem.classList.remove("show");
+        });
+    }
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
     // Get login member Info from backend
     await getLoginInfo();
-    await showCheckNotic();
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
-            $(".dropdown-content-sysNotic").each((index, elem) => {
-                if (elem.classList.contains("show"))
-                    elem.classList.remove("show");
-            });
-        }
-    }
+    await showCheckNotic();    
 
     // check is there any new message for me per 10sec
     setInterval(showCheckNotic, 10*1000);
