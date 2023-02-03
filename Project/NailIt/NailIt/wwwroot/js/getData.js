@@ -39,6 +39,12 @@ let ritem
 let ritemName
 let rdep
 
+//
+let selectedOrderRemovalC
+let selectedOrderItem
+let selectedOrderItemName
+let PriceTotal
+
 // 卸甲類型
 // 被選擇的卸甲類型
 const OrderRemovalC = $('select[name="OrderRemovalC"]')
@@ -252,14 +258,14 @@ function getReserveTime() {
                     // 當前點擊的 button id = 資料庫撈出 年月日時 顯示出可預約時間
                     if (dateid == ymd) {
                         if (pOrderid != null) {
-                            $('#radio').append(`<label class="col-4"><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
+                            $('#radio').append(`<label class=""><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
                         }
                         else {
                             if (month <= todaym && date <= todayd && hour < todayh) {
-                                $('#radio').append(`<label class="col-4"><input  type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
+                                $('#radio').append(`<label class=""><input  type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
                             }
                             else {
-                                $('#radio').append(`<label class="col-4"><input class="plan" type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
+                                $('#radio').append(`<label class=""><input class="plan" type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
                             }
                         }
 
@@ -345,27 +351,60 @@ function getManicuristData() {
     })
 }
 
+
+
 function getOrderPartC() {
     $('#Sendbtn').on('click', function () {
         OpartCval = OpartC.find("option:selected").val();
         getDemosetData()
         getOrderItem()
-
+        calculateprice()
     })
     OpartC.change(function () {
         OpartCval = OpartC.find("option:selected").val();
         getDemosetData()
         getOrderItem()
+        calculateprice()
+        deposit = OrderItemName.find("option:selected").attr('deposit')
 
+        // demoSprice.text("NT$" + price)
+        demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        inputOde.val(deposit);
+    })
+    OrderRemovalC.change(function () {
+        calculateprice()
+        //deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        // demoSprice.text("NT$" + price)
+        //demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        //inputOde.val(deposit);
+    })
+    OrderItem.change(function () {
+        calculateprice()
+        deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        // demoSprice.text("NT$" + price)
+        demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        inputOde.val(deposit);
     })
     OrderItemName.change(function () {
-        var price = OrderItemName.find("option:selected").attr('price')
-        var deposit = OrderItemName.find("option:selected").attr('deposit')
+        calculateprice()
+        deposit = OrderItemName.find("option:selected").attr('deposit')
 
-        demoSprice.text("NT$" + price)
+        // demoSprice.text("NT$" + price)
         demoSde.text("NT$" + deposit)
-        inputOprice.val(price);
+        // inputOprice.val(price);
         inputOde.val(deposit);
+        // var price = OrderItemName.find("option:selected").attr('price')
+        // var deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        // demoSprice.text("NT$" + price)
+        // demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        // inputOde.val(deposit);
     })
 }
 
@@ -375,7 +414,7 @@ function getDemosetData() {
         url: `https://localhost:44308/api/product/MID/dset/${MID}/${OpartCval}`,
         method: "GET",
         dataType: "json",
-        async: true,
+        async: false,
         success: res => {
             DsetRes = res;
             // console.log(res)
@@ -390,13 +429,14 @@ function getDemosetData() {
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
                 OrderItemName.append(`<option value="${DRes['demoSetName']}" price="${DRes['demoSetPrice']}" deposit="${DRes['demoSetDeposit']}">${DRes['demoSetName']} NT$${DRes['demoSetPrice']}</option>`)
             }
+
             OrderItemName.show();
-            var price = OrderItemName.find("option:selected").attr('price')
+            //var price = OrderItemName.find("option:selected").attr('price')
             var deposit = OrderItemName.find("option:selected").attr('deposit')
 
-            demoSprice.text("NT$" + price)
+            // demoSprice.text("NT$" + price)
             demoSde.text("NT$" + deposit)
-            inputOprice.val(price);
+            // inputOprice.val(price);
             inputOde.val(deposit);
         },
         error: err => {
@@ -410,7 +450,7 @@ function getOrderItem() {
         url: `https://localhost:44308/api/product/MID/service/${MID}/${OpartCval}`,
         method: "GET",
         dataType: "json",
-        async: true,
+        async: false,
         success: res => {
             OrderItem.empty();
             console.log(DsetRes)
@@ -436,18 +476,19 @@ function getOrderItem() {
                     OrderItemName.empty();
 
                     OrderItemName.append(new Option(itemName, itemName));
-
-                    price = OrderItem.find("option:selected").attr('price')
+                    calculateprice()
+                    // price = OrderItem.find("option:selected").attr('price')
                     deposit = OrderItem.find("option:selected").attr('deposit')
 
-                    demoSprice.text("NT$" + price)
+                    // demoSprice.text("NT$" + price)
                     demoSde.text("NT$" + deposit)
-                    inputOprice.val(price);
+                    // inputOprice.val(price);
                     inputOde.val(deposit);
                 }
                 else {
                     OrderType.val(true)
                     getDemosetData()
+                    calculateprice()
                     OrderItemName.show();
                 }
             })
@@ -578,10 +619,10 @@ function postCash() {
     let x = `${HashKey}&ChoosePayment=Credit&EncryptType=1&ItemName=${itemName}&MerchantID=3002607&MerchantTradeDate=${MerchantTradeDate}&MerchantTradeNo=${MerchantTradeNo}&PaymentType=aio&ReturnURL=${returnUrl}&TotalAmount=${TotalAmount}&TradeDesc=${TradeDesc}&HashIV=${HashIV}`
     console.log(x)
     let y = encodeURIComponent(x)
-    y = y.replace("%20", "+")
+    y = y.replaceAll("%20", "+")
     console.log(y)
     y = y.toLowerCase();
-
+    console.log(y)
     var hash = CryptoJS.SHA256(y).toString();
 
     hash = hash.toUpperCase()
@@ -619,30 +660,30 @@ function postCash() {
 
 // 計算 預估金額
 function calculate() {
-    let selectedOrderRemovalC
-    let selectedOrderItem
-    let selectedOrderItemName
-    let PriceTotal
     $('#reservebtn,#Sendbtn').on('click', function () {
-        selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
-        //selectedOrderItem = $('select[name="OrderItemName"]').find("option:selected").attr('price')
-        selectedOrderItemName = $('select[name="OrderItemName"]').find("option:selected").attr('price')
-        //console.log(selectedOrderItem)
-        PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
-        demoSprice.text("NT$" + PriceTotal);
-        inputOprice.val(PriceTotal);
-        console.log(PriceTotal)
-        console.log(selectedOrderRemovalC)
-        console.log(inputOprice.val())
+        calculateprice()
     })
     OrderRemovalC.change(function () {
-        selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
-        PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName)
-        demoSprice.text("NT$" + PriceTotal);
-        inputOprice.val(PriceTotal);
-        console.log(PriceTotal)
-        console.log(selectedOrderRemovalC)
-        console.log(inputOprice.val())
+        calculateprice()
     })
+}
 
+function calculateprice() {
+    selectedOrderRemovalC = OrderRemovalC.find("option:selected").attr('price')
+    selectedOrderItem = $('select[name="OrderItem"]').find("option:selected").attr('price')
+    selectedOrderItemName = $('select[name="OrderItemName"]').find("option:selected").attr('price')
+    if (selectedOrderItem == undefined) {
+        selectedOrderItem = 0
+    }
+    if (selectedOrderItemName == undefined) {
+        selectedOrderItemName = 0
+    }
+
+
+    PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName) + parseInt(selectedOrderItem)
+    demoSprice.text("NT$" + PriceTotal);
+    inputOprice.val(PriceTotal);
+    console.log("卸甲價錢" + selectedOrderRemovalC)
+    console.log("施作項目" + selectedOrderItem)
+    console.log("造型" + selectedOrderItemName)
 }
