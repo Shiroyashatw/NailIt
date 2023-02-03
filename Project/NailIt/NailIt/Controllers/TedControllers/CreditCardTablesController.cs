@@ -34,12 +34,12 @@ namespace NailIt.Controllers.TedControllers
         {
             var query =  from user in _context.CreditCardTables where user.CreditCardOwner == id select user;
             
-            await query.ToListAsync();
-            if(query.Count() < 0)
+            var x = await query.ToListAsync();
+            if(x.Count() < 0)
             {
                 return new List<CreditCardTable>();
             }
-            return query.ToList();
+            return x;
         }
 
         // PUT: api/CreditCardTables/5
