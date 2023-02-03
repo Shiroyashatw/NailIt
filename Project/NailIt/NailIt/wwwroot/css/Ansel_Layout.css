@@ -49,13 +49,13 @@
     z-index: 1;
 }
 
-    .dropdown-content a {
-        color: black;
-        padding: 5px 10px;
-        text-decoration: none;
-        display: block;
-        white-space: nowrap;
-    }
+.dropdown-content a {
+    color: black;
+    padding: 5px 10px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+}
 
 .dropdown a:hover {
     background-color: #ddd;
@@ -89,7 +89,7 @@ html {
     z-index: 9999;
 }
 
-#navall > div {
+#navall>div {
     /* background-color: blue; */
     max-height: 100%;
     /* 待研究 */
@@ -110,17 +110,17 @@ html {
     height: 100%;
 }
 
-.navmid > li {
+.navmid>li {
     display: inline;
     color: black;
 }
 
-.navmid > li > a {
+.navmid>li>a {
     color: black;
     font-weight: bold;
 }
 
-.navmid > li > a:hover {
+.navmid>li>a:hover {
     text-decoration-line: underline;
     text-decoration-thickness: 1.5px;
     text-underline-offset: 7px;
@@ -142,7 +142,7 @@ html {
     font-weight: bold;
 }
 
-.navend2 > img {
+.navend2 img { /* 因為notice有修改格式 */
     width: 25px;
     /* background-color: blue; */
 }
@@ -171,16 +171,17 @@ footer {
     margin-top: 6%;
 }
 
-    #footit b {
-        font-size: 14px;
-        margin-right: 1%;
-    }
+#footit b {
+    font-size: 14px;
+    margin-right: 1%;
+}
 
 #footpre pre {
     color: white;
     font-size: 14px;
 }
 
-#footpre, #footcopy {
+#footpre,
+#footcopy {
     margin-top: 1%;
 }
