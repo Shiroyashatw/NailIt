@@ -89,7 +89,7 @@ namespace NailIt.Controllers.YueyueControllers
             _context.CommentTables.Add(commentTable);
 
             var mycomment = await (from co in _context.CommentTables
-                             where co.CommentType == true
+                             where co.CommentType == true && co.CommentTarget==commentTable.CommentTarget
                              select co.CommentScore).ToListAsync();
             double total=0;
             foreach (double x in mycomment)
@@ -97,7 +97,7 @@ namespace NailIt.Controllers.YueyueControllers
                 total += x;
             }
             var theMember = await _context.MemberTables.FindAsync(commentTable.CommentTarget);
-            theMember.MemberScore = (total / mycomment.Count);
+            theMember.MemberScore = theMember.MemberScore == null ? commentTable.CommentScore : (total / mycomment.Count);
             try
             {
                 await _context.SaveChangesAsync();
