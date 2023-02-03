@@ -34,7 +34,7 @@ namespace NailIt.Controllers.TedControllers
         {
             var query =  from user in _context.CreditCardTables where user.CreditCardOwner == id select user;
             
-            var x = await query.ToListAsync();
+            var x =  await query.ToListAsync();
             if(x.Count() < 0)
             {
                 return new List<CreditCardTable>();
