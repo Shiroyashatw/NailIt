@@ -44,7 +44,7 @@
         <div class="row opacity-25 p-0 " id="navall">
             <div class="col-1 p-0"></div>
             <div class="col-2 d-flex align-items-center" id="brand">
-                Nail IT
+                <a href="/TanTanLib/html/cover.html">Nail IT</a>
             </div>
             <div class="col-3">
                 <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
@@ -57,13 +57,17 @@
                 <p class="navend1">登入 / 會員中心</p>
             </div>
             <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                <img class="mt-1 mr-3 cursor-pointer" id="chat" src="../images/chat-box.png" onclick="showChatPage()">
+                <div style="position:relative">
+                    <img class="mt-1 mr-3 cursor-pointer" id="chat" src="~/images/chat-box.png" onclick="showChatPage()">
+                    <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+                </div>
                 <div class="dropdown">
-                    <img class="cursor-pointer" src="../images/notification.png" onclick="showSysNotic()">
-                    <div id="sysNoticDropDown" class="dropdown-content">
-                        <a href="javascript:void(0)">編輯3</a>
-                        <a href="javascript:void(0)" class="text-danger">刪除3</a>
-                        <a href="javascript:void(0)" class="text-danger">檢舉3</a>
+                    <img class="cursor-pointer dropbtn-sysNotic" src="~/images/notification.png" onclick="showSysNotic()">
+                    <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
+                    <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
+                        @* <a class="drop-item">編輯3</a>
+                        <a class="drop-item">刪除3</a>
+                        <a class="drop-item">檢舉3</a> *@
                     </div>
                 </div>
             </div>
@@ -110,7 +114,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Ansel_Layout.js" asp-append-version="true"></script>
     <script src="~/AnselLib/Ansel_Service.js"></script>
     <script src="~/AnselLib/Ansel_Common.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

@@ -43,18 +43,18 @@
             <input type="hidden" name="MerchantID" value="3002607">
             <br />
             <!-- DX20230127114112152C -->
-            <input type="text" name="MerchantTradeNo" value="Nailit20230131211012">
+            <input type="text" name="MerchantTradeNo" value="Nailit20230203092005">
             <br />
-            <input type="text" name="MerchantTradeDate" value="2023/01/31 21:10:12">
+            <input type="text" name="MerchantTradeDate" value="2023/02/03 09:20:05">
             <br />
             <input type="hidden" name="PaymentType" value="aio">
             <br />
-            <input type="text" name="TotalAmount" value="500">
+            <input type="text" name="TotalAmount" value="200">
             <br />
             <!-- NAILIT美甲預約 -->
             <input type="text" name="TradeDesc" value="NAILIT美甲預約">
             <br />
-            <input type="text" name="ItemName" value="固定項目">
+            <input type="text" name="ItemName" value="閃亮亮 NT$500">
             <br />
             <input type="hidden" name="ReturnURL" value="https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL">
             <br />
@@ -69,6 +69,9 @@
     </div>
 
     <script>
+        //HashKey=pwFHCqoQZGmho4w6&ChoosePayment=Credit&EncryptType=1&ItemName=閃亮亮 NT$500&MerchantID=3002607&MerchantTradeDate=2023/02/03 09:20:05&MerchantTradeNo=Nailit20230203092005&PaymentType=aio&ReturnURL=https://hoyo.idv.tw/?a=Tools/EcPay&b=ReturnURL&TotalAmount=200&TradeDesc=NAILIT美甲預約&HashIV=EkRm7iFT261dpevs
+        "hashkey%3dpwfhcqoqzgmho4w6%26choosepayment%3dcredit%26encrypttype%3d1%26itemname%3d%e9%96%83%e4%ba%ae%e4%ba%ae%20nt%24500%26merchantid%3d3002607%26merchanttradedate%3d2023%2f02%2f03%2009%3a20%3a05%26merchanttradeno%3dnailit20230203092005%26paymenttype%3daio%26returnurl%3dhttps%3a%2f%2fhoyo.idv.tw%2f%3fa%3dtools%2fecpay%26b%3dreturnurl%26totalamount%3d200%26tradedesc%3dnailit%e7%be%8e%e7%94%b2%e9%a0%90%e7%b4%84%26hashiv%3dekrm7ift261dpevs"
+        "HashKey%3DpwFHCqoQZGmho4w6%26ChoosePayment%3DCredit%26EncryptType%3D1%26ItemName%3D%E9%96%83%E4%BA%AE%E4%BA%AE%20NT%24500%26MerchantID%3D3002607%26MerchantTradeDate%3D2023%2F02%2F03%2009%3A20%3A05%26MerchantTradeNo%3DNailit20230203092005%26PaymentType%3Daio%26ReturnURL%3Dhttps%3A%2F%2Fhoyo.idv.tw%2F%3Fa%3DTools%2FEcPay%26b%3DReturnURL%26TotalAmount%3D200%26TradeDesc%3DNAILIT%E7%BE%8E%E7%94%B2%E9%A0%90%E7%B4%84%26HashIV%3DEkRm7iFT261dpevs"
         $('#btnCashSend').on('click', function () {
             // Nailit20230131211012
             // 2023/01/31 21:10:12
@@ -102,13 +105,13 @@
             let x = `${HashKey}&ChoosePayment=Credit&EncryptType=1&ItemName=${itemName}&MerchantID=3002607&MerchantTradeDate=${MerchantTradeDate}&MerchantTradeNo=${MerchantTradeNo}&PaymentType=aio&ReturnURL=${returnUrl}&TotalAmount=${TotalAmount}&TradeDesc=${TradeDesc}&HashIV=${HashIV}`
             console.log(x)
             let y = encodeURIComponent(x)
-            y = y.replace("%20", "+")
+            y = y.replaceAll("%20", "+")
             y = y.toLowerCase();
-            
+            console.log(y)
             var hash = CryptoJS.SHA256(y).toString();
             
             // QB = QB.toUpperCase();
-            // console.log(hash)
+            console.log(hash)
             hash = hash.toUpperCase()
             $('input[name="CheckMacValue"]').val(hash)
 
