@@ -9,8 +9,10 @@
         regionname: "",
         namesearch: "",
         color: [{}],
+        colors:[],
+        colorstyle:[],
         tag: [{}],
-        tagname:""
+
     }
 })
 //獲得所有標籤
@@ -20,27 +22,39 @@ $.ajax({
     url: "/api/TagTable",
     success: function (e) {
         console.log(e);
-        mydata2.tag = e;
+        for (let i = 0; i < 10; i++) {
+            mydata2.tag.push(e[i]);
+        }
+        mydata2.tag.shift();
+        console.log(mydata2.tag);
     }
 })
 
 //獲得所有顏色
 $.ajax({
     type: "get",
-    async: false,
+
     url: "/api/ColorTables2",
     success: function (e) {
         console.log(e);
-        mydata2.color = e;
-        for (var i = 0; i < e.length; i++) {
-            if (e[i].colorCss == "#FFFFFF") {
-                /*$(".colcir")[i].css({"background-color" : "yellow"});*/
-            }
+
+        for (color in e) {
+            mydata2.colors.push(e[color]);
+            mydata2.colorstyle.push({ backgroundColor: e[color].colorCss });
+
         }
+        
+        mydata2.colorstyle[4] = ({ backgroundColor: "#F2F2F2", border: 'gray solid 1pt', color: 'black' });
+        mydata2.colorstyle[12] = ({ backgroundImage: 'linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%)' });
+        mydata2.colorstyle[13] = ({ backgroundColor: "#FFFFFF", border: 'gray solid 1pt', color: 'black' });
         //"{backgroundColor:color[key].colorCss}"
         //$("div").css(("background-color" : "yellow", "font-size" : "200%"J);
+        //style = "background-color:#FFFFFF;border:solid gray 1px;color: black;"
     }
-})
+});
+
+//document.getElementById("13").style.border = "solid gray 1px";
+
 
 //獲得所有城市
 $.ajax({
@@ -76,6 +90,7 @@ $("#city").on("change", function () {
                 $('#region').append($('<option>', {
                     text: "縣市未選取"
                 }));
+                $('#region')[0].attr("selected", "true");
             } else if (mydata2.cityselected != null) {
                 console.log(mydata2.cityselected);
 

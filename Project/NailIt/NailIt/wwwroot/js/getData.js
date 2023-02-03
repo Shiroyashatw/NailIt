@@ -258,14 +258,14 @@ function getReserveTime() {
                     // 當前點擊的 button id = 資料庫撈出 年月日時 顯示出可預約時間
                     if (dateid == ymd) {
                         if (pOrderid != null) {
-                            $('#radio').append(`<label class="col-4"><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
+                            $('#radio').append(`<label class=""><input class="" type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
                         }
                         else {
                             if (month <= todaym && date <= todayd && hour < todayh) {
-                                $('#radio').append(`<label class="col-4"><input  type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
+                                $('#radio').append(`<label class=""><input  type="radio" name="planId" value="${pID}" disabled><span class="round button btnnotclick">${time}</span></label>`)
                             }
                             else {
-                                $('#radio').append(`<label class="col-4"><input class="plan" type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
+                                $('#radio').append(`<label class=""><input class="plan" type="radio" name="planId" value="${pID}" date=${ymd} time=${time}><span class="round button">${time}</span></label>`)
                             }
                         }
 
@@ -365,15 +365,39 @@ function getOrderPartC() {
         getDemosetData()
         getOrderItem()
         calculateprice()
+        deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        // demoSprice.text("NT$" + price)
+        demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        inputOde.val(deposit);
     })
     OrderRemovalC.change(function () {
         calculateprice()
+        //deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        // demoSprice.text("NT$" + price)
+        //demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        //inputOde.val(deposit);
     })
     OrderItem.change(function () {
         calculateprice()
+        deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        // demoSprice.text("NT$" + price)
+        demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        inputOde.val(deposit);
     })
     OrderItemName.change(function () {
         calculateprice()
+        deposit = OrderItemName.find("option:selected").attr('deposit')
+
+        // demoSprice.text("NT$" + price)
+        demoSde.text("NT$" + deposit)
+        // inputOprice.val(price);
+        inputOde.val(deposit);
         // var price = OrderItemName.find("option:selected").attr('price')
         // var deposit = OrderItemName.find("option:selected").attr('deposit')
 
@@ -408,12 +432,12 @@ function getDemosetData() {
 
             OrderItemName.show();
             //var price = OrderItemName.find("option:selected").attr('price')
-            //var deposit = OrderItemName.find("option:selected").attr('deposit')
+            var deposit = OrderItemName.find("option:selected").attr('deposit')
 
             // demoSprice.text("NT$" + price)
-            // demoSde.text("NT$" + deposit)
+            demoSde.text("NT$" + deposit)
             // inputOprice.val(price);
-            // inputOde.val(deposit);
+            inputOde.val(deposit);
         },
         error: err => {
             console.log(err)
@@ -454,12 +478,12 @@ function getOrderItem() {
                     OrderItemName.append(new Option(itemName, itemName));
                     calculateprice()
                     // price = OrderItem.find("option:selected").attr('price')
-                    // deposit = OrderItem.find("option:selected").attr('deposit')
+                    deposit = OrderItem.find("option:selected").attr('deposit')
 
                     // demoSprice.text("NT$" + price)
-                    // demoSde.text("NT$" + deposit)
+                    demoSde.text("NT$" + deposit)
                     // inputOprice.val(price);
-                    // inputOde.val(deposit);
+                    inputOde.val(deposit);
                 }
                 else {
                     OrderType.val(true)
@@ -595,10 +619,10 @@ function postCash() {
     let x = `${HashKey}&ChoosePayment=Credit&EncryptType=1&ItemName=${itemName}&MerchantID=3002607&MerchantTradeDate=${MerchantTradeDate}&MerchantTradeNo=${MerchantTradeNo}&PaymentType=aio&ReturnURL=${returnUrl}&TotalAmount=${TotalAmount}&TradeDesc=${TradeDesc}&HashIV=${HashIV}`
     console.log(x)
     let y = encodeURIComponent(x)
-    y = y.replace("%20", "+")
+    y = y.replaceAll("%20", "+")
     console.log(y)
     y = y.toLowerCase();
-
+    console.log(y)
     var hash = CryptoJS.SHA256(y).toString();
 
     hash = hash.toUpperCase()
@@ -654,6 +678,8 @@ function calculateprice() {
     if (selectedOrderItemName == undefined) {
         selectedOrderItemName = 0
     }
+
+
     PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName) + parseInt(selectedOrderItem)
     demoSprice.text("NT$" + PriceTotal);
     inputOprice.val(PriceTotal);
