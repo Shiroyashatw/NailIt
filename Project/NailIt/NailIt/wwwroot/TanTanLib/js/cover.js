@@ -12,6 +12,8 @@
         colors:[],
         colorstyle:[],
         tag: [{}],
+        top5: [{}],
+        demoset: [{}]
 
     }
 })
@@ -52,8 +54,31 @@ $.ajax({
         //style = "background-color:#FFFFFF;border:solid gray 1px;color: black;"
     }
 });
+//獲得TOP5
+$.ajax({
+    type: "get",
+    url: "/api/OrderTables2/Top5",
+    success: function (e) {
+        console.log(e);
+        mydata2.top5 = e;
 
-//document.getElementById("13").style.border = "solid gray 1px";
+    }
+
+
+});
+
+//獲得Demoset
+$.ajax({
+    type: "get",
+    url: "/api/DemoSetTables2",
+    success: function (e) {
+        mydata2.demoset = e;
+        console.log(mydata2.demoset);
+
+    }
+
+
+});
 
 
 //獲得所有城市

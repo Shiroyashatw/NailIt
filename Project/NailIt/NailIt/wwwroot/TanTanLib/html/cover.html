@@ -135,128 +135,94 @@
                             <div class="mt-3"><b class="mytite">TOP5&thinsp;</b></div>
                             <div class="mt-3 d-flex justify-content-around" style="width:100%;">
                                 <div class="mt-4 d-flex justify-content-center" style="width: 100%; flex-wrap: wrap;">
-                                    <div class="mr-4">
-                                        <div class="top5pic">
-                                            <img src="../images/TOP-1.jpg" alt="">
-                                        </div>
-                                        <div>
-                                            <p style="font-weight:bolder" class="mb-0 mt-2">1012 Greyish Room</p>
-                                            <p>&thinsp;NT$1600</p>
-                                        </div>
-                                    </div>
-                                    <div class="mx-3">
-                                        <div class="top5pic">
-                                            <img src="../images/TOP-1.jpg" alt="">
-                                        </div>
-                                        <div>
-                                            <p style="font-weight:bolder" class="mb-0 mt-2">1012 Greyish Room</p>
-                                            <p>&thinsp;NT$1600</p>
-                                        </div>
-                                    </div>
-                                    <div class="mx-3">
-                                        <div class="top5pic">
-                                            <img src="../images/TOP-1.jpg" alt="">
-                                        </div>
-                                        <div>
-                                            <p style="font-weight:bolder" class="mb-0 mt-2">1012 Greyish Room</p>
-                                            <p>&thinsp;NT$1600</p>
-                                        </div>
-                                    </div>
-                                    <div class="mx-3">
-                                        <div class="top5pic">
-                                            <img src="../images/TOP-1.jpg" alt="">
-                                        </div>
-                                        <div>
-                                            <p style="font-weight:bolder" class="mb-0 mt-2">1012 Greyish Room</p>
-                                            <p>&thinsp;NT$1600</p>
-                                        </div>
-                                    </div>
-                                    <div class="mx-3">
-                                        <div class="top5pic">
-                                            <img src="../images/TOP-1.jpg" alt="">
-                                        </div>
-                                        <div>
-                                            <p style="font-weight:bolder" class="mb-0 mt-2">1012 Greyish Room</p>
-                                            <p>&thinsp;NT$1600</p>
+                                    <div class="mx-3" v-for="(item,key) in top5">
+                                        <div class="top5pic ">
+                                            <div class="Seemore pb-2 d-flex justify-content-center align-content-end" style="position: absolute; width: 200px; height: 200px; padding-top: 145px;">
+                                                <button class="Clickme" style="background-color: black; color: white; width: 140px; height: 40px; visibility: hidden;" onclick="Checkit(this)" v-bind:value="top5[key].demoSetId">查  看</button>
+                                            </div>
+                                            <div><img class="Demoimg" v-bind:src="top5[key].demoSetCover" alt="" style="width:200px;height:200px"></div>
+                                            <div>
+                                                <p style="font-weight:bolder" class="mb-0 mt-2">{{top5[key].demoSetName}}</p>
+                                                <p>&thinsp;{{top5[key].demoSetPrice}}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-1 p-0"></div>
-                </div>
-
-                <!-- search列--------------------------------------------------------------------------------------------- -->
-                <div class="myblock">
-                    <div class="row">
                         <div class="col-1 p-0"></div>
-                        <div class="col-10">
-                            <div>
-                                <b class="mytite">SEARCH&thinsp;</b>
-                                <div class="seatitle mt-4 mx-2 d-flex align-items-center"><b class="ml-4">顏色</b></div>
-                                <div class="m-4 d-flex align-items-center justify-content-center justify-content-between" style="width:90%;">
+                    </div>
 
-                                    <div class="coldot mt-2 d-flex align-items-center justify-content-center" style="flex-wrap:wrap">
-                                        <div class="m-4" v-for="(item,key) in colors">
-                                            <a v-bind:id= "colors[key].colorId-1"
-                                               v-bind:href="'/YiPLib/fliter.html?Color='+colors[key].colorId" class="colcir d-flex align-items-center justify-content-center rounded-circle"
-                                               v-bind:style="colorstyle[key]">{{colors[key].colorName}}</a>
+                    <!-- search列--------------------------------------------------------------------------------------------- -->
+                    <div class="myblock">
+                        <div class="row">
+                            <div class="col-1 p-0"></div>
+                            <div class="col-10">
+                                <div>
+                                    <b class="mytite">SEARCH&thinsp;</b>
+                                    <div class="seatitle mt-4 mx-2 d-flex align-items-center"><b class="ml-4">顏色</b></div>
+                                    <div class="m-4 d-flex align-items-center justify-content-center justify-content-between" style="width:90%;">
+
+                                        <div class="coldot mt-2 d-flex align-items-center justify-content-center" style="flex-wrap:wrap">
+                                            <div class="m-4" v-for="(item,key) in colors">
+                                                <a v-bind:id="colors[key].colorId-1"
+                                                   v-bind:href="'/YiPLib/fliter.html?Color='+colors[key].colorId" class="colcir d-flex align-items-center justify-content-center rounded-circle"
+                                                   v-bind:style="colorstyle[key]">{{colors[key].colorName}}</a>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                </div>
-                                <!-- 標籤列--------------------------------------------------------------------------------------------- -->
-                                <div class="seatitle mt-5 d-flex align-items-center"><b class="ml-4">標籤</b></div>
-                                <div class="m-5 d-flex align-items-center justify-content-between" style="width: 90%; flex-wrap: wrap">
+                                    </div>
+                                    <!-- 標籤列--------------------------------------------------------------------------------------------- -->
+                                    <div class="seatitle mt-5 d-flex align-items-center"><b class="ml-4">標籤</b></div>
+                                    <div class="m-5 d-flex align-items-center justify-content-center" style="width: 90%; flex-wrap: wrap">
 
                                         <div class="mx-3 mb-3 mt-1 mytag d-flex align-items-center justify-content-center" v-for="(item,key) in tag">
-                                            <a v-bind:href="'/YiPLib/fliter.html?FixTag='+tag[key].tagName" class="btn d-flex align-items-center justify-content-center" style="width:330px;" >
+                                            <a v-bind:href="'/YiPLib/fliter.html?FixTag='+tag[key].tagName" class="btn d-flex align-items-center justify-content-center" style="width:330px;">
                                                 {{tag[key].tagName}}
                                             </a>
                                         </div>
 
-                                </div>
+                                    </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <footer class="footer " style="height:320px;">
-            <div class="row p-0">
-                <div class="col-1 "></div>
-                <div class="col-10">
-                    <div id="footit">
-                        <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
-                        <b>檢舉</b>
-                        <b>隱私權政策</b>
-                        <b>防詐騙宣導</b>
-                    </div>
-                    <div id="footpre">
-                        <pre>
+            <footer class="footer " style="height:320px;">
+                <div class="row p-0">
+                    <div class="col-1 "></div>
+                    <div class="col-10">
+                        <div id="footit">
+                            <b style="font-family:Cascadia Mono SemiBold;">關於Nail it</b>
+                            <b>檢舉</b>
+                            <b>隱私權政策</b>
+                            <b>防詐騙宣導</b>
+                        </div>
+                        <div id="footpre">
+                            <pre>
 地址：408台中市南屯區公益路二段51號18樓
 客服信箱：Nailit@gmail.com
 客服電話： 04 -2326-5860
         </pre>
-                    </div>
-                    <div id="footcopy">
-                        <p style="font-size: 12px;font-family:Franklin Gothic Book;">
-                            Copyright ©2022 MSIT44TEAM1
-                        </p>
+                        </div>
+                        <div id="footcopy">
+                            <p style="font-size: 12px;font-family:Franklin Gothic Book;">
+                                Copyright ©2022 MSIT44TEAM1
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
 
-        </footer>
-    </div>
+            </footer>
+        </div>
 
-    <!-- 插入JS檔 -->
+        <!-- 插入JS檔 -->
 
-    <script src="/TanTanLib//js/cover.js"></script>
+        <script src="/TanTanLib//js/cover.js"></script>
 </body>
 
 </html>
