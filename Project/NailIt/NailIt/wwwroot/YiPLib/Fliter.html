@@ -130,7 +130,7 @@
         .heart {
             font-size: 7px;
             position: absolute;
-            color: red;
+            color: rgb(180, 180, 180);
             font-weight: bold;
             /*top:4px;*/
             margin-top: 4px;
@@ -157,7 +157,7 @@
 
         .Cover {
             /*margin-right: 70px;*/
-            margin-right: 25px;
+            /*margin-right: 25px;*/
             height: 180px;
             width: 180px;
             object-fit: cover;
@@ -229,13 +229,24 @@
                 z-index: 99;
             }
 
+        .Seemore {
+/*            margin-left: 30px;*/
+            margin-right: 25px;
+            overflow: hidden;
+        }
+
         .Seemore:hover > .Clickme {
             visibility: visible;
         }
 
         .Seemore:hover {
-            filter: grayscale(60%);
+            filter: grayscale(20%);
         }
+
+            .Seemore:hover > .Cover {
+                transition: 1s;
+                transform: scale(1.1);
+            }
 
         .LinkTo {
             color: black;
