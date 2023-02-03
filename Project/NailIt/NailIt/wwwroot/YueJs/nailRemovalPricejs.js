@@ -1,9 +1,9 @@
 ﻿
 async function removalSendGet()
 {
+	await YueloginCheck();
 	tedDiv.style.display = "none";
 	contentdiv.style.display = "block";
-	await YueloginCheck();
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
@@ -14,6 +14,7 @@ async function removalSendGet()
         .then(result=>
             myResult = result)
 		.catch(error => console.log('error', error));
+	console.log(nowMember);
 	removalSee();
 }
 

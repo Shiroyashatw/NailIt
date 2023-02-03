@@ -12,14 +12,14 @@ html {
     width: 100%;
     height: 90px;
     position: fixed;
-    background-position-x:0px;
+    background-position-x: 0px;
     font-size: 16px;
     background-color: white;
     opacity: .9;
     z-index: 9999;
 }
 
-#navall>div {
+#navall > div {
     /* background-color: blue; */
     max-height: 100%;
     /* 待研究 */
@@ -40,22 +40,21 @@ html {
     height: 100%;
 }
 
-.navmid>li {
-    display: inline;
-    color: black;
+    .navmid > li {
+        display: inline;
+        color: black;
+    }
 
-}
+        .navmid > li > a {
+            color: black;
+            font-weight: bold;
+        }
 
- .navmid > li > a {
-   color: black;
-   font-weight: bold;
-}
-
-.navmid>li>a:hover {
-    text-decoration-line: underline;
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 7px;
-}
+            .navmid > li > a:hover {
+                text-decoration-line: underline;
+                text-decoration-thickness: 1.5px;
+                text-underline-offset: 7px;
+            }
 
 #brand a,
 #brand a:link,
@@ -73,10 +72,9 @@ html {
     font-weight: bold;
 }
 
-.navend2>img {
+.navend2 > img {
     width: 25px;
     /* background-color: blue; */
-
 }
 
 /* 內文------------------------------------------------------------------------------ */
@@ -90,25 +88,22 @@ html {
 
 .carousel-item img {
     height: 430px;
-    object-fit:fill;
+    object-fit: fill;
     object-position: center center;
 }
 
 .carousel-control-next,
-.carousel-control-prev
-    {
+.carousel-control-prev {
     filter: invert(100%);
-
 }
 
 .carousel .carousel-indicators li {
     background-color: gray;
 }
 
-.carousel .carousel-indicators li.active {
-    
-    background-color: #3B3838;
-}
+    .carousel .carousel-indicators li.active {
+        background-color: #3B3838;
+    }
 
 /* 內文1------------------------------------------------------------------------------ */
 
@@ -122,33 +117,32 @@ html {
     text-underline-offset: 7px;
 }
 
-b,p{
+b, p {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 18px;
 }
 
 
 
-select{
+select {
     opacity: 80%;
     border: none;
     outline: none;
 }
-input{
 
+input {
     border: none;
     outline: none;
 }
 
-.resertite{
+.resertite {
     border: 2px;
     border-bottom-style: solid;
 }
 
 .searchButton img {
-
     height: 24px;
-} 
+}
 
 
 /* TOP---------------------------------------------------------- */
@@ -156,18 +150,45 @@ input{
     height: 200px;
 }
 
+.Seemore {
+    overflow: hidden;
+}
+
+    .Seemore:hover {
+        filter: grayscale(20%);
+    }
+
+        .Seemore:hover > .Demoimg {
+            transition: 0.5s;
+            transform: scale(1.1);
+        }
+
+.Clickme {
+    background-color: black;
+    color: white;
+    width: 140px;
+    height: 40px;
+    visibility: hidden;
+    z-index: 99;
+
+}
+
+    .Clickme:hover {
+        background-color: black;
+        color: white;
+        z-index: 99;
+    }
 /* SEARCH---------------------------------------------------------- */
 
 .seatitle {
     background-color: #000000;
     height: 55px;
-
 }
 
-.seatitle>b {
-    font-size: 18px;
-    color: white;
-}
+    .seatitle > b {
+        font-size: 18px;
+        color: white;
+    }
 
 .colcir {
     background-color: rgb(116, 112, 112);
@@ -177,10 +198,11 @@ input{
     height: 70px;
     /* margin: 20px; */
 }
-.colcir:hover{
-    color: #000000;
-    /* text-decoration-line:none; */
-}
+
+    .colcir:hover {
+        color: #000000;
+        /* text-decoration-line:none; */
+    }
 
 
 
@@ -190,44 +212,41 @@ input{
     text-decoration-thickness: 1px;
 }
 
-.coldot{
-   margin:4% 0%;
+.coldot {
+    margin: 4% 0%;
 }
 
 .colmix {
     background-image: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
-
 }
 
-.mytag .btn{
+.mytag .btn {
     background-color: white;
     color: black;
     font-weight: bold;
-    border: 2px solid black; 
-    height:60px;
-    margin:1% 0%;
-    border-radius:0px;
+    border: 2px solid black;
+    height: 60px;
+    margin: 1% 0%;
+    border-radius: 0px;
+}
 
-  }
-
-  .mytag  .btn {
+.mytag .btn {
     transition-duration: 0.4s;
-  }
-  
-  .mytag   .btn:hover {
-    background-color:#D0CECE; 
-    font-weight: bolder;
-    
-  }
+}
 
-  /* 頁尾---------------------------------------------------------- */
-
-  #hid{    
-    background-color:white; 
-    border: 0px solid white; 
-    height:60px;
-    margin:1% 0%;
+    .mytag .btn:hover {
+        background-color: #D0CECE;
+        font-weight: bolder;
     }
+
+/* 頁尾---------------------------------------------------------- */
+
+#hid {
+    background-color: white;
+    border: 0px solid white;
+    height: 60px;
+    margin: 1% 0%;
+}
 
 
 footer {
@@ -239,21 +258,20 @@ footer {
 }
 
 
-#footit{
-    margin-top:6%;
+#footit {
+    margin-top: 6%;
 }
 
-#footit b{
-    font-size: 14px;
-    margin-right:1%;
-}
+    #footit b {
+        font-size: 14px;
+        margin-right: 1%;
+    }
 
-#footpre pre{
+#footpre pre {
     color: white;
     font-size: 14px;
 }
 
-#footpre,#footcopy{
-    margin-top:1%;
+#footpre, #footcopy {
+    margin-top: 1%;
 }
-

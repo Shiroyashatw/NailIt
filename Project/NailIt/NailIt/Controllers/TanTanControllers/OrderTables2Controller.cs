@@ -36,6 +36,45 @@ namespace NailIt.Controllers.TanTanControllers
                                  };
             return await newOrderTables.ToListAsync();
         }
+        // GET: api/OrderTables2/Top5
+        [HttpGet("Top5")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetTop5()
+        {
+            //select TOP 5  order_Item,COUNT(order_Item) count1 from Order_Table where order_Type = '1' group by order_Item order by count1 desc
+            //var OrderTop5 = from o in _context.OrderTables
+            //                where o.OrderType == true
+            //                group o by new { o.OrderItem } into g
+            //                select  new
+            //                {
+            //                    OrderItem = g.Key.OrderItem,
+
+            //                    //QTY = g.Count(o => o.OrderItem)
+            //                };
+
+            var groups = _context.OrderTables.Where(n => n.OrderType == true)
+
+                         
+                         .GroupBy(n => n.OrderItem)
+                         .Select(n => new
+                         {
+                             OrderItem = n.Key,
+                             OrderItemCount = n.Count(),
+                         })
+                         .OrderByDescending(n => n.OrderItemCount).Take(5);
+
+            var groups2 = groups.Join(_context.DemoSetTables,
+                         n => n.OrderItem,
+                         o => o.DemoSetId,
+                         (n, o) => new  // (c,s)代表將資料集合起來
+                         {
+                             DemoSetId=o.DemoSetId,
+                             DemoSetName = o.DemoSetName,
+                             DemoSetCover = o.DemoSetCover,
+                             DemoSetPrice = o.DemoSetPrice.ToString("C0"),
+                         });
+
+            return await groups2.ToListAsync();
+        }
         // GET: api/OrderTables2/5
         [HttpGet("{id}")]
         public async Task<ActionResult<dynamic>> GetOrderTable(int id)
@@ -89,7 +128,7 @@ namespace NailIt.Controllers.TanTanControllers
 
         // GET: api/OrderTables2/condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}
         [HttpGet("condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}")]
-        public async Task<ActionResult<dynamic>> GetOrderCondition(string OdateS, string OdateE, string orderStateC ,int orderId)
+        public async Task<ActionResult<dynamic>> GetOrderCondition(string OdateS, string OdateE, string orderStateC, int orderId)
         {
             var date1 = DateTime.Parse(OdateS);
             var date2 = DateTime.Parse(OdateE).AddMinutes(1439);
@@ -104,22 +143,22 @@ namespace NailIt.Controllers.TanTanControllers
                                         && a.OrderOrderTime <= Convert.ToDateTime(date2));
             }
 
-            if (orderStateC != "AA") { result = result.Where(a => a.OrderStateC == orderStateC);}
-           
+            if (orderStateC != "AA") { result = result.Where(a => a.OrderStateC == orderStateC); }
+
 
 
             if (orderId != 0) { result = result.Where(a => a.OrderId == orderId); }
-           
+
 
             var result2 = from o in result
-                                 join os in _context.CodeTables on o.OrderStateC equals os.CodeId
-                                 select new
-                                 {
-                                     OrderId = o.OrderId,
-                                     OrderOrderTime = o.OrderOrderTime.ToString("yyyy-MM-dd HH:mm"),
-                                     OrderStateC = o.OrderStateC,
-                                     OrderStateName = os.CodeRepresent // 狀態
-                                 };
+                          join os in _context.CodeTables on o.OrderStateC equals os.CodeId
+                          select new
+                          {
+                              OrderId = o.OrderId,
+                              OrderOrderTime = o.OrderOrderTime.ToString("yyyy-MM-dd HH:mm"),
+                              OrderStateC = o.OrderStateC,
+                              OrderStateName = os.CodeRepresent // 狀態
+                          };
             return await result2.ToListAsync();
         }
 
