@@ -98,21 +98,7 @@ namespace NailIt.Controllers.AnselControllers
 
             return Ok(leftJoinLike);
         }
-
-        // GET: api/ArticleTables/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ArticleTable>> GetArticleTable(int id)
-        //{
-        //    var articleTable = await _context.ArticleTables.FindAsync(id);
-
-        //    if (articleTable == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return articleTable;
-        //}
-
+        
         // PUT: api/ArticleTables/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

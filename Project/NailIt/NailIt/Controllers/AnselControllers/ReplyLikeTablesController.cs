@@ -20,58 +20,6 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
-        //// GET: api/ReplyLikeTables
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<ReplyLikeTable>>> GetReplyLikeTables()
-        //{
-        //    return await _context.ReplyLikeTables.ToListAsync();
-        //}
-
-        //// GET: api/ReplyLikeTables/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ReplyLikeTable>> GetReplyLikeTable(int id)
-        //{
-        //    var replyLikeTable = await _context.ReplyLikeTables.FindAsync(id);
-
-        //    if (replyLikeTable == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return replyLikeTable;
-        //}
-
-        //// PUT: api/ReplyLikeTables/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutReplyLikeTable(int id, ReplyLikeTable replyLikeTable)
-        //{
-        //    if (id != replyLikeTable.ReplyLikeId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(replyLikeTable).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ReplyLikeTableExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         // POST: api/ReplyLikeTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -126,9 +74,5 @@ namespace NailIt.Controllers.AnselControllers
             }
         }
 
-        //private bool ReplyLikeTableExists(int id)
-        //{
-        //    return _context.ReplyLikeTables.Any(e => e.ReplyLikeId == id);
-        //}
     }
 }

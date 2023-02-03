@@ -109,50 +109,6 @@ namespace NailIt.Controllers.AnselControllers
             return result;
         }
 
-        // GET: api/ReplyTables/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ReplyTable>> GetReplyTable(int id)
-        //{
-        //    var replyTable = await _context.ReplyTables.FindAsync(id);
-
-        //    if (replyTable == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return replyTable;
-        //}
-
-        // PUT: api/ReplyTables/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutReplyTable(int id, ReplyTable replyTable)
-        //{
-        //    if (id != replyTable.ReplyId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(replyTable).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ReplyTableExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
 
         // POST: api/ReplyTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -197,9 +153,5 @@ namespace NailIt.Controllers.AnselControllers
             return NoContent();
         }
 
-        //private bool ReplyTableExists(int id)
-        //{
-        //    return _context.ReplyTables.Any(e => e.ReplyId == id);
-        //}
     }
 }
