@@ -3,8 +3,10 @@
 
 
 // Write your JavaScript code.
-var scop = {
-    loginId: 0,
+var navScop = {
+    loginId: -1,
+    loginAccount:"",
+    loginNickname:""
 }
 var showChatPage = function () {
     if (!checkLogin()) return;
@@ -12,7 +14,7 @@ var showChatPage = function () {
     window.location.href = `${apiServer}/Community/chat`;
 }
 var showSysNotic = async function () {
-    if (!checkLogin()) return;
+    if (!checkLoginNoAlert()) return;
 
     // check unread system notice
     let result = await putMsgRead(0);
@@ -29,7 +31,7 @@ var showSysNotic = async function () {
     $("#sysNoticDropDown").addClass("show");
 }
 var showCheckNotic = async function () {
-    if (!checkLogin()) return;
+    if (!checkLoginNoAlert()) return;
     let result = await getMembersMsg();
     if (!!result) {
         if (result.findIndex(x => x.unreadCount > 0 && x.memberId == 0) > -1) {
@@ -61,15 +63,34 @@ var getMembersMsg = async function () {
 }
 
 var checkLogin = function () {
-    if (scop.loginId == 0) {
+    if (navScop.loginId == -1) {
         alert("請先登入!");
         return false;
     }
     return true;
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    scop.loginId = 1;//$("#loginId").val();
+var checkLoginNoAlert = function () {
+    if (navScop.loginId == -1) {
+        return false;
+    }
+    return true;
+}
+
+async function getLoginInfo() {
+    await YueloginCheck();
+    console.log("nowMember" , nowMember);
+    console.log("nowAccount" , nowAccount);
+    console.log("nowNickName" , nowNickName);
+    navScop.loginId = nowMember;
+    navScop.loginAccount = nowAccount;
+    navScop.loginNickname = nowNickName;
+}
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+    // Get login member Info from backend
+    await getLoginInfo();
 
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {

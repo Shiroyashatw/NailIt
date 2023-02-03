@@ -2,27 +2,29 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor hca
 @{
     ViewData["Title"] = "美甲小天地";
-    int loginId = hca.HttpContext.Session.GetInt32("loginId") ?? 0;
-    string loginAccount = hca.HttpContext.Session.GetString("loginAccount") ?? "Guest";
-    string loginNickname = hca.HttpContext.Session.GetString("loginNickname") ?? "Guest";
+    //int loginId = hca.HttpContext.Session.GetInt32("loginId") ?? 0;
+    //string loginAccount = hca.HttpContext.Session.GetString("loginAccount") ?? "Guest";
+    //string loginNickname = hca.HttpContext.Session.GetString("loginNickname") ?? "Guest";
 }
 @section Head{
     <!-- Google Icons -->
     @*<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />*@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/c86cec09de.js" crossorigin="anonymous"></script>
-    <!-- Custom js -->
-    <script src="~/AnselLib/Ansel_Community.js"></script>
-    
+    <!-- Custom css -->
     <link rel="stylesheet" href="~/AnselLib/Ansel_Community.css">
+    
     <style></style>
 }
-@section Scripts{}
+@section Scripts{
+    <!-- Custom js -->
+    <script src="~/AnselLib/Ansel_Community.js"></script>
+}
 
 @* invisible infornation *@
-<input id="loginId" type="text" value="@loginId" class="d-none">
+@*<input id="loginId" type="text" value="@loginId" class="d-none">
 <input id="loginAccount" type="text" value="@loginAccount" class="d-none">
-<input id="loginNickname" type="text" value="@loginNickname" class="d-none">
+<input id="loginNickname" type="text" value="@loginNickname" class="d-none">*@
 
 <div class="">
     @* <nav aria-label="breadcrumb">

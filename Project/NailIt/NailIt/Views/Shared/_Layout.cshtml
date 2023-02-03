@@ -65,15 +65,16 @@
                     <img class="cursor-pointer dropbtn-sysNotic" src="~/images/notification.png" onclick="showSysNotic()">
                     <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
                     <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
-                        @* <a class="drop-item">編輯3</a>
-                        <a class="drop-item">刪除3</a>
-                        <a class="drop-item">檢舉3</a> *@
+                        @* <a class="drop-item">系統訊息內容1</a> *@
+                        @* <a class="drop-item">系統訊息內容2</a> *@
+                        @* <a class="drop-item">系統訊息內容3</a> *@
                     </div>
                 </div>
             </div>
             <div class="col-1 p-0"></div>
         </div>
     </nav>
+
     <div id="mainPadding" class="d-flex justify-content-center">
         <main id="mainBackground" role="main" class="col-sm-10 default-margin">
             @RenderBody()
@@ -114,7 +115,8 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/Ansel_Layout.js" asp-append-version="true"></script>
+    <script src="~/YueJs/loginCheck.js"></script>
+    <script src="~/js/Ansel_Layout.js"></script>
     <script src="~/AnselLib/Ansel_Service.js"></script>
     <script src="~/AnselLib/Ansel_Common.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

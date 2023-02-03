@@ -1,7 +1,8 @@
 var scop = {
-    loginId: 0, // 目前登入者Id
-    loginAccount: "", // 目前登入者帳號
-    loginNickname: "", // 目前登入者暱稱
+    //從layout的js取得login ingo //
+    // loginId: 0, // 目前登入者Id
+    // loginAccount: "", // 目前登入者帳號
+    // loginNickname: "", // 目前登入者暱稱
     bodyArea: null, // for closing right click menu
     chattingMembersMenu: null, //  for chattingMembers right click menu
     chattingMsgsMenu: null, // for chattingMsg right click menu
@@ -38,7 +39,7 @@ var showAddBlack = async function () {
     if (!checkLogin()) return;
     // create black model 
     let blacklist = new MessageBlacklistTable({
-        blacklistBuilder: scop.loginId,
+        blacklistBuilder: navScop.loginId,
         blacklistTarget: scop.memberid
     });
     // call api (postBlacklist)
@@ -109,8 +110,8 @@ var showRevokeMsg = async function () {
     let result = await putMsgRevoke(scop.messageid);
     if (!!result) {
         // update message
-        $(`div[data-messageid='${scop.messageid}']`).prepend(`<span class="rounded px-3 py-2" style="border: 4px solid black;">訊息已收回</span>`);
-        $(`div[data-messageid='${scop.messageid}']`).children()[1].remove();
+        $(`div[data-messageid='${scop.messageid}']`).children().children()[0].remove();
+        $(`div[data-messageid='${scop.messageid}']`).children().prepend(`<span class="rounded px-3 py-2" style="border: 4px solid black;">訊息已收回</span>`);
     }
 }
 // Enter specific person while enter into chatting page
@@ -227,7 +228,7 @@ var showMyNewImg = async function (obj) {
     // get file
     let files = $(obj).prop('files');
     let message = new MessageTable({
-        messageSender: scop.loginId,
+        messageSender: navScop.loginId,
         messageReceiver: scop.currentChatMemId
     });
     let formdata = new FormData();
@@ -262,7 +263,7 @@ var showMyNewMsg = async function () {
     content = await elmDataURLToLink(draftMessage.innerHTML);
     // get value from textarea
     let message = new MessageTable({
-        messageSender: scop.loginId,
+        messageSender: navScop.loginId,
         messageReceiver: scop.currentChatMemId,
         messageContent: content,
     });
@@ -322,7 +323,7 @@ var renderBlacklist = function (blacklist) {
 var renderMessage = async function (message, slide) {
     let messageHTML = "";
     // the message sent by other
-    if (message.messageSender != scop.loginId) {
+    if (message.messageSender != navScop.loginId) {
         // text message
         if (message.messageContent.indexOf("<img") == -1) {
             messageHTML = `
@@ -516,7 +517,7 @@ var postMsgImage = async function (imageFiles) {
 //#region Custom tool function
 // Check if login ?
 var checkLogin = function () {
-    if (scop.loginId == 0) {
+    if (navScop.loginId == -1) {
         alert("請先登入!");
         return false;
     }
@@ -678,10 +679,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     // })
 
     // 是否需要把backend的session設定到frontend ?
-    scop.loginId = $("#loginId").val();
-    scop.loginAccount = $("#loginAccount").val();
-    scop.loginNickname = $("#loginNickname").val();
-    console.log(scop.loginId, scop.loginAccount, scop.loginNickname);
+    // navScop.loginId = $("#loginId").val();
+    // navScop.loginAccount = $("#loginAccount").val();
+    // navScop.loginNickname = $("#loginNickname").val();
+    // console.log(navScop.loginId, navScop.loginAccount, navScop.loginNickname);
     // $("#findMemberId").val();
     // $("#findMemberAccount").val();
     // $("#findMemberNickname").val();

@@ -142,7 +142,7 @@ html {
     font-weight: bold;
 }
 
-.navend2 img { /* 因為notice有修改格式 */
+.navend2 img { /* 因為notice 加入dropDown顯示系統通知訊息有修改格式 */
     width: 25px;
     /* background-color: blue; */
 }
