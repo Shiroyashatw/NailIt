@@ -832,7 +832,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         }
 
-        // nav 上的sysNotic下拉
+        // nav 上的sysNotic下拉，here cover the event sets in layout.js, so set it here again.
         if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
             $(".dropdown-content-sysNotic").each((index, elem) => {
                 if (elem.classList.contains("show"))
