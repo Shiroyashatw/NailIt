@@ -169,7 +169,7 @@ function removalSendPut() {
 	myHeaders.append("Content-Type", "application/json");
 
 	var raw = JSON.stringify({
-		"removalPriceManicuristID": 2,
+		"removalPriceManicuristID": nowMember,
 		"removalPriceB0": removeNail1.value,
 		"removalPriceB1": removeNail2.value,
 		"removalPriceB2": removeNail3.value,
