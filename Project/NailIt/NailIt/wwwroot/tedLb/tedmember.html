@@ -1138,7 +1138,7 @@
 
                         $.ajax({
                             type: "put",
-                            url: "/api/ManicuristTables/1",
+                            url: "/api/ManicuristTables/" + nowmembb,
                             contentType: "application/json",
                             data: JSON.stringify(this.shoplist),
                             success: function () {
