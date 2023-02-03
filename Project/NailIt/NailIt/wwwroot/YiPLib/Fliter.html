@@ -152,7 +152,7 @@
             flex-wrap: wrap;
             margin-top: 16px;
             /*margin-left: 90px;*/
-            margin-left: 25px;
+            margin-left: 30px;
         }
 
         .Cover {
@@ -169,7 +169,7 @@
             font-size: 16px;
             border: 1px solid grey;
             float: left;
-            max-width:100px;
+            max-width:200px;
             height:35px;
         }
 
@@ -231,7 +231,7 @@
 
         .Seemore {
 /*            margin-left: 30px;*/
-            margin-right: 25px;
+            margin-right: 30px;
             overflow: hidden;
         }
 
@@ -265,70 +265,138 @@
 
         .ForSingle {
             padding: 3px;
-            color: rgb(230 51 73);
+            /*color: rgb(230 51 73);*/
+            color: #FF6733;
             transition: all .3s linear;
-            cursor:pointer;
+            cursor: pointer;
+            position: relative;
         }
-
-            .ForSingle:hover {
-                background-color: rgb(230 51 73);
-                color: rgb(255 233 236);
+            .ForSingle:after {
+                content: '';
+                width: 100%;
+                height: 1px;
+                /*background-color: rgb(230 51 73);*/
+                background-color: #FF6733;
+                position: absolute;
+                bottom: 0px;
+                left: 0;
+                transition: all .3s linear;
             }
 
-        .SingleUderLine {
-            border-bottom: solid 1pt rgb(230 51 73);
-        }
 
         .ForCombo {
             padding: 3px;
-            color: rgb(71 189 101);
+            /*color: rgb(71 189 101);*/
+            color: #7F7F7F;
             transition: all .3s linear;
             cursor: pointer;
+            position: relative;
         }
 
-            .ForCombo:hover {
-                /*background-color: rgb(211 241 201);*/
-                background-color: rgb(71 189 101);
-                /*color: rgb(71 189 101);*/
-                color: rgb(211 241 201);
+            .ForCombo:after {
+                content: '';
+                width: 0%;
+                height: 1px;
+                /*background-color: rgb(71 189 101);*/
+                background-color: #7F7F7F;
+                position: absolute;
+                bottom: 0px;
+                left: 0;
+                transition: all .3s linear;
             }
 
-        .ComboUderLine {
-            border-bottom: solid 1pt rgb(71 189 101);
+            .ForCombo:hover::after {
+                width: 100%;
+            }
+
+        .NowSingle {
+            padding: 3px;
+            /*color: rgb(230 51 73);*/
+            color: #7F7F7F;
+            transition: all .3s linear;
+            cursor: pointer;
+            position: relative;
         }
 
-        .ForClear {
-            cursor: pointer;
+            .NowSingle:after {
+                content: '';
+                width: 0%;
+                height: 1px;
+                /*background-color: rgb(230 51 73);*/
+                background-color: #7F7F7F;
+                position: absolute;
+                bottom: 0px;
+                left: 0;
+                transition: all .3s linear;
+            }
+
+            .NowSingle:hover::after {
+                width: 100%;
+            }
+
+        .NowCombo {
             padding: 3px;
-            color: rgb(105 121 204);
+            /*color: rgb(71 189 101);*/
+            color: #FF6733;
             transition: all .3s linear;
+            cursor: pointer;
+            position: relative;
+        }
+
+            .NowCombo:after {
+                content: '';
+                width: 100%;
+                height: 1px;
+                /*background-color: rgb(71 189 101);*/
+                background-color: #FF6733;
+                position: absolute;
+                bottom: 0px;
+                left: 0;
+                transition: all .3s linear;
+            }
+
+        .ForClear {
+            padding: 3px;
+            /*color: rgb(105 121 204);*/
+            color: #000000;
+            cursor: pointer;
         }
 
             .ForClear:hover {
-                background-color: rgb(105 121 204);
-                color: rgb(209 215 244);
+                color: #FF6733;
             }
 
-        .QryBtn {
-            padding-top: 2px;
-            padding-bottom: 2px;
-            padding-left: 50px;
-            padding-right: 50px;
-            color: white;
-            background-color: black;
-            border:none;
-        }
+
+            .QryBtn {
+                padding-top: 2px;
+                padding-bottom: 2px;
+                padding-left: 50px;
+                padding-right: 50px;
+                color: white;
+                background-color: black;
+                border: none;
+            }
 
             .QryBtn:hover {
                 background: #D0CECE;
                 border: none;
             }
 
-            /*DD*/
-            * {
-                margin: 0;
-                padding: 0;
-            }
+        .SelectStyle{
+            border:none;
+            width:110px;
+            text-align:center;
+        }
+
+        .SelectStyle:focus {
+            outline:none;
+        }
+
+        /*DD*/
+        * {
+            margin: 0;
+            padding: 0;
+        }
 
         html {
             overflow-y: auto;
@@ -481,7 +549,7 @@
                 <!--連結End-->
                 <div class="mt-3">
                     <div v-if="SelectMethod == 'ShowSingle'">
-                        <label class="ForSingle SingleUderLine">
+                        <label class="ForSingle">
                             單選查詢
                             <input class="TagRadio" type="radio" />
                         </label>
@@ -497,11 +565,11 @@
     </div>-->
                     </div>
                     <div v-if="SelectMethod == 'ShowCombo'">
-                        <label class="ForSingle" onclick="ChangeToSingle()">
+                        <label class="NowSingle" onclick="ChangeToSingle()">
                             單選查詢
                             <input class="TagRadio" type="radio" />
                         </label>
-                        <label class="ForCombo ComboUderLine">
+                        <label class="NowCombo">
                             複選查詢
                             <input class="TagRadio" type="radio" />
                         </label>
@@ -517,13 +585,13 @@
                         <label>地區</label>
                         <div>
                             <div>
-                                <select v-model="SelectedCity" onchange="ShowCountry(this)">
+                                <select v-model="SelectedCity" class="SelectStyle" onchange="ShowCountry(this)">
                                     <option value="none" selected disabled hidden>請選擇縣市</option>
                                     <option v-for="(item,key) in City" v-bind:value="[key]">{{City[key]}}</option>
                                 </select>
                             </div>
                             <div class="mt-2">
-                                <select v-model="SelectedArea" v-if="ShowAreas" onchange="ShowArea(this)">
+                                <select v-model="SelectedArea" class="SelectStyle" v-if="ShowAreas" onchange="ShowArea(this)">
                                     <option value="none" selected disabled hidden>請選擇地區</option>
                                     <option v-if="Area" v-for="(item,key) in Area" v-bind:value="Area[key]">{{item}}</option>
                                 </select>
@@ -592,13 +660,13 @@
                         <label>地區</label>
                         <div>
                             <div>
-                                <select id="SecCoun" onchange="SecShowCoun(this)">
+                                <select id="SecCoun" class="SelectStyle" onchange="SecShowCoun(this)">
                                     <option value="none" selected disabled hidden>請選擇縣市</option>
                                     <option v-for="(item,key) in City" v-bind:value="[key]">{{City[key]}}</option>
                                 </select>
                             </div>
                             <div class="mt-2">
-                                <select v-model="QueryArray.Area" v-if="SecShowArea">
+                                <select v-model="QueryArray.Area" class="SelectStyle" v-if="SecShowArea">
                                     <option value="none" selected disabled hidden>請選擇地區</option>
                                     <option v-if="Area" v-for="(item,key) in Area" v-bind:value="Area[key]">{{item}}</option>
                                 </select>
