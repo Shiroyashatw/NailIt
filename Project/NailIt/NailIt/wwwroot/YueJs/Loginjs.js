@@ -41,8 +41,7 @@ async function login() {
 			}
 		}
 	).catch(error => console.log('error', error));
-
-	if(flag)window.history.back();
+	if (flag) location.href = document.referrer;
 
 }
 

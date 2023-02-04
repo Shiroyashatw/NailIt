@@ -23,8 +23,7 @@ namespace NailIt.Controllers.YueyueControllers
         [HttpGet]
         public async Task<List<MemberTable>> LoginCheck()
         {
-            string theKey=Request.Cookies[".AspNetCore.Session"];
-            if(HttpContext.Session.GetString("NailLogin")==null|| theKey == null)
+            if(HttpContext.Session.GetString("NailLogin")==null)
                 return null;
             Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
             var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;

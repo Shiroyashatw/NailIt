@@ -27,8 +27,11 @@ namespace NailIt.Controllers
         public IActionResult Index()
         {
             // setup login user info
-            var LoginMemberInfo = LoginCheck()[0];
-            HttpContext.Session.SetInt32("loginId", LoginMemberInfo.MemberId);
+            if (LoginCheck()!=null)
+            {
+                var LoginMemberInfo = LoginCheck()[0];
+                HttpContext.Session.SetInt32("loginId", LoginMemberInfo.MemberId);
+            }
 
             return View();
         }
@@ -37,8 +40,11 @@ namespace NailIt.Controllers
         public IActionResult Chat(int? id)
         {
             // setup login user info
-            var LoginMemberInfo = LoginCheck()[0];
-            HttpContext.Session.SetInt32("loginId", LoginMemberInfo.MemberId);
+            if (LoginCheck()!=null)
+            {
+                var LoginMemberInfo = LoginCheck()[0];
+                HttpContext.Session.SetInt32("loginId", LoginMemberInfo.MemberId);
+            }
 
             // if comes with memberId which user want to talk to
             ViewBag.FindMemberId = (id != null) ? id : -1;
@@ -59,7 +65,7 @@ namespace NailIt.Controllers
                 return null;
             Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
             var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
-            return theId.ToList();
+            return theId.ToList();            
         }
 
     }
