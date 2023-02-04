@@ -20,16 +20,6 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
-        public List<MemberTable> LoginCheck()
-        {
-            string theKey = Request.Cookies[".AspNetCore.Session"];
-            if (HttpContext.Session.GetString("NailLogin") == null || theKey == null)
-                return null;
-            Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
-            var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
-            return theId.ToList();            
-        }
-
         /// <summary>
         /// load reply of article
         /// </summary>
@@ -39,7 +29,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{ArticleId}")]
         public async Task<ActionResult<IEnumerable<ReplyTable>>> GetReplyTables(int ArticleId)
         {
-            var loginId = LoginCheck()?[0].MemberId ?? -1;
+            var loginId = HttpContext.Session.GetInt32("loginId") ?? -1;
             var replies = await _context.ReplyTables.
                 Where(r => r.ArticleId == ArticleId).
                 OrderByDescending(r => r.ReplyId).
