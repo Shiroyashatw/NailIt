@@ -184,6 +184,7 @@
             padding-bottom: 3px;
             padding-left: 84.5px;
             padding-right: 85px;
+            z-index: 3;
         }
 
         .Clickme {
@@ -503,7 +504,7 @@
             font-weight: bold;
         }
 
-        .navend2 > img {
+        .navend2 img { /* 因為notice 加入dropDown顯示系統通知訊息有修改格式 */
             width: 25px;
             /* background-color: blue; */
         }
@@ -545,6 +546,65 @@
             margin-top: 1%;
         }
 
+        .unread-badge-message {
+            position: absolute;
+            top: 1px;
+            left: 16px;
+            width: 10px;
+            height: 10px;
+        }
+
+        .unread-badge-sysNotic {
+            position: absolute;
+            top: 0px;
+            left: 15px;
+            width: 10px;
+            height: 10px;
+        }
+
+        /* dropdown sysNotic---------------------------------------------------------- */
+        /*#region Dropdown*/
+        .dropbtn {
+            /* background-color: #04AA6D; */
+            /* color: white; */
+            /* padding: 16px; */
+            /* font-size: 16px; */
+            border: none;
+            cursor: pointer;
+        }
+
+        /* .dropbtn:hover, .dropbtn:focus {
+  } */
+        .dropdown {
+            float: right;
+            position: relative;
+            /* display: inline-block; */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            /* min-width: 160px; */
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            right: 0;
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+                padding: 5px 10px;
+                text-decoration: none;
+                display: block;
+                white-space: nowrap;
+            }
+
+        .dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        /*#endregion*/
 
 
     </style>
@@ -571,8 +631,17 @@
                     <p class="navend1">登入 / 會員中心</p>
                 </div>
                 <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
-                    <img id="noti mr-0" src="../images/notification.png">
+                    <div style="position:relative">
+                        <img class="mt-1 mr-3 cursor-pointer" id="chat" src="../images/chat-box.png" onclick="showChatPage()">
+                        <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+                    </div>
+                    <div class="dropdown">
+                        <img class="cursor-pointer dropbtn-sysNotic" src="../images/notification.png" onclick="showSysNotic()">
+                        <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
+                        <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
+                            <a class="drop-item">--目前沒有未讀系統訊息--</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-1 p-0"></div>
             </div>
@@ -683,18 +752,26 @@
                     <div class="col-5">
                     </div>
                     <div class="col-4">
-                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
-                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        <div v-if="DemoSetValue">
+                            <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                            <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        </div>
                     </div>
                     <div class="col-1"></div>
                 </div>
 
-                <div class="row FixPad CowRight">
+                <div class="row">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <p class="DisInLine">共計{{DemoSetList.length}}個作品 頁數1/1</p>
-                        <button class="CBtn">上一頁</button>
-                        <button class="CBtn">下一頁</button>
+                        <div v-if="DemoSetValue" class="FixPad CowRight">
+                            <p class="DisInLine">共計{{DemoSetList.length}}個作品 頁數1/1</p>
+                            <button class="CBtn">上一頁</button>
+                            <button class="CBtn">下一頁</button>
+                        </div>
+                        <div v-else="DemoSetValue">
+                            <p class="produce">尚未擁有作品</p>
+                        </div>
+
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -721,18 +798,25 @@
                     <div class="col-6">
                     </div>
                     <div class="col-4">
-                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
-                        <button class="Searchbtn" onclick="SearchIT()"><i class="fa fa-search"></i></button>
+                        <div v-if="MainDemoSetValue">
+                            <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                            <button class="Searchbtn" onclick="SearchIT()"><i class="fa fa-search"></i></button>
+                        </div>
                     </div>
                     <div class="col-1"></div>
                 </div>
 
-                <div class="row FixPad CowRight">
+                <div class="row">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <p class="DisInLine">共計{{MainDemoCover.length}}個作品 頁數1/1</p>
-                        <button class="CBtn">上一頁</button>
-                        <button class="CBtn">下一頁</button>
+                        <div class="FixPad CowRight" v-if="MainDemoSetValue">
+                            <p class="DisInLine">共計{{MainDemoCover.length}}個作品 頁數1/1</p>
+                            <button class="CBtn">上一頁</button>
+                            <button class="CBtn">下一頁</button>
+                        </div>
+                        <div v-else="MainDemoSetValue">
+                            <p class="produce">尚未擁有作品</p>
+                        </div>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -759,7 +843,7 @@
                     <div class="col-1">
                     </div>
                     <div class="col-10" id="ToSort">
-                        <div class="DisFlex" id="SortLeft">
+                        <div class="DisFlex" id="SortLeft" v-if="CommentValue">
                             <div>
                                 <p class="DisInLine ">排序：</p>
                             </div>
@@ -772,10 +856,13 @@
                             </select>
                         </div>
 
-                        <div class="DisFlex" id="SortRight">
-                            <p class="DisInLine">共計12條評論 頁數1/1</p>
+                        <div class="DisFlex" id="SortRight" v-if="CommentValue">
+                            <p class="DisInLine">共計{{Comment.length}}條評論 頁數1/1</p>
                             <button class="CBtn">上一頁</button>
                             <button class="CBtn">下一頁</button>
+                        </div>
+                        <div v-else="CommentValue">
+                            <p class="produce">尚未擁有評論</p>
                         </div>
                     </div>
                     <div class="col-1"></div>
@@ -922,12 +1009,12 @@
                 </div>
 
                 <!--<div class="row">
-                <div class="col-1"></div>
-                <div class="col-10">
-                    <p class="Blackline ratingimgpd"></p>
-                </div>
-                <div class="col-1"></div>
-            </div>-->
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <p class="Blackline ratingimgpd"></p>
+                    </div>
+                    <div class="col-1"></div>
+                </div>-->
 
             </div>
 
@@ -978,15 +1065,31 @@
     </div>
 
     <script src="../YueJs/loginCheck.js"></script>
+    <script src="../js/Ansel_Layout.js"></script>
+    <script src="../AnselLib/Ansel_Service.js"></script>
+    <script src="../AnselLib/Ansel_Common.js"></script>
+
+    <!--<script>
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
+                $(".dropdown-content-sysNotic").each((index, elem) => {
+                    if (elem.classList.contains("show"))
+                        elem.classList.remove("show");
+                });
+            }
+        }
+    </script>-->
 
     <script>
         let GetNowurl = window.location.href;
         let Nowurl = new URL(GetNowurl);
         let ManicuristID = Nowurl.searchParams.get('id');
         let GetManicuristID;
+        GetManicuristID = nowMember;
         Pre();
         async function Pre() {
             await YueloginCheck();
+            console.log("nowMember" + nowMember);
             console.log("nowMember" + nowMember);
             console.log("GetManicuristID" + GetManicuristID);
 
@@ -1020,6 +1123,11 @@
                             ShowData.DemoSetList.push(e[demoset]);
                         }
                     }
+                    //console.log("------"+ShowData.DemoSetList);
+                    if (ShowData.DemoSetList.length == 0) {
+                        ShowData.DemoSetValue = false;
+                        //console.log('OK');
+                    }
                 }
             });
 
@@ -1042,6 +1150,10 @@
                         e[q].Commentwid = (e[q].commentScore * 20) + '%';
                         ShowData.Comment.push(e[q]);
                     }
+                    if (ShowData.Comment.length == 0) {
+                        ShowData.CommentValue = false;
+                        //console.log('OK');
+                    }
                 }
             });
 
@@ -1049,7 +1161,7 @@
                 type: "get",
                 url: "/api/DemoSet/GetMainDemoSetTable/" + GetManicuristID,
                 success: function (e) {
-                    console.log(e);
+                    //console.log(e);
                     for (maindemo in e) {
                         ShowData.MainDemoCover.push(e[maindemo]);
                         //demoSetMainStartTime
@@ -1058,12 +1170,18 @@
                         let EdT = e[maindemo].demoSetMainEndTime.slice(0, 10).replace('-', '/').replace('-', '/');
                         let StTD = new Date(StT);
                         let EdTD = new Date(EdT);
-                        let diff = EdTD - StTD;
+                        let NowD = new Date();
+                        let diff = EdTD - NowD;
+
                         console.log(diff / 86400000);
-                        ShowData.GetRestDay.push(diff / 86400000);
+                        ShowData.GetRestDay.push(parseInt(diff / 86400000));
                         //console.log(e[maindemo].demoSetMainStartTime.slice(0, 10).replace('-', '/').replace('-', '/'));
                         //ShowData.StartDate.push(e[maindemo].demoSetMainStartTime.slice(0, 10).replace('-', '/').replace('-', '/'));
                         //ShowData.EndDate.push(e[maindemo].demoSetMainEndTime.slice(0, 10).replace('-', '/').replace('-', '/'));
+                    }
+                    if (ShowData.DemoSetList.length == 0) {
+                        ShowData.MainDemoSetValue = false;
+                        //console.log('OK');
                     }
                 }
             });
@@ -1219,7 +1337,10 @@
                     SortRateLTH: [],
                     SearchString: "",
                     PoblicAdress: false,
-                    GetRestDay:[],
+                    GetRestDay: [],
+                    DemoSetValue: true,
+                    MainDemoSetValue: true,
+                    CommentValue:true,
                 }
             },
             methods: {
@@ -1232,7 +1353,7 @@
 
 
 
- 
+
 
 
 

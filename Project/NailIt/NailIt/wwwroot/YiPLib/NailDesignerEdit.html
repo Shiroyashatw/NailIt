@@ -277,7 +277,7 @@
         #Insertdemo {
             color: white;
             border: none;
-            background-color: #7F7F7F;
+            background-color: #FF6733;
             font-size: 16px;
             /*width: 25%;*/
             /*height: 35px;*/
@@ -291,7 +291,8 @@
         .Editbtn {
             color: white;
             border: none;
-            background-color: #7F7F7F;
+            /*background-color: #7F7F7F;*/
+            background-color: #FF6733;
             font-size: 16px;
             padding-top: 6px;
             padding-bottom: 6px;
@@ -301,19 +302,23 @@
         }
 
             .Editbtn:hover, #Insertdemo:hover {
-                background-color: #D0CECE;
+                /*background-color: #D0CECE;*/
+                /*background-color: #fc8158;*/
+                background-color: #fba88d;
                 color: white;
             }
 
         .Checkbtn:hover {
-            background-color: #fc8158;
+            /*background-color: #fc8158;*/
+            background-color: #D0CECE;
             color: white;
         }
 
         .Checkbtn {
             color: white;
             border: none;
-            background-color: #FF6733;
+            /*background-color: #FF6733;*/
+            background-color: #7F7F7F;
             font-size: 16px;
             padding-top: 6px;
             padding-bottom: 6px;
@@ -410,19 +415,21 @@
             display: none;
         }
 
-        #EdUp {
+/*        #EdUp {
             position: absolute;
-        }
+        }*/
 
         #Mylabel {
             background-color: rgb(0, 0, 0, 0.3);
             color: white;
-            position: relative;
+            position: absolute;
             padding-top: 5px;
             padding-bottom: 5px;
             padding-left: 10px;
             padding-right: 10px;
             width: inherit;
+            top:0px;
+            left:65px;
         }
 
             #Mylabel:hover, #GetFileBtn:hover {
@@ -492,7 +499,7 @@
         }
 
         #UpDemoLabel {
-            background-color: #7F7F7F;
+            background-color: #FF6733;
             color: white;
             height: 35px;
             margin-left: 15px;
@@ -503,7 +510,7 @@
         }
 
             #UpFileLabel:hover, #UpDemoLabel:hover {
-                background-color: #D0CECE;
+                background-color: #fba88d;
             }
 
         .OnTxt {
@@ -872,17 +879,18 @@
             <div class="col-1"></div>
             <div id="photoframe" class="col-3 d-flex flex-column">
                 <div>
-                    <img id="DesignerImg" class="Profileimg" v-bind:src="DesignList.manicuristPic" />
+                    <div>
+                        <img id="DesignerImg" class="Profileimg" v-bind:src="DesignList.manicuristPic" />
+                    </div>
+                        <div>
+                            <label id="Mylabel">
+                                <img id="editimg" />編輯
+                                <input type="file" id="file-uploader" accept="image/*" onchange="Getfile(this)" />
+                            </label>
+                        </div>
                 </div>
                 <!--<div class="d-flex justify-content-start" id="EdUp">-->
-                <div id="EdUp">
-                    <div>
-                        <label id="Mylabel">
-                            <img id="editimg" />編輯
-                            <input type="file" id="file-uploader" accept="image/*" onchange="Getfile(this)" />
-                        </label>
-                    </div>
-                </div>
+
             </div>
             <div class="col-5" id="Profile">
                 <!--<input type="text" id="SalonN" maxlength="20" placeholder="店家名稱" v-if="Editing" v-model="PutManicurist[0].manicuristSalonName" />-->
@@ -937,8 +945,10 @@
                         <!--<button data-toggle="modal" data-target="#EditModal">新增</button>-->
                     </div>
                     <div class="col-4">
-                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
-                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        <div v-if="DemoSetValue">
+                            <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                            <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        </div>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1085,12 +1095,17 @@
                     </div>
                 </div>
                 <!--insert Modal End-->
-                <div class="row FixPad CowRight">
+                <div class="row">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <p class="DisInLine">共計{{DemoSetList.length}}個作品 頁數1/1</p>
-                        <button class="CBtn">上一頁</button>
-                        <button class="CBtn">下一頁</button>
+                        <div v-if="DemoSetValue" class="FixPad CowRight">
+                            <p class="DisInLine">共計{{DemoSetList.length}}個作品 頁數1/1</p>
+                            <button class="CBtn">上一頁</button>
+                            <button class="CBtn">下一頁</button>
+                        </div>
+                        <div v-else="DemoSetValue" class="mt-4">
+                            <p class="produce">尚未擁有作品</p>
+                        </div>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1230,7 +1245,7 @@
                             <!--EditModalEnd-->
                             <!--DeleteModal-->
                             <div class="modal fade" id="DeleteModal" data-keyboard="false" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1465,6 +1480,10 @@
                     console.log(e);
                     for (demoset in e) {
                         ShowData.DemoSetList.push(e[demoset]);
+                    }
+                    if (ShowData.DemoSetList.length == 0) {
+                        ShowData.DemoSetValue = false;
+                        //console.log('OK');
                     }
                 }
             });
@@ -1785,6 +1804,7 @@
                 GetCertainDemoKey: "",
                 SearchString: "",
                 InsertCover: [{ "demoSetId": GetManicuristID, "demoSetCover": "" }],
+                DemoSetValue: true,
             },
             methods: {
                 InsertDemo: function () {
