@@ -39,6 +39,18 @@ function headChange() {
 		loginORout.innerText = "登入";
 		loginORout.href = "https://localhost:44308/Yuelogin.html";
 	}
+	console.log("E03");
 }
 
-function 
+async function YueLogout()
+{
+	var requestOptions = {
+		method: 'GET',
+		redirect: 'follow'
+	};
+	await fetch("/api/YueLogout", requestOptions)
+		.then(response => response.text())
+		.then(result => console.log(result))
+		.catch(error => console.log('error', error));
+	location.href("https://localhost:44308/TanTanLib/html/cover.html");
+}
