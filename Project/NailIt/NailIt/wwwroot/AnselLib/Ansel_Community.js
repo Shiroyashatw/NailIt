@@ -711,7 +711,6 @@ var getArticles = async function () {
 
 // Check if login ?
 var checkLogin = function () {
-    console.log(navScop.loginId);
     if (navScop.loginId == -1) {
         alert("請先登入!");
         return false;

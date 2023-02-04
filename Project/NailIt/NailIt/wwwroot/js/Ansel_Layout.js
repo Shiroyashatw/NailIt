@@ -14,7 +14,7 @@ var showChatPage = function () {
     window.location.href = `${apiServer}/Community/chat`;
 }
 var showSysNotic = async function () {
-    if (!checkLoginNoAlert()) return;
+    if (!checkLogin()) return;
 
     // check unread system notice
     let result = await putMsgRead(0);
@@ -79,12 +79,12 @@ var checkLoginNoAlert = function () {
 
 async function getLoginInfo() {
     await YueloginCheck();
-    console.log("nowMember" , nowMember);
-    console.log("nowAccount" , nowAccount);
-    console.log("nowNickName" , nowNickName);
     navScop.loginId = nowMember;
     navScop.loginAccount = nowAccount;
     navScop.loginNickname = nowNickName;
+    console.log("nowMember" , nowMember);
+    console.log("nowAccount" , nowAccount);
+    console.log("nowNickName" , nowNickName);
 }
 
 // Close the dropdown if the user clicks outside of it
