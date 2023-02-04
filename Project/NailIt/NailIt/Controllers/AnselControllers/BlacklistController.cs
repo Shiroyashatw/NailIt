@@ -22,11 +22,21 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
+        public List<MemberTable> LoginCheck()
+        {
+            string theKey = Request.Cookies[".AspNetCore.Session"];
+            if (HttpContext.Session.GetString("NailLogin") == null || theKey == null)
+                return null;
+            Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
+            var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
+            return theId.ToList();            
+        }
+
         // GET: api/Blacklist
         [HttpGet]
         public async Task<ActionResult> GetBlacklist()
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             var blacklist = await _context.MessageBlacklistTables.
                 Where(b => b.BlacklistBuilder == loginId).ToListAsync();
             var joinMember = blacklist.Join(_context.MemberTables, 
