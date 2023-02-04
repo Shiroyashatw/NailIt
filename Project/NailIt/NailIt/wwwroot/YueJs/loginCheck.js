@@ -7,13 +7,20 @@ async function YueloginCheck() {
 		method: 'GET',
 		redirect: 'follow'
 	};
-
+	var myresult;
 	await fetch("/api/LoginCheck", requestOptions)
 		.then(response => response.text())
-		.then(result => daMember = JSON.parse(result)[0])
+		.then(result => myresult = result)
 		.catch(error => console.log('error', error));
-	nowMember = daMember.memberId;
-	
-	nowAccount = daMember.memberAccount;
-	nowNickName = daMember.memberNickname;
+	if (myresult == "") {
+		nowMember = -1;
+		nowAccount = -1;
+		nowNickName = "";
+	}
+	else {
+		JSON.parse(myresult)[0]
+		nowMember = daMember.memberId;
+		nowAccount = daMember.memberAccount;
+		nowNickName = daMember.memberNickname;
+	}
 }
