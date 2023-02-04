@@ -186,6 +186,7 @@
             padding-bottom: 3px;
             padding-left: 84.5px;
             padding-right: 85px;
+            z-index:3;
         }
 
         .Clickme {
@@ -425,7 +426,8 @@
 
         .DemoGroup {
             margin-left: 30px;
-            margin-bottom: 30px;
+            /*margin-bottom: 30px;*/
+            /*margin-top:15px;*/
         }
 
         [v-cloak] {
@@ -726,8 +728,10 @@
                                     查看
                                 </button>
                             </div>
-                            <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
-                            <p class="DemoGroup">${{DemoSetList[key].demoSetPrice}}</p>
+                            <div class="my-3">
+                                <p style="font-weight: bold;" class="DemoGroup">{{DemoSetList[key].demoSetName}}</p>
+                                <p class="DemoGroup">NT${{DemoSetList[key].demoSetPrice}}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-1"></div>
@@ -781,7 +785,7 @@
                     <div class="col-1">
                     </div>
                     <div class="col-10" id="ToSort">
-                        <div class="DisFlex" id="SortLeft">
+                        <div class="DisFlex" id="SortLeft" v-if="CommentValue">
                             <div>
                                 <p class="DisInLine ">排序：</p>
                             </div>
@@ -794,10 +798,13 @@
                             </select>
                         </div>
 
-                        <div class="DisFlex" id="SortRight">
+                        <div class="DisFlex" id="SortRight" v-if="CommentValue">
                             <p class="DisInLine">共計{{Comment.length}}條評論 頁數1/1</p>
                             <button class="CBtn">上一頁</button>
                             <button class="CBtn">下一頁</button>
+                        </div>
+                        <div v-else="CommentValue">
+                            <p class="produce">尚未擁有評論</p>
                         </div>
                     </div>
                     <div class="col-1"></div>
@@ -1144,7 +1151,7 @@
                                                 <!-- <p>可預約時間:</p> -->
                                                 <!-- <label class="col-4"><input type="radio" name="label" value=""><span class="round button">9:00</span></label> -->
                                             </div>
-                                            <div class="remark"></div>
+                                            <div class="remark col-12"></div>
                                         </div>
                                     </div>
 
@@ -1343,6 +1350,7 @@
                     SearchString: "",
                     PoblicAdress: false,
                     GetRestDay: [],
+                    CommentValue:true,
                 }
             },
             methods: {
@@ -1405,6 +1413,10 @@
                     e[q].Commentwid = (e[q].commentScore * 20) + '%';
                     ShowData.Comment.push(e[q]);
                 }
+                if (ShowData.Comment.length == 0) {
+                    ShowData.CommentValue = false;
+                    //console.log('OK');
+                }
             }
         });
 
@@ -1419,9 +1431,13 @@
                     let EdT = e[maindemo].demoSetMainEndTime.slice(0, 10).replace('-', '/').replace('-', '/');
                     let StTD = new Date(StT);
                     let EdTD = new Date(EdT);
-                    let diff = EdTD - StTD;
+                    let NowD = new Date();
+                    console.log("NowD" + NowD);
+                    console.log("EdTD" + EdTD);
+                    let diff = EdTD - NowD;
+                    console.log(parseInt(diff / 86400000));
                     console.log(diff / 86400000);
-                    ShowData.GetRestDay.push(diff / 86400000);
+                    ShowData.GetRestDay.push(parseInt(diff / 86400000));
                 }
             }
         });

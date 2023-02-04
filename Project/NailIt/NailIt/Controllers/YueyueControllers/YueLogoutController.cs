@@ -24,19 +24,10 @@ namespace NailIt.Controllers.YueyueControllers
 
         // PUT: api/Logout/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
-        public async Task<bool> PutMemberTable(string token)
+        [HttpGet]
+        public bool PutMemberTable()
         {
-            Guid guid = Guid.Parse(token);
-            var myMember = (
-            from MemberTable in _context.MemberTables
-            where MemberTable.MemberLogincredit ==guid
-            select MemberTable).ToList()[0];
-
-            _context.Entry(myMember).State = EntityState.Modified;
-            myMember.MemberLogincredit = null;
-            HttpContext.Session.Remove("token");
-            await _context.SaveChangesAsync();
+            HttpContext.Session.Remove("NailLogin");
             return true;
         }
     }

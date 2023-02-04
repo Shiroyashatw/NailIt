@@ -3,8 +3,10 @@
 
 
 // Write your JavaScript code.
-var scop = {
-    loginId: 0,
+var navScop = {
+    loginId: -1,
+    loginAccount:"",
+    loginNickname:""
 }
 var showChatPage = function () {
     if (!checkLogin()) return;
@@ -29,7 +31,7 @@ var showSysNotic = async function () {
     $("#sysNoticDropDown").addClass("show");
 }
 var showCheckNotic = async function () {
-    if (!checkLogin()) return;
+    if (!checkLoginNoAlert()) return;
     let result = await getMembersMsg();
     if (!!result) {
         if (result.findIndex(x => x.unreadCount > 0 && x.memberId == 0) > -1) {
@@ -61,25 +63,44 @@ var getMembersMsg = async function () {
 }
 
 var checkLogin = function () {
-    if (scop.loginId == 0) {
+    if (navScop.loginId == -1) {
         alert("請先登入!");
         return false;
     }
     return true;
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    scop.loginId = 1;//$("#loginId").val();
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
-            $(".dropdown-content-sysNotic").each((index, elem) => {
-                if (elem.classList.contains("show"))
-                    elem.classList.remove("show");
-            });
-        }
+var checkLoginNoAlert = function () {
+    if (navScop.loginId == -1) {
+        return false;
     }
+    return true;
+}
+
+async function getLoginInfo() {
+    await YueloginCheck();
+    navScop.loginId = nowMember;
+    navScop.loginAccount = nowAccount;
+    navScop.loginNickname = nowNickName;
+    console.log("nowMember" , nowMember);
+    console.log("nowAccount" , nowAccount);
+    console.log("nowNickName" , nowNickName);
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
+        $(".dropdown-content-sysNotic").each((index, elem) => {
+            if (elem.classList.contains("show"))
+                elem.classList.remove("show");
+        });
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    // Get login member Info from backend
+    await getLoginInfo();
+    await showCheckNotic();    
 
     // check is there any new message for me per 10sec
     setInterval(showCheckNotic, 10*1000);

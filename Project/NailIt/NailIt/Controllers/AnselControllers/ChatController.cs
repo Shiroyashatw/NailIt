@@ -44,6 +44,16 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
+        public List<MemberTable> LoginCheck()
+        {
+            string theKey = Request.Cookies[".AspNetCore.Session"];
+            if (HttpContext.Session.GetString("NailLogin") == null || theKey == null)
+                return null;
+            Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
+            var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
+            return theId.ToList();            
+        }
+
         // Get all message from MessageTables, SysNoticeTables and NoticeTables
         private async Task<List<AllMessage>> getMemberAllMessage(int? loginId)
         {
@@ -189,7 +199,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet]
         public async Task<ActionResult> GetMembersMsg()
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables and NoticeTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
 
@@ -204,7 +214,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{memberId}")]
         public async Task<ActionResult> GetSingleMemberMsg(int memberId)
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
 
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
@@ -225,7 +235,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{updateTime}")]
         public async Task<ActionResult> GetNewMsg(DateTime updateTime)
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
 
@@ -246,7 +256,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpPut("{senderId}")]
         public async Task<ActionResult> PutMsgRead(int senderId)
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
             // Get all unread message

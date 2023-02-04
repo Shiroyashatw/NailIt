@@ -1,9 +1,9 @@
 ﻿
 async function removalSendGet()
 {
+	await YueloginCheck();
 	tedDiv.style.display = "none";
 	contentdiv.style.display = "block";
-	await YueloginCheck();
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
@@ -14,6 +14,7 @@ async function removalSendGet()
         .then(result=>
             myResult = result)
 		.catch(error => console.log('error', error));
+	console.log(nowMember);
 	removalSee();
 }
 
@@ -168,7 +169,7 @@ function removalSendPut() {
 	myHeaders.append("Content-Type", "application/json");
 
 	var raw = JSON.stringify({
-		"removalPriceManicuristID": 2,
+		"removalPriceManicuristID": nowMember,
 		"removalPriceB0": removeNail1.value,
 		"removalPriceB1": removeNail2.value,
 		"removalPriceB2": removeNail3.value,

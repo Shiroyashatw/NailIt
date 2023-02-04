@@ -29,13 +29,14 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{ArticleId}")]
         public async Task<ActionResult<IEnumerable<ReplyTable>>> GetReplyTables(int ArticleId)
         {
+            var loginId = HttpContext.Session.GetInt32("loginId") ?? -1;
             var replies = await _context.ReplyTables.
                 Where(r => r.ArticleId == ArticleId).
                 OrderByDescending(r => r.ReplyId).
                 ToListAsync();
 
             // remove the reply had been report by this user
-            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D6").ToList();
+            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == loginId && r.ReportPlaceC == "D6").ToList();
             var leftJoinReport = (from reply in replies
                                   join report in userArticleReport
                                        on reply.ReplyId equals report.ReportItem into gj
@@ -50,7 +51,7 @@ namespace NailIt.Controllers.AnselControllers
                 m => m.MemberId,
                 (r, m) => new { reply = r, m.MemberNickname }).ToList();
 
-            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == HttpContext.Session.GetInt32("loginId")).ToList();
+            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == loginId).ToList();
             var leftJoinLike = (from reply in repliesJoinMember
                                 join like in userReplyLike
                                      on reply.reply.ReplyId equals like.ReplyId into gj
@@ -109,50 +110,6 @@ namespace NailIt.Controllers.AnselControllers
             return result;
         }
 
-        // GET: api/ReplyTables/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ReplyTable>> GetReplyTable(int id)
-        //{
-        //    var replyTable = await _context.ReplyTables.FindAsync(id);
-
-        //    if (replyTable == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return replyTable;
-        //}
-
-        // PUT: api/ReplyTables/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutReplyTable(int id, ReplyTable replyTable)
-        //{
-        //    if (id != replyTable.ReplyId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(replyTable).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ReplyTableExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
 
         // POST: api/ReplyTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -197,9 +154,5 @@ namespace NailIt.Controllers.AnselControllers
             return NoContent();
         }
 
-        //private bool ReplyTableExists(int id)
-        //{
-        //    return _context.ReplyTables.Any(e => e.ReplyId == id);
-        //}
     }
 }

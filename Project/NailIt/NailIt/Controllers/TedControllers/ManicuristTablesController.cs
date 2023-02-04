@@ -47,10 +47,7 @@ namespace NailIt.Controllers.TedControllers
         public async Task<IActionResult> PutManicuristTable(int id, ManicuristTable manicuristTable)
         {
 
-            if (id != manicuristTable.ManicuristId)
-            {
-                return BadRequest();
-            }
+            
 
             _context.Entry(manicuristTable).State = EntityState.Modified;
 

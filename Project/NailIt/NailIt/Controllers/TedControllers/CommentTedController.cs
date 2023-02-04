@@ -93,7 +93,14 @@ namespace NailIt.Controllers.TedControllers
             score += commentTable.CommentScore;
 
             var mannewsc = await _context.ManicuristTables.FindAsync(commentTable.CommentTarget);
+            if (mannewsc.ManicuristScore == null)
+            {
+                mannewsc.ManicuristScore = commentTable.CommentScore;
+            }
+            else
+            { 
             mannewsc.ManicuristScore = score / (newsc.Count + 1);
+            }
             try
             {
                 await _context.SaveChangesAsync();

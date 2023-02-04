@@ -19,7 +19,7 @@ function clickEye() {
 async function login() {
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
-
+	var flag = false;
 	var raw = JSON.stringify([accountInput.value, pwInput.value]);
 	var requestOptions = {
 		method: 'PUT',
@@ -35,12 +35,13 @@ async function login() {
 				toastr.warning("無此帳號，請確認您輸入的帳號是否正確");
 			else if ("wrongPW" == result)
 				toastr.warning("密碼錯誤了呦");
-			else
+			else {
 				toastr.success("登入成功");
+				flag = true;
+			}
 		}
 	).catch(error => console.log('error', error));
-
-	window.history.back();
+	if (flag) location.href = document.referrer;
 
 }
 

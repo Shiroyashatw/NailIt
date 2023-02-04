@@ -19,59 +19,6 @@ namespace NailIt.Controllers.AnselControllers
         {
             _context = context;
         }
-
-        // GET: api/ArticleLikeTables
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<ArticleLikeTable>>> GetArticleLikeTables()
-        //{
-        //    return await _context.ArticleLikeTables.ToListAsync();
-        //}
-
-        // GET: api/ArticleLikeTables/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ArticleLikeTable>> GetArticleLikeTable(int id)
-        //{
-        //    var articleLikeTable = await _context.ArticleLikeTables.FindAsync(id);
-
-        //    if (articleLikeTable == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return articleLikeTable;
-        //}
-
-        // PUT: api/ArticleLikeTables/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutArticleLikeTable(int id, ArticleLikeTable articleLikeTable)
-        //{
-        //    if (id != articleLikeTable.ArticleLikeId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(articleLikeTable).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ArticleLikeTableExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         // POST: api/ArticleLikeTables
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -117,9 +64,5 @@ namespace NailIt.Controllers.AnselControllers
             return NoContent();
         }
 
-        //private bool ArticleLikeTableExists(int id)
-        //{
-        //    return _context.ArticleLikeTables.Any(e => e.ArticleLikeId == id);
-        //}
     }
 }

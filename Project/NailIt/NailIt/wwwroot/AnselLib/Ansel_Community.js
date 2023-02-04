@@ -87,7 +87,7 @@ var showNewArticleModal = function () {
     scop.articleMode = "new";
     scop.newArticle = new ArticleTable({
         articleBoardC: scop.articleCode == "My" ? "L0" : scop.articleCode,
-        articleAuthor: scop.loginId,
+        articleAuthor: navScop.loginId,
     });
     $("#editArticleModal").modal("show");
 }
@@ -102,7 +102,7 @@ var showReportAction = async function () {
     let reportRepresent = scop.reportCodeList.find(r => r.codeId == reportCodeId).codeRepresent;
     // new report for reply
     let report = new ReportTable({
-        reportBuilder: scop.loginId,
+        reportBuilder: navScop.loginId,
         ReportTarget: scop.articleAuthorId,
         reportItem: currentArticle().article.articleId,
         reportPlaceC: "D5",
@@ -175,14 +175,14 @@ var showNewReply = async function () {
     if (!checkLogin()) return;
     let reply = new ReplyTable({
         articleId: scop.articleId,
-        memberId: scop.loginId,
+        memberId: navScop.loginId,
         replyContent: $("#replyInput").val(),
     })
     let resultReply = await postReply(reply);
     if (!!resultReply) {
         reply = {
             reply: resultReply,
-            memberNickname: scop.loginNickname,
+            memberNickname: navScop.loginNickname,
             replyLastDateDiff: "0分鐘前",
             like: false
         }
@@ -263,10 +263,10 @@ var showReplyLikeToggle = async function (likeObj) {
     // get the reply (like status)
     let replyId = $(likeObj).parent().parent().data("replyid")
     let reply = scop.replies.find(r => r.reply.replyId == replyId);
-    // build a like with replyId and memberId:scop.loginId
+    // build a like with replyId and memberId:navScop.loginId
     let replyLike = new ReplyLikeTable({
         replyId: replyId,
-        memberId: scop.loginId
+        memberId: navScop.loginId
     })
     // if like == false (build a like)
     if (!reply.like) {
@@ -298,10 +298,10 @@ var showArticleLikeToggle = async function (likeObj) {
     if (!checkLogin()) return;
     // get like status
     let article = currentArticle();
-    // build a like with articleId and memberId:scop.loginId
+    // build a like with articleId and memberId:navScop.loginId
     let articleLike = new ArticleLikeTable({
         articleId: scop.articleId,
-        memberId: scop.loginId
+        memberId: navScop.loginId
     });
     // if like == false (create a like)
     if (!article.like) {
@@ -375,7 +375,7 @@ var showMoreArticle = async function () {
 var sendMemberMsg = function () {
     if (!checkLogin()) return;
     // link to page
-    window.location.href = `https://localhost:5001/Community/chat/${scop.articleAuthorId}`;
+    window.location.href = `/Community/chat/${scop.articleAuthorId}`;
 }
 // show articles of one person (my or other)
 var showMyMain = async function (own) {
@@ -390,7 +390,7 @@ var showMyMain = async function (own) {
     $("#btnMoreArticle").removeAttr("disabled");    
     if (own) {
         $("#mainTitle").html("我的");
-        scop.articleAuthorId = scop.loginId;
+        scop.articleAuthorId = navScop.loginId;
         $("#btnSendMsg").addClass("d-none");
     } else{
         $("#mainTitle").hide();
@@ -436,7 +436,7 @@ var renderNewReply = function (reply) {
                 <div data-replyid="${reply.replyId}">
                     <div class="d-flex align-items-center"> <!-- Reply header -->
                         <div style="margin-right:auto">
-                            <span>${scop.loginNickname}</span><span>1秒前</span>
+                            <span>${navScop.loginNickname}</span><span>1秒前</span>
                         </div>
                         <i class="fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>
                         <span>${reply.replyLikesCount}</span>
@@ -474,7 +474,7 @@ var renderReplaies = function () {
                         <div class="dropdown-content dropdown-content-community">
         `;
         // Can edit and delete own reply
-        if (reply.reply.memberId == scop.loginId) {
+        if (reply.reply.memberId == navScop.loginId) {
             replyHTML += `
                 <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal(this)">刪除</a>
             `;
@@ -500,7 +500,7 @@ var renderReplaies = function () {
 var renderArtiModDropdown = function () {
     let dropContentHTML = ``;
     // Can edit and delete own article
-    if (scop.articleAuthorId == scop.loginId) {
+    if (scop.articleAuthorId == navScop.loginId) {
         dropContentHTML = `
             <a href="javascript:void(0)" onclick="showEditArticleModal()">編輯</a>
             <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal()">刪除</a>`;
@@ -711,7 +711,7 @@ var getArticles = async function () {
 
 // Check if login ?
 var checkLogin = function () {
-    if (scop.loginId == 0) {
+    if (navScop.loginId == -1) {
         alert("請先登入!");
         return false;
     }
@@ -777,10 +777,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     // })
 
     // 是否需要把backend的session設定到frontend ?
-    scop.loginId = $("#loginId").val();
-    scop.loginAccount = $("#loginAccount").val();
-    scop.loginNickname = $("#loginNickname").val();
-    console.log(scop.loginId, scop.loginAccount, scop.loginNickname);
+    // navScop.loginId = $("#loginId").val();
+    // navScop.loginAccount = $("#loginAccount").val();
+    // navScop.loginNickname = $("#loginNickname").val();
+    // console.log(navScop.loginId, navScop.loginAccount, navScop.loginNickname);
 
     // Initial data, menu list and report list
     scop.articleCodeList = await SocialService.getCodes("L");
@@ -831,7 +831,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         }
 
-        // nav 上的sysNotic下拉
+        // nav 上的sysNotic下拉，here cover the event sets in layout.js, so set it here again.
         if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
             $(".dropdown-content-sysNotic").each((index, elem) => {
                 if (elem.classList.contains("show"))
@@ -891,9 +891,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         } else {
             $("#newArtiCodeList").val(article.articleBoardC); //選擇看板
         }
-        $("#editModalAuthorAvatar").children()[0].innerText = scop.loginAccount[0];
-        $("#editModalAuthor").children()[0].innerText = scop.loginNickname;
-        $("#editModalAuthor").children()[1].innerText = scop.loginAccount;
+        $("#editModalAuthorAvatar").children()[0].innerText = navScop.loginAccount[0];
+        $("#editModalAuthor").children()[0].innerText = navScop.loginNickname;
+        $("#editModalAuthor").children()[1].innerText = navScop.loginAccount;
         $("#editModalArticleTitle").val(article.articleTitle);
         $("#editModalArticleContent").html(article.articleContent);
     });
