@@ -40,15 +40,6 @@ namespace NailIt.Controllers.TanTanControllers
 
             return managerTable;
         }
-        public IActionResult MemberCenter()
-        {
-            string userName = Request.Cookies["userName"] ?? "Guest";
-            if (userName == "Guest")
-            {
-                return Redirect("/Home/Index");
-            }
-            return View();
-        }
 
         //// PUT: api/Letmeinqq/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
