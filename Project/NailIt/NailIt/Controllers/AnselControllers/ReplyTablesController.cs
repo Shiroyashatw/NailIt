@@ -20,6 +20,16 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
+        public List<MemberTable> LoginCheck()
+        {
+            string theKey = Request.Cookies[".AspNetCore.Session"];
+            if (HttpContext.Session.GetString("NailLogin") == null || theKey == null)
+                return null;
+            Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
+            var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
+            return theId.ToList();            
+        }
+
         /// <summary>
         /// load reply of article
         /// </summary>
@@ -35,7 +45,7 @@ namespace NailIt.Controllers.AnselControllers
                 ToListAsync();
 
             // remove the reply had been report by this user
-            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D6").ToList();
+            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == LoginCheck()[0].MemberId && r.ReportPlaceC == "D6").ToList();
             var leftJoinReport = (from reply in replies
                                   join report in userArticleReport
                                        on reply.ReplyId equals report.ReportItem into gj
@@ -50,7 +60,7 @@ namespace NailIt.Controllers.AnselControllers
                 m => m.MemberId,
                 (r, m) => new { reply = r, m.MemberNickname }).ToList();
 
-            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == HttpContext.Session.GetInt32("loginId")).ToList();
+            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == LoginCheck()[0].MemberId).ToList();
             var leftJoinLike = (from reply in repliesJoinMember
                                 join like in userReplyLike
                                      on reply.reply.ReplyId equals like.ReplyId into gj
