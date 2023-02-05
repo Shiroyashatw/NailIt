@@ -17,6 +17,12 @@
 
     }
 })
+//TOP5網址
+function Checkit(e) {
+    
+    window.location = "/YiPLib/product.html?id=" + e.value;
+}
+
 //獲得所有標籤
 $.ajax({
     type: "get",
@@ -35,7 +41,7 @@ $.ajax({
 //獲得所有顏色
 $.ajax({
     type: "get",
-
+    async: false,
     url: "/api/ColorTables2",
     success: function (e) {
         console.log(e);
@@ -61,6 +67,7 @@ $.ajax({
     success: function (e) {
         console.log(e);
         mydata2.top5 = e;
+       
 
     }
 

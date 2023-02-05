@@ -199,7 +199,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet]
         public async Task<ActionResult> GetMembersMsg()
         {
-            var loginId = LoginCheck()[0].MemberId;
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables and NoticeTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
 
@@ -214,7 +214,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{memberId}")]
         public async Task<ActionResult> GetSingleMemberMsg(int memberId)
         {
-            var loginId = LoginCheck()[0].MemberId;
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
 
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
@@ -235,7 +235,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{updateTime}")]
         public async Task<ActionResult> GetNewMsg(DateTime updateTime)
         {
-            var loginId = LoginCheck()[0].MemberId;
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
 
@@ -256,7 +256,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpPut("{senderId}")]
         public async Task<ActionResult> PutMsgRead(int senderId)
         {
-            var loginId = LoginCheck()[0].MemberId;
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
             // Get all unread message

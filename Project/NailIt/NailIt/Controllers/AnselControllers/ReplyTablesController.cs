@@ -20,16 +20,6 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
-        public List<MemberTable> LoginCheck()
-        {
-            string theKey = Request.Cookies[".AspNetCore.Session"];
-            if (HttpContext.Session.GetString("NailLogin") == null || theKey == null)
-                return null;
-            Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
-            var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
-            return theId.ToList();            
-        }
-
         /// <summary>
         /// load reply of article
         /// </summary>
@@ -39,13 +29,14 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{ArticleId}")]
         public async Task<ActionResult<IEnumerable<ReplyTable>>> GetReplyTables(int ArticleId)
         {
+            var loginId = HttpContext.Session.GetInt32("loginId") ?? -1;
             var replies = await _context.ReplyTables.
                 Where(r => r.ArticleId == ArticleId).
                 OrderByDescending(r => r.ReplyId).
                 ToListAsync();
 
             // remove the reply had been report by this user
-            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == LoginCheck()[0].MemberId && r.ReportPlaceC == "D6").ToList();
+            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == loginId && r.ReportPlaceC == "D6").ToList();
             var leftJoinReport = (from reply in replies
                                   join report in userArticleReport
                                        on reply.ReplyId equals report.ReportItem into gj
@@ -60,7 +51,7 @@ namespace NailIt.Controllers.AnselControllers
                 m => m.MemberId,
                 (r, m) => new { reply = r, m.MemberNickname }).ToList();
 
-            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == LoginCheck()[0].MemberId).ToList();
+            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == loginId).ToList();
             var leftJoinLike = (from reply in repliesJoinMember
                                 join like in userReplyLike
                                      on reply.reply.ReplyId equals like.ReplyId into gj

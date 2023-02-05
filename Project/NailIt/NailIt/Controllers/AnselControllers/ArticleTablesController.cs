@@ -20,6 +20,16 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
+        public List<MemberTable> LoginCheck()
+        {
+            string theKey = Request.Cookies[".AspNetCore.Session"];
+            if (HttpContext.Session.GetString("NailLogin") == null || theKey == null)
+                return null;
+            Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
+            var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
+            return theId.ToList();            
+        }
+
         /// <summary>
         /// load 10 articles. click on "more button" will load more 10 articles.
         /// </summary>
@@ -33,6 +43,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{boardSort}/{page}/{order}")]
         public async Task<ActionResult<IEnumerable<ArticleTable>>> GetArticleTables(string boardSort = "L0", int page = 0, string order = "latest", string searchValue = "")
         {
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             var amountPerPage = 10;
             var articles = await _context.ArticleTables.
                 Where(a => a.ArticleBoardC == boardSort).
@@ -46,7 +57,7 @@ namespace NailIt.Controllers.AnselControllers
                 ToList();
             }
             // remove the article had been report by this user
-            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D5").ToList();
+            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == loginId && r.ReportPlaceC == "D5").ToList();
             var leftJoinReport = (from article in articles
                                   join report in userArticleReport
                                        on article.ArticleId equals report.ReportItem into gj
@@ -63,7 +74,7 @@ namespace NailIt.Controllers.AnselControllers
             foreach (var article in articles)
             {
                 var replyReport = _context.ReportTables.
-                    Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D6").
+                    Where(r => r.ReportBuilder == loginId && r.ReportPlaceC == "D6").
                     ToList();
                 var articleReplyReportCount = replyReport.
                     Join(_context.ReplyTables,
@@ -82,7 +93,7 @@ namespace NailIt.Controllers.AnselControllers
                     (a, m) => new { article = a, m.MemberAccount, m.MemberNickname }).
                 ToList();
 
-            var userArticleLike = _context.ArticleLikeTables.Where(a => a.MemberId == HttpContext.Session.GetInt32("loginId")).ToList();
+            var userArticleLike = _context.ArticleLikeTables.Where(a => a.MemberId == loginId).ToList();
             var leftJoinLike = (from article in articlesJoinMember
                                 join like in userArticleLike
                                      on article.article.ArticleId equals like.ArticleId into gj

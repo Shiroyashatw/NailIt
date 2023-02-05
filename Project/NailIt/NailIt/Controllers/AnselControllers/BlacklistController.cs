@@ -26,7 +26,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet]
         public async Task<ActionResult> GetBlacklist()
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = HttpContext.Session.GetInt32("loginId") ?? -1;
             var blacklist = await _context.MessageBlacklistTables.
                 Where(b => b.BlacklistBuilder == loginId).ToListAsync();
             var joinMember = blacklist.Join(_context.MemberTables, 
