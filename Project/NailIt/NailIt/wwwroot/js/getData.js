@@ -556,11 +556,14 @@ function OrderDetail() {
         let rremovec = OrderRemovalC.find("option:selected").text()
         ritem = $('select[name="OrderItem"]').find("option:selected").text()
         ritemName = $('select[name="OrderItemName"]').find("option:selected").val()
-        console.log(ritem)
-        console.log(ritemName)
+        //console.log(ritem)
+        //console.log(ritemName)
         let rprice = $('input[name="OrderPrice"]').val()
         rdep = $('input[name="OrderDeposit"]').val()
-        $('.rescheck').append(`
+        let OrderTypeVal = OrderType.val();
+        console.log(OrderTypeVal)
+        if (OrderTypeVal == "true") {
+            $('.rescheck').append(`
         <p>預約日期:${rdate} 時間:${rtime}</p>
         <p>施作部位:${rparc}</p>
         <p>卸甲:${rremovec}</p>
@@ -568,6 +571,17 @@ function OrderDetail() {
         <p>預估價位:NT$${rprice}</p>
         <p>訂金:NT$${rdep}</p>
         `);
+        }
+        else {
+            $('.rescheck').append(`
+        <p>預約日期:${rdate} 時間:${rtime}</p>
+        <p>施作部位:${rparc}</p>
+        <p>卸甲:${rremovec}</p>
+        <p>施作項目:${ritem}</p>
+        <p>預估價位:NT$${rprice}</p>
+        <p>訂金:NT$${rdep}</p>
+        `);
+        }
 
     })
 }
@@ -683,7 +697,7 @@ function calculateprice() {
     PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName) + parseInt(selectedOrderItem)
     demoSprice.text("NT$" + PriceTotal);
     inputOprice.val(PriceTotal);
-    console.log("卸甲價錢" + selectedOrderRemovalC)
-    console.log("施作項目" + selectedOrderItem)
-    console.log("造型" + selectedOrderItemName)
+    //console.log("卸甲價錢" + selectedOrderRemovalC)
+    //console.log("施作項目" + selectedOrderItem)
+    //console.log("造型" + selectedOrderItemName)
 }
