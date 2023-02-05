@@ -297,7 +297,8 @@
             padding-top: 6px;
             padding-bottom: 6px;
             height: 39px;
-            width: 80%;
+            /*width: 80%;*/
+            width:165px;
             min-height: 10%;
             min-width: 50px;
             /*            padding-left: 30%;
@@ -305,11 +306,55 @@
             margin-top: 210px;
             min-width: contain;
             min-height: contain;
+            margin-left:5px;
         }
 
         #Sendbtn:hover {
             background-color: #7F7F7F;
         }
+
+        #Reportbtn {
+            color: white;
+            border: none;
+            background-color: #FF6733;
+            font-size: 18px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            height: 39px;
+            width: 83px;
+            min-height: 10%;
+            min-width: 50px;
+            margin-top: 210px;
+            min-width: contain;
+            min-height: contain;
+        }
+
+            #Reportbtn:hover {
+                background-color: #fba88d;
+                color: white;
+            }
+
+        #Chatbtn {
+            /*color: white;*/
+            border: black 1px solid;
+            /*background-color: #FF6733;*/
+            font-size: 18px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            height: 39px;
+            width: 83px;
+            min-height: 10%;
+            min-width: 50px;
+            margin-top: 210px;
+            min-width: contain;
+            min-height: contain;
+            margin-left: 5px;
+        }
+
+            #Chatbtn:hover {
+                background-color: black;
+                color: white;
+            }
 
         #Insertdemo {
             color: white;
@@ -490,7 +535,13 @@
             height: 100%;
         }
 
-
+            #brand a,
+            #brand a:link,
+            #brand a:visited,
+            #brand a:active {
+                color: black;
+                text-decoration-line: none;
+            }
 
         .navmid {
             /* background-color: blue; */
@@ -642,7 +693,7 @@
             <div class="row opacity-25 p-0 " id="navall">
                 <div class="col-1 p-0"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
-                    Nail IT
+                    <a href="/TanTanLib/html/cover.html"> Nail IT</a>
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
@@ -652,8 +703,7 @@
                     </ul>
                 </div>
                 <div class="col-4 pt-3">
-                    <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a
-                            id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
+                    <p class="navend1">登入 / 會員中心</p>
                 </div>
                 <div class="col-1 d-flex align-items-center justify-content-end navend2">
                     <div style="position:relative">
@@ -677,24 +727,24 @@
 
 
         <!--<div>
-            <nav class="row FixPad">
-                <div class="col">
-                </div>
-                <div class="col-2">
-                    <a>Nail It</a>
-                </div>
-                <div class="col-6">
-                    <button class="Btnpd">設計師作品</button>
-                    <button class="Btnpd">美甲天地</button>
-                    <button class="Btnpd">會員中心</button>
-                </div>
-                <div class="col-2">
-                    登入/會員中心
-                </div>
-                <div class="col">
-                </div>
-            </nav>
-        </div>-->
+        <nav class="row FixPad">
+            <div class="col">
+            </div>
+            <div class="col-2">
+                <a>Nail It</a>
+            </div>
+            <div class="col-6">
+                <button class="Btnpd">設計師作品</button>
+                <button class="Btnpd">美甲天地</button>
+                <button class="Btnpd">會員中心</button>
+            </div>
+            <div class="col-2">
+                登入/會員中心
+            </div>
+            <div class="col">
+            </div>
+        </nav>
+    </div>-->
 
 
         <div class="row" style="padding-top:90px">
@@ -713,12 +763,12 @@
 
 
         <!--<div class="row">
-            <div class="col-4"></div>
-            <div class="col-3" id="EdChBt">
-                <button id="Editbtn" v-on:click="GoToEdit">編輯</button>
-            </div>
-            <div class="col-5"></div>
-        </div>-->
+        <div class="col-4"></div>
+        <div class="col-3" id="EdChBt">
+            <button id="Editbtn" v-on:click="GoToEdit">編輯</button>
+        </div>
+        <div class="col-5"></div>
+    </div>-->
 
 
         <div class="row mt-4">
@@ -728,7 +778,7 @@
                     <img class="Profileimg" v-bind:src="DesignList.manicuristPic" alt="" id="ProfileImg">
                 </div>
             </div>
-            <div class="col-5" id="Profile">
+            <div class="col-4" id="Profile">
                 <b id="Title" class="Bigtext FixsmPad">{{DesignList.manicuristSalonName}}</b>
                 <p id="Context" class="mt-3">{{DesignList.manicuristIntro}}</p>
                 <div>
@@ -744,8 +794,10 @@
                     <!--class="mb-0 mt-3 ml-2"-->
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-3">
                 <!--<div style="height: 80%;"></div>-->
+                <button id="Reportbtn">檢舉</button>
+                <button id="Chatbtn" onclick="Msg()">私訊</button>
                 <button id="Sendbtn">預約</button>
                 <button id="reportbtn" type="button" class="btn btn-secondary btn-sm">檢舉</button>
             </div>
@@ -1060,12 +1112,12 @@
                 </div>
 
                 <!--<div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-10">
-                        <p class="Blackline ratingimgpd"></p>
-                    </div>
-                    <div class="col-1"></div>
-                </div>-->
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <p class="Blackline ratingimgpd"></p>
+                </div>
+                <div class="col-1"></div>
+            </div>-->
 
             </div>
 
@@ -1460,6 +1512,10 @@
                 }
             });
             console.log(ShowData.MainDemoCover);
+        }
+
+        function Msg() {
+            window.location = "/Community/chat/" + GetManicuristID;
         }
 
 
