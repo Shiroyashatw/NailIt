@@ -17,7 +17,7 @@ dd{
    
 }
 .inner1{
-    height:130px;
+    height:100px;
     font-size: 18px;
 }
 .inner2{
@@ -176,7 +176,7 @@ button[value=newcounnt]:hover{
 }
 .switch-btn{
     border: none;
-  
+    height:39px;
     width: 100px;
     background-color: transparent;
 }
@@ -548,7 +548,7 @@ html {
     font-weight: bold;
 }
 
-.navend2 > img {
+.navend2 img { /* 因為notice 加入dropDown顯示系統通知訊息有修改格式 */
     width: 25px;
     /* background-color: blue; */
 }
@@ -593,4 +593,61 @@ footer {
 
 #newsolanname, #newsolanaddress, #newshopphone, #newintoshop, #newshoplicen {
     max-width: 70%;
+}
+.unread-badge-message {
+    position: absolute;
+    top: 1px;
+    left: 16px;
+    width: 10px;
+    height: 10px;
+}
+
+.unread-badge-sysNotic {
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    width: 10px;
+    height: 10px;
+}
+
+/* dropdown sysNotic---------------------------------------------------------- */
+/*#region Dropdown*/
+.dropbtn {
+    /* background-color: #04AA6D; */
+    /* color: white; */
+    /* padding: 16px; */
+    /* font-size: 16px; */
+    border: none;
+    cursor: pointer;
+}
+
+/* .dropbtn:hover, .dropbtn:focus {
+  } */
+.dropdown {
+    float: right;
+    position: relative;
+    /* display: inline-block; */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    /* min-width: 160px; */
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    right: 0;
+    z-index: 1;
+}
+
+    .dropdown-content a {
+        color: black;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: block;
+        white-space: nowrap;
+    }
+
+.dropdown a:hover {
+    background-color: #ddd;
 }

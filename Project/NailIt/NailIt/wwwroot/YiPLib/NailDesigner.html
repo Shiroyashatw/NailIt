@@ -474,6 +474,14 @@
             height: 100%;
         }
 
+            #brand a,
+            #brand a:link,
+            #brand a:visited,
+            #brand a:active {
+                color: black;
+                text-decoration-line: none;
+            }
+
 
 
         .navmid {
@@ -626,7 +634,7 @@
             <div class="row opacity-25 p-0 " id="navall">
                 <div class="col-1 p-0"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
-                    Nail IT
+                    <a href="/TanTanLib/html/cover.html"> Nail IT</a>
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
@@ -772,9 +780,9 @@
                     <div class="col-1"></div>
                     <div class="col-10">
                         <div v-if="DemoSetValue" class="FixPad CowRight">
-                            <p class="DisInLine">共計{{DemoSetList.length}}個作品 頁數1/1</p>
-                            <button class="CBtn">上一頁</button>
-                            <button class="CBtn">下一頁</button>
+                            <p class="DisInLine">共計{{DemoSetList.length}}個作品</p>
+                            <!--<button class="CBtn">上一頁</button>
+                            <button class="CBtn">下一頁</button>-->
                         </div>
                         <div v-else="DemoSetValue">
                             <p class="produce">尚未擁有作品</p>
@@ -818,9 +826,9 @@
                     <div class="col-1"></div>
                     <div class="col-10">
                         <div class="FixPad CowRight" v-if="MainDemoSetValue">
-                            <p class="DisInLine">共計{{MainDemoCover.length}}個作品 頁數1/1</p>
-                            <button class="CBtn">上一頁</button>
-                            <button class="CBtn">下一頁</button>
+                            <p class="DisInLine">共計{{MainDemoCover.length}}個作品</p>
+                            <!--<button class="CBtn">上一頁</button>
+                            <button class="CBtn">下一頁</button>-->
                         </div>
                         <div v-else="MainDemoSetValue">
                             <p class="produce">尚未擁有作品</p>
@@ -865,9 +873,9 @@
                         </div>
 
                         <div class="DisFlex" id="SortRight" v-if="CommentValue">
-                            <p class="DisInLine">共計{{Comment.length}}條評論 頁數1/1</p>
-                            <button class="CBtn">上一頁</button>
-                            <button class="CBtn">下一頁</button>
+                            <p class="DisInLine">共計{{Comment.length}}條評論</p>
+                            <!--<button class="CBtn">上一頁</button>
+                            <button class="CBtn">下一頁</button>-->
                         </div>
                         <div v-else="CommentValue">
                             <p class="produce">尚未擁有評論</p>
@@ -1187,7 +1195,7 @@
                         //ShowData.StartDate.push(e[maindemo].demoSetMainStartTime.slice(0, 10).replace('-', '/').replace('-', '/'));
                         //ShowData.EndDate.push(e[maindemo].demoSetMainEndTime.slice(0, 10).replace('-', '/').replace('-', '/'));
                     }
-                    if (ShowData.DemoSetList.length == 0) {
+                    if (ShowData.MainDemoCover.length == 0) {
                         ShowData.MainDemoSetValue = false;
                         //console.log('OK');
                     }

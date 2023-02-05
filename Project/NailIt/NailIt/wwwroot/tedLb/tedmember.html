@@ -39,9 +39,18 @@
                     <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
                 </div>
                 <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
-                    <img id="noti mr-0" src="../images/notification.png">
-                </div>
+    <div style="position:relative">
+        <img class="mt-1 mr-3 cursor-pointer" id="chat" src="../images/chat-box.png" onclick="showChatPage()">
+        <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+    </div>
+    <div class="dropdown">
+        <img class="cursor-pointer dropbtn-sysNotic" src="../images/notification.png" onclick="showSysNotic()">
+        <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
+        <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
+            <a class="drop-item">--目前沒有未讀系統訊息--</a>
+        </div>
+    </div>
+</div>
                 <div class="col-1 p-0"></div>
             </div>
         </nav>
@@ -121,7 +130,12 @@
                             <span class="close2">&times;</span>
                             <div class="form-group">
                                 <label>店家/美甲師名稱:</label><input type="text" id="newsolanname" class="form-control" name="name" value="" />
-                                <label>店家/美甲師地址:</label><input type="text" id="newsolanaddress" class="form-control" name="name" value="" />
+                                <label>店家/美甲師地址:</label>
+                                <div class="input-group mb-3">
+                                    <select style="max-width:20%" class="custom-select" onchange="change(this)" name="city" id="city1"></select><label for="city">縣市</label>
+                                    <select style="max-width:20%" class="custom-select" name="hometown"  id="hometown1"></select><label for="hometown">鄉鎮</label>
+                                </div>
+                                <input type="text" id="newsolanaddress" class="form-control" name="name" value="" />
                                 <label>店家/美甲師電話:</label><input type="text" id="newshopphone" class="form-control" name="name" value="" />
                                 <label>介紹</label><textarea class="form-control" id="newintoshop" rows="3"></textarea>
                                 <label>證照</label><textarea class="form-control" id="newshoplicen" rows="3"></textarea>
@@ -133,7 +147,7 @@
                     <div id="memberinfor">
                         <div class="content" id="member-infor">
                             <div class="inner2">
-                                <pre><b><button style="border-bottom: 1px solid;" id="personal" class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b>                          <button type="button" onclick="openinfor(event,'member-infor-modif','個人檔案>個人資料>修改')" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <pre><b><button style="border-bottom: 1px solid;" id="personal" class="inner-link" onclick="openinfor(event,'member-infor','個人檔案>個人資料')" href="#">個人資料</button></b>    <b><button class="inner-link" onclick="openinfor(event,'shop-infor','個人檔案>店家個檔')" href="#">店家個檔</button></b>                          <button style="bottom:40px" type="button" onclick="openinfor(event,'member-infor-modif','個人檔案>個人資料>修改')" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
           </svg></button></pre>
@@ -961,6 +975,9 @@
     <script src="ted.js/order.js"></script>
     <script src="./ted.js/member.js"></script>
     <script src="ted.js/evaluate.js"></script>
+    <script src="../js/Ansel_Layout.js"></script>
+    <script src="../AnselLib/Ansel_Service.js"> </script>
+    <script src="../AnselLib/Ansel_common.js"></script>
 
     <script src="../YueJs/nailRemovalPricejs.js"></script>
     <script src="../YueJs/reserveCanceljs.js"></script>
@@ -971,7 +988,9 @@
     <script src="../YueJs/toastr.js"></script>
     <script src="../YueJs/serviceSetjs.js"></script>
     <script src="../YueJs/YueSetCalenjs.js"></script>
+
     <script>
+        openinfor(event, 'member-infor', '個人檔案>個人資料');
         var nowmembb = "";
         async function grave() {
             await YueloginCheck();
@@ -1340,9 +1359,9 @@
         function btninsertshopcert() {
             newshoplist[0].manicuristId = nowMember;
             newshoplist[0].manicuristSalonName = $("#newsolanname").val();
-            newshoplist[0].manicuristAddress = $("#newsolanaddress").val();
-            newshoplist[0].manicuristCounty = ($("#newsolanaddress").val()).substr(0, 3);
-            newshoplist[0].manicuristTownship = ($("#newsolanaddress").val()).substr(3, 3);
+            newshoplist[0].manicuristAddress = ($("#city1").val())+($("#hometown1").val())+$("#newsolanaddress").val();
+            newshoplist[0].manicuristCounty = ($("#city1").val());
+            newshoplist[0].manicuristTownship = ($("#hometown1").val());
             newshoplist[0].manicuristSalonPhone = $("#newshopphone").val();
             newshoplist[0].manicuristIntro = $("#newintoshop").val();
             newshoplist[0].manicuristLicense = $("#newshoplicen").val();
