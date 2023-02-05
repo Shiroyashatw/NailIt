@@ -27,6 +27,13 @@ namespace NailIt.Controllers.DogeControllers
         {
             var res = _db.DemoSetTables.Find(id);
             if (res == null) return NotFound();
+            // 當點進讀取作品資料時 瀏覽次數+1
+            var demoCount = (from d in _db.DemoSetTables
+                             where d.DemoSetId == id
+                             select d).SingleOrDefault();
+            demoCount.DemoSetCount += 1;
+            _db.SaveChanges();
+            // 撈取設計師 demoset demo 相關資料
             var query = from o in _db.ManicuristTables
                             // 利用 ManicuristId 設計師ID 兩表join
                         join demoset in _db.DemoSetTables
@@ -62,6 +69,25 @@ namespace NailIt.Controllers.DogeControllers
 
             var res = _db.OrderTables.FirstOrDefault(r => r.PlanId == orderTable.PlanId && r.OrderOrderTime == orderTable.OrderOrderTime );
             plan.OrderId = res.OrderId;
+
+            SysNoticeTable insert = new SysNoticeTable
+            {
+                SysNoticeTitle = "交易通知",
+                SysNoticeTarget = orderTable.ManicuristId,
+                SysNoticeContent = "交易成立通知-客人進行預約",
+                SysNoticeBuildTime = DateTime.Now,
+                SysNoticeState = false,
+            };
+            SysNoticeTable CashComplete = new SysNoticeTable
+            {
+                SysNoticeTitle = "交易通知",
+                SysNoticeTarget = orderTable.ManicuristId,
+                SysNoticeContent = "交易付款完成通知",
+                SysNoticeBuildTime = DateTime.Now,
+                SysNoticeState = false,
+            };
+            _db.SysNoticeTables.Add(insert);
+            _db.SysNoticeTables.Add(CashComplete);
             await _db.SaveChangesAsync();
             return Content("OK");
         }
