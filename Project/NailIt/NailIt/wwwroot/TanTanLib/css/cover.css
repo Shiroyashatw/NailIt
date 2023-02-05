@@ -150,34 +150,79 @@ input {
     height: 200px;
 }
 
+
 .Seemore {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    padding-top: 145px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.Clickme {
+    background-color: white;
+    color: black;
+    width: 140px;
+    height: 40px;
+    font-weight: bold;
+    border: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     overflow: hidden;
 }
 
-    .Seemore:hover {
-        filter: grayscale(20%);
-    }
-
-        .Seemore:hover > .Demoimg {
-            transition: 0.5s;
-            transform: scale(1.1);
-        }
-
-.Clickme {
+.Clickme:hover,
+.Clickme:focus {
     background-color: black;
-    color: white;
     width: 140px;
     height: 40px;
-    visibility: hidden;
-    z-index: 99;
-
+    color: white;
+    z-index: 999;
 }
 
-    .Clickme:hover {
-        background-color: black;
-        color: white;
-        z-index: 99;
+.top5pic:hover .Clickme {
+    visibility: visible;
+    z-index: 9999;
+}
+
+.Seepic:hover {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* 只有圖片放大
+ .Seepic:hover img
+ {
+     transition: 0.5s;
+     transform: scale(1.1);
+     filter: grayscale(20%);
+ }*/
+
+/*整體放大*/
+    .top5pic:hover {
+        transition: 0.5s;
+        transform: scale(1.1);
+        filter: grayscale(30%);
     }
+
+        .top5pic:hover p {
+            transition: 0.5s;
+            transform: scale(1.1);
+            margin-left: 5%;
+            
+        }
+
+/*.topone:hover,
+.topone:focus {
+    border:1px solid;
+    opacity: .8;
+    z-index: 10;
+}*/
+
+
 /* SEARCH---------------------------------------------------------- */
 
 .seatitle {
@@ -206,7 +251,9 @@ input {
 
 
 
-#1:hover {
+
+
+#1 {
     color: white;
     text-decoration-line: underline;
     text-decoration-thickness: 1px;

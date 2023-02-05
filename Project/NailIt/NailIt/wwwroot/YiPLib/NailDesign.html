@@ -186,7 +186,7 @@
             padding-bottom: 3px;
             padding-left: 84.5px;
             padding-right: 85px;
-            z-index:3;
+            z-index: 3;
         }
 
         .Clickme {
@@ -297,7 +297,8 @@
             padding-top: 6px;
             padding-bottom: 6px;
             height: 39px;
-            width: 80%;
+            /*width: 80%;*/
+            width:165px;
             min-height: 10%;
             min-width: 50px;
             /*            padding-left: 30%;
@@ -305,11 +306,55 @@
             margin-top: 210px;
             min-width: contain;
             min-height: contain;
+            margin-left:5px;
         }
 
         #Sendbtn:hover {
             background-color: #7F7F7F;
         }
+
+        #Reportbtn {
+            color: white;
+            border: none;
+            background-color: #FF6733;
+            font-size: 18px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            height: 39px;
+            width: 83px;
+            min-height: 10%;
+            min-width: 50px;
+            margin-top: 210px;
+            min-width: contain;
+            min-height: contain;
+        }
+
+            #Reportbtn:hover {
+                background-color: #fba88d;
+                color: white;
+            }
+
+        #Chatbtn {
+            /*color: white;*/
+            border: black 1px solid;
+            /*background-color: #FF6733;*/
+            font-size: 18px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            height: 39px;
+            width: 83px;
+            min-height: 10%;
+            min-width: 50px;
+            margin-top: 210px;
+            min-width: contain;
+            min-height: contain;
+            margin-left: 5px;
+        }
+
+            #Chatbtn:hover {
+                background-color: black;
+                color: white;
+            }
 
         #Insertdemo {
             color: white;
@@ -520,7 +565,7 @@
             font-weight: bold;
         }
 
-        .navend2>img {
+        .navend2 img { /* 因為notice 加入dropDown顯示系統通知訊息有修改格式 */
             width: 25px;
             /* background-color: blue; */
         }
@@ -562,6 +607,75 @@
         #footcopy {
             margin-top: 1%;
         }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        .unread-badge-message {
+            position: absolute;
+            top: 1px;
+            left: 16px;
+            width: 10px;
+            height: 10px;
+        }
+
+        .unread-badge-sysNotic {
+            position: absolute;
+            top: 0px;
+            left: 15px;
+            width: 10px;
+            height: 10px;
+        }
+
+        /* dropdown sysNotic---------------------------------------------------------- */
+        /*#region Dropdown*/
+        .dropbtn {
+            /* background-color: #04AA6D; */
+            /* color: white; */
+            /* padding: 16px; */
+            /* font-size: 16px; */
+            border: none;
+            cursor: pointer;
+        }
+
+        /* .dropbtn:hover, .dropbtn:focus {
+  } */
+        .dropdown {
+            float: right;
+            position: relative;
+            /* display: inline-block; */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            /* min-width: 160px; */
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            right: 0;
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+                padding: 5px 10px;
+                text-decoration: none;
+                display: block;
+                white-space: nowrap;
+            }
+
+        .dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        /*#endregion*/
+
     </style>
 </head>
 
@@ -583,11 +697,20 @@
                     </ul>
                 </div>
                 <div class="col-4 pt-3">
-                    <p class="navend1">登入 / 會員中心</p>
+                    <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
                 </div>
                 <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
-                    <img id="noti mr-0" src="../images/notification.png">
+                    <div style="position:relative">
+                        <img class="mt-1 mr-3 cursor-pointer" id="chat" src="../images/chat-box.png" onclick="showChatPage()">
+                        <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+                    </div>
+                    <div class="dropdown">
+                        <img class="cursor-pointer dropbtn-sysNotic" src="../images/notification.png" onclick="showSysNotic()">
+                        <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
+                        <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
+                            <a class="drop-sysNotic-item">--目前沒有未讀系統訊息--</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-1 p-0"></div>
             </div>
@@ -595,24 +718,24 @@
 
 
         <!--<div>
-            <nav class="row FixPad">
-                <div class="col">
-                </div>
-                <div class="col-2">
-                    <a>Nail It</a>
-                </div>
-                <div class="col-6">
-                    <button class="Btnpd">設計師作品</button>
-                    <button class="Btnpd">美甲天地</button>
-                    <button class="Btnpd">會員中心</button>
-                </div>
-                <div class="col-2">
-                    登入/會員中心
-                </div>
-                <div class="col">
-                </div>
-            </nav>
-        </div>-->
+        <nav class="row FixPad">
+            <div class="col">
+            </div>
+            <div class="col-2">
+                <a>Nail It</a>
+            </div>
+            <div class="col-6">
+                <button class="Btnpd">設計師作品</button>
+                <button class="Btnpd">美甲天地</button>
+                <button class="Btnpd">會員中心</button>
+            </div>
+            <div class="col-2">
+                登入/會員中心
+            </div>
+            <div class="col">
+            </div>
+        </nav>
+    </div>-->
 
 
         <div class="row" style="padding-top:90px">
@@ -646,7 +769,7 @@
                     <img class="Profileimg" v-bind:src="DesignList.manicuristPic" alt="" id="ProfileImg">
                 </div>
             </div>
-            <div class="col-5" id="Profile">
+            <div class="col-4" id="Profile">
                 <b id="Title" class="Bigtext FixsmPad">{{DesignList.manicuristSalonName}}</b>
                 <p id="Context" class="mt-3">{{DesignList.manicuristIntro}}</p>
                 <div>
@@ -662,8 +785,10 @@
                     <!--class="mb-0 mt-3 ml-2"-->
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-3">
                 <!--<div style="height: 80%;"></div>-->
+                <button id="Reportbtn">檢舉</button>
+                <button id="Chatbtn" onclick="Msg()">私訊</button>
                 <button id="Sendbtn">預約</button>
             </div>
             <div class="col-1">
@@ -724,7 +849,7 @@
                             <div class="Seemore my-0">
                                 <img class="Demoimg" v-bind:src="DemoSetList[key].demoSetCover" alt="Loading">
                                 <button onclick="Checkit(this)" v-bind:value="DemoSetList[key].demoSetId"
-                                    class="Clickme">
+                                        class="Clickme">
                                     查看
                                 </button>
                             </div>
@@ -768,7 +893,7 @@
                                 <div class="Ribbon">剩餘{{GetRestDay[key]}}天</div>
                                 <img class="Demoimg" v-bind:src="MainDemoCover[key].demoSetCover" alt="">
                                 <button onclick="Checkit(this)" v-bind:value="MainDemoCover[key].demoSetId"
-                                    class="Clickme">
+                                        class="Clickme">
                                     查看
                                 </button>
                             </div>
@@ -859,7 +984,7 @@
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
                                             <div class="ContextFullstar"
-                                                v-bind:style="{width:SortDateLTH[key].Commentwid}">★★★★★</div>
+                                                 v-bind:style="{width:SortDateLTH[key].Commentwid}">★★★★★</div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{SortDateLTH[key].commentScore}}</p>
@@ -890,7 +1015,7 @@
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
                                             <div class="ContextFullstar"
-                                                v-bind:style="{width:SortDateHTL[key].Commentwid}">★★★★★</div>
+                                                 v-bind:style="{width:SortDateHTL[key].Commentwid}">★★★★★</div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{SortDateHTL[key].commentScore}}</p>
@@ -921,7 +1046,7 @@
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
                                             <div class="ContextFullstar"
-                                                v-bind:style="{width:SortRateHTL[key].Commentwid}">★★★★★</div>
+                                                 v-bind:style="{width:SortRateHTL[key].Commentwid}">★★★★★</div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{SortRateHTL[key].commentScore}}</p>
@@ -952,7 +1077,7 @@
                                         <div class="Contextratings">
                                             <div class="Emptystar">★★★★★</div>
                                             <div class="ContextFullstar"
-                                                v-bind:style="{width:SortRateLTH[key].Commentwid}">★★★★★</div>
+                                                 v-bind:style="{width:SortRateLTH[key].Commentwid}">★★★★★</div>
                                         </div>
                                         <div>
                                             <p class="ml-2">{{SortRateLTH[key].commentScore}}</p>
@@ -1119,8 +1244,9 @@
                                 <div class="calendar">
                                     <div class="header">
                                         <button type="button" class="lastYear btnnotclick" title="Last year"></button>
-                                        <button type="button" class="lastMonth" title="Last month"><i
-                                                class="bi bi-chevron-compact-left"></i></button>
+                                        <button type="button" class="lastMonth" title="Last month">
+                                            <i class="bi bi-chevron-compact-left"></i>
+                                        </button>
                                         <div class="currentDate"></div>
                                         <button type="button" class="nextMonth" title="Next month">
                                             <i class="bi bi-chevron-compact-right"></i>
@@ -1161,7 +1287,9 @@
                                         <button class="cancelbtn" type="button" onclick="Closeform()">取消</button>
                                         <button class="stepbtn" type="button" onclick="step1()">上一步</button>
                                         <button id="step3btn" class="stepbtn" type="button"
-                                            onclick="step3()">下一步</button>
+                                                onclick="step3()">
+                                            下一步
+                                        </button>
                                     </div>
 
                                 </div>
@@ -1330,6 +1458,10 @@
             console.log(ShowData.MainDemoCover);
         }
 
+        function Msg() {
+            window.location = "/Community/chat/" + GetManicuristID;
+        }
+
 
         const ShowData = new Vue({
             el: '#ShowData',
@@ -1350,7 +1482,7 @@
                     SearchString: "",
                     PoblicAdress: false,
                     GetRestDay: [],
-                    CommentValue:true,
+                    CommentValue: true,
                 }
             },
             methods: {
@@ -1583,8 +1715,17 @@
     <script src="../js/calendar.js"></script>
     <script src="../js/calendarscript.js"></script>
     <script src="../YueJs/loginCheck.js"></script>
+    <script src="../js/Ansel_Layout.js"></script>
+    <script src="../AnselLib/Ansel_Service.js"></script>
+    <script src="../AnselLib/Ansel_Common.js"></script>
     <!-- 引用 商品資料 可預約日期 -->
     <script src="../js/getData.js"></script>
+
+    <script src="../YueJs/loginCheck.js"></script>
+    <script src="../js/Ansel_Layout.js"></script>
+    <script src="../AnselLib/Ansel_Service.js"></script>
+    <script src="../AnselLib/Ansel_Common.js"></script>
+
     <script>
         // 抓取登入者ID
         async function pre() {
@@ -1602,7 +1743,7 @@
             }
         })
         getManicuristData()
-        
+
         getReserveDate()
         getReserveTime()
         getOrderPartC()
