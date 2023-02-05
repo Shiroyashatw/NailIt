@@ -98,6 +98,11 @@
   background-color: black;
   border: 1px black;
 }
+.row .main-item .middle-item .product-info .product-footer .reservebtn button:hover {
+  background-color: #3498db;
+  color: #fff;
+  transition: 0.5s;
+}
 .row .footter-item {
   margin: 20px 0;
 }

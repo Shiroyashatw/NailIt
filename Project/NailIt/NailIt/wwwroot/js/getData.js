@@ -736,3 +736,10 @@ function report() {
         });
     })
 }
+function Msg() {
+    $('#msgbtn').on('click',function(){
+        let getMid = $('input[name="ManicuristId"]').val();
+        window.location = "/Community/chat/" + getMid;
+    })
+    
+}

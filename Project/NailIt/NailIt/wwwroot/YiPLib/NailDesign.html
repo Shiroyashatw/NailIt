@@ -799,7 +799,6 @@
                 <button id="Reportbtn">檢舉</button>
                 <button id="Chatbtn" onclick="Msg()">私訊</button>
                 <button id="Sendbtn">預約</button>
-                <button id="reportbtn" type="button" class="btn btn-secondary btn-sm">檢舉</button>
             </div>
             <div class="col-1">
             </div>
@@ -1809,7 +1808,7 @@
                 alertform()
             }
         })
-        $('#reportbtn').on('click', function () {
+        $('#Reportbtn').on('click', function () {
             if (nowMember == -1) {
                 alert("請先登入會員，再進行檢舉")
             }
