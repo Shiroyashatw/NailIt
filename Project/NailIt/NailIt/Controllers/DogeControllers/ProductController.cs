@@ -95,7 +95,17 @@ namespace NailIt.Controllers.DogeControllers
         [Route("report")]
         public async Task<ActionResult<ReportTable>> Report(ReportTable reportTable)
         {
-            _db.ReportTables.Add(reportTable);
+            ReportTable insert = new ReportTable
+            {
+                ReportBuilder = reportTable.ReportBuilder,
+                ReportTarget = reportTable.ReportTarget,
+                ReportItem = reportTable.ReportItem,
+                ReportPlaceC = reportTable.ReportPlaceC,
+                ReportReasonC = reportTable.ReportReasonC,
+                ReportContent = reportTable.ReportContent,
+                ReportBuildTime = DateTime.Now,
+            };
+            _db.ReportTables.Add(insert);
             await _db.SaveChangesAsync();
             return Content("OK");
         }
