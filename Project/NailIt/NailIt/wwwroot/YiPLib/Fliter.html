@@ -150,7 +150,6 @@
         .Coverdiv {
             display: flex;
             flex-wrap: wrap;
-            margin-top: 16px;
             /*margin-left: 90px;*/
             margin-left: 30px;
         }
@@ -428,6 +427,14 @@
             height: 100%;
         }
 
+            #brand a,
+            #brand a:link,
+            #brand a:visited,
+            #brand a:active {
+                color: black;
+                text-decoration-line: none;
+            }
+
 
 
         .navmid {
@@ -583,7 +590,7 @@
             <div class="row opacity-25 p-0 " id="navall">
                 <div class="col-1 p-0"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
-                    Nail IT
+                    <a href="/TanTanLib/html/cover.html"> Nail IT</a>
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
@@ -843,8 +850,12 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mt-3">
-                    <p>現在搜尋的條件為：{{QueryCondition}}</p>
-                    <p v-if="QueryLength">共計{{QueryLength}}件商品</p>
+                    <div>
+                        <p>現在搜尋的條件為：{{QueryCondition}}</p>
+                    </div>
+                    <div class="d-flex">
+                        <p v-if="QueryLength">共計{{QueryLength}}件商品</p>
+                    </div>
                 </div>
                 <div>
                     <p v-if="QueryNone">查無結果</p>
@@ -856,8 +867,8 @@
                             <img class="Cover" v-bind:src="DemoSet[key].demoSetCover" />
                             <button class="Clickme" onclick="Checkit(this)" v-bind:value="DemoSet[key].demoSetId">查看</button>
                         </div>
-                        <p>{{DemoSet[key].demoSetName}}</p>
-                        <p>{{DemoSet[key].demoSetPrice}}</p>
+                        <p class="my-1">{{DemoSet[key].demoSetName}}</p>
+                        <p class="mt-1 mb-2">NT${{DemoSet[key].demoSetPrice}}</p>
                     </div>
                 </div>
 
