@@ -379,28 +379,36 @@ namespace NailIt.Controllers.AnselControllers
         {
             if (frm.Files.Count > 0)
             {
-                string baseUri = $"{Request.Scheme}://{Request.Host}";
-                // var uri = "https://localhost:5001";
-                // var uri = "https://localhost:44308";
+                var messages = new List<MessageTable>();
                 MessageTable message = JsonConvert.DeserializeObject<MessageTable>(frm["message"]);
                 // lock DB
                 var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
                 // save Image message
                 _context.MessageTables.Add(message);
                 await _context.SaveChangesAsync();
+                var id = message.MessageId;
                 for (int i = 0; i < frm.Files.Count; i++)
                 {
+                    if (i != 0)
+                        message.MessageId = 0;
                     // use messageId be image name
-                    string imageName = $"{message.MessageId}-{i + 1}.png";
-                    message.MessageContent += $"<img class='mw-100' src='{baseUri}/AnselLib/ChatImage/{imageName}'>";
-                    // 如果多張圖片，需要<br>換行，才不會有多餘的空白
-                    if (i != frm.Files.Count - 1) { message.MessageContent += "<br>"; }
+                    string imageName = $"{id}.png";
                     chatSaveImage(imageName, frm.Files[i]);
+                    message.MessageContent = $"<img src='/AnselLib/ChatImage/{imageName}' onclick='showPicModal(this)'>";                    
+                    if (i == 0)
+                        await _context.SaveChangesAsync();
+                    else
+                        _context.MessageTables.Add(message);
+                        await _context.SaveChangesAsync();
+                    // deep copy, then add into return list
+                    var theMsg = new MessageTable();
+                    Common.DeepCopy(ref message, ref theMsg);
+                    messages.Add(theMsg);
+                    id++;
                 }
-                await _context.SaveChangesAsync();
 
                 t.Commit();
-                return CreatedAtAction("GetMessageTable", new { id = message.MessageId }, message);
+                return Ok(messages);
             }
             return NotFound();
         }
