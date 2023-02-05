@@ -1,4 +1,7 @@
-﻿//#region Prototype
+﻿const delay = (delayInms) => {
+    return new Promise(resolve => setTimeout(resolve, delayInms));
+}
+//#region Prototype
 // Get date in "YYYY-MM-DD" ex:"2023-01-17"
 String.prototype.localYYYYMMDD = function () {
     if (this === undefined || this === null) {
