@@ -1,16 +1,11 @@
-﻿preDo();
+﻿
 var nowId;
-function preDo() {
-	clickEye();
-}
-
 
 function clickEye() {
 	if (pwInput.type === "password") {
 		pwInput.type = "text";
 		pwEye.src = "./YuePic/eyeopen.jpg";
 	} else {
-		toastr.success("開始處理");
 		pwInput.type = "password";
 		pwEye.src = "./YuePic/eyeclose.jpg";
 	}

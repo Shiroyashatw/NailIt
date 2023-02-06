@@ -89,6 +89,12 @@ namespace NailIt.Controllers.YueyueControllers
 
             if (!myMember.Any())
             {
+                SysNoticeTable daNotice = new SysNoticeTable();
+                daNotice.SysNoticeTitle = "預約已被確認";
+                daNotice.SysNoticeContent = "歡迎加入Nailit！！";
+                daNotice.SysNoticeTarget = memberTable.MemberId;
+                daNotice.SysNoticeState = false;
+                _context.SysNoticeTables.Add(daNotice);
                 _context.MemberTables.Add(memberTable);
                 await _context.SaveChangesAsync();
                 return true;
