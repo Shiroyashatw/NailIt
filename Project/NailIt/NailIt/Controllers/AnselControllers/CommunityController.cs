@@ -26,7 +26,7 @@ namespace NailIt.Controllers
         // GET: Community
         public IActionResult Index()
         {
-            // setup login user info
+            // // setup login user info
             if (LoginCheck()!=null)
             {
                 var LoginMemberInfo = LoginCheck()[0];
@@ -39,7 +39,7 @@ namespace NailIt.Controllers
         // GET: Chat
         public IActionResult Chat(int? id)
         {
-            // setup login user info
+            // // setup login user info
             if (LoginCheck()!=null)
             {
                 var LoginMemberInfo = LoginCheck()[0];

@@ -277,7 +277,7 @@
         #Insertdemo {
             color: white;
             border: none;
-            background-color: #7F7F7F;
+            background-color: #FF6733;
             font-size: 16px;
             /*width: 25%;*/
             /*height: 35px;*/
@@ -291,7 +291,8 @@
         .Editbtn {
             color: white;
             border: none;
-            background-color: #7F7F7F;
+            /*background-color: #7F7F7F;*/
+            background-color: #FF6733;
             font-size: 16px;
             padding-top: 6px;
             padding-bottom: 6px;
@@ -301,19 +302,23 @@
         }
 
             .Editbtn:hover, #Insertdemo:hover {
-                background-color: #D0CECE;
+                /*background-color: #D0CECE;*/
+                /*background-color: #fc8158;*/
+                background-color: #fba88d;
                 color: white;
             }
 
         .Checkbtn:hover {
-            background-color: #fc8158;
+            /*background-color: #fc8158;*/
+            background-color: #D0CECE;
             color: white;
         }
 
         .Checkbtn {
             color: white;
             border: none;
-            background-color: #FF6733;
+            /*background-color: #FF6733;*/
+            background-color: #7F7F7F;
             font-size: 16px;
             padding-top: 6px;
             padding-bottom: 6px;
@@ -410,19 +415,21 @@
             display: none;
         }
 
-        #EdUp {
+/*        #EdUp {
             position: absolute;
-        }
+        }*/
 
         #Mylabel {
             background-color: rgb(0, 0, 0, 0.3);
             color: white;
-            position: relative;
+            position: absolute;
             padding-top: 5px;
             padding-bottom: 5px;
             padding-left: 10px;
             padding-right: 10px;
             width: inherit;
+            top:0px;
+            left:65px;
         }
 
             #Mylabel:hover, #GetFileBtn:hover {
@@ -492,7 +499,7 @@
         }
 
         #UpDemoLabel {
-            background-color: #7F7F7F;
+            background-color: #FF6733;
             color: white;
             height: 35px;
             margin-left: 15px;
@@ -503,7 +510,7 @@
         }
 
             #UpFileLabel:hover, #UpDemoLabel:hover {
-                background-color: #D0CECE;
+                background-color: #fba88d;
             }
 
         .OnTxt {
@@ -738,6 +745,14 @@
             height: 100%;
         }
 
+            #brand a,
+            #brand a:link,
+            #brand a:visited,
+            #brand a:active {
+                color: black;
+                text-decoration-line: none;
+            }
+
         .navmid {
             /* background-color: blue; */
             height: 100%;
@@ -764,7 +779,7 @@
             text-align: right;
         }
 
-        .navend2 > img {
+        .navend2 img { /* 因為notice 加入dropDown顯示系統通知訊息有修改格式 */
             width: 25px;
             /* background-color: blue; */
         }
@@ -810,6 +825,74 @@
             margin-top: 1%;
         }
 
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        .unread-badge-message {
+            position: absolute;
+            top: 1px;
+            left: 16px;
+            width: 10px;
+            height: 10px;
+        }
+
+        .unread-badge-sysNotic {
+            position: absolute;
+            top: 0px;
+            left: 15px;
+            width: 10px;
+            height: 10px;
+        }
+
+        /* dropdown sysNotic---------------------------------------------------------- */
+        /*#region Dropdown*/
+        .dropbtn {
+            /* background-color: #04AA6D; */
+            /* color: white; */
+            /* padding: 16px; */
+            /* font-size: 16px; */
+            border: none;
+            cursor: pointer;
+        }
+
+        /* .dropbtn:hover, .dropbtn:focus {
+  } */
+        .dropdown {
+            float: right;
+            position: relative;
+            /* display: inline-block; */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            /* min-width: 160px; */
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            right: 0;
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+                padding: 5px 10px;
+                text-decoration: none;
+                display: block;
+                white-space: nowrap;
+            }
+
+        .dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        /*#endregion*/
+
 
 
     </style>
@@ -819,27 +902,36 @@
 
     <div class="container-fluid" id="ShowData" v-cloak>
 
-            <div class="row opacity-25 mynav" id="navall">
-                <div class="col-1"></div>
-                <div class="col-2 d-flex align-items-center" id="brand">
-                    Nail IT
-                </div>
-                <div class="col-3">
-                    <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
-                        <li><a href="#"> 美 甲 查 詢 </a></li>
-                        <li><a href="#"> 美 甲 小 天 地 </a></li>
-                        <li><a href="#"> 關 於 我 們 </a></li>
-                    </ul>
-                </div>
-                <div class="col-4 pt-3">
-                    <p class="navend1">登入 / 會員中心</p>
-                </div>
-                <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
-                    <img id="noti mr-0" src="../images/notification.png">
-                </div>
-                <div class="col-1"></div>
+        <div class="row opacity-25 mynav" id="navall">
+            <div class="col-1"></div>
+            <div class="col-2 d-flex align-items-center" id="brand">
+                <a href="/TanTanLib/html/cover.html"> Nail IT</a>
             </div>
+            <div class="col-3">
+                <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
+                    <li><a href="#"> 美 甲 查 詢 </a></li>
+                    <li><a href="#"> 美 甲 小 天 地 </a></li>
+                    <li><a href="#"> 關 於 我 們 </a></li>
+                </ul>
+            </div>
+            <div class="col-4 pt-3">
+                <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
+            </div>
+            <div class="col-1 d-flex align-items-center justify-content-end navend2">
+                <div style="position:relative">
+                    <img class="mt-1 mr-3 cursor-pointer" id="chat" src="../images/chat-box.png" onclick="showChatPage()">
+                    <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+                </div>
+                <div class="dropdown">
+                    <img class="cursor-pointer dropbtn-sysNotic" src="../images/notification.png" onclick="showSysNotic()">
+                    <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
+                    <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
+                        <a class="drop-sysNotic-item">--目前沒有未讀系統訊息--</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
 
 
         <div class="row" style="padding-top:90px">
@@ -872,10 +964,9 @@
             <div class="col-1"></div>
             <div id="photoframe" class="col-3 d-flex flex-column">
                 <div>
-                    <img id="DesignerImg" class="Profileimg" v-bind:src="DesignList.manicuristPic" />
-                </div>
-                <!--<div class="d-flex justify-content-start" id="EdUp">-->
-                <div id="EdUp">
+                    <div>
+                        <img id="DesignerImg" class="Profileimg" v-bind:src="DesignList.manicuristPic" />
+                    </div>
                     <div>
                         <label id="Mylabel">
                             <img id="editimg" />編輯
@@ -883,6 +974,8 @@
                         </label>
                     </div>
                 </div>
+                <!--<div class="d-flex justify-content-start" id="EdUp">-->
+
             </div>
             <div class="col-5" id="Profile">
                 <!--<input type="text" id="SalonN" maxlength="20" placeholder="店家名稱" v-if="Editing" v-model="PutManicurist[0].manicuristSalonName" />-->
@@ -893,12 +986,12 @@
                     <textarea id="Infotext" maxlength="200" class="mt-3" placeholder="自我介紹" v-if="Editing" v-model="PutManicurist[0].manicuristIntro"></textarea>
                 </form>
                 <!--<div id="Score">
-                <div class="ratings">
-                    <div class="Emptystar">★★★★★</div>
-                    <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
-                </div>
-                <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
-            </div>-->
+                    <div class="ratings">
+                        <div class="Emptystar">★★★★★</div>
+                        <div class="Fullstar" v-bind:style="{width:width}">★★★★★</div>
+                    </div>
+                    <div id="Scorefloat" class="d-flex align-items-center">{{DesignList.manicuristScore}}</div>
+                </div>-->
             </div>
             <div class="col-2">
                 <!--<div style="height: 80%;"></div>-->
@@ -937,8 +1030,10 @@
                         <!--<button data-toggle="modal" data-target="#EditModal">新增</button>-->
                     </div>
                     <div class="col-4">
-                        <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
-                        <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        <div v-if="DemoSetValue">
+                            <input class="Searchbar" type="text" placeholder="作品,標籤" v-model="SearchString">
+                            <button class="Searchbtn" onclick="Searchit()"><i class="fa fa-search"></i></button>
+                        </div>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1085,12 +1180,17 @@
                     </div>
                 </div>
                 <!--insert Modal End-->
-                <div class="row FixPad CowRight">
+                <div class="row">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <p class="DisInLine">共計{{DemoSetList.length}}個作品 頁數1/1</p>
-                        <button class="CBtn">上一頁</button>
-                        <button class="CBtn">下一頁</button>
+                        <div v-if="DemoSetValue" class="FixPad CowRight">
+                            <p class="DisInLine">共計{{DemoSetList.length}}個作品</p>
+                            <!--<button class="CBtn">上一頁</button>
+                            <button class="CBtn">下一頁</button>-->
+                        </div>
+                        <div v-else="DemoSetValue" class="mt-4">
+                            <p class="produce">尚未擁有作品</p>
+                        </div>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1137,16 +1237,16 @@
                                                         <textarea required v-model="ThisFormData[0].demoSetContent" class="ExitEmpty" id="PutInFo" placeholder="最多100字" minlength="1" maxlength="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                                                     </div>
                                                     <!--<div>
-                                                    <label for="UpDemoFile">照片：</label>
-                                                    <br />
-                                                    <div class="d-flex align-items-center">
-                                                        <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
-                                                        <label id="UpFileLabel" class="align-items-center">
-                                                            上傳檔案
-                                                            <input id="UpDemoFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
-                                                        </label>
-                                                    </div>
-                                                </div>-->
+                                                        <label for="UpDemoFile">照片：</label>
+                                                        <br />
+                                                        <div class="d-flex align-items-center">
+                                                            <textarea id="UpFileText" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' readonly="readonly"></textarea>
+                                                            <label id="UpFileLabel" class="align-items-center">
+                                                                上傳檔案
+                                                                <input id="UpDemoFile" class="ExitEmpty" type="file" accept="image/*" onchange="GetCoverfile(this)" />
+                                                            </label>
+                                                        </div>
+                                                    </div>-->
                                                     <div class="py-2">
                                                         <label for="PutC">施作部位：</label>
                                                         <select id="PutC" v-model="ThisFormData[0].demoSetPartC" required>
@@ -1230,7 +1330,7 @@
                             <!--EditModalEnd-->
                             <!--DeleteModal-->
                             <div class="modal fade" id="DeleteModal" data-keyboard="false" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                     <form>
                                         <div class="modal-content">
                                             <div class="modal-header border-0 pb-0">
@@ -1369,9 +1469,9 @@
                 <div class="row FixPad CowRight">
                     <div class="col-1"></div>
                     <div class="col-10">
-                        <p class="DisInLine">共計12個作品 頁數1/1</p>
-                        <button class="CBtn">上一頁</button>
-                        <button class="CBtn">下一頁</button>
+                        <p class="DisInLine">共計12個作品</p>
+                        <!--<button class="CBtn">上一頁</button>
+                        <button class="CBtn">下一頁</button>-->
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -1425,6 +1525,9 @@
     </div>
 
     <script src="../YueJs/loginCheck.js"></script>
+    <script src="../js/Ansel_Layout.js"></script>
+    <script src="../AnselLib/Ansel_Service.js"></script>
+    <script src="../AnselLib/Ansel_Common.js"></script>
 
     <script>
         //let ManicuristID = 2;
@@ -1465,6 +1568,10 @@
                     console.log(e);
                     for (demoset in e) {
                         ShowData.DemoSetList.push(e[demoset]);
+                    }
+                    if (ShowData.DemoSetList.length == 0) {
+                        ShowData.DemoSetValue = false;
+                        //console.log('OK');
                     }
                 }
             });
@@ -1785,6 +1892,7 @@
                 GetCertainDemoKey: "",
                 SearchString: "",
                 InsertCover: [{ "demoSetId": GetManicuristID, "demoSetCover": "" }],
+                DemoSetValue: true,
             },
             methods: {
                 InsertDemo: function () {

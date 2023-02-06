@@ -81,10 +81,10 @@
             text-align: right;
         }
 
-        .navend2>img {
+        .navend2 img {
+            /* 因為notice 加入dropDown顯示系統通知訊息有修改格式 */
             width: 25px;
             /* background-color: blue; */
-
         }
 
         /* 頁尾---------------------------------------------------------- */
@@ -122,6 +122,75 @@
         #footcopy {
             margin-top: 1%;
         }
+
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        .unread-badge-message {
+            position: absolute;
+            top: 1px;
+            left: 16px;
+            width: 10px;
+            height: 10px;
+        }
+
+        .unread-badge-sysNotic {
+            position: absolute;
+            top: 0px;
+            left: 15px;
+            width: 10px;
+            height: 10px;
+        }
+
+        /* dropdown sysNotic---------------------------------------------------------- */
+        /*#region Dropdown*/
+        .dropbtn {
+            /* background-color: #04AA6D; */
+            /* color: white; */
+            /* padding: 16px; */
+            /* font-size: 16px; */
+            border: none;
+            cursor: pointer;
+        }
+
+        /* .dropbtn:hover, .dropbtn:focus {
+  } */
+        .dropdown {
+            float: right;
+            position: relative;
+            /* display: inline-block; */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            /* min-width: 160px; */
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            right: 0;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 5px 10px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        /*#endregion*/
     </style>
 
 </head>
@@ -143,11 +212,24 @@
                 </ul>
             </div>
             <div class="col-4 pt-3">
-                <p class="navend1">登入 / 會員中心</p>
+                <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a
+                        id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
             </div>
             <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                <img class="mt-1 mr-3" id="chat" src="../TanTanLib/images/chat-box.png">
-                <img id="noti mr-0" src="../TanTanLib/images/notification.png">
+                <div style="position:relative">
+                    <img class="mt-1 mr-3 cursor-pointer" id="chat" src="../TanTanLib/images/chat-box.png"
+                        onclick="showChatPage()">
+                    <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+                </div>
+                <div class="dropdown">
+                    <img class="cursor-pointer dropbtn-sysNotic" src="../TanTanLib/images/notification.png"
+                        onclick="showSysNotic()">
+                    <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
+                    <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded"
+                        style="background-color:#ccc;max-width:450px">
+                        <a class="drop-sysNotic-item">--目前沒有未讀系統訊息--</a>
+                    </div>
+                </div>
             </div>
             <div class="col-1"></div>
         </div>
@@ -201,10 +283,11 @@
                             <!--  檢舉 預約 -->
                             <div class="product-footer">
                                 <div class="reportbtn">
-                                    <button type="button" id="reportbtn" onclick="repalertform()">檢舉此商品</button>
+                                    <button type="button" id="reportbtn" >檢舉此商品</button>
                                 </div>
                                 <div class="reservebtn">
                                     <button type="button" id="reservebtn">預約</button>
+                                    <button type="button" id="msgbtn">私訊</button>
                                 </div>
                             </div>
                         </div>
@@ -641,18 +724,28 @@
     <!-- 日曆函數 -->
     <script src="../js/calendar.js"></script>
     <script src="../js/calendarscript.js"></script>
-    <script src="../YueJs/loginCheck.js"></script>
     <!-- 引用 商品資料 可預約日期 -->
     <script src="../js/getData.js"></script>
 
+    <script src="../YueJs/loginCheck.js"></script>
+    <script src="../js/Ansel_Layout.js"></script>
+    <script src="../AnselLib/Ansel_Service.js"></script>
+    <script src="../AnselLib/Ansel_Common.js"></script>
     <script>
         // 抓取登入者ID
         async function pre() {
             await YueloginCheck()
             $('input[name="MemberId"]').val(nowMember)
+            $('input[name="ReportBuilder"]').val(nowMember)
             console.log(nowMember)
         }
         pre()
+        // if (!event.target.matches('.dropbtn-sysNotic') && !event.target.matches('.drop-sysNotic-item')) {
+        //     $(".dropdown-content-sysNotic").each((index, elem) => {
+        //         if (elem.classList.contains("show"))
+        //             elem.classList.remove("show");
+        //     });
+        // }
         // 抓取基本資料 
         getbasicinfo()
         $('#reservebtn').on('click', function () {
@@ -663,12 +756,21 @@
                 alertform()
             }
         })
+        $('#reportbtn').on('click', function () {
+            if (nowMember == -1) {
+                alert("請先登入會員，再進行檢舉")
+            }
+            else {
+                repalertform()
+            }
+        })
         calculate()
         // 放入可選擇的預約日期
         getReserveDate()
         // 取得可放入的預約時間
         getReserveTime()
         OrderDetail()
+        Msg()
         // 傳送表單資料
         postOrder()
         //let rMid = $('input[name="MemberId"]').val(nowMember)
@@ -687,14 +789,14 @@
             }
             console.log(JSON.stringify(returnArray))
             $.ajax({
-                url: "api/product/report",
+                url: "https://localhost:44308/api/product/report",
                 method: "POST",
                 contentType: 'application/json',
                 data: JSON.stringify(returnArray),
 
                 success: res => {
                     alert('檢舉送出成功')
-                    Closeform()
+                    repCloseform()
                 },
                 error: err => {
                     console.log("N")

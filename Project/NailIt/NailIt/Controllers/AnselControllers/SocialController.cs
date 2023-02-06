@@ -57,8 +57,18 @@ namespace NailIt.Controllers.AnselControllers
 
                 // record image at ArticlePicTable
                 if (articlePic.ArticleId == 0)
-                {   // new article havn't got a id.
-                    articlePic.ArticleId = _context.ArticleTables.OrderByDescending(a => a.ArticleId).FirstOrDefault().ArticleId + 1;
+                {
+                    var articles = _context.ArticleTables.ToList();
+                    // new article havn't got a id.
+                    if (articles.Count > 0)
+                    {
+                        articlePic.ArticleId = articles.OrderByDescending(a => a.ArticleId).FirstOrDefault().ArticleId + 1;
+                    }
+                    // very first article.
+                    else
+                    {
+                        articlePic.ArticleId = 1;
+                    }
                 }
                 foreach (var imageFile in frm.Files)
                 {

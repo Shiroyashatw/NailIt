@@ -29,13 +29,14 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{ArticleId}")]
         public async Task<ActionResult<IEnumerable<ReplyTable>>> GetReplyTables(int ArticleId)
         {
+            var loginId = HttpContext.Session.GetInt32("loginId") ?? -1;
             var replies = await _context.ReplyTables.
                 Where(r => r.ArticleId == ArticleId).
                 OrderByDescending(r => r.ReplyId).
                 ToListAsync();
 
             // remove the reply had been report by this user
-            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == HttpContext.Session.GetInt32("loginId") && r.ReportPlaceC == "D6").ToList();
+            var userArticleReport = _context.ReportTables.Where(r => r.ReportBuilder == loginId && r.ReportPlaceC == "D6").ToList();
             var leftJoinReport = (from reply in replies
                                   join report in userArticleReport
                                        on reply.ReplyId equals report.ReportItem into gj
@@ -50,7 +51,7 @@ namespace NailIt.Controllers.AnselControllers
                 m => m.MemberId,
                 (r, m) => new { reply = r, m.MemberNickname }).ToList();
 
-            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == HttpContext.Session.GetInt32("loginId")).ToList();
+            var userReplyLike = _context.ReplyLikeTables.Where(r => r.MemberId == loginId).ToList();
             var leftJoinLike = (from reply in repliesJoinMember
                                 join like in userReplyLike
                                      on reply.reply.ReplyId equals like.ReplyId into gj

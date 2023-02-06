@@ -44,6 +44,16 @@ namespace NailIt.Controllers.AnselControllers
             _context = context;
         }
 
+        public List<MemberTable> LoginCheck()
+        {
+            string theKey = Request.Cookies[".AspNetCore.Session"];
+            if (HttpContext.Session.GetString("NailLogin") == null || theKey == null)
+                return null;
+            Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
+            var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
+            return theId.ToList();            
+        }
+
         // Get all message from MessageTables, SysNoticeTables and NoticeTables
         private async Task<List<AllMessage>> getMemberAllMessage(int? loginId)
         {
@@ -189,7 +199,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet]
         public async Task<ActionResult> GetMembersMsg()
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables and NoticeTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
 
@@ -204,7 +214,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{memberId}")]
         public async Task<ActionResult> GetSingleMemberMsg(int memberId)
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
 
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
@@ -225,7 +235,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpGet("{updateTime}")]
         public async Task<ActionResult> GetNewMsg(DateTime updateTime)
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
 
@@ -246,7 +256,7 @@ namespace NailIt.Controllers.AnselControllers
         [HttpPut("{senderId}")]
         public async Task<ActionResult> PutMsgRead(int senderId)
         {
-            var loginId = HttpContext.Session.GetInt32("loginId");
+            var loginId = LoginCheck()?[0].MemberId ?? -1;
             // Get all message from MessageTables, SysNoticeTables, NoticeTables and NoticeReadTables
             List<AllMessage> allMessage = await getMemberAllMessage(loginId);
             // Get all unread message
@@ -369,28 +379,36 @@ namespace NailIt.Controllers.AnselControllers
         {
             if (frm.Files.Count > 0)
             {
-                string baseUri = $"{Request.Scheme}://{Request.Host}";
-                // var uri = "https://localhost:5001";
-                // var uri = "https://localhost:44308";
+                var messages = new List<MessageTable>();
                 MessageTable message = JsonConvert.DeserializeObject<MessageTable>(frm["message"]);
                 // lock DB
                 var t = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
                 // save Image message
                 _context.MessageTables.Add(message);
                 await _context.SaveChangesAsync();
+                var id = message.MessageId;
                 for (int i = 0; i < frm.Files.Count; i++)
                 {
+                    if (i != 0)
+                        message.MessageId = 0;
                     // use messageId be image name
-                    string imageName = $"{message.MessageId}-{i + 1}.png";
-                    message.MessageContent += $"<img class='mw-100' src='{baseUri}/AnselLib/ChatImage/{imageName}'>";
-                    // 如果多張圖片，需要<br>換行，才不會有多餘的空白
-                    if (i != frm.Files.Count - 1) { message.MessageContent += "<br>"; }
+                    string imageName = $"{id}.png";
                     chatSaveImage(imageName, frm.Files[i]);
+                    message.MessageContent = $"<img src='/AnselLib/ChatImage/{imageName}' onclick='showPicModal(this)'>";                    
+                    if (i == 0)
+                        await _context.SaveChangesAsync();
+                    else
+                        _context.MessageTables.Add(message);
+                        await _context.SaveChangesAsync();
+                    // deep copy, then add into return list
+                    var theMsg = new MessageTable();
+                    Common.DeepCopy(ref message, ref theMsg);
+                    messages.Add(theMsg);
+                    id++;
                 }
-                await _context.SaveChangesAsync();
 
                 t.Commit();
-                return CreatedAtAction("GetMessageTable", new { id = message.MessageId }, message);
+                return Ok(messages);
             }
             return NotFound();
         }
