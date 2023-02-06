@@ -29,17 +29,16 @@ async function YueloginCheck() {
 function headChange() {
 	if (nowMember != -1) {
 		huiORreg.innerText = "會員中心";
-		huiORreg.href = "https://localhost:44308/tedLb/tedmember.html#";
+		huiORreg.href = "/tedLb/tedmember.html#";
 		loginORout.innerText = "登出";
 		loginORout.addEventListener("click", YueLogout, true);
 	}
 	else {
 		huiORreg.innerText = "註冊";
-		huiORreg.href = "https://localhost:44308/YueRegister.html";
+		huiORreg.href = "/YueRegister.html";
 		loginORout.innerText = "登入";
-		loginORout.href = "https://localhost:44308/Yuelogin.html";
+		loginORout.href = "/Yuelogin.html";
 	}
-	console.log("E03");
 }
 
 async function YueLogout()
@@ -52,5 +51,5 @@ async function YueLogout()
 		.then(response => response.text())
 		.then(result => console.log(result))
 		.catch(error => console.log('error', error));
-	location.href("https://localhost:44308/TanTanLib/html/cover.html");
+	location.href("/TanTanLib/html/cover.html");
 }

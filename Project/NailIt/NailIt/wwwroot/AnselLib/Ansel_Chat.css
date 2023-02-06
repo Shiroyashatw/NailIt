@@ -55,6 +55,7 @@
 
 /*#region chattingMain*/
 span img {
+    cursor: pointer;
     height: 150px;
     width: 240px;
     object-fit: cover;

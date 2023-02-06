@@ -701,3 +701,45 @@ function calculateprice() {
     //console.log("施作項目" + selectedOrderItem)
     //console.log("造型" + selectedOrderItemName)
 }
+
+// 檢舉表單
+function report() {
+    MID = url.searchParams.get('id');
+    $('#report').on('click', function () {
+        // 加入時區 8小時
+        Tzdate = new Date(+new Date() + 8 * 3600 * 1000)
+        // 轉換成 SQL datetime格式
+        Tztoday = Tzdate.toISOString().slice(0, 19) // .replace('T', ' ');
+        $('input[name="ReportBuildTime"]').val(Tztoday)
+        $('input[name="ReportTarget"]').val(MID)
+        $('input[name="ReportItem"]').val(MID)
+        var formdata = $('#reportform').serializeArray();
+        var returnArray = {}
+        // var Yes = true
+        for (var i = 0; i < formdata.length; i++) {
+            returnArray[formdata[i]['name']] = formdata[i]['value'];
+        }
+        console.log(JSON.stringify(returnArray))
+        $.ajax({
+            url: "https://localhost:44308/api/product/report",
+            method: "POST",
+            contentType: 'application/json',
+            data: JSON.stringify(returnArray),
+
+            success: res => {
+                alert('檢舉送出成功')
+                repCloseform()
+            },
+            error: err => {
+                console.log("N")
+            },
+        });
+    })
+}
+function Msg() {
+    $('#msgbtn').on('click',function(){
+        let getMid = $('input[name="ManicuristId"]').val();
+        window.location = "/Community/chat/" + getMid;
+    })
+    
+}

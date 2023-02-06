@@ -135,6 +135,11 @@ $btnnotclcik: rgba(0, 0, 0, 0.1);
                             color: white;
                             background-color: black;
                             border: 1px black;
+                            &:hover {
+                                background-color: #3498db;
+                                color: #fff;
+                                transition: .5s;
+                            }
                         }
                     }
                 }

@@ -586,7 +586,7 @@ var renderReport = function () {
 var renderMenu = function () {
     let menuHTML = "";
     for (const [key, value] of Object.entries(scop.articleCodeList)) {
-        menuHTML += `<li><button class="btn btn-light" onclick="showMain('${value.codeId}','${value.codeRepresent}')">${value.codeRepresent}</button></li>`;
+        menuHTML += `<li><a class="" onclick="showMain('${value.codeId}','${value.codeRepresent}')">${value.codeRepresent}</a></li>`;
 
         // show first sort
         if (key == 0) {
