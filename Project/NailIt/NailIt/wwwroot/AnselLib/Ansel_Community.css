@@ -1,14 +1,28 @@
 /*#region Font*/
 /*#endregion*/
 
+/*#region side nav*/
+.communityUl>li {
+  margin-bottom: 10px;
+}
+.communityUl>li>a {
+  cursor: pointer;
+}
+.communityUl>li>a:hover {
+  border-bottom: 1px solid #000;
+}
+
+/*#endregion*/
+
 
 /*#region Fixed new article button*/
-#btnNewArticle{
+#btnNewArticle {
   font-size: 30px;
   position: fixed;
   right: 4vw;
   bottom: 10vh;
 }
+
 /*#endregion*/
 
 
