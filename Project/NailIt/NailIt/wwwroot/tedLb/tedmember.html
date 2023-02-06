@@ -14,6 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link href="../YueCss/workSet.css" rel="stylesheet" />
     <link href="../YueCss/calen.css" rel="stylesheet" />
+    <link href="../nail-polish.ico" type="image/x-icon" rel="icon" />
     <title>會員中心</title>
 </head>
 <body>
@@ -109,7 +110,6 @@
                     <span class="close111">&times;</span>
                     <p>請輸入驗證碼</p>
                     <input class="form-control" id="certifiednum" type="text" name="name" value="" />
-                    <br />
                     <button class="btn" id="btnverif" onclick="verifcert()">驗證</button>
                 </div>
             </div>
@@ -139,7 +139,6 @@
                                 <label>店家/美甲師電話:</label><input type="text" id="newshopphone" class="form-control" name="name" value="" />
                                 <label>介紹</label><textarea class="form-control" id="newintoshop" rows="3"></textarea>
                                 <label>證照</label><textarea class="form-control" id="newshoplicen" rows="3"></textarea>
-                                <br />
                                 <button id="btninsertshop" onclick="btninsertshopcert()" class="btn">確定新增</button>
                             </div>
                         </div>
@@ -1148,6 +1147,7 @@
 
                                 success: function () {
                                     window.location = "/tedLb/tedmember.html";
+
                                     alert("信用卡新增成功");
                                 }
                             })

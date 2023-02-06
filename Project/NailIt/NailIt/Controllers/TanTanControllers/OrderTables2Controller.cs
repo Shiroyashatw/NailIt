@@ -36,6 +36,34 @@ namespace NailIt.Controllers.TanTanControllers
                                  };
             return await newOrderTables.ToListAsync();
         }
+
+        //// GET: api/OrderTables2
+        //[HttpGet("2/{pageNum}")]
+        //public async Task<ActionResult<IEnumerable<dynamic>>> GetOrderTables2(int pageNum)
+        //{
+        //    var newOrderTables = from o in _context.OrderTables
+        //                         join os in _context.CodeTables on o.OrderStateC equals os.CodeId
+        //                         select new
+        //                         {
+        //                             OrderId = o.OrderId,
+        //                             OrderOrderTime = o.OrderOrderTime.ToString("yyyy-MM-dd HH:mm"),
+        //                             OrderStateC = o.OrderStateC,
+        //                             OrderStateName = os.CodeRepresent // 狀態
+        //                         };
+        //    //每頁條数
+        //    const int pageSize = 5;
+        //    //頁碼 0也就是第一条 
+
+
+        //    //源数据   
+
+
+        //    //分页   
+        //    var query = newOrderTables.Skip(pageNum * pageSize).Take(pageSize);
+
+
+        //    return await query.ToListAsync();
+        //}
         // GET: api/OrderTables2/Top5
         [HttpGet("Top5")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetTop5()
@@ -53,7 +81,7 @@ namespace NailIt.Controllers.TanTanControllers
 
             var groups = _context.OrderTables.Where(n => n.OrderType == true)
 
-                         
+
                          .GroupBy(n => n.OrderItem)
                          .Select(n => new
                          {
@@ -67,7 +95,7 @@ namespace NailIt.Controllers.TanTanControllers
                          o => o.DemoSetId,
                          (n, o) => new  // (c,s)代表將資料集合起來
                          {
-                             DemoSetId=o.DemoSetId,
+                             DemoSetId = o.DemoSetId,
                              DemoSetName = o.DemoSetName,
                              DemoSetCover = o.DemoSetCover,
                              DemoSetPrice = o.DemoSetPrice.ToString("C0"),
@@ -84,7 +112,7 @@ namespace NailIt.Controllers.TanTanControllers
                                 from m in mlist.DefaultIfEmpty()
                                 join ma in _context.MemberTables on o.ManicuristId equals ma.MemberId into malist
                                 from ma in malist.DefaultIfEmpty()
-                                join p in _context.PlanTables on o.PlanId equals p.PlanId
+                                //join p in _context.PlanTables on o.PlanId equals p.PlanId
                                 join c in _context.CodeTables on o.OrderPartC equals c.CodeId
                                 join r in _context.CodeTables on o.OrderRemovalC equals r.CodeId
                                 join os in _context.CodeTables on o.OrderStateC equals os.CodeId
@@ -97,7 +125,7 @@ namespace NailIt.Controllers.TanTanControllers
                                     ManicuristId = o.ManicuristId,
                                     ManicuristName = ma.MemberName,
                                     PlanId = o.PlanId,
-                                    PlanTime = p.PlanStartTime.ToString("yyyy-MM-dd HH:mm"),
+                                    //PlanTime = p.PlanStartTime == null ? "-" : ((DateTime)o.OrderAcceptTime).ToString("yyyy-MM-dd HH:mm"),
                                     OrderPrice = o.OrderPrice,
                                     OrderDeposit = o.OrderDeposit,
                                     OrderPartC = o.OrderPartC,

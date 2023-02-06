@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +15,7 @@ using NailIt.Models;
 using Newtonsoft.Json.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
+
 namespace NailIt.Controllers.TanTanControllers
 {
     [Route("api/[controller]")]
@@ -20,11 +23,15 @@ namespace NailIt.Controllers.TanTanControllers
     public class ReportTablesController : ControllerBase
     {
         private readonly NailitDBContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ReportTablesController(NailitDBContext context)
+        public ReportTablesController(NailitDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
+
         }
+
 
 
         // GET: api/ReportTables
@@ -69,7 +76,7 @@ namespace NailIt.Controllers.TanTanControllers
         {
             var date1 = DateTime.Parse(dateS);
             var date2 = DateTime.Parse(dateE).AddMinutes(1439);
-            
+
 
             var query = from o in _context.ReportTables
                         join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
@@ -212,7 +219,8 @@ namespace NailIt.Controllers.TanTanControllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReportTable(int id, ReportTable reportTable)
         {
-
+            var Claim = _httpContextAccessor.HttpContext.User.Claims.ToList();
+            var ManagerId = Claim.Where(a => a.Type == "ManagerId").First().Value;
             if (id != reportTable.ReportId)
             {
                 return BadRequest();
@@ -225,7 +233,7 @@ namespace NailIt.Controllers.TanTanControllers
                                       select o).FirstOrDefault();
             CertainReportTable.ReportResult = reportTable.ReportResult;
             CertainReportTable.ReportCheckTime = reportTable.ReportCheckTime;
-            CertainReportTable.ManagerId = reportTable.ManagerId;
+            CertainReportTable.ManagerId = Int16.Parse(ManagerId);
 
             try
             {

@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="col-3  pt-3 justify-content-end" id="navend">
-                         Hi {{myname}}/ <b style="font-size:14px;" onclick="plzlogout()">登出</b>
+                         Hi 管理員{{myname}} / <b style="font-size:14px;" onclick="plzlogout()">登出</b>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -69,7 +69,7 @@
                     <div class="col-1"></div>
                     <div class="px-0 col-7 mycon">
                         <!-- 1審核------------------------------------------------------------------------------ -->
-                        <div id="report" class="tabcontent" >
+                        <div id="report" class="tabcontent"  >
                             <b id="rigtil">後臺管理 ＞ <u>審核檢舉</u></b>
                             <!-- 檢舉條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
@@ -328,10 +328,10 @@
                                     <p class="my-0 mr-2">共計</p>
                                     <p class="my-0 mr-2">{{ordernum}}個項</p>
                                     <p class="my-0 mr-1">頁數</p>
-                                    <input class="my-1 mr-1"   style="width:10%;height:100%;text-align: right;" v-model="pageNum">
+                                    <input class=" my-1 mr-1" style="width:10%;height:100%;">
                                     <p class="my-0 mr-2">/ {{orderpage}} </p>
-                                    <a class="mr-2" onclick="uporder()">上一頁</a>
-                                    <a class="mr-1" onclick="nextorder()">下一頁</a>
+                                    <a class="mr-2" href="">上一頁</a>
+                                    <a class="mr-1" href="">下一頁</a>
                                 </div>
                             </div>
                             <!-- 訂單項目欄位表------------------------------------------------------------------------------------------- -->
@@ -346,13 +346,13 @@
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody v-for="(item,key) in order2">
+                                    <tbody v-for="(item,key) in order">
                                         <tr>
-                                            <th scope="row">{{order2[key].orderId}}</th>
+                                            <th scope="row">{{order[key].orderId}}</th>
 
-                                            <td>{{order2[key].orderOrderTime}}</td>
-                                            <td>{{order2[key].orderStateName}}</td>
-                                            <td><button onclick="revieworder(this)" dsta-toggle="modal" data-target="#orderModal" v-bind:value="order2[key].orderId">查 閱</button></td>
+                                            <td>{{order[key].orderOrderTime}}</td>
+                                            <td>{{order[key].orderStateName}}</td>
+                                            <td><button onclick="revieworder(this)" data-toggle="modal" data-target="#orderModal" v-bind:value="order[key].orderId">查 閱</button></td>
                                         </tr>
                                     </tbody>
                                 </table>
