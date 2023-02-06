@@ -1,13 +1,55 @@
 /*#region Font*/
 /*#endregion*/
 
-/*#region side nav*/
+.thumbnail {
+  max-width: 100%;
+  height: 137px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.data-memberId {
+  border-bottom: 1px black solid  
+}
+
+/*#region Modal*/
+.btnEdit{
+  border: none;
+  color: #fff;
+  height: 24px;
+  width: 65px;
+  font-size: 13px;
+
+}
+.btnCancel{
+  background-color: #7F7F7F;
+}
+.btnPublish{
+  background-color: #FF6733;
+}
+.account{
+  color: #818181;
+}
+.replyDiff{
+  font-size:13px;
+  color: #818181;
+}
+#ModalArticleReplyCount{
+  font-size:13px;
+  color: #818181;
+}
+/*#endregion*/
+
+/*#region Side nav*/
 .communityUl>li {
   margin-bottom: 10px;
 }
+
 .communityUl>li>a {
   cursor: pointer;
 }
+
 .communityUl>li>a:hover {
   border-bottom: 1px solid #000;
 }
