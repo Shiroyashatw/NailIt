@@ -189,7 +189,7 @@
         .dropdown a:hover {
             background-color: #ddd;
         }
-
+        
         /*#endregion*/
     </style>
 
@@ -248,11 +248,11 @@
                 <div class="main-item   ">
                     <!-- header-item 放置點擊連結順序 -->
                     <div class="header-item" style="display: flex;">
-                        <div class="link"><a href="#">首頁</a><i class="bi bi-chevron-right"></i></div>
-                        <div class="link"><a href="Fliter.html">美甲查詢</a><i class="bi bi-chevron-right"></i></div>
-                        <div class="link"><a href="" id="topmanicuristSalonName"></a><i class="bi bi-chevron-right"></i>
+                        <div class="link"><a class="LinkTo" href="../TanTanLib/html/cover.html">首頁</a><i class="bi bi-chevron-right"></i></div>
+                        <div class="link"><a class="LinkTo" href="Fliter.html">美甲查詢</a><i class="bi bi-chevron-right"></i></div>
+                        <div class="link"><a class="LinkTo" href="" id="topmanicuristSalonName"></a><i class="bi bi-chevron-right"></i>
                         </div>
-                        <div class="link"><a href="#" id="topdemosetName"></a></div>
+                        <div class="link"><a class="LinkNow" href="" id="topdemosetName"></a></div>
                     </div>
                     <!-- middle-item 中間資訊欄 照片加文字 -->
                     <div class="middle-item d-flex">
@@ -369,7 +369,7 @@
                                     <select class="" name="OrderPartC"></select>
                                 </div>
                                 <div class="itemBx col-12">
-                                    <label class="">卸甲:</label>
+                                    <label class="">卸甲選擇:</label>
                                     <select class="" name="OrderRemovalC"></select>
                                 </div>
                                 <div class="itemBx col-12">
@@ -377,7 +377,7 @@
                                     <select class="" name="OrderItem"></select>
                                 </div>
                                 <div class="itemBx col-12">
-                                    <label class="">造型:</label>
+                                    <label class="">造型款式:</label>
                                     <select class="" name="OrderItemName"></select>
                                 </div>
                                 <div class="itemBx col-12">
@@ -386,7 +386,7 @@
                                     <input type="hidden" name="OrderPrice" value="">
                                 </div>
                                 <div class="itemBx col-12">
-                                    <label class="">訂金:</label>
+                                    <label class="">預付訂金:</label>
                                     <label class="demoSetDeposit"></label>
                                     <input type="hidden" name="OrderDeposit" value="">
                                 </div>
@@ -558,6 +558,10 @@
             </div>
 
 
+        </div>
+        <div id="reportSusses" class="isHide">
+            <p>檢舉成功</p>
+            <button id="reportSussesbtn">OK</button>
         </div>
     </div>
 
@@ -770,6 +774,7 @@
         // 取得可放入的預約時間
         getReserveTime()
         OrderDetail()
+        
         Msg()
         // 傳送表單資料
         postOrder()

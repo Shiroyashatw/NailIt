@@ -36,8 +36,10 @@ async function login() {
 			}
 		}
 	).catch(error => console.log('error', error));
-	if (flag) location.href = document.referrer;
-
+	if (flag) {
+		console.log(document.referrer);
+		location.href = document.referrer == "https://localhost:44308/YueRegister.html" || document.referrer == "https://localhost:44308/Yuelogin.html" ? "/TanTanLib/html/cover.html":document.referrer;
+	}
 }
 
 function forgor()

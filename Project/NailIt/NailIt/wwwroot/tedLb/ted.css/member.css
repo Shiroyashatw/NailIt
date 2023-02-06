@@ -186,7 +186,7 @@ button[value=newcounnt]:hover{
 }
 .order-name{
 
-    height: 40px;
+    height: 25px;
     border-bottom: 1px solid;
 }
 .order-name h6{
@@ -282,7 +282,7 @@ button[value=newcounnt]:hover{
     background-color: #fc8158;
 }
 .evaluation-btn{
-    width: 80px;
+    width: 100px;
     background-color:transparent;
     border: none;
 }
@@ -394,8 +394,8 @@ button[value=newcounnt]:hover{
 .insert-topdiv {
     display: none;
     position: fixed;
-    z-index: 1;
-    padding-top: 100px;
+    z-index: 99999!important;
+    padding-top:200px;
     left: 0;
     top: 0;
     width: 100%;
@@ -429,7 +429,7 @@ button[value=newcounnt]:hover{
 .insertshop-div {
     display: none;
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 9999!important; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -440,6 +440,7 @@ button[value=newcounnt]:hover{
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 .contentinsertshop{
+    z-index:3;
     background-color:#fefefe;
     margin:auto;
     padding:20px;

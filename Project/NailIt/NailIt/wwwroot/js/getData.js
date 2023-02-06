@@ -555,7 +555,7 @@ function OrderDetail() {
         let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
         let rremovec = OrderRemovalC.find("option:selected").text()
         ritem = $('select[name="OrderItem"]').find("option:selected").text()
-        ritemName = $('select[name="OrderItemName"]').find("option:selected").val()
+        ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
         //console.log(ritem)
         //console.log(ritemName)
         let rprice = $('input[name="OrderPrice"]').val()
@@ -564,22 +564,64 @@ function OrderDetail() {
         console.log(OrderTypeVal)
         if (OrderTypeVal == "true") {
             $('.rescheck').append(`
-        <p>預約日期:${rdate} 時間:${rtime}</p>
-        <p>施作部位:${rparc}</p>
-        <p>卸甲:${rremovec}</p>
-        <p>施作項目:${ritem} 造型:${ritemName}</p>
-        <p>預估價位:NT$${rprice}</p>
-        <p>訂金:NT$${rdep}</p>
+            <div class="col-12">
+                <label class="title">預約日期:</label>
+                <label class="text">${rdate}</label>
+                <label class="title">預約時間:</label>
+                <label class="text">${rtime}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">施作部位:</label>
+                <label class="text">${rparc}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">卸甲選擇:</label>
+                <label class="text">${rremovec}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">施作項目:</label>
+                <label class="text">${ritem}</label>
+                <label class="title">造型款式:</label>
+                <label class="text">${ritemName}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">預估價位:</label>
+                <label class="text">NT$${rprice}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">預付訂金:</label>
+                <label class="text">NT$${rdep}</label>
+            </div>
         `);
         }
         else {
             $('.rescheck').append(`
-        <p>預約日期:${rdate} 時間:${rtime}</p>
-        <p>施作部位:${rparc}</p>
-        <p>卸甲:${rremovec}</p>
-        <p>施作項目:${ritem}</p>
-        <p>預估價位:NT$${rprice}</p>
-        <p>訂金:NT$${rdep}</p>
+            <div class="col-12">
+                <label class="title">預約日期:</label>
+                <label class="text">${rdate}</label>
+                <label class="title">預約時間:</label>
+                <label class="text">${rtime}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">施作部位:</label>
+                <label class="text">${rparc}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">卸甲選擇:</label>
+                <label class="text">${rremovec}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">施作項目:</label>
+                <label class="text">${ritem}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">預估價位:</label>
+                <label class="text">NT$${rprice}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">預付訂金:</label>
+                <label class="text">NT$${rdep}</label>
+            </div>
         `);
         }
 
@@ -736,10 +778,13 @@ function report() {
         });
     })
 }
+
+
+
 function Msg() {
-    $('#msgbtn').on('click',function(){
+    $('#msgbtn').on('click', function () {
         let getMid = $('input[name="ManicuristId"]').val();
         window.location = "/Community/chat/" + getMid;
     })
-    
+
 }

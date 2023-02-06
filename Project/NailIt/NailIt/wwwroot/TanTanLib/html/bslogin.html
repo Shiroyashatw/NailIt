@@ -81,26 +81,27 @@
 
                     <h4 class="mt-4"><b>登入</b></h4>
                     <div>
-                        <label for="accountInput"  class="mt-4">帳號：</label>
-                        <input id="accountInput" type="text" style=" width: 240px;height:35px " placeholder=" 請輸入您的帳號" />
+                        <label for="accountInput" class="mt-4">帳號：</label>
+                        <input id="accountInput" type="text" style=" width: 240px;height:35px " placeholder=" 請輸入您的帳號" v-model="myID" />
                     </div>
                     <div class="mt-1">
                         <label for="pwInput" class="mt-4">密碼：</label>
-                        <input id="pwInput" type="password" style=" width: 240px;height:35px " placeholder=" 請輸入您的密碼" />
+                        <input id="pwInput" type="password" style=" width: 240px;height:35px " placeholder=" 請輸入您的密碼" v-model="pswd" />
 
                     </div>
+                    <!--href="./backstage.html"-->
 
-                    <div class="mt-4">
-                        <a href="./backstage.html" class="btn">
-                            <div class="d-flex align-content-center align-content-center justify-content-center">登 入</div>
-                        </a>
-                        
-                    </div>
+
+                    <div class="btn mt-4 d-flex align-content-center align-content-center justify-content-center" onclick="plzlogin()">登 入</div>
+
+                   
+
                 </div>
 
             </div>
         </div>
     </div>
+    <script src="../../TanTanLib/js/myajax.js"></script>
 </body>
 
 </html>

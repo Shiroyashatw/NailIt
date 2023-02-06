@@ -86,22 +86,22 @@ namespace NailIt.Controllers.YueyueControllers
             from MemberTable in _context.MemberTables
             where MemberTable.MemberAccount == memberTable.MemberAccount
             select MemberTable;
-
             if (!myMember.Any())
             {
-                SysNoticeTable daNotice = new SysNoticeTable();
-                daNotice.SysNoticeTitle = "預約已被確認";
+                 SysNoticeTable daNotice = new SysNoticeTable();
+                daNotice.SysNoticeTitle = "註冊完成";
                 daNotice.SysNoticeContent = "歡迎加入Nailit！！";
-                daNotice.SysNoticeTarget = memberTable.MemberId;
                 daNotice.SysNoticeState = false;
-                _context.SysNoticeTables.Add(daNotice);
+                daNotice.SysNoticeBuildTime = DateTime.UtcNow;
                 _context.MemberTables.Add(memberTable);
+                await _context.SaveChangesAsync();
+                daNotice.SysNoticeTarget = (from  no in _context.MemberTables where no.MemberAccount == memberTable.MemberAccount select no.MemberId).ToList()[0];
+                _context.SysNoticeTables.Add(daNotice);
                 await _context.SaveChangesAsync();
                 return true;
             }
             else
                 return false;
         }
-     
     }
 }
