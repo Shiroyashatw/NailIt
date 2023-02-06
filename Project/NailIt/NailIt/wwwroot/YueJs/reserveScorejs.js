@@ -83,7 +83,7 @@ function scoreLoop(search=false)
 		thisCompleteTime = x.order_CompleteTime.substring(0, 10) + " " + x.order_CompleteTime.substring(11, 19);
 		answer += `<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 20%">
-						<img src="`+ x.order_Cover + `" width="90%" style="margin-left: 3% ;height:170px;" onclick="javascript:location.href='` + maniTo +`'" />
+						<img src="../YipLib/`+ x.order_Cover + `" width="90%" style="margin-left: 3% ;height:170px;" onclick="javascript:location.href='` + maniTo +`'" />
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
 						<span style="font-size: 120%"  onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName + `</b></span>
