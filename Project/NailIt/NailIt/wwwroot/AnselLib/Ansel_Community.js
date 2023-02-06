@@ -435,15 +435,15 @@ var renderRemoveTheReply = function () {
 }
 var renderNewReply = function (reply) {
     let replyHTML = `
-                <div data-replyid="${reply.replyId}">
+                <div data-replyid="${reply.replyId}" class="mb-3">
                     <div class="d-flex align-items-center"> <!-- Reply header -->
                         <div style="margin-right:auto">
-                            <span>${navScop.loginNickname}</span><span>1秒前</span>
+                            <span class="mr-2 font-weight-bold">${navScop.loginNickname}</span><span class="replyDiff">1秒前</span>
                         </div>
-                        <i class="fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>
+                        <i class="mr-1 fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>
                         <span>${reply.replyLikesCount}</span>
                         <div class="dropdown">
-                            <i onclick="showDropdown(this)" class="dropbtn-community fa-solid fa-ellipsis-vertical"></i>
+                            <i onclick="showDropdown(this)" class="ml-3 dropbtn-community fa-solid fa-ellipsis-vertical"></i>
                             <div class="dropdown-content dropdown-content-community">
                                 <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal(this)">刪除</a>
                             </div>
@@ -459,20 +459,20 @@ var renderNewReply = function (reply) {
 var renderReplaies = function () {
     let replyHTML = "";
     for (const reply of scop.replies) {
-        replyHTML += `<div data-replyid="${reply.reply.replyId}">
+        replyHTML += `<div data-replyid="${reply.reply.replyId}" class="mb-3">
                         <div class="d-flex align-items-center"> <!-- Reply header -->
                             <div style="margin-right:auto">
-                                <span>${reply.memberNickname}</span><span>${reply.replyLastDateDiff}</span>
+                                <span class="mr-2 font-weight-bold">${reply.memberNickname}</span><span class="replyDiff">${reply.replyLastDateDiff}</span>
                             </div>`;
         if (reply.like) { // show user already like the comment
-            replyHTML += `<i class="fa-solid fa-heart cursor-pointer" style="color:red;" onclick="showReplyLikeToggle(this)"></i>`;
+            replyHTML += `<i class="mr-1 fa-solid fa-heart cursor-pointer" style="color:red;" onclick="showReplyLikeToggle(this)"></i>`;
         } else {
-            replyHTML += `<i class="fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>`;
+            replyHTML += `<i class="mr-1 fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>`;
         }
         replyHTML += `
                     <span>${reply.reply.replyLikesCount}</span>
                     <div class="dropdown">
-                        <i onclick="showDropdown(this)" class="dropbtn-community fa-solid fa-ellipsis-vertical"></i>
+                        <i onclick="showDropdown(this)" class="ml-3 dropbtn-community fa-solid fa-ellipsis-vertical"></i>
                         <div class="dropdown-content dropdown-content-community">
         `;
         // Can edit and delete own reply
@@ -524,17 +524,17 @@ var renderRemoveArticle = function () {
 var renderTheArticle = function (article) {
     let articleHTML = `
         <div class="col-10 pr-0">
-            <h4 class="m-0">${article.article.articleTitle}</h4>
-            <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-            <span>${shortContent(60, article.article.articleContent)}</span><br>
-            <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
-            <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
+            <h4 class="mb-3 font-weight-bold">${article.article.articleTitle}</h4>
+            <span class="data-memberId" data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
+            <span>${shortContent(52, article.article.articleContent)}</span><br>
+            <i class="mt-3 mr-1 fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
+            <i class="mr-1 fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
         </div>`;
     let firsImg = firstImg(article.article.articleContent);
     if (firsImg != undefined) {
         articleHTML += `
-            <div class="col-2 pl-0 d-flex align-items-center">
-                <img class="mw-100" src="${firsImg.src}" style="aspect-ratio:1;">
+            <div class="col-2 px-0 d-flex align-items-center">
+                <img class="thumbnail" src="${firsImg.src}" >
             </div>`;
     }
     $(`div[data-articleid="${article.article.articleId}"]`).html(articleHTML);
@@ -546,17 +546,17 @@ var renderArticles = function (articles) {
             `<div class="pb-3 mb-3 bottomBorder cursor-pointer d-flex justify-content-between" onclick="showModal($(this).data('articleid'))" data-articleid="${article.article.articleId}">
                 
                 <div class="col-10 pr-0">
-                    <h4 class="m-0">${article.article.articleTitle}</h4>
-                    <span data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
-                    <span>${shortContent(60, article.article.articleContent)}</span><br>
-                    <i class="fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
-                    <i class="fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
+                    <h4 class="mb-3 font-weight-bold">${article.article.articleTitle}</h4>
+                    <span class="data-memberId" data-memberId="${article.article.articleAuthor}">${article.memberNickname}</span><br>
+                    <span>${shortContent(52, article.article.articleContent)}</span><br>
+                    <i class="mt-3 mr-1 fa-solid fa-heart text-danger""></i>${article.article.articleLikesCount}
+                    <i class="mr-1 fa-sharp fa-solid fa-comment text-primary"></i>${article.article.articleReplyCount}
                 </div>`;
         let firsImg = firstImg(article.article.articleContent);
         if (firsImg != undefined) {
             articlesHTML += `
-                <div class="col-2 pl-0 d-flex align-items-center">
-                    <img class="mw-100" src="${firsImg.src}" style="aspect-ratio:1;">
+                <div class="col-2 px-0 d-flex align-items-center">
+                    <img class="thumbnail" src="${firsImg.src}" >
                 </div>`;
         }
         articlesHTML += `
@@ -566,7 +566,7 @@ var renderArticles = function (articles) {
     if (scop.page == 0) $("#articles").empty();
     $("#articles").append(articlesHTML);
     if (articles.length < 10) {
-        $("#articles").append('<div>查無更多資料</div>');
+        $("#articles").append('<div class="text-center">查無更多資料</div>');
         $("#btnMoreArticle").prop("disabled", "true");
     }
 }
@@ -889,11 +889,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             $("#newArtiCodeList").attr('disabled', 'disabled');
             $("#articleModal").modal("hide");
             article = currentArticle().article;
-            $("#newArtiCodeList").val(article.articleCode); //選擇看板
+            $("#newArtiCodeList").val(article.articleBoardC); //選擇看板
+            $("#titleEditModal").text("編輯貼文");
         } else {
             $("#newArtiCodeList").val(article.articleBoardC); //選擇看板
+            $("#titleEditModal").text("新增貼文");
         }
-        $("#editModalAuthorAvatar").children()[0].innerText = navScop.loginAccount[0];
+        $("#editModalAuthorAvatar").children()[0].innerText = navScop.loginAccount[0].toUpperCase();
         $("#editModalAuthor").children()[0].innerText = navScop.loginNickname;
         $("#editModalAuthor").children()[1].innerText = navScop.loginAccount;
         $("#editModalArticleTitle").val(article.articleTitle);
@@ -915,7 +917,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     $("#articleModal").on("show.bs.modal", function (e) {
         let article = currentArticle();
 
-        $("#ModalAuthorAvatar").children()[0].innerText = article.memberAccount[0];
+        $("#ModalAuthorAvatar").children()[0].innerText = article.memberAccount[0].toUpperCase();
         $("#ModalAuthor").children()[0].innerText = article.memberNickname;
         $("#ModalAuthor").children()[1].innerText = article.memberAccount;
 
