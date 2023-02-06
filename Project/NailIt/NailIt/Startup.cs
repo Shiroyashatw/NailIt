@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace NailIt
 {
@@ -41,6 +42,18 @@ namespace NailIt
             // Session
             services.AddSession();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
+            //Tan
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+            {
+                //未登入時會自動導到這個網址
+                option.LoginPath = new PathString("/api/bslogin.html");
+                option.LogoutPath = new PathString("/api/bslogin.html");
+                //沒有權限時會導到這網址
+                //option.AccessDeniedPath = new PathString("/api/backstage.html");
+                option.ExpireTimeSpan= TimeSpan.FromDays(1);
+                
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,10 +75,18 @@ namespace NailIt
             app.UseStaticFiles();
 
             app.UseRouting();
+            //Tan
+            app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
+            
             app.UseSession();
+
+            
+            
+
 
             app.UseEndpoints(endpoints =>
             {

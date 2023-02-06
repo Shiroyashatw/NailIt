@@ -67,8 +67,11 @@
                 </div>
             </div>
 
-            <div id="articles" class="mt-5"></div>
-            <button id="btnMoreArticle" class="btn btn-secondary" onclick="showMoreArticle()">載入更多</button>
+            <div id="articles" class="mt-5 mb-4"></div>
+            <div class="text-center">
+                <button id="btnMoreArticle" class="btn btn-secondary" onclick="showMoreArticle()">載入更多</button>
+            </div>
+            
         </main>
     </div>
 </div>
@@ -80,22 +83,22 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <!-- Header -->
-            <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
+            <div class="modal-header d-flex align-items-center bottomBorder mt-3 px-4 mx-3">
                 <div class="d-flex align-items-center cursor-pointer" data-dismiss="modal" onclick="showMyMain()">
-                    <div id="ModalAuthorAvatar" class="bg-secondary d-flex justify-content-center align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;width:55px">
+                    <div id="ModalAuthorAvatar" class="mr-2 bg-secondary d-flex justify-content-center align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;width:55px">
                         <div>
                             B
                         </div>
                     </div>
                     <div id="ModalAuthor">
-                        <div>Author Nickname</div>
-                        <div>Author Username</div>
+                        <div class="font-weight-bold">Author Nickname</div>
+                        <div class="account">Author Username</div>
                     </div>
                 </div>
                 <div class="">
                     <i id="ModelArticleLike" class="fa-solid fa-heart cursor-pointer" onclick="showArticleLikeToggle(this)" style="color:rgb(108, 117, 125);"></i>
                     <span id="ModelArticleLikesCount">0</span>
-                    <div class="dropdown">
+                    <div class="dropdown ml-2">
                         <i onclick="showDropdown(this)" class="dropbtn-community fa-solid fa-ellipsis"></i>
                         <div id="ArtiModDropContent" class="dropdown-content dropdown-content-community">
                             <a href="javascript:void(0)">編輯</a>
@@ -107,7 +110,7 @@
             </div>
             <!-- Body -->
             <div class="modal-body" style="max-height: calc(100vh - 180px); overflow-y: auto;">
-                <div class="bottomBorder">
+                <div class="bottomBorder px-4">
                     <div id="ModalArticleTitle" class="mb-1 mb-sm-2">
                         <h4 class="mb-0">Article Title</h4>
                         <span>articleLastEdit</span>
@@ -116,13 +119,13 @@
                         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi fugiat deserunt culpa harum, quod minima esse velit perspiciatis itaque. Pariatur minima nobis blanditiis nam voluptates repellendus optio laboriosam qui, reiciendis totam odit ducimus assumenda repudiandae quaerat asperiores iusto quo voluptatum ullam ad illo quae ea temporibus debitis! Iste est explicabo esse provident. Reprehenderit officia voluptate minus odio temporibus quod aspernatur ut quaerat ab dolorum? Sint natus quas vero, maxime fuga suscipit assumenda aperiam numquam pariatur corrupti perferendis repellendus explicabo, nemo, blanditiis optio impedit eligendi nostrum ipsum. Quos nisi impedit perferendis animi error, blanditiis, voluptatibus quasi alias et voluptate possimus commodi!
                     </p>
                 </div>
-                <div>
-                    <div class="row">
-                        <h5>留言區</h5><span id="ModalArticleReplyCount"> 共X則留言</span>
+                <div class="mx-4">
+                    <div class="my-3 d-flex align-items-end">
+                        <h5 class="my-0 mr-2 font-weight-bold">留言區</h5><span id="ModalArticleReplyCount"> 共X則留言</span>
                     </div>
                     <div class="row d-flex justify-content-center">
                         <div class="col-10">
-                            <input id="replyInput" type="text" placeholder="留言..." style="width: 100%;">
+                            <input id="replyInput" type="text" placeholder="留言..." style="width: 100%;" class="mb-3">
                             <div id="ModelReplies"></div>
                         </div>
                     </div>
@@ -138,17 +141,19 @@
 <div class="modal fade" id="editArticleModal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
+            <!-- Title -->
+            <h5 id="titleEditModal" class="mx-3 mb-0 mt-3 font-weight-bold">編輯貼文</h5>
             <!-- Header -->
-            <div class="modal-header d-flex align-items-center bottomBorder px-0 mx-3">
+            <div class="modal-header d-flex align-items-center bottomBorder px-4 mx-3">
                 <div class="d-flex align-items-center">
-                    <div id="editModalAuthorAvatar" class="bg-secondary d-flex justify-content-center align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;width:55px">
+                    <div id="editModalAuthorAvatar" class="mr-2 bg-secondary d-flex justify-content-center align-items-center rounded-circle" style="aspect-ratio:1;color: #fff;width:55px">
                         <div>
                             B
                         </div>
                     </div>
-                    <div id="editModalAuthor">
-                        <div>Author Nickname</div>
-                        <div>Author Username</div>
+                    <div id="editModalAuthor" class="mr-4">
+                        <div class="font-weight-bold">Author Nickname</div>
+                        <div class="account">Author Username</div>
                     </div>
                     <div>
                         <label for="newArtiCodeList">選擇看板:</label>
@@ -156,9 +161,9 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-start flex-column">
-                    <div class="row">
-                        <button data-dismiss="modal">取消</button>
-                        <button onclick="showSaveArticle()">發布</button>
+                    <div class="d-flex">
+                        <button class="btnEdit btnCancel mr-2" data-dismiss="modal">取消</button>
+                        <button class="btnEdit btnPublish" onclick="showSaveArticle()">發布</button>
                     </div>
                 </div>
             </div>
