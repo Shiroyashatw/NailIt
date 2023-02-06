@@ -92,7 +92,7 @@ namespace NailIt.Controllers.YueyueControllers
                 daNotice.SysNoticeTitle = "註冊完成";
                 daNotice.SysNoticeContent = "歡迎加入Nailit！！";
                 daNotice.SysNoticeState = false;
-                daNotice.SysNoticeBuildTime = DateTime.Now;
+                daNotice.SysNoticeBuildTime = DateTime.UtcNow;
                 _context.MemberTables.Add(memberTable);
                 await _context.SaveChangesAsync();
                 daNotice.SysNoticeTarget = (from  no in _context.MemberTables where no.MemberAccount == memberTable.MemberAccount select no.MemberId).ToList()[0];
