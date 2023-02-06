@@ -13,6 +13,14 @@ var scop = {
 }
 //#region Function
 //#region Action
+var showPicModal = function(obj){
+    let imgPic = document.createElement("img");
+    imgPic.src = $(obj).prop("src");
+    imgPic.classList.add("mw-100");
+    $("#pictureBody").empty();
+    $(imgPic).appendTo("#pictureBody");
+    $("#pictureModal").modal("show");
+}
 var showRevokeBlock = async function (obj) {
     if (!checkLogin()) return;
     // get blacklistid
@@ -94,7 +102,7 @@ var showNewMsg = async function () {
                             </div>`;
                         $("#chattingArea").append(messageDateHTML).slideDown();
                     }
-                    renderMessage(message, true); // true means with slidDown
+                    renderMessage(message, true); // true means add with slidDown
                 }
                 // update chatting members, remove unread red mark
                 $(`div[data-memberid='${scop.currentChatMemId}']`).children()[2].remove();
@@ -239,18 +247,15 @@ var showMyNewImg = async function (obj) {
     let result = await postMsgImage(formdata);
     if (!!result) {
         // show new message
-        await renderMessage(result, true);
-        BindingMsgRightMenu($(`div[data-messageid="${result.messageId}"]`));
+        for (const message of result) {
+            await renderMessage(message, true);
+            BindingMsgRightMenu($(`div[data-messageid="${message.messageId}"]`));
+        }
         // update chatting members
-        await renderTheChatMember(result);
+        await renderTheChatMember(result[result.length-1]);
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
         // update scop.chattingMembers, for fliter
-        updateThechattingMember(result);
-
-        // Scroll to bottom of message 
-        // setTimeout(() => {
-        //     ShowChattingBottom();
-        // }, "80")
+        updateThechattingMember(result[result.length-1]);
     }
 }
 // Sending message
@@ -260,6 +265,7 @@ var showMyNewMsg = async function () {
         return;
     }
     content = await elmDataURLToLink(draftMessage.innerHTML);
+    console.log(content);
     // get value from textarea
     let message = new MessageTable({
         messageSender: navScop.loginId,
@@ -281,11 +287,6 @@ var showMyNewMsg = async function () {
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
         // update scop.chattingMembers, for fliter
         updateThechattingMember(result);
-
-        // Scroll to bottom of message
-        // setTimeout(() => {
-        //     ShowChattingBottom();
-        // }, "80")
     }
 }
 var showChatMember = async function () {
@@ -338,7 +339,7 @@ var renderMessage = async function (message, slide) {
             messageHTML = `
                 <div class="mb-1" data-messageid="${message.messageId}" style="display: flex;">
                     <div class="d-flex">
-                        <span class="bg-secondary rounded px-1 py-1">${message.messageContent}</span>
+                        <span class="bg-secondary text-white rounded px-1 py-1">${message.messageContent}</span>
                         <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
                     </div>
                 </div>`;
@@ -347,7 +348,7 @@ var renderMessage = async function (message, slide) {
     // the message sent by me
     else {
         // text message
-        if (message.messageContent.indexOf("<img") == -1 || typeof message.messageTime == "object") {
+        if (message.messageContent.indexOf("<img") == -1) {
             messageHTML = `
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
@@ -356,7 +357,17 @@ var renderMessage = async function (message, slide) {
                     </div>
                 </div>`;
         }
-        // image message
+        // copy paste image
+        else if (typeof message.messageTime == "object") {
+            messageHTML = `
+                <div class="myMessage mb-1" data-messageid="${message.messageId}">
+                    <div class="d-flex flex-row-reverse">
+                        <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
+                    </div>
+                </div>`;
+        }
+        // image message, 純圖片, myNewImg 此回傳的日期格式為字串與其他回傳的不同
         else {
             messageHTML = `
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
@@ -375,8 +386,10 @@ var renderMessage = async function (message, slide) {
         htmlHeight = getNodeHeight(newElm) + "px";
         await $(`<div id='tempMsg'style='height:${htmlHeight}'></div>`).appendTo("#chattingArea")
         await ShowChattingBottom();
-        await $(messageHTML).css("display", "none").appendTo("#chattingArea").slideDown("slow");
+        await delay(3);
+        await $(messageHTML).css("display", "none").appendTo("#chattingArea").slideDown();
         $("#tempMsg").remove();
+        await delay(600);
 
         return;
     }
@@ -566,11 +579,12 @@ async function elmDataURLToLink(html) {
             imageURLs = result;
         }
         // html <img> change base64 to backend link.
+        // 傳送包含class或style設定的img兩個以上，backend會出現"Unexpected token 'M'"的錯誤，最後使用CSS檔統一設定
         for (const imgTag of imgTags) {
             if (imgTag.src.startsWith("data")) {
                 let urlImg = document.createElement("img");
-                urlImg.src = apiServer + imageURLs[index];
-                urlImg.classList.add("mw-100");
+                urlImg.src = imageURLs[index];
+                urlImg.setAttribute("onclick", "showPicModal(this)");
                 imgTag.before(urlImg);
                 imgTag.remove();
                 index++;
@@ -587,10 +601,10 @@ function BindingMsgRightMenu(chattingMsgArea) {
     const chattingMsgsMenu = scop.chattingMsgsMenu;
     // var chattingMsgArea = documenchattingMsgAreachattingMsgAreat.getElementsByClassName("data-messageid");
     for (const itemValue of chattingMsgArea) {
-        itemValue.childNodes[1].addEventListener("contextmenu", (e) => {
+        itemValue.childNodes[1].childNodes[1].addEventListener("contextmenu", (e) => {
             e.preventDefault();
             // get the message id
-            scop.messageid = $(e.currentTarget).parent().data("messageid");
+            scop.messageid = $(e.currentTarget).parent().parent().data("messageid");
             const { clientX: mouseX, clientY: mouseY } = e;
             const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY, bodyArea, chattingMsgsMenu);
 

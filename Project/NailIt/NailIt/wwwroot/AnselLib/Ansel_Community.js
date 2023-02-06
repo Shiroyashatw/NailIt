@@ -55,6 +55,8 @@ var showSaveArticle = async function () {
             // show the article code page
             let articleCode = scop.articleCodeList.find(a => a.codeId == $("#newArtiCodeList").val());
             showMain(articleCode.codeId, articleCode.codeRepresent);
+            // snack bar inform complete
+            showSnackbar("貼文新建完成!");
         }
     }
     if (scop.articleMode == "edit") {
@@ -75,6 +77,8 @@ var showSaveArticle = async function () {
             renderTheArticle(currentArticle());
             // show the article modal
             $("#articleModal").modal("show");
+            // snack bar inform complete
+            showSnackbar("貼文修改完成!");
         }
     }
 }
@@ -195,8 +199,6 @@ var showNewReply = async function () {
         $("#ModalArticleReplyCount").html(`共${currentArticle().article.articleReplyCount}則留言`);
         // Render the reply at articles
         renderTheArticle(currentArticle());
-        // snack bar inform complete
-        showSnackbar("留言已完成!");
     }
 }
 // Remove the article from articles
@@ -242,8 +244,8 @@ var showSnackbar = function (text) {
     // Add the "show" class to DIV
     x.className = "snackShow";
     x.innerText = text;
-    // After 2.5 seconds, remove the show class from DIV
-    setTimeout(function () { x.className = x.className.replace("snackShow", ""); }, 2500);
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function () { x.className = x.className.replace("snackShow", ""); }, 3*1000);
 }
 // When the user clicks on the button,toggle between hiding and showing the dropdown content 
 var showDropdown = function (obj) {
@@ -584,7 +586,7 @@ var renderReport = function () {
 var renderMenu = function () {
     let menuHTML = "";
     for (const [key, value] of Object.entries(scop.articleCodeList)) {
-        menuHTML += `<li><button class="btn btn-light" onclick="showMain('${value.codeId}','${value.codeRepresent}')">${value.codeRepresent}</button></li>`;
+        menuHTML += `<li><a class="" onclick="showMain('${value.codeId}','${value.codeRepresent}')">${value.codeRepresent}</a></li>`;
 
         // show first sort
         if (key == 0) {

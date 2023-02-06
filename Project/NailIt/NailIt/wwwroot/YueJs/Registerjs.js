@@ -108,10 +108,12 @@ function RegisterPost() { //呼叫post api 的方法
         fetch("https://localhost:44308/api/YueMember", requestOptions)
             .then(response => response.text())
             .then(function (result) {
-                if ("true"==result)
-                    toastr.warning("GO");
-                else
+                if ("true" != result)
                     toastr.warning("帳號重複了呦");
+                else {
+                    setTimeout(() => { window.location.replace("/Yuelogin.html") }, 3000);
+                    toastr.success("註冊成功，三秒後將會跳轉頁面");
+                }
             })
             .catch(error => console.log('error', error));
     }

@@ -61,8 +61,6 @@ namespace NailIt.Controllers.YueyueControllers
                 order_Cover = Order.OrderType == true ? subDemoSet.DemoSetCover : subMamicurist.ManicuristPic
             };
 
-
-
             if (myOrder == null)
             {
                 return null;
@@ -81,18 +79,43 @@ namespace NailIt.Controllers.YueyueControllers
                 return false;
             _context.Entry(myOrder).State = EntityState.Modified;
             myOrder.OrderStateC = state;
+            SysNoticeTable daNotice = new SysNoticeTable();
+            daNotice.SysNoticeBuildTime = DateTime.Now;
             if (state == "A1")
+            {
+                daNotice.SysNoticeTitle = "預約已被確認";
+                daNotice.SysNoticeContent = "您對" + myOrder.ManicuristId + "的預約項目" + myOrder.OrderItemName + "已被確認，詳請請前往訂單管理頁面查看";
+                daNotice.SysNoticeTarget = myOrder.MemberId;
+                daNotice.SysNoticeState = false;
                 myOrder.OrderAcceptTime = DateTime.Now;
+            }
             else if (state == "A7")
+            {
+                daNotice.SysNoticeTitle = "訂單已被取消";
+                daNotice.SysNoticeContent = "您對" + myOrder.ManicuristId + "的預約項目" + myOrder.OrderItemName + "已被取消，詳請請前往訂單管理頁面查看";
+                daNotice.SysNoticeTarget = myOrder.MemberId;
+                daNotice.SysNoticeState = false;
                 myOrder.OrderCancelTime = DateTime.Now;
+            }
             else if (state == "A2")
+            {
+                daNotice.SysNoticeTitle = "美甲師已完成訂單";
+                daNotice.SysNoticeContent = "您對" + myOrder.ManicuristId + "的預約項目" + myOrder.OrderItemName + "，美甲師已點擊完成，詳請請前往訂單管理頁面查看";
+                daNotice.SysNoticeTarget = myOrder.MemberId;
+                daNotice.SysNoticeState = false;
                 myOrder.OrderCompleteTime = DateTime.Now;
+            }
             else if (state == "A6")
+            {
+                daNotice.SysNoticeTitle = "訂單已被評價";
+                daNotice.SysNoticeContent = "您對" + myOrder.ManicuristId + "的預約項目" + myOrder.OrderItemName + "，美甲師已完成評價，詳請請前往評價管理頁面查看";
+                daNotice.SysNoticeTarget = myOrder.MemberId;
+                daNotice.SysNoticeState = false;
                 myOrder.OrderDoneTime = DateTime.Now;
+            }
+            _context.SysNoticeTables.Add(daNotice);
             await _context.SaveChangesAsync();
             return true;
         }
-
-
     }
 }

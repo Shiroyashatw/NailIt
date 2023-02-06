@@ -1,39 +1,47 @@
 /*#region Body*/
-#mainPadding{
+#mainPadding {
     background-color: darkgrey;
 }
-#mainBackground{
+
+#mainBackground {
     background-color: white;
 }
+
 /*#endregion*/
 
 /*#region ChattingMembers*/
-.data-memberid:hover{
+.data-memberid:hover {
     background-color: #ccc;
 }
-.chosen{
+
+.chosen {
     background-color: #ccc;
 }
+
 /*#endregion*/
 
 
 
 /*#region Draft message*/
-.fa-image:hover{
+.fa-image:hover {
     color: #ccc;
 }
-.material-symbols-outlined:hover{
+
+.material-symbols-outlined:hover {
     color: #007bff;
 }
-#draftMessage{
+
+#draftMessage {
     border: none;
     outline: none;
     min-height: 10vh;
     max-height: 40vh;
 }
-#emptySendMsgArea{
+
+#emptySendMsgArea {
     min-height: 10vh;
 }
+
 /* #draftMessagetextarea {
     border: none;
     outline: none;
@@ -45,7 +53,14 @@
 /*#endregion*/
 
 
-/*#region XXX*/
+/*#region chattingMain*/
+span img {
+    cursor: pointer;
+    height: 150px;
+    width: 240px;
+    object-fit: cover;
+}
+
 /*#endregion*/
 
 /*#region right click menu*/
@@ -77,4 +92,5 @@
 .context-menu .item:hover {
     background: #343434;
 }
+
 /*#endregion*/

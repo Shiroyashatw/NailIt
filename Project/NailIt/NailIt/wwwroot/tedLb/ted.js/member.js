@@ -18,7 +18,7 @@ function openinfor(evt, idcontent, titile) {
         innerlink[i].className = innerlink[i].className.replace("active","");
 
         document.getElementById(idcontent).style.display = "block";
-        evt.currentTarget.className += " active";
+        //evt.currentTarget.className += " active";
 
         document.querySelector('.inner1 b').innerHTML = '<b>我的帳戶></b>'+titile;
         if(titile == "我的預約"){
@@ -141,13 +141,16 @@ var app = ["台北市","基隆市","新北市","連江縣","宜蘭縣","新竹�
 
 for (var i = 0; i < 22; i++){
     document.getElementById('city').add(new Option(app[i], app[i]));
+    document.getElementById('city1').add(new Option(app[i], app[i]));
 }
  
 function change(x){
     var name = x.value;
     document.getElementById("hometown").options.length = 0;
+    document.getElementById("hometown1").options.length = 0;
    for(var i=0;i<area_data[name].length;i++){
-       document.getElementById("hometown").add(new Option(area_data[name][i], area_data[name][i]))
+       document.getElementById("hometown").add(new Option(area_data[name][i], area_data[name][i]));
+       document.getElementById("hometown1").add(new Option(area_data[name][i], area_data[name][i]));
    }
     
 }

@@ -555,19 +555,75 @@ function OrderDetail() {
         let rparc = $('select[name="OrderPartC"]').find("option:selected").text()
         let rremovec = OrderRemovalC.find("option:selected").text()
         ritem = $('select[name="OrderItem"]').find("option:selected").text()
-        ritemName = $('select[name="OrderItemName"]').find("option:selected").val()
-        console.log(ritem)
-        console.log(ritemName)
+        ritemName = $('select[name="OrderItemName"]').find("option:selected").text()
+        //console.log(ritem)
+        //console.log(ritemName)
         let rprice = $('input[name="OrderPrice"]').val()
         rdep = $('input[name="OrderDeposit"]').val()
-        $('.rescheck').append(`
-        <p>預約日期:${rdate} 時間:${rtime}</p>
-        <p>施作部位:${rparc}</p>
-        <p>卸甲:${rremovec}</p>
-        <p>施作項目:${ritem} 造型:${ritemName}</p>
-        <p>預估價位:NT$${rprice}</p>
-        <p>訂金:NT$${rdep}</p>
+        let OrderTypeVal = OrderType.val();
+        console.log(OrderTypeVal)
+        if (OrderTypeVal == "true") {
+            $('.rescheck').append(`
+            <div class="col-12">
+                <label class="title">預約日期:</label>
+                <label class="text">${rdate}</label>
+                <label class="title">預約時間:</label>
+                <label class="text">${rtime}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">施作部位:</label>
+                <label class="text">${rparc}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">卸甲選擇:</label>
+                <label class="text">${rremovec}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">施作項目:</label>
+                <label class="text">${ritem}</label>
+                <label class="title">造型款式:</label>
+                <label class="text">${ritemName}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">預估價位:</label>
+                <label class="text">NT$${rprice}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">預付訂金:</label>
+                <label class="text">NT$${rdep}</label>
+            </div>
         `);
+        }
+        else {
+            $('.rescheck').append(`
+            <div class="col-12">
+                <label class="title">預約日期:</label>
+                <label class="text">${rdate}</label>
+                <label class="title">預約時間:</label>
+                <label class="text">${rtime}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">施作部位:</label>
+                <label class="text">${rparc}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">卸甲選擇:</label>
+                <label class="text">${rremovec}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">施作項目:</label>
+                <label class="text">${ritem}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">預估價位:</label>
+                <label class="text">NT$${rprice}</label>
+            </div>
+            <div class="col-12">
+                <label class="title">預付訂金:</label>
+                <label class="text">NT$${rdep}</label>
+            </div>
+        `);
+        }
 
     })
 }
@@ -683,7 +739,52 @@ function calculateprice() {
     PriceTotal = parseInt(selectedOrderRemovalC) + parseInt(selectedOrderItemName) + parseInt(selectedOrderItem)
     demoSprice.text("NT$" + PriceTotal);
     inputOprice.val(PriceTotal);
-    console.log("卸甲價錢" + selectedOrderRemovalC)
-    console.log("施作項目" + selectedOrderItem)
-    console.log("造型" + selectedOrderItemName)
+    //console.log("卸甲價錢" + selectedOrderRemovalC)
+    //console.log("施作項目" + selectedOrderItem)
+    //console.log("造型" + selectedOrderItemName)
+}
+
+// 檢舉表單
+function report() {
+    MID = url.searchParams.get('id');
+    $('#report').on('click', function () {
+        // 加入時區 8小時
+        Tzdate = new Date(+new Date() + 8 * 3600 * 1000)
+        // 轉換成 SQL datetime格式
+        Tztoday = Tzdate.toISOString().slice(0, 19) // .replace('T', ' ');
+        $('input[name="ReportBuildTime"]').val(Tztoday)
+        $('input[name="ReportTarget"]').val(MID)
+        $('input[name="ReportItem"]').val(MID)
+        var formdata = $('#reportform').serializeArray();
+        var returnArray = {}
+        // var Yes = true
+        for (var i = 0; i < formdata.length; i++) {
+            returnArray[formdata[i]['name']] = formdata[i]['value'];
+        }
+        console.log(JSON.stringify(returnArray))
+        $.ajax({
+            url: "https://localhost:44308/api/product/report",
+            method: "POST",
+            contentType: 'application/json',
+            data: JSON.stringify(returnArray),
+
+            success: res => {
+                alert('檢舉送出成功')
+                repCloseform()
+            },
+            error: err => {
+                console.log("N")
+            },
+        });
+    })
+}
+
+
+
+function Msg() {
+    $('#msgbtn').on('click', function () {
+        let getMid = $('input[name="ManicuristId"]').val();
+        window.location = "/Community/chat/" + getMid;
+    })
+
 }
