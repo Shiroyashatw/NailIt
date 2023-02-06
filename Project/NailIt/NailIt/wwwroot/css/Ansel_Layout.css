@@ -126,13 +126,18 @@ html {
     text-underline-offset: 7px;
 }
 
-#brand a,
+.Navimg{
+    height:70px;
+    object-fit:cover;
+    border-radius:50px;
+}
+/* #brand a,
 #brand a:link,
 #brand a:visited,
 #brand a:active {
     color: black;
     text-decoration-line: none;
-}
+} */
 
 
 .navend1 {

@@ -2,7 +2,19 @@
     return new Promise(resolve => setTimeout(resolve, delayInms));
 }
 //#region Prototype
-// Get date in "YYYY-MM-DD" ex:"2023-01-17"
+String.prototype.localYYYYMMDDHHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let dt = new Date(this).addHours(8);
+    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
+    let day = dt.getDate().toString().padStart(2, "0");
+    let hour = dt.getHours().toString().padStart(2, "0");
+    let minute = dt.getMinutes().toString().padStart(2, "0");
+
+    return `${dt.getFullYear()}-${month}-${day} ${hour}:${minute}`
+}
+// Get date in "YYYY-MM-DD" ex:"2023-01-17", local 台北時間
 String.prototype.localYYYYMMDD = function () {
     if (this === undefined || this === null) {
         return '';
@@ -48,7 +60,20 @@ Date.prototype.addHours = function (hours) {
     this.setHours(this.getHours() + hours);
     return this;
 }
-// Get date in "YYYY-MM-DD" ex:"2023-01-17"
+Date.prototype.localYYYYMMDDHHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let dt = this.addHours(8);
+    this.addHours(8);
+    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
+    let day = dt.getDate().toString().padStart(2, "0");
+    let hour = dt.getHours().toString().padStart(2, "0");
+    let minute = dt.getMinutes().toString().padStart(2, "0");
+
+    return `${dt.getFullYear()}-${month}-${day} ${hour}:${minute}`
+}
+// Get date in "YYYY-MM-DD" ex:"2023-01-17", local 台北時間
 Date.prototype.localYYYYMMDD = function () {
     if (this === undefined || this === null) {
         return '';
