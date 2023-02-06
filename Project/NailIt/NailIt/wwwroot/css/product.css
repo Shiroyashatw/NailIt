@@ -71,17 +71,21 @@
   margin-left: 40px;
   position: relative;
 }
+.row .main-item .middle-item .product-info #demoSetContent {
+  font-size: 18px;
+  color: gray;
+}
 .row .main-item .middle-item .product-info .product-tag {
   height: 200px;
   margin: 20px 0;
 }
 .row .main-item .middle-item .product-info .product-tag a {
   display: inline-block;
-  padding: 5px 15px;
+  padding: 3px 10px;
   margin: 0.2rem 0.5rem;
-  font-size: 18px;
+  font-size: 16px;
   border: 2px solid black;
-  border-radius: 10%;
+  border-radius: 1.5rem;
 }
 .row .main-item .middle-item .product-info .product-tag a:hover {
   color: white;
