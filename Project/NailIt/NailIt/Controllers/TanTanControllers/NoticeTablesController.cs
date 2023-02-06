@@ -149,7 +149,16 @@ namespace NailIt.Controllers.TanTanControllers
 
         //    return NoContent();
         //}
-
+            //Context.DemoSetTables.Add(DemoSetTable);
+            //await Context.SaveChangesAsync();
+            //var result = Context.DemoSetTables.FirstOrDefault(r => r.ManicuristId == DemoSetTable.ManicuristId && r.DemoSetName == DemoSetTable.DemoSetName);
+            //DemoTable insret = new DemoTable
+            //{
+            //    DemoSetId = result.DemoSetId,
+            //    DemoPic = result.DemoSetCover
+            //};
+            //Context.DemoTables.Add(insret);
+            //await Context.SaveChangesAsync();
         //// POST: api/NoticeTables
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("post")]

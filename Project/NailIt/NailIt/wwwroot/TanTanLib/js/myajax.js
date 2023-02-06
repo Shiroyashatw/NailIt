@@ -1,6 +1,3 @@
-
-
-
 var mydata = new Vue({
     el: "#mydata",
     data: {
@@ -42,6 +39,7 @@ var mydata = new Vue({
         noticeget: [{ "NdataS": "1900-01-01", "NdataE": "3000-01-01", "NoiceMem": 3, "NoiceState": true, "NoiceStateN": "NOPE" }],
         //3.訂單-----------------------------------------------------------------------------------------------------------------------------------------------------
         order: [{}],
+        //order2: [{}],
         //[{
         //    "orderId": 1, "memberId": 1, "manicuristId": 2, "planId": 1, "orderPrice": 2500.0000, "orderDeposit": 200.0000,
         //    "orderPartC": "C1", "orderRemovalC": "B2", "orderType": true, "orderItem": 1, "orderItemName": "繽紛雪人",
@@ -68,10 +66,113 @@ var mydata = new Vue({
         nowmanagerId: "",
         managerpost: [{ "managerAccount": "", "managerPassword": "", "managerName": "", "managerPurview": "", "managerBuildTime": "" }],
         managerget: [{ "managerId": 0, "managerName": "$", "managerPurview": 3 }],
+        //登入--------------------------
+        myID: "", pswd: "",
+        login: [{ account: "", password: "" }],
+        myname: "",
 
+        //---------------------
+        pageNum: 1.
     }
 })
+//GET訂單資料表
+//var pageNum = 0;
 
+//$.ajax({
+//    type: "get",
+//    url: "/api/OrderTables2/2/0",
+//    success: function (e) {
+//        mydata.order2 = e;
+//        console.log(e);
+//    }
+//})
+
+
+//function nextorder() {
+//    pageNum++;
+//    mydata.pageNum = pageNum+1;
+//    if (mydata.orderpage - 1 < pageNum) {
+//        pageNum = mydata.orderpage - 1
+//        mydata.pageNum = pageNum + 1
+//    }
+//    console.log(pageNum)
+
+//    $.ajax({
+//        type: "get",
+//        url: "/api/OrderTables2/2/" + pageNum,
+//        success: function (e) {
+//            mydata.order2 = e;
+//            console.log(e);
+//        }
+//    })
+//}
+//function uporder() {
+//    pageNum--;
+//    mydata.pageNum = pageNum + 1;
+//    if (pageNum < 0) {
+//        pageNum = 0;
+//        mydata.pageNum = pageNum + 1;
+//    }
+
+//    console.log(pageNum)
+//    $.ajax({
+//        type: "get",
+//        url: "/api/OrderTables2/2/" + pageNum,
+//        success: function (e) {
+//            mydata.order2 = e;
+//            console.log(e);
+//        }
+//    })
+//}
+
+
+//登出
+function plzlogout() {
+    $.ajax({
+        type: "delete",
+        async: false,
+        url: "/api/Letmeinqq/delete",
+        contentType: "application/json",
+        success: function (e) {
+            mydata.name = e;
+            console.log(e);
+            window.location = "/TanTanLib/html/bslogin.html"
+
+        }
+
+
+    });
+}
+//登入
+function plzlogin() {
+    console.log(mydata.myID);
+    console.log(mydata.pswd);
+    mydata.login[0].account = mydata.myID;
+    mydata.login[0].password = mydata.pswd;
+
+    console.log(mydata.login[0]);
+    $.ajax({
+        type: "post",
+        async: false,
+        url: "/api/Letmeinqq/post",
+        contentType: "application/json",
+        data: JSON.stringify(mydata.login[0]),
+        success: function (e) {
+            mydata.name = e;
+            console.log(e);
+
+            if (mydata.name == "-1") {
+                alert("帳號密碼錯誤");
+            } else {
+                
+                window.location = "/TanTanLib/html/backstage2.html"
+
+
+            }
+        }
+
+    });
+}
 
 ////5.管理員--------------------------------------------------------------------------------------------------------------------------------
 //GET 篩選會員資料表
@@ -149,17 +250,13 @@ function savemanager() {
         contentType: "application/json",
         data: JSON.stringify(mydata.managerpost[0]),
         success: function () {
-            window.location = "/TanTanLib/html/backstage.html"
-            var tabcontent;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (var i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tabcontent[4].style.display = "block";
+
+            window.location = "/TanTanLib/html/backstage2.html"
 
         }
 
     });
+
 }
 
 //PUT 會員資料表
@@ -177,7 +274,7 @@ function putmanager(e) {
         contentType: "application/json",
         data: JSON.stringify(mydata.managerput[0]),
         success: function () {
-            window.location = "/TanTanLib/html/backstage.html"
+            window.location = "/TanTanLib/html/backstage2.html"
             var tabcontent;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -216,7 +313,7 @@ function delmanmem(e) {
         type: "delete",
         url: "/api/ManagerTables/" + mydata.managermodel,
         success: function () {
-            window.location = "/TanTanLib/html/backstage.html"
+            window.location = "/TanTanLib/html/backstage2.html"
             var tabcontent;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -349,6 +446,7 @@ function reviewmem(e) {
 
 ////3.訂單--------------------------------------------------------------------------------------------------------------------------------
 //GET訂單資料表
+
 $.ajax({
     type: "get",
     url: "/api/OrderTables2",
@@ -360,10 +458,14 @@ $.ajax({
         if (mydata.ordernum >= 5) {
             mydata.orderpage = Math.ceil(mydata.ordernum / 5)
         } else {
-            mydata.orderpage = 1
+            mydata.orderpage = 1;
+
         };
+        //mydata.pageNum = 1;
     }
 })
+
+
 
 //GET單一訂單資料表
 function revieworder(e) {
@@ -383,6 +485,7 @@ function revieworder(e) {
 
 //GET訂單篩選
 function selorder() {
+
     // orderget: [{ "OdataS": "1900-01-01", "OdataE": "3000-01-01", "orderStateC": "AA", "orderId": 0 }]
     var OdataS = $("#orderdatestart").val();
     var OdataE = $("#orderdateend").val();
@@ -441,6 +544,7 @@ function selorder() {
             } else {
                 mydata.orderpage = 1
             };
+            //mydata.pageNum = 1;
         }
     })
 
@@ -719,7 +823,7 @@ function changereviewreport(e) {
     console.log(now);
     mydata.reportput[0].reportId = mydata.reportmodel;
     mydata.reportput[0].reportCheckTime = now;
-    mydata.reportput[0].managerId = 1;
+    /*mydata.reportput[0].managerId = 1;*/
     console.log(mydata.reportput[0]);
     $.ajax({
         type: "put",
@@ -727,13 +831,8 @@ function changereviewreport(e) {
         contentType: "application/json",
         data: JSON.stringify(mydata.reportput[0]),
         success: function () {
-            window.location = "/TanTanLib/html/backstage.html"
-            var tabcontent;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tabcontent[0].style.display = "block";
+            window.location = "/TanTanLib/html/backstage2.html"
+
         }
 
     })
@@ -803,15 +902,15 @@ function delnotice(e) {
         type: "delete",
         url: "/api/NoticeTables/delete/" + mydata.noticemodel,
         success: function () {
-            window.location = "/TanTanLib/html/backstage.html"
+            window.location = "/TanTanLib/html/backstage2.html"
             var tabcontent;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
-               
+
             }
-            
-            
+
+
         }
     })
 }
@@ -885,7 +984,7 @@ function savenotice() {
         contentType: "application/json",
         data: JSON.stringify(mydata.noticepost[0]),
         success: function () {
-            window.location = "/TanTanLib/html/backstage.html"
+            window.location = "/TanTanLib/html/backstage2.html"
             var tabcontent;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (var i = 0; i < tabcontent.length; i++) {
@@ -951,7 +1050,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage.html"
+                    window.location = "/TanTanLib/html/backstage2.html"
                 }
             })
         }
@@ -968,7 +1067,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage.html"
+                    window.location = "/TanTanLib/html/backstage2.html"
                 }
             })
         }
@@ -984,7 +1083,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage.html"
+                    window.location = "/TanTanLib/html/backstage2.html"
                 }
             })
         }
@@ -998,7 +1097,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage.html"
+                    window.location = "/TanTanLib/html/backstage2.html"
                 }
             })
         }

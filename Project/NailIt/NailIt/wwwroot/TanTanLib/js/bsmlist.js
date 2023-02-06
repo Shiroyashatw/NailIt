@@ -9,7 +9,8 @@ function bsmlist(evt, manageobj) {
   tablinks = document.getElementsByClassName("tablinks");
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace("active", "");
-  }
+    }
+  
   document.getElementById(manageobj).style.display = "block";
   evt.currentTarget.className += "active";
   
