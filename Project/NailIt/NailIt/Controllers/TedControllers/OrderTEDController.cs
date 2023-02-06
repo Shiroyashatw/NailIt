@@ -44,6 +44,7 @@ namespace NailIt.Controllers.TedControllers
                         where o.MemberId == id
                         select new Orderappointment()
                         {
+                            OrderType = o.OrderType,
                             DemoSetId = a.DemoSetId,
                             MemberId =o.MemberId,
                             ManicuristId =o.ManicuristId,
@@ -78,16 +79,25 @@ namespace NailIt.Controllers.TedControllers
         public async Task<IActionResult> PutOrderTable(int id, string[] newstat)
         {
             var orderTable = await _context.OrderTables.FindAsync(id);
+            SysNoticeTable notic = new SysNoticeTable();
             if (newstat[0] == "A4")
             {
                 orderTable.OrderCompleteTime = DateTime.Now;
-            }else if (newstat[0] == "A6")
+                notic.SysNoticeTitle = "訂單已完成";
+                notic.SysNoticeContent = "訂單編號:" + Convert.ToString(id).PadLeft(8, '0') + "已完成，要記得去評論呦~";
+                notic.SysNoticeTarget = orderTable.MemberId;
+                notic.SysNoticeState = false;
+            }
+            else if (newstat[0] == "A6")
             {
                 orderTable.OrderCancelTime = DateTime.Now;
-
+                notic.SysNoticeTitle = "訂單已取消";
+                notic.SysNoticeContent = "訂單編號:" + Convert.ToString(id).PadLeft(8, '0') + "已取消。";
+                notic.SysNoticeTarget = orderTable.MemberId;
+                notic.SysNoticeState = false;
             }
             orderTable.OrderStateC = newstat[0];
-            
+
 
 
             try

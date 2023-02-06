@@ -63,7 +63,7 @@
                 <!--sidebar-->
                 <div id="app">
                     <dl>
-                        <dt class="title">首頁>會員中心</dt>
+                        <dt class="title"><a style="color:black" href="https://localhost:44308/TanTanLib/html/cover.html">首頁</a>>會員中心</dt>
                         <dt class="title">我的帳號</dt>
                         <dd><a class="member-link" href="#" onclick="openinfor(event,'member-infor','個人檔案>個人資料')">個人檔案</a></dd>
                         <dd><a class="member-link" href="#" onclick="openinfor(event,'Bank-card','銀行帳號/信用卡')">銀行帳號/信用卡</a></dd>
@@ -541,7 +541,8 @@
                                     <div v-if="fin.orderType" class="product-picture"><a v-bind:href="'https://localhost:44308/YiPLib/product.html?id='+fin.demoSetId"><img style="object-fit:cover" v-bind:src="fin.demoSetCover" alt=""></a></div>
                                     <div v-else="fin.orderType" class="product-picture"><a v-bind:href="'https://localhost:44308/YiPLib/NailDesign.html?id='+fin.manicuristId"><img style="object-fit:cover" v-bind:src="fin.demoSetCover" alt=""></a></div>
                                      <div class="product-information"><p>{{fin.orderItemName}}</p><p style="color:gray" class="productdetil">{{fin.demoSetContent}}</p><p class="productdetil">完成日期:{{fin.orderCompleteTime}}</p></div>
-                                    <div class="btn-cancel-order"><button class="cancel-btn">再預約</button></div>
+                                    <div v-if="fin.orderType" class="btn-cancel-order"><button onclick="regref(this)" v-bind:id="'rere'+fin.demoSetId" class="cancel-btn">再預約</button></div>
+                                    <div v-else="fin.orderType" class="btn-cancel-order"><button onclick="regref1(this)" v-bind:id="'rerere'+fin.manicuristId" class="cancel-btn">再預約</button></div>
                                     <div class="btn-order-stat"><pre>訂金 NT${{fin.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'orderfin'+[key]" onclick="Getorderfin(this)" data-target="#showdetilfin" href="#">詳情</a></P><button v-if="fin.orderStateC == 'A4'" disabled="disabled" class="ing-btn">未評價</button><button v-else="fin.orderStateC == 'A5'" disabled="disabled" class="ing-btn">已評價</button></div>
                                 </div>
                                 <!-- 訂單詳情-->
@@ -598,7 +599,7 @@
                                     <div v-if="cancel.orderType" class="product-picture"><a v-bind:href="'https://localhost:44308/YiPLib/product.html?id='+cancel.demoSetId"><img style="object-fit:cover" v-bind:src="cancel.demoSetCover" alt=""></a></div>
                                     <div v-else="cancel.orderType" class="product-picture"><a v-bind:href="'https://localhost:44308/YiPLib/NailDesign.html?id='+cancel.manicuristId"><img style="object-fit:cover" v-bind:src="cancel.demoSetCover" alt=""></a></div>
                                     <div class="product-information"><p>{{cancel.orderItemName}}</p><p style="color:gray" class="productdetil">{{cancel.demoSetContent}}</p><p class="productdetil">取消日期:{{cancel.orderCancelTime}}</p></div>
-                                    <div class="btn-order-stat"><pre>訂金 NT${{cancel.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'ordercancel'+[key]" onclick="Getordercancel(this)" data-target="#showdetilcancel" href="#">詳情</a></P><button class="check-btn">再預約</button></div>
+                                    <div class="btn-order-stat"><pre>訂金 NT${{cancel.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'ordercancel'+[key]" onclick="Getordercancel(this)" data-target="#showdetilcancel" href="#">詳情</a></P><div v-if="cancel.orderType"><button onclick="regref(this)" v-bind:id="'erer'+cancel.demoSetId" class="check-btn">再預約</button></div><div v-else="cancel.orderType"><button v-bind:id="'ererer1'+cancel.manicuristId" onclick="regref1(this)" class="check-btn">再預約</button></div></div>
                                 </div>
                                 <!-- 訂單詳情完成-->
                                 <div class="modal fade" id="showdetilcancel" tabindex="-1" role="dialog" aria-labelledby="showdetilcancel" aria-hidden="true">
@@ -1456,6 +1457,16 @@
             }
         }
 
+        function regref(e) {
+            var idd = e.id.substr(4,e.id.length-4);
+            window.location = "https://localhost:44308/YiPLib/product.html?id=" + idd;
+        }
+        function regref1(e) {
+            var idd = e.id.substr(6, e.id.length - 6);
+            window.location="https://localhost:44308/YiPLib/NailDesign.html?id=" + idd;
+            
+        }
+    
     </script>
 
 </body>

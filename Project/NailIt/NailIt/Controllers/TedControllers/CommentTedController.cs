@@ -81,8 +81,10 @@ namespace NailIt.Controllers.TedControllers
 
             commentTable.CommentBuildTime = DateTime.Now;
             _context.CommentTables.Add(commentTable);
-          
-
+            SysNoticeTable notic = new SysNoticeTable();
+            notic.SysNoticeTitle = "評論已新增";
+            notic.SysNoticeContent = "訂單編號:"+Convert.ToString(commentTable.CommentOrderId).PadLeft(8,'0')+"，顧客已經完成評論!!";
+            notic.SysNoticeTarget = commentTable.CommentTarget;
             var newsc = (from aa in _context.CommentTables where aa.CommentTarget == commentTable.CommentTarget select aa.CommentScore).ToList();
 
             double score = 0;
