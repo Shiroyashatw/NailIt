@@ -107,7 +107,7 @@ function getbasicinfo() {
 
 
             $('#productName').text(Demosetres['demoSetName'])
-            $('#demoSetPrice').text("預估價格:" + Demosetres['demoSetPrice'])
+            $('#demoSetPrice').text("預估價格: NT$" + Demosetres['demoSetPrice'])
             $('#demoSetContent').text(Demosetres['demoSetContent'])
 
             $('#botmanicuristSalonName').text("店家/設計師名稱:" + Ores['manicuristSalonName'])

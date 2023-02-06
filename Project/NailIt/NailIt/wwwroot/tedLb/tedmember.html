@@ -483,7 +483,7 @@
                                     <div class="product-information"><p>{{rig.orderItemName}}</p><p style="color:gray" class="productdetil">{{rig.demoSetContent}}</p><p class="productdetil">預約日期:{{rig.orderOrderTime}}</p></div>
                                     <div class="btn-order-stat">
                                         <pre>訂金 NT${{rig.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'rigorder'+[key]" onclick="Getorderrig(this)" data-target="#showdetilcheck" href="#">詳情</a></P>
-                                        <button style="width:100px;height:30px" v-if="rig.orderStateC == 'A1'" v-bind:id="'oodd'+rig.orderId" onclick="ordercompli(this)" class="check-btn">已完成</button><button v-else="rig.orderStateC == 'A2'" style="background-color:gray;width:100px;height:30px" class="check-btn">預約中</button>
+                                        <button style="width:100px;height:30px" v-if="rig.orderStateC == 'A2'" v-bind:id="'oodd'+rig.orderId" onclick="ordercompli(this)" class="check-btn">已完成</button><button v-else="rig.orderStateC == 'A1'" style="background-color:gray;width:100px;height:30px" class="check-btn">預約中</button>
                                     </div>
                                 </div>
                                 <!-- 訂單詳情完成-->

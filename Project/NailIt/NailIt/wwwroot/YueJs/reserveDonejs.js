@@ -81,7 +81,7 @@ function doneLoop(search=false) {
 					<span style="padding-left:2%;margin-top:10%;font-size:10px">評價時間：`+ thisOrderTime + `</span>
 					<div class="row" style="background-color:lightgray;width:96%;padding-top:2%;margin-left:2%;margin-bottom:2%">
 					<div style="margin-left: 3%; display: inline-block; width: 20% ;height:110px">
-						<img src="`+ x.order_Cover + `"width="90%" height="90%" style="margin-left: 3%" onclick="javascript:location.href='` + maniTo +`'"/>
+						<img src="../YipLib/`+ x.order_Cover + `"width="90%" height="90%" style="margin-left: 3%" onclick="javascript:location.href='` + maniTo +`'"/>
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
 						<span style="font-size: 120%"  onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName + `</b></span>
