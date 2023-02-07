@@ -80,6 +80,7 @@ namespace NailIt.Controllers.TedControllers
         {
             var orderTable = await _context.OrderTables.FindAsync(id);
             SysNoticeTable notic = new SysNoticeTable();
+            notic.SysNoticeBuildTime = DateTime.UtcNow;
             if (newstat[0] == "A4")
             {
                 orderTable.OrderCompleteTime = DateTime.Now;
