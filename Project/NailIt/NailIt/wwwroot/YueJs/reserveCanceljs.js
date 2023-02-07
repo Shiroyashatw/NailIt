@@ -30,7 +30,7 @@ function reserveCancel(search = false) {
 				<input  id="searchStart" type="date" />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
 				<input   id="searchEnd" type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCancel(true)" />
+				<img src="../YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCancel(true)" />
 				<br />
 				<div
 					id="removeNaildiv"
