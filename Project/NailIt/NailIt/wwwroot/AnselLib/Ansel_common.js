@@ -14,6 +14,18 @@ String.prototype.localYYYYMMDDHHmm = function () {
 
     return `${dt.getFullYear()}-${month}-${day} ${hour}:${minute}`
 }
+String.prototype.YYYYMMDDHHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let dt = new Date(this);
+    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
+    let day = dt.getDate().toString().padStart(2, "0");
+    let hour = dt.getHours().toString().padStart(2, "0");
+    let minute = dt.getMinutes().toString().padStart(2, "0");
+
+    return `${dt.getFullYear()}-${month}-${day} ${hour}:${minute}`
+}
 // Get date in "YYYY-MM-DD" ex:"2023-01-17", local 台北時間
 String.prototype.localYYYYMMDD = function () {
     if (this === undefined || this === null) {
@@ -65,7 +77,6 @@ Date.prototype.localYYYYMMDDHHmm = function () {
         return '';
     }
     let dt = this.addHours(8);
-    this.addHours(8);
     let month = (dt.getMonth() + 1).toString().padStart(2, "0");
     let day = dt.getDate().toString().padStart(2, "0");
     let hour = dt.getHours().toString().padStart(2, "0");
@@ -73,13 +84,23 @@ Date.prototype.localYYYYMMDDHHmm = function () {
 
     return `${dt.getFullYear()}-${month}-${day} ${hour}:${minute}`
 }
+Date.prototype.YYYYMMDDHHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let month = (this.getMonth() + 1).toString().padStart(2, "0");
+    let day = this.getDate().toString().padStart(2, "0");
+    let hour = this.getHours().toString().padStart(2, "0");
+    let minute = this.getMinutes().toString().padStart(2, "0");
+
+    return `${this.getFullYear()}-${month}-${day} ${hour}:${minute}`
+}
 // Get date in "YYYY-MM-DD" ex:"2023-01-17", local 台北時間
 Date.prototype.localYYYYMMDD = function () {
     if (this === undefined || this === null) {
         return '';
     }
     let dt = this.addHours(8);
-    this.addHours(8);
     let month = (dt.getMonth() + 1).toString().padStart(2, "0");
     let day = dt.getDate().toString().padStart(2, "0");
 
