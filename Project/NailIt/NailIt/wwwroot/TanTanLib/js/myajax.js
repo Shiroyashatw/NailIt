@@ -823,7 +823,7 @@ function changereviewreport(e) {
     console.log(now);
     mydata.reportput[0].reportId = mydata.reportmodel;
     mydata.reportput[0].reportCheckTime = now;
-    /*mydata.reportput[0].managerId = 1;*/
+    mydata.reportput[0].managerId = 5;
     console.log(mydata.reportput[0]);
     $.ajax({
         type: "put",
