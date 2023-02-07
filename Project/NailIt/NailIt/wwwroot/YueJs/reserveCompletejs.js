@@ -31,7 +31,7 @@ function reserveComplete(search = false) {
 				<input  id="searchStart" type="date" />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
 				<input  id="searchEnd" type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveComplete(true)" />
+				<img src="../YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveComplete(true)" />
 				<br />
 				<div
 					id="removeNaildiv"
@@ -76,7 +76,7 @@ function completeLoop(search=false) {
 		thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
 		answer += `<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 20%; height:170px">
-						<img src="`+ x.order_Cover + `"  width="90%" height="90%" style="margin-left: 3%"  onclick="javascript:location.href='` + maniTo +`'" />
+						<img src="../YipLib/`+ x.order_Cover + `"  width="90%" height="90%" style="margin-left: 3%"  onclick="javascript:location.href='` + maniTo +`'" />
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 40%">
 						<span style="font-size: 120%"  onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName+`</b></span>
