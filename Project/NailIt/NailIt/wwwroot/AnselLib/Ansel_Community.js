@@ -400,7 +400,7 @@ var showMyMain = async function (own) {
     }
     await getMyArticles();
     $("#avatar").addClass("d-flex");
-    $("#avatar").children()[0].innerText = scop.articles.member.memberAccount[0];
+    $("#avatar").children()[0].innerText = scop.articles.member.memberAccount[0].toUpperCase();
     $("#memberNames").children()[0].innerText = scop.articles.member.memberNickname;
     $("#memberNames").children()[1].innerText = scop.articles.member.memberAccount;
     $("#memberNames").children()[2].innerText = `共${scop.articles.articleCount}篇文章`;
@@ -419,6 +419,7 @@ var showMain = async function (code, name) {
     $("#memberInfo").children().hide();
     $("#btnMoreArticle").removeAttr("disabled");
     $("#avatar").removeClass("d-flex");
+    $("#btnSendMsg").addClass("d-none");
     // show articles
     await getArticles();
     renderArticles(scop.articles);
@@ -443,7 +444,7 @@ var renderNewReply = function (reply) {
                         <i class="mr-1 fa-solid fa-heart cursor-pointer" style="color:rgb(108, 117, 125);" onclick="showReplyLikeToggle(this)"></i>
                         <span>${reply.replyLikesCount}</span>
                         <div class="dropdown">
-                            <i onclick="showDropdown(this)" class="ml-3 dropbtn-community fa-solid fa-ellipsis-vertical"></i>
+                            <i onclick="showDropdown(this)" class="ml-3 dropbtn-community fa-solid fa-ellipsis-vertical cursor-pointer"></i>
                             <div class="dropdown-content dropdown-content-community">
                                 <a href="javascript:void(0)" class="text-danger" onclick="showConfirmDelModal(this)">刪除</a>
                             </div>
@@ -472,7 +473,7 @@ var renderReplaies = function () {
         replyHTML += `
                     <span>${reply.reply.replyLikesCount}</span>
                     <div class="dropdown">
-                        <i onclick="showDropdown(this)" class="ml-3 dropbtn-community fa-solid fa-ellipsis-vertical"></i>
+                        <i onclick="showDropdown(this)" class="ml-3 dropbtn-community fa-solid fa-ellipsis-vertical cursor-pointer"></i>
                         <div class="dropdown-content dropdown-content-community">
         `;
         // Can edit and delete own reply
@@ -925,7 +926,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         else $("#ModelArticleLike").css("color", "rgb(108, 117, 125)");
         $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
         $("#ModalArticleTitle").children()[0].innerText = article.article.articleTitle;
-        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.localYYYYMMDD();
+        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.localYYYYMMDDHHmm();
         if (article.article.articleLastEdit != article.article.articleBuildTime)
             $("#ModalArticleTitle").children()[1].innerText += "(已編輯)";
         $("#ModalArticleContent").html(article.article.articleContent);

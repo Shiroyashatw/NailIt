@@ -107,7 +107,7 @@ function getbasicinfo() {
 
 
             $('#productName').text(Demosetres['demoSetName'])
-            $('#demoSetPrice').text("預估價格:" + Demosetres['demoSetPrice'])
+            $('#demoSetPrice').text("預估價格: NT$" + Demosetres['demoSetPrice'])
             $('#demoSetContent').text(Demosetres['demoSetContent'])
 
             $('#botmanicuristSalonName').text("店家/設計師名稱:" + Ores['manicuristSalonName'])
@@ -131,7 +131,7 @@ function getbasicinfo() {
             $('#show_big_photo').attr("src", res[0]['demo']['demoPic'])
             var demo1 = res[0]['demo']['demoPic']
             for (var i = 0; i < res.length; i++) {
-                $('.photocontainer').append(`<div class="smallphoto"><img onclick="getsrc(this)" src="${res[i]['demo']['demoPic']}" alt=""></div>`)
+                $('.photocontainer').append(`<div class="smallphoto"><img class=""  src="${res[i]['demo']['demoPic']}" alt=""></div>`)
             }
             // 當標籤內容為null時 不顯示A標籤
             for (let i = 1; i <= 4; i++) {

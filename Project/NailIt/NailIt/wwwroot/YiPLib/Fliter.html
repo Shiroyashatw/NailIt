@@ -12,577 +12,575 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
-
+    <link rel="icon" type="image/x-icon" href="../../nail-polish.ico">
     <style>
 
-        .ColorsRadio,.TagRadio{
-            display:none;
-        }
-
-        .DisplayCircle{
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-        }
-
-        .DisplayCircle:hover {
-/*        border-radius: 0%;
-             width: 25px;
-             height: 25px;*/
-            /*border: solid red 5px;*/
-             /*transition: 1s;*/
-        cursor:pointer;
-        }
-
-            .TagLabel {
-                border: solid gray 1px;
-                border-radius: 10px;
-                padding-top: 1px;
-                padding-bottom: 1px;
-                font-size: 13px;
-            }
-
-        .TagLabel:hover{
-            background-color:gray;
-            color:white;
-        }
-
-        .NowLabel {
-            border: solid gray 1px;
-            border-radius: 10px;
-            padding-top: 1px;
-            padding-bottom: 1px;
-            font-size: 13px;
-            background-color: gray;
-            color: white;
-        }
-
-        /*range*/
-
-        .RangeContainer {
-            display: flex;
-            flex-direction: column;
-            /*width: 80%;*/
-            margin: 10% auto;
-        }
-
-        .SliderControl {
-            position: relative;
-            /*min-height: 50px;*/
-            height:20px;
-        }
-
-        .FromControl {
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            color: #635a5a;
-            
-        }
-
-        input[type=range]::-webkit-slider-thumb{
-            -webkit-appearance:none;
-            pointer-events:all;
-            border-radius:50%;
-            cursor:pointer;
-            background-color:#fff;
-            box-shadow: 0 0 0 1px #C6C6C6;
-            width:12px;
-            height:12px;
-        }
-
-        input[type=range]::-webkit-slider-thumb:hover{
-            background:#f7f7f7;
-        }
-
-        input[type=range]::-webkit-slider-thumb:active{
-            box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
-            -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
-        }
-
-        input[type="number"]{
-            color:#8a8383;
-            border:none;
-            width:60px;
-        }
-
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button{
-            opacity:1;
-        }
-
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            height:2px;
-            width:100%;
-            position:absolute;
-            pointer-events:none;
-            background-color:#C6C6C6;
-        }
-
-        #FromSlider {
-            height: 0;
-            z-index: 1;
-        }
-        /*range-end-*/
-
-        .heart {
-            font-size: 7px;
-            position: absolute;
-            color: rgb(180, 180, 180);
-            font-weight: bold;
-            /*top:4px;*/
-            margin-top: 4px;
-            margin-left: -0.5px;
-            /*margin-top:-36px;*/
-        }
-
-        #Ctitle {
-            margin-top:24px;
-            font-size:20px;
-        }
-
-        #Sortdiv {
-            margin-top: 24px;
-        }
-
-        .Coverdiv {
-            display: flex;
-            flex-wrap: wrap;
-            /*margin-left: 90px;*/
-            margin-left: 30px;
-        }
-
-        .Cover {
-            /*margin-right: 70px;*/
-            /*margin-right: 25px;*/
-            height: 180px;
-            width: 180px;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        .Searchbar {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid grey;
-            float: left;
-            max-width:200px;
-            height:35px;
-        }
-
-        .Searchbtn {
-            background-color: black;
-            float: left;
-            /*width: 15%;*/
-            padding-top: 1px;
-            padding-bottom: 1px;
-            padding-left: 5px;
-            padding-right: 5px;
-            color: white;
-            font-size: 20px;
-            border: 1px solid black;
-            border-left: none;
-            cursor: pointer;
-            height: 35px;
-            min-width: 20px;
-            min-height: 20px;
-        }
-
-            .Searchbtn:hover, .ClearBtn:hover {
-                background: #D0CECE;
-            }
-
-        #SortSelect{
-            width:130px;
-            border:none;
-        }
-        #SortSelect:focus{
-            outline:none;
-        }
-
-        .Clickme {
-            border: hidden;
-            position: absolute;
-            /*top: -60px;*/
-            /*margin-left: 70px;*/
-            /*margin-right: 70px;*/
-            left: 25px;
-            top: 130px;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            padding-left: 50px;
-            padding-right: 50px;
-            /*width:100px;*/
-            text-align: center;
-            background-color: white;
-            color: black;
-            z-index: 99;
-            visibility: hidden;
-        }
-
-            .Clickme:hover {
-                background-color: black;
-                color: white;
-                z-index: 99;
-            }
-
-        .Seemore {
-/*            margin-left: 30px;*/
-            margin-right: 30px;
-            overflow: hidden;
-        }
-
-        .Seemore:hover > .Clickme {
-            visibility: visible;
-        }
-
-        .Seemore:hover {
-            filter: grayscale(20%);
-        }
-
-            .Seemore:hover > .Cover {
-                transition: 1s;
-                transform: scale(1.1);
-            }
-            /*連結CSS (路徑) Start*/
-        .LinkTo {
-            color: black;
-        }
-
-            .LinkTo:hover {
-                color: #FF6733;
-                text-decoration: none;
-            }
-            /*當前連結CSS*/
-        .LinkNow {
-            color: #FF6733;
-            font-weight: bold;
-        }
-        /*連結CSS END*/
-
-        .ForSingle {
-            padding: 3px;
-            /*color: rgb(230 51 73);*/
-            color: #FF6733;
-            transition: all .3s linear;
-            cursor: pointer;
-            position: relative;
-        }
-            .ForSingle:after {
-                content: '';
-                width: 100%;
-                height: 1px;
-                /*background-color: rgb(230 51 73);*/
-                background-color: #FF6733;
-                position: absolute;
-                bottom: 0px;
-                left: 0;
-                transition: all .3s linear;
-            }
-
-
-        .ForCombo {
-            padding: 3px;
-            /*color: rgb(71 189 101);*/
-            color: #7F7F7F;
-            transition: all .3s linear;
-            cursor: pointer;
-            position: relative;
-        }
-
-            .ForCombo:after {
-                content: '';
-                width: 0%;
-                height: 1px;
-                /*background-color: rgb(71 189 101);*/
-                background-color: #7F7F7F;
-                position: absolute;
-                bottom: 0px;
-                left: 0;
-                transition: all .3s linear;
-            }
-
-            .ForCombo:hover::after {
-                width: 100%;
-            }
-
-        .NowSingle {
-            padding: 3px;
-            /*color: rgb(230 51 73);*/
-            color: #7F7F7F;
-            transition: all .3s linear;
-            cursor: pointer;
-            position: relative;
-        }
-
-            .NowSingle:after {
-                content: '';
-                width: 0%;
-                height: 1px;
-                /*background-color: rgb(230 51 73);*/
-                background-color: #7F7F7F;
-                position: absolute;
-                bottom: 0px;
-                left: 0;
-                transition: all .3s linear;
-            }
-
-            .NowSingle:hover::after {
-                width: 100%;
-            }
-
-        .NowCombo {
-            padding: 3px;
-            /*color: rgb(71 189 101);*/
-            color: #FF6733;
-            transition: all .3s linear;
-            cursor: pointer;
-            position: relative;
-        }
-
-            .NowCombo:after {
-                content: '';
-                width: 100%;
-                height: 1px;
-                /*background-color: rgb(71 189 101);*/
-                background-color: #FF6733;
-                position: absolute;
-                bottom: 0px;
-                left: 0;
-                transition: all .3s linear;
-            }
-
-        .ForClear {
-            padding: 3px;
-            /*color: rgb(105 121 204);*/
-            color: #000000;
-            cursor: pointer;
-        }
-
-            .ForClear:hover {
-                color: #FF6733;
-            }
-
-
-            .QryBtn {
-                padding-top: 2px;
-                padding-bottom: 2px;
-                padding-left: 50px;
-                padding-right: 50px;
-                color: white;
-                background-color: black;
-                border: none;
-            }
-
-            .QryBtn:hover {
-                background: #D0CECE;
-                border: none;
-            }
-
-        .SelectStyle{
-            border:none;
-            width:110px;
-            text-align:center;
-        }
-
-        .SelectStyle:focus {
-            outline:none;
-        }
-
-        /*DD*/
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        #mynav {
-            width: 100%;
-            height: 90px;
-            position: fixed;
-            background-position-x: 0px;
-            font-size: 16px;
-            background-color: white;
-            opacity: .9;
-            z-index: 9999;
-        }
-
-        #navall > div {
-            /* background-color: blue; */
-            max-height: 100%;
-            /* 待研究 */
-            height: 90px;
-        }
-
-        #brand {
-            font-family: Cascadia Mono SemiBold;
-            font-size: 30px;
-            color: black;
-            height: 100%;
-        }
-
-            #brand a,
-            #brand a:link,
-            #brand a:visited,
-            #brand a:active {
-                color: black;
-                text-decoration-line: none;
-            }
-
-
-
-        .navmid {
-            /* background-color: blue; */
-            height: 100%;
-        }
-
-            .navmid > li {
-                display: inline;
-                color: black;
-            }
-
-                .navmid > li > a {
-                    color: black;
-                    font-weight: bold;
-                }
-
-                    .navmid > li > a:hover {
-                        text-decoration-line: underline;
-                        text-decoration-thickness: 1.5px;
-                        text-underline-offset: 7px;
-                    }
-
-        .navend1 {
-            /* background-color: darksalmon; */
-            font-size: 14px;
-            text-align: right;
-            font-weight: bold;
-        }
-
-        .navend2 img { /* 因為notice 加入dropDown顯示系統通知訊息有修改格式 */
-            width: 25px;
-            /* background-color: blue; */
-        }
-
-        /* 頁尾---------------------------------------------------------- */
-
-        #hid {
-            background-color: white;
-            border: 0px solid white;
-            height: 60px;
-            margin: 1% 0%;
-        }
-
-
-        footer {
-            width: 100%;
-            margin-top: 7%;
-            background-color: rgb(0, 0, 0);
-            color: white;
-            width: 100%;
-        }
-
-
-        #footit {
-            margin-top: 6%;
-        }
-
-            #footit b {
-                font-size: 14px;
-                margin-right: 1%;
-            }
-
-        #footpre pre {
-            color: white;
-            font-size: 14px;
-        }
-
-        #footpre, #footcopy {
-            margin-top: 1%;
-        }
-
-        .cursor-pointer {
-            cursor: pointer;
-        }
-
-        .show {
-            display: block !important;
-        }
-
-        .unread-badge-message {
-            position: absolute;
-            top: 1px;
-            left: 16px;
-            width: 10px;
-            height: 10px;
-        }
-
-        .unread-badge-sysNotic {
-            position: absolute;
-            top: 0px;
-            left: 15px;
-            width: 10px;
-            height: 10px;
-        }
-
-        /* dropdown sysNotic---------------------------------------------------------- */
-        /*#region Dropdown*/
-        .dropbtn {
-            /* background-color: #04AA6D; */
-            /* color: white; */
-            /* padding: 16px; */
-            /* font-size: 16px; */
-            border: none;
-            cursor: pointer;
-        }
-
-        /* .dropbtn:hover, .dropbtn:focus {
-  } */
-        .dropdown {
-            float: right;
-            position: relative;
-            /* display: inline-block; */
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f1f1f1;
-            /* min-width: 160px; */
-            overflow: auto;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            right: 0;
-            z-index: 1;
-        }
-
-            .dropdown-content a {
-                color: black;
-                padding: 5px 10px;
-                text-decoration: none;
-                display: block;
-                white-space: nowrap;
-            }
-
-        .dropdown a:hover {
-            background-color: #ddd;
-        }
-
-        /*#endregion*/
-
-        .Navimg{
-            height:70px;
-            object-fit:cover;
-            border-radius:50px;
-        }
-
-
-
+              .ColorsRadio, .TagRadio {
+                  display: none;
+              }
+
+              .DisplayCircle {
+                  width: 25px;
+                  height: 25px;
+                  border-radius: 50%;
+              }
+
+                  .DisplayCircle:hover {
+                      /*        border-radius: 0%;
+                   width: 25px;
+                   height: 25px;*/
+                      /*border: solid red 5px;*/
+                      /*transition: 1s;*/
+                      cursor: pointer;
+                  }
+
+              .TagLabel {
+                  border: solid gray 1px;
+                  border-radius: 10px;
+                  padding-top: 1px;
+                  padding-bottom: 1px;
+                  font-size: 13px;
+              }
+
+                  .TagLabel:hover {
+                      background-color: gray;
+                      color: white;
+                  }
+
+              .NowLabel {
+                  border: solid gray 1px;
+                  border-radius: 10px;
+                  padding-top: 1px;
+                  padding-bottom: 1px;
+                  font-size: 13px;
+                  background-color: gray;
+                  color: white;
+              }
+
+              /*range*/
+
+              .RangeContainer {
+                  display: flex;
+                  flex-direction: column;
+                  /*width: 80%;*/
+                  margin: 10% auto;
+              }
+
+              .SliderControl {
+                  position: relative;
+                  /*min-height: 50px;*/
+                  height: 20px;
+              }
+
+              .FromControl {
+                  position: relative;
+                  display: flex;
+                  justify-content: space-between;
+                  color: #635a5a;
+              }
+
+              input[type=range]::-webkit-slider-thumb {
+                  -webkit-appearance: none;
+                  pointer-events: all;
+                  border-radius: 50%;
+                  cursor: pointer;
+                  background-color: #fff;
+                  box-shadow: 0 0 0 1px #C6C6C6;
+                  width: 12px;
+                  height: 12px;
+              }
+
+                  input[type=range]::-webkit-slider-thumb:hover {
+                      background: #f7f7f7;
+                  }
+
+                  input[type=range]::-webkit-slider-thumb:active {
+                      box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+                      -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+                  }
+
+              input[type="number"] {
+                  color: #8a8383;
+                  border: none;
+                  width: 60px;
+              }
+
+              input[type=number]::-webkit-inner-spin-button,
+              input[type=number]::-webkit-outer-spin-button {
+                  opacity: 1;
+              }
+
+              input[type="range"] {
+                  -webkit-appearance: none;
+                  appearance: none;
+                  height: 2px;
+                  width: 100%;
+                  position: absolute;
+                  pointer-events: none;
+                  background-color: #C6C6C6;
+              }
+
+              #FromSlider {
+                  height: 0;
+                  z-index: 1;
+              }
+              /*range-end-*/
+
+              .heart {
+                  font-size: 7px;
+                  position: absolute;
+                  color: rgb(180, 180, 180);
+                  font-weight: bold;
+                  /*top:4px;*/
+                  margin-top: 4px;
+                  margin-left: -0.5px;
+                  /*margin-top:-36px;*/
+              }
+
+              #Ctitle {
+                  margin-top: 24px;
+                  font-size: 20px;
+              }
+
+              #Sortdiv {
+                  margin-top: 24px;
+              }
+
+              .Coverdiv {
+                  display: flex;
+                  flex-wrap: wrap;
+                  /*margin-left: 90px;*/
+                  margin-left: 30px;
+              }
+
+              .Cover {
+                  /*margin-right: 70px;*/
+                  /*margin-right: 25px;*/
+                  height: 180px;
+                  width: 180px;
+                  object-fit: cover;
+                  object-position: center;
+              }
+
+              .Searchbar {
+                  padding: 10px;
+                  font-size: 16px;
+                  border: 1px solid grey;
+                  float: left;
+                  max-width: 200px;
+                  height: 35px;
+              }
+
+              .Searchbtn {
+                  background-color: black;
+                  float: left;
+                  /*width: 15%;*/
+                  padding-top: 1px;
+                  padding-bottom: 1px;
+                  padding-left: 5px;
+                  padding-right: 5px;
+                  color: white;
+                  font-size: 20px;
+                  border: 1px solid black;
+                  border-left: none;
+                  cursor: pointer;
+                  height: 35px;
+                  min-width: 20px;
+                  min-height: 20px;
+              }
+
+                  .Searchbtn:hover, .ClearBtn:hover {
+                      background: #D0CECE;
+                  }
+
+              #SortSelect {
+                  width: 130px;
+                  border: none;
+              }
+
+                  #SortSelect:focus {
+                      outline: none;
+                  }
+
+              .Clickme {
+                  border: hidden;
+                  position: absolute;
+                  /*top: -60px;*/
+                  /*margin-left: 70px;*/
+                  /*margin-right: 70px;*/
+                  left: 25px;
+                  top: 130px;
+                  padding-top: 5px;
+                  padding-bottom: 5px;
+                  padding-left: 50px;
+                  padding-right: 50px;
+                  /*width:100px;*/
+                  text-align: center;
+                  background-color: white;
+                  color: black;
+                  z-index: 99;
+                  visibility: hidden;
+              }
+
+                  .Clickme:hover {
+                      background-color: black;
+                      color: white;
+                      z-index: 99;
+                  }
+
+              .Seemore {
+                  /*            margin-left: 30px;*/
+                  margin-right: 30px;
+                  overflow: hidden;
+              }
+
+                  .Seemore:hover > .Clickme {
+                      visibility: visible;
+                  }
+
+                  .Seemore:hover {
+                      filter: grayscale(20%);
+                  }
+
+                      .Seemore:hover > .Cover {
+                          transition: 1s;
+                          transform: scale(1.1);
+                      }
+              /*連結CSS (路徑) Start*/
+              .LinkTo {
+                  color: black;
+              }
+
+                  .LinkTo:hover {
+                      color: #FF6733;
+                      text-decoration: none;
+                  }
+              /*當前連結CSS*/
+              .LinkNow {
+                  color: #FF6733;
+                  font-weight: bold;
+              }
+              /*連結CSS END*/
+
+              .ForSingle {
+                  padding: 3px;
+                  /*color: rgb(230 51 73);*/
+                  color: #FF6733;
+                  transition: all .3s linear;
+                  cursor: pointer;
+                  position: relative;
+              }
+
+                  .ForSingle:after {
+                      content: '';
+                      width: 100%;
+                      height: 1px;
+                      /*background-color: rgb(230 51 73);*/
+                      background-color: #FF6733;
+                      position: absolute;
+                      bottom: 0px;
+                      left: 0;
+                      transition: all .3s linear;
+                  }
+
+
+              .ForCombo {
+                  padding: 3px;
+                  /*color: rgb(71 189 101);*/
+                  color: #7F7F7F;
+                  transition: all .3s linear;
+                  cursor: pointer;
+                  position: relative;
+              }
+
+                  .ForCombo:after {
+                      content: '';
+                      width: 0%;
+                      height: 1px;
+                      /*background-color: rgb(71 189 101);*/
+                      background-color: #7F7F7F;
+                      position: absolute;
+                      bottom: 0px;
+                      left: 0;
+                      transition: all .3s linear;
+                  }
+
+                  .ForCombo:hover::after {
+                      width: 100%;
+                  }
+
+              .NowSingle {
+                  padding: 3px;
+                  /*color: rgb(230 51 73);*/
+                  color: #7F7F7F;
+                  transition: all .3s linear;
+                  cursor: pointer;
+                  position: relative;
+              }
+
+                  .NowSingle:after {
+                      content: '';
+                      width: 0%;
+                      height: 1px;
+                      /*background-color: rgb(230 51 73);*/
+                      background-color: #7F7F7F;
+                      position: absolute;
+                      bottom: 0px;
+                      left: 0;
+                      transition: all .3s linear;
+                  }
+
+                  .NowSingle:hover::after {
+                      width: 100%;
+                  }
+
+              .NowCombo {
+                  padding: 3px;
+                  /*color: rgb(71 189 101);*/
+                  color: #FF6733;
+                  transition: all .3s linear;
+                  cursor: pointer;
+                  position: relative;
+              }
+
+                  .NowCombo:after {
+                      content: '';
+                      width: 100%;
+                      height: 1px;
+                      /*background-color: rgb(71 189 101);*/
+                      background-color: #FF6733;
+                      position: absolute;
+                      bottom: 0px;
+                      left: 0;
+                      transition: all .3s linear;
+                  }
+
+              .ForClear {
+                  padding: 3px;
+                  /*color: rgb(105 121 204);*/
+                  color: #000000;
+                  cursor: pointer;
+              }
+
+                  .ForClear:hover {
+                      color: #FF6733;
+                  }
+
+
+              .QryBtn {
+                  padding-top: 2px;
+                  padding-bottom: 2px;
+                  padding-left: 50px;
+                  padding-right: 50px;
+                  color: white;
+                  background-color: black;
+                  border: none;
+              }
+
+                  .QryBtn:hover {
+                      background: #D0CECE;
+                      border: none;
+                  }
+
+              .SelectStyle {
+                  border: none;
+                  width: 110px;
+                  text-align: center;
+              }
+
+                  .SelectStyle:focus {
+                      outline: none;
+                  }
+
+              /*DD*/
+              * {
+                  margin: 0;
+                  padding: 0;
+              }
+
+              html {
+                  overflow-y: auto;
+                  overflow-x: hidden;
+              }
+
+              #mynav {
+                  width: 100%;
+                  height: 90px;
+                  position: fixed;
+                  background-position-x: 0px;
+                  font-size: 16px;
+                  background-color: white;
+                  opacity: .9;
+                  z-index: 9999;
+              }
+
+              #navall > div {
+                  /* background-color: blue; */
+                  max-height: 100%;
+                  /* 待研究 */
+                  height: 90px;
+              }
+
+              #brand {
+                  font-family: Cascadia Mono SemiBold;
+                  font-size: 30px;
+                  color: black;
+                  height: 100%;
+              }
+
+                  #brand a,
+                  #brand a:link,
+                  #brand a:visited,
+                  #brand a:active {
+                      color: black;
+                      text-decoration-line: none;
+                  }
+
+
+
+              .navmid {
+                  /* background-color: blue; */
+                  height: 100%;
+              }
+
+                  .navmid > li {
+                      display: inline;
+                      color: black;
+                  }
+
+                      .navmid > li > a {
+                          color: black;
+                          font-weight: bold;
+                      }
+
+                          .navmid > li > a:hover {
+                              text-decoration-line: underline;
+                              text-decoration-thickness: 1.5px;
+                              text-underline-offset: 7px;
+                          }
+
+              .navend1 {
+                  /* background-color: darksalmon; */
+                  font-size: 14px;
+                  text-align: right;
+                  font-weight: bold;
+              }
+
+              .navend2 img { /* 因為notice 加入dropDown顯示系統通知訊息有修改格式 */
+                  width: 25px;
+                  /* background-color: blue; */
+              }
+
+              /* 頁尾---------------------------------------------------------- */
+
+              #hid {
+                  background-color: white;
+                  border: 0px solid white;
+                  height: 60px;
+                  margin: 1% 0%;
+              }
+
+
+              footer {
+                  width: 100%;
+                  margin-top: 7%;
+                  background-color: rgb(0, 0, 0);
+                  color: white;
+                  width: 100%;
+              }
+
+
+              #footit {
+                  margin-top: 6%;
+              }
+
+                  #footit b {
+                      font-size: 14px;
+                      margin-right: 1%;
+                  }
+
+              #footpre pre {
+                  color: white;
+                  font-size: 14px;
+              }
+
+              #footpre, #footcopy {
+                  margin-top: 1%;
+              }
+
+              .cursor-pointer {
+                  cursor: pointer;
+              }
+
+              .show {
+                  display: block !important;
+              }
+
+              .unread-badge-message {
+                  position: absolute;
+                  top: 1px;
+                  left: 16px;
+                  width: 10px;
+                  height: 10px;
+              }
+
+              .unread-badge-sysNotic {
+                  position: absolute;
+                  top: 0px;
+                  left: 15px;
+                  width: 10px;
+                  height: 10px;
+              }
+
+              /* dropdown sysNotic---------------------------------------------------------- */
+              /*#region Dropdown*/
+              .dropbtn {
+                  /* background-color: #04AA6D; */
+                  /* color: white; */
+                  /* padding: 16px; */
+                  /* font-size: 16px; */
+                  border: none;
+                  cursor: pointer;
+              }
+
+              /* .dropbtn:hover, .dropbtn:focus {
+        } */
+              .dropdown {
+                  float: right;
+                  position: relative;
+                  /* display: inline-block; */
+              }
+
+              .dropdown-content {
+                  display: none;
+                  position: absolute;
+                  background-color: #f1f1f1;
+                  /* min-width: 160px; */
+                  overflow: auto;
+                  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                  right: 0;
+                  z-index: 1;
+              }
+
+                  .dropdown-content a {
+                      color: black;
+                      padding: 5px 10px;
+                      text-decoration: none;
+                      display: block;
+                      white-space: nowrap;
+                  }
+
+              .dropdown a:hover {
+                  background-color: #ddd;
+              }
+
+              /*#endregion*/
+
+              .Navimg {
+                  height: 70px;
+                  object-fit: cover;
+                  border-radius: 50px;
+              }
     </style>
 </head>
 

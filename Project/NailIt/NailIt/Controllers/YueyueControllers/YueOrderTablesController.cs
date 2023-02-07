@@ -80,7 +80,7 @@ namespace NailIt.Controllers.YueyueControllers
             _context.Entry(myOrder).State = EntityState.Modified;
             myOrder.OrderStateC = state;
             SysNoticeTable daNotice = new SysNoticeTable();
-            daNotice.SysNoticeBuildTime = DateTime.Now;
+            daNotice.SysNoticeBuildTime = DateTime.UtcNow;
             if (state == "A1")
             {
                 daNotice.SysNoticeTitle = "預約已被確認";

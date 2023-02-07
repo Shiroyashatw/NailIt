@@ -265,7 +265,6 @@ var showMyNewMsg = async function () {
         return;
     }
     content = await elmDataURLToLink(draftMessage.innerHTML);
-    console.log(content);
     // get value from textarea
     let message = new MessageTable({
         messageSender: navScop.loginId,
@@ -551,6 +550,7 @@ function chattingMembersSplice(memberid) {
 function scrolltoId(id) {
     let access = document.getElementById(id);
     access.scrollIntoView();
+    document.documentElement.scrollTop = 0; // 外層scroll
 }
 // Save dataURL image. Replace image src dataURL to url link.
 async function elmDataURLToLink(html) {
