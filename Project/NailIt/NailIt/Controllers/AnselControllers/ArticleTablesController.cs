@@ -27,7 +27,7 @@ namespace NailIt.Controllers.AnselControllers
                 return null;
             Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
             var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
-            return theId.ToList();            
+            return theId.ToList();
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace NailIt.Controllers.AnselControllers
 
             return Ok(leftJoinLike);
         }
-        
+
         // PUT: api/ArticleTables/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
