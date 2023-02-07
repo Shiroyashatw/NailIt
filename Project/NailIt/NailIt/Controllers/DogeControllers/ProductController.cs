@@ -75,7 +75,7 @@ namespace NailIt.Controllers.DogeControllers
                 SysNoticeTitle = "交易通知",
                 SysNoticeTarget = orderTable.ManicuristId,
                 SysNoticeContent = "交易成立通知-客人進行預約",
-                SysNoticeBuildTime = DateTime.Now,
+                SysNoticeBuildTime = DateTime.UtcNow,
                 SysNoticeState = false,
             };
             SysNoticeTable CashComplete = new SysNoticeTable
@@ -83,11 +83,12 @@ namespace NailIt.Controllers.DogeControllers
                 SysNoticeTitle = "交易通知",
                 SysNoticeTarget = orderTable.ManicuristId,
                 SysNoticeContent = "交易付款完成通知",
-                SysNoticeBuildTime = DateTime.Now,
+                SysNoticeBuildTime = DateTime.UtcNow,
                 SysNoticeState = false,
             };
-            _db.SysNoticeTables.Add(insert);
             _db.SysNoticeTables.Add(CashComplete);
+            _db.SysNoticeTables.Add(insert);
+            
             await _db.SaveChangesAsync();
             return Content("OK");
         }
