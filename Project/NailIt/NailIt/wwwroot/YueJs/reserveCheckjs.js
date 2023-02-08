@@ -151,7 +151,7 @@ function getCheckDetail(i,str)
 
 	infoModal.innerHTML = `<div>
                 <h5>`+myTitle+`</h5> 
-				<image id="Xpng" src="./YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
+				<image id="Xpng" src="../YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
                 <hr />
                 <span class="detailItem">施作項目：`+ x.order_ItemName +`</span>
 				<br />
