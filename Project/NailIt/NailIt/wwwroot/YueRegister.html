@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="application/json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Nailit會員註冊</title>
     <link rel="stylesheet" href="./YueCss/bootstrap.css" />
     <script src="./YueJs/jquery.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
-
+    <link rel="icon" type="image/x-icon" href="../messageImage_1675689510333.jpg">
     <style>
         /*頁首*/
         * {
@@ -117,6 +117,12 @@
         #footpre, #footcopy {
             margin-top: 1%;
         }
+
+        .Navimg {
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50px;
+        }
     </style>
 </head>
 <body>
@@ -125,7 +131,9 @@
             <div class="row opacity-25 p-0 " id="navall">
                 <div class="col-1 p-0"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
-                    Nail IT
+                    <a href="./TanTanLib/html/cover.html">
+                        <img class="Navimg" src="./YiPLib/UploadFolder/70.png" />
+                    </a>
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
@@ -138,8 +146,6 @@
                     <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
                 </div>
                 <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
-                    <img id="noti mr-0" src="../images/notification.png">
                 </div>
                 <div class="col-1 p-0"></div>
             </div>
