@@ -143,20 +143,9 @@
   width: 800px;
   height: 450px;
   box-shadow: 12px 12px 7px rgba(0, 0, 0, 0.4);
-  -webkit-animation-name: oxxo;
-          animation-name: oxxo;
-  -webkit-animation-duration: 0.5s;
-          animation-duration: 0.5s;
+  animation-name: oxxo;
+  animation-duration: 0.5s;
   z-index: 3;
-}
-
-@-webkit-keyframes oxxo {
-  from {
-    top: 0%;
-  }
-  to {
-    top: 18%;
-  }
 }
 
 @keyframes oxxo {
@@ -275,7 +264,6 @@
   width: 95%;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   margin-left: 0.5rem;
   /* days */

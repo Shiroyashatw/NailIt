@@ -686,7 +686,7 @@ function postCash() {
     
     $('input[name="CheckMacValue"]').val(hash)
 
-    //$('#cashform').submit();
+    $('#cashform').submit();
     // const apiURL = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
     // const data = { 
