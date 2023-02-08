@@ -461,13 +461,14 @@ function getOrderItem() {
             for (i = 0; i < res.length; i++) {
                 var Sres = res[i]
                 // OrderItem.append(new Option(Sres['serviceName'], Sres['serviceId']));
-                OrderItem.append(`<option value="${Sres['serviceId']}" price="${Sres['servicePrice']}" deposit="${Sres['seriveDeposit']}">${Sres['serviceName']} NT$${Sres['servicePrice']}</option>`)
+                OrderItem.append(`<option value="${Sres['serviceId']}" price="${Sres['servicePrice']}" deposit="${Sres['seriveDeposit']}" text="${Sres['serviceName']}">${Sres['serviceName']} NT$${Sres['servicePrice']}</option>`)
             }
             var price
             var deposit
             // 當施作項目 變更時 不是選擇固定項目的選項時 隱藏造型選項
             OrderItem.change(function () {
                 var itemName = OrderItem.find("option:selected").text();
+                let itemNameVal = OrderItem.find("option:selected").attr("text");
                 if (OrderItem.find("option:selected").attr("type") != "fix") {
                     OrderType.val(false)
 
@@ -475,7 +476,7 @@ function getOrderItem() {
 
                     OrderItemName.empty();
 
-                    OrderItemName.append(new Option(itemName, itemName));
+                    OrderItemName.append(new Option(itemName, itemNameVal));
                     calculateprice()
                     // price = OrderItem.find("option:selected").attr('price')
                     deposit = OrderItem.find("option:selected").attr('deposit')
@@ -673,19 +674,19 @@ function postCash() {
 
     // CheckMacValue 檢查碼生成 上面參數都正確會傳放入 val()進去
     let x = `${HashKey}&ChoosePayment=Credit&EncryptType=1&ItemName=${itemName}&MerchantID=3002607&MerchantTradeDate=${MerchantTradeDate}&MerchantTradeNo=${MerchantTradeNo}&PaymentType=aio&ReturnURL=${returnUrl}&TotalAmount=${TotalAmount}&TradeDesc=${TradeDesc}&HashIV=${HashIV}`
-    console.log(x)
+    
     let y = encodeURIComponent(x)
     y = y.replaceAll("%20", "+")
-    console.log(y)
+    
     y = y.toLowerCase();
-    console.log(y)
+    
     var hash = CryptoJS.SHA256(y).toString();
 
     hash = hash.toUpperCase()
-    console.log(hash)
+    
     $('input[name="CheckMacValue"]').val(hash)
 
-    $('#cashform').submit();
+    //$('#cashform').submit();
     // const apiURL = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
     // const data = { 
