@@ -153,8 +153,7 @@ namespace NailIt.Controllers.TanTanControllers
 
             return await newOrderTable.ToListAsync();
         }
-
-        // GET: api/OrderTables2/condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}
+        // GET: api/OrderTables2/condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}}
         [HttpGet("condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}")]
         public async Task<ActionResult<dynamic>> GetOrderCondition(string OdateS, string OdateE, string orderStateC, int orderId)
         {
@@ -187,8 +186,58 @@ namespace NailIt.Controllers.TanTanControllers
                               OrderStateC = o.OrderStateC,
                               OrderStateName = os.CodeRepresent // 狀態
                           };
+
+
             return await result2.ToListAsync();
         }
+
+        // GET: api/OrderTables2/condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}}/{pageNum}
+        [HttpGet("condition/{OdateS}/{OdateE}/{orderStateC}/{orderId}/{pageNum}")]
+        public async Task<ActionResult<dynamic>> GetOrderCondition2(string OdateS, string OdateE, string orderStateC, int orderId,int pageNum)
+        {
+            var date1 = DateTime.Parse(OdateS);
+            var date2 = DateTime.Parse(OdateE).AddMinutes(1439);
+
+            var query = from o in _context.OrderTables
+                        select o;
+
+            var result = query;
+            if (OdateS != "1900-01-01" && OdateE != "3000-01-01")
+            {
+                result = result.Where(a => a.OrderOrderTime >= Convert.ToDateTime(date1)
+                                        && a.OrderOrderTime <= Convert.ToDateTime(date2));
+            }
+
+            if (orderStateC != "AA") { result = result.Where(a => a.OrderStateC == orderStateC); }
+
+
+
+            if (orderId != 0) { result = result.Where(a => a.OrderId == orderId); }
+
+
+            var result2 = from o in result
+                          join os in _context.CodeTables on o.OrderStateC equals os.CodeId
+                          select new
+                          {
+                              OrderId = o.OrderId,
+                              OrderOrderTime = o.OrderOrderTime.ToString("yyyy-MM-dd HH:mm"),
+                              OrderStateC = o.OrderStateC,
+                              OrderStateName = os.CodeRepresent // 狀態
+                          };
+            //每頁條数
+            const int pageSize = 5;
+            //頁碼 0也就是第一条 
+
+
+            //源数据   
+
+
+            //分页   
+            var result3 = result2.Skip(pageNum * pageSize).Take(pageSize);
+
+            return await result3.ToListAsync();
+        }
+
 
         private bool OrderTableExists(int id)
         {

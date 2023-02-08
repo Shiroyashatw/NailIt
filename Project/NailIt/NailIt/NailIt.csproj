@@ -24,4 +24,11 @@
     <None Include="wwwroot\TanTanLib\js\bsmlist.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\TanTanLib\html\backstage-notice.html">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

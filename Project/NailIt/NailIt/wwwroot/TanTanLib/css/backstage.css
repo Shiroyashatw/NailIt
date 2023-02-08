@@ -39,13 +39,17 @@
     
 }
 
-.mylist a{
+
+
+.tablinks {
+    text-decoration-line: none;
     display: block;
-    margin-top:10%;
-    margin-left:10%;
-    font-size:18px;
-    color: black;
+    margin-top: 10%;
+    margin-left: 10%;
+    font-size: 18px;
+    color: #262626
 }
+
 
 #mylist2{
     margin-left:10%;
@@ -54,14 +58,24 @@
 .mylist b{
     font-size:20px;
 }
-/*.mylist 
-a:link,
-a:visited,
-a:active {
-    text-decoration-line: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
+
+.mylist a:hover:enabled {
+    cursor: pointer;
+}
+    a:active:enabled, a:focus:enabled, a:hover:enabled, .mylist a:hover {
+        color: black !important;
+        
+    }
+/*
+.tablinks #triango:focus {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg) !important;
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
 }*/
+
+
 /* 右側------------------------------------------------------------------------------------------------ */
 #rigtil {
     font-size: 20px;
@@ -110,17 +124,13 @@ p{
     
 }
 
-#infopage a{
+#infopage a {
     text-decoration-line: underline;
-    text-decoration-thickness:1px;
+    text-decoration-thickness: 1px;
     text-underline-offset: 4px;
-    color: #7F7F7F;
+    color: black;
+    cursor: pointer;
 }
-
-#infopage a:hover{
-    color: #7F7F7F;
-}
-
 
 
 
