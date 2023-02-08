@@ -140,14 +140,11 @@ function getCheckDetail(i,str)
 	var thisOrderId = "";
 	var thisOrderTime = "";
 	var thisStartTime = "";
-	var myTitle = "";
+	var myTitle = "預約訂單詳情";
 	thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 	thisOrderTime = x.order_OrderTime.substring(0, 10) + " " + x.order_OrderTime.substring(11, 19);
 	thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
-	if (str == "yes")
-		myTitle = "預約訂單確認";
-	else
-		myTitle = "預約訂單取消";
+	
 
 	infoModal.innerHTML = `<div>
                 <h5>`+myTitle+`</h5> 
