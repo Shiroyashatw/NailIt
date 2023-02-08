@@ -54,6 +54,17 @@ Date.prototype.YYYYMMDDHHmm = function (local) {
 
     return `${dt.getFullYear()}-${month}-${day} ${hour}:${minute}`
 }
+Date.prototype.YYYYMMDDHHmm = function () {
+    if (this === undefined || this === null) {
+        return '';
+    }
+    let month = (this.getMonth() + 1).toString().padStart(2, "0");
+    let day = this.getDate().toString().padStart(2, "0");
+    let hour = this.getHours().toString().padStart(2, "0");
+    let minute = this.getMinutes().toString().padStart(2, "0");
+
+    return `${this.getFullYear()}-${month}-${day} ${hour}:${minute}`
+}
 // Get date in "YYYY-MM-DD" ex:"2023-01-17", local 台北時間
 Date.prototype.YYYYMMDD = function (local) {
     if (this === undefined || this === null) {
