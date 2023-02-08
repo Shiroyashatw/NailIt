@@ -94,7 +94,7 @@ var showNewMsg = async function () {
                 // show messages
                 for (const message of result2) {
                     // print Date
-                    let messageDate = message.messageTime.localYYYYMMDD();
+                    let messageDate = message.messageTime.YYYYMMDD(8);
                     if (messageDate != new Date().YYYYMMDD()) {
                         let messageDateHTML = `
                             <div class="my-3 d-flex justify-content-center">
@@ -186,8 +186,8 @@ var showSingleMemberMsg = async function (obj) {
         let messageDate;
         for (const message of result) {
             // print Date
-            if (messageDate != message.messageTime.localYYYYMMDD()) {
-                messageDate = message.messageTime.localYYYYMMDD();
+            if (messageDate != message.messageTime.YYYYMMDD(8)) {
+                messageDate = message.messageTime.YYYYMMDD(8);
                 let messageDateHTML = `
                     <div class="my-3 d-flex justify-content-center">
                         <span class="px-3 bg-secondary text-white rounded">${messageDate}</span>
@@ -214,8 +214,8 @@ var showSingleMemberMsg = async function (obj) {
         let messageDate;
         for (const message of result2) {
             // print Date
-            if (messageDate != message.messageTime.localYYYYMMDD()) {
-                messageDate = message.messageTime.localYYYYMMDD();
+            if (messageDate != message.messageTime.YYYYMMDD(8)) {
+                messageDate = message.messageTime.YYYYMMDD(8);
                 let messageDateHTML = `
                     <div class="my-3 d-flex justify-content-center">
                         <span class="px-3 bg-secondary text-white rounded">${messageDate}</span>
@@ -329,7 +329,7 @@ var renderMessage = async function (message, slide) {
                 <div class="mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex">
                         <span class="bg-secondary text-white rounded px-3 py-2">${message.messageContent}</span>                    
-                        <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end">${message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -339,7 +339,7 @@ var renderMessage = async function (message, slide) {
                 <div class="mb-1" data-messageid="${message.messageId}" style="display: flex;">
                     <div class="d-flex">
                         <span class="bg-secondary text-white rounded px-1 py-1">${message.messageContent}</span>
-                        <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end">${message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -352,7 +352,7 @@ var renderMessage = async function (message, slide) {
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
                         <span class="rounded px-3 py-2" style="border: 4px solid black;">${message.messageContent}</span>
-                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -362,7 +362,7 @@ var renderMessage = async function (message, slide) {
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
                         <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
-                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -372,7 +372,7 @@ var renderMessage = async function (message, slide) {
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
                         <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
-                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.indexOf("Z") != -1 ? message.messageTime.HHmm() : message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.indexOf("Z") != -1 ? message.messageTime.HHmm() : message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }

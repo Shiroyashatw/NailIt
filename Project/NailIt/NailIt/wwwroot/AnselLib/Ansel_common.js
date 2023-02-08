@@ -2,70 +2,51 @@
     return new Promise(resolve => setTimeout(resolve, delayInms));
 }
 //#region Prototype
-String.prototype.localYYYYMMDDHHmm = function () {
+////////////////// String Prototype
+// local 參數 為 時區
+String.prototype.YYYYMMDDHHmm = function (local) {
     if (this === undefined || this === null) {
         return '';
     }
-    let dt = new Date(this).addHours(8);
-    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
-    let day = dt.getDate().toString().padStart(2, "0");
-    let hour = dt.getHours().toString().padStart(2, "0");
-    let minute = dt.getMinutes().toString().padStart(2, "0");
-
-    return `${dt.getFullYear()}-${month}-${day} ${hour}:${minute}`
+    let dt = new Date(this);
+    if (!!local) dt = new Date(this).addHours(local);
+    return dt.YYYYMMDDHHmm()
 }
+
+// local 參數 為 時區
 // Get date in "YYYY-MM-DD" ex:"2023-01-17", local 台北時間
-String.prototype.localYYYYMMDD = function () {
-    if (this === undefined || this === null) {
-        return '';
-    }
-    let dt = new Date(this).addHours(8);
-    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
-    let day = dt.getDate().toString().padStart(2, "0");
-
-    return `${dt.getFullYear()}-${month}-${day}`
-}
-String.prototype.YYYYMMDD = function () {
+String.prototype.YYYYMMDD = function (local) {
     if (this === undefined || this === null) {
         return '';
     }
     let dt = new Date(this);
-    let month = (dt.getMonth() + 1).toString().padStart(2, "0");
-    let day = dt.getDate().toString().padStart(2, "0");
-
-    return `${dt.getFullYear()}-${month}-${day}`
+    if (!!local) dt = new Date(this).addHours(local);
+    return dt.YYYYMMDD();
 }
-String.prototype.localHHmm = function () {
-    if (this === undefined || this === null) {
-        return '';
-    }
-    let dt = new Date(this).addHours(8);
-    let HH = dt.getHours().toString().padStart(2, "0");
-    let mm = dt.getMinutes().toString().padStart(2, "0");
 
-    return `${HH}:${mm}`
-}
-String.prototype.HHmm = function () {
+// local 參數 為 時區
+String.prototype.HHmm = function (local) {
     if (this === undefined || this === null) {
         return '';
     }
     let dt = new Date(this);
-    let HH = dt.getHours().toString().padStart(2, "0");
-    let mm = dt.getMinutes().toString().padStart(2, "0");
-
-    return `${HH}:${mm}`
+    if (!!local) dt = new Date(this).addHours(local);
+    return dt.HHmm();
 }
-// Date
+
+////////////////// Date Prototype
 Date.prototype.addHours = function (hours) {
     this.setHours(this.getHours() + hours);
     return this;
 }
-Date.prototype.localYYYYMMDDHHmm = function () {
+
+// local 參數 為 時區
+Date.prototype.YYYYMMDDHHmm = function (local) {
     if (this === undefined || this === null) {
         return '';
     }
-    let dt = this.addHours(8);
-    this.addHours(8);
+    let dt = this;
+    if (!!local) dt = this.addHours(local);
     let month = (dt.getMonth() + 1).toString().padStart(2, "0");
     let day = dt.getDate().toString().padStart(2, "0");
     let hour = dt.getHours().toString().padStart(2, "0");
@@ -74,42 +55,25 @@ Date.prototype.localYYYYMMDDHHmm = function () {
     return `${dt.getFullYear()}-${month}-${day} ${hour}:${minute}`
 }
 // Get date in "YYYY-MM-DD" ex:"2023-01-17", local 台北時間
-Date.prototype.localYYYYMMDD = function () {
+Date.prototype.YYYYMMDD = function (local) {
     if (this === undefined || this === null) {
         return '';
     }
-    let dt = this.addHours(8);
-    this.addHours(8);
+    let dt = this;
+    if (!!local) dt = this.addHours(local);
     let month = (dt.getMonth() + 1).toString().padStart(2, "0");
     let day = dt.getDate().toString().padStart(2, "0");
 
     return `${dt.getFullYear()}-${month}-${day}`
 }
-Date.prototype.YYYYMMDD = function () {
+Date.prototype.HHmm = function (local) {
     if (this === undefined || this === null) {
         return '';
     }
-    let month = (this.getMonth() + 1).toString().padStart(2, "0");
-    let day = this.getDate().toString().padStart(2, "0");
-
-    return `${this.getFullYear()}-${month}-${day}`
-}
-Date.prototype.localHHmm = function () {
-    if (this === undefined || this === null) {
-        return '';
-    }
-    let dt = this.addHours(8);
+    let dt = this;
+    if (!!local) dt = this.addHours(local);
     let HH = dt.getHours().toString().padStart(2, "0");
     let mm = dt.getMinutes().toString().padStart(2, "0");
-
-    return `${HH}:${mm}`
-}
-Date.prototype.HHmm = function () {
-    if (this === undefined || this === null) {
-        return '';
-    }
-    let HH = this.getHours().toString().padStart(2, "0");
-    let mm = this.getMinutes().toString().padStart(2, "0");
 
     return `${HH}:${mm}`
 }
