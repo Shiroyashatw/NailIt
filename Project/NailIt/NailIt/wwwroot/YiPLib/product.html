@@ -34,7 +34,7 @@
             font-size: 16px;
             background-color: white;
             opacity: .9;
-            z-index: 9999;
+            z-index: 1;
 
         }
 
@@ -50,6 +50,14 @@
             font-size: 30px;
             color: black;
             height: 100%;
+        }
+
+        #brand a,
+        #brand a:link,
+        #brand a:visited,
+        #brand a:active {
+            color: black;
+            text-decoration-line: none;
         }
 
 
@@ -202,12 +210,14 @@
         <div class="row opacity-25 " id="navall">
             <div class="col-1"></div>
             <div class="col-2 d-flex align-items-center" id="brand">
-                Nail IT
+                <a href="/TanTanLib/html/cover.html">
+                    <img class="Navimg" src="UploadFolder/70.png" />
+                </a>
             </div>
             <div class="col-3">
                 <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
-                    <li><a href="#"> 美 甲 查 詢 </a></li>
-                    <li><a href="#"> 美 甲 小 天 地 </a></li>
+                    <li><a href="/YiPLib/Fliter.html"> 美 甲 查 詢 </a></li>
+                    <li><a href="/Community/Index"> 美 甲 小 天 地 </a></li>
                     <li><a href="#"> 關 於 我 們 </a></li>
                 </ul>
             </div>
@@ -720,12 +730,12 @@
 
     <!-- /點擊小圖 大圖跟著切換 -->
     <script>
-        $(document).on("click", ".smallphoto img", function() {
-            
+        $(document).on("click", ".smallphoto img", function () {
+
             let getTag = $(this).attr("src")
             let getSrc = document.getElementById("show_big_photo");
             getSrc.setAttribute("src", getTag);
-            
+
         })
         // function getsrc(whichpic) {
         //     var getTag = whichpic.getAttribute("src");

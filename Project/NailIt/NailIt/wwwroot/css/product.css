@@ -147,6 +147,7 @@
           animation-name: oxxo;
   -webkit-animation-duration: 0.5s;
           animation-duration: 0.5s;
+  z-index: 3;
 }
 
 @-webkit-keyframes oxxo {
@@ -176,6 +177,7 @@
   width: 100%;
   top: 0%;
   left: 0%;
+  z-index: 2;
 }
 
 .isShow {
