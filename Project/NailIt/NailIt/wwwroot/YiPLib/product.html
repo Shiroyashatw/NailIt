@@ -189,7 +189,7 @@
         .dropdown a:hover {
             background-color: #ddd;
         }
-        
+
         /*#endregion*/
     </style>
 
@@ -248,9 +248,12 @@
                 <div class="main-item   ">
                     <!-- header-item 放置點擊連結順序 -->
                     <div class="header-item" style="display: flex;">
-                        <div class="link"><a class="LinkTo" href="../TanTanLib/html/cover.html">首頁</a><i class="bi bi-chevron-right"></i></div>
-                        <div class="link"><a class="LinkTo" href="Fliter.html">美甲查詢</a><i class="bi bi-chevron-right"></i></div>
-                        <div class="link"><a class="LinkTo" href="" id="topmanicuristSalonName"></a><i class="bi bi-chevron-right"></i>
+                        <div class="link"><a class="LinkTo" href="../TanTanLib/html/cover.html">首頁</a><i
+                                class="bi bi-chevron-right"></i></div>
+                        <div class="link"><a class="LinkTo" href="Fliter.html">美甲查詢</a><i
+                                class="bi bi-chevron-right"></i></div>
+                        <div class="link"><a class="LinkTo" href="" id="topmanicuristSalonName"></a><i
+                                class="bi bi-chevron-right"></i>
                         </div>
                         <div class="link"><a class="LinkNow" href="" id="topdemosetName"></a></div>
                     </div>
@@ -283,7 +286,7 @@
                             <!--  檢舉 預約 -->
                             <div class="product-footer">
                                 <div class="reportbtn">
-                                    <button type="button" id="reportbtn" >檢舉此商品</button>
+                                    <button type="button" id="reportbtn">檢舉此商品</button>
                                 </div>
                                 <div class="reservebtn">
                                     <button type="button" id="reservebtn">預約</button>
@@ -717,12 +720,22 @@
 
     <!-- /點擊小圖 大圖跟著切換 -->
     <script>
-        function getsrc(whichpic) {
-            var getTag = whichpic.getAttribute("src");
-            var getSrc = document.getElementById("show_big_photo");
+        $(document).on("click", ".smallphoto img", function() {
+            
+            let getTag = $(this).attr("src")
+            let getSrc = document.getElementById("show_big_photo");
             getSrc.setAttribute("src", getTag);
-        }
-        getsrc(whichpic);
+            
+        })
+        // function getsrc(whichpic) {
+        //     var getTag = whichpic.getAttribute("src");
+        //     var getSrc = document.getElementById("show_big_photo");
+        //     getSrc.setAttribute("src", getTag);
+        //     console.log(whichpic)
+        //     console.log(typeof (whichpic))
+        //     console.log(getTag)
+        // }
+        // getsrc(whichpic);
     </script>
 
     <!-- 日曆函數 -->
@@ -774,7 +787,7 @@
         // 取得可放入的預約時間
         getReserveTime()
         OrderDetail()
-        
+
         Msg()
         // 傳送表單資料
         postOrder()

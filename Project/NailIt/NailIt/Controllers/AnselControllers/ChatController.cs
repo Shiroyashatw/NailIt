@@ -51,7 +51,7 @@ namespace NailIt.Controllers.AnselControllers
                 return null;
             Guid aa = Guid.Parse(HttpContext.Session.GetString("NailLogin"));
             var theId = from member in _context.MemberTables where member.MemberLogincredit == aa select member;
-            return theId.ToList();            
+            return theId.ToList();
         }
 
         // Get all message from MessageTables, SysNoticeTables and NoticeTables
@@ -394,12 +394,12 @@ namespace NailIt.Controllers.AnselControllers
                     // use messageId be image name
                     string imageName = $"{id}.png";
                     chatSaveImage(imageName, frm.Files[i]);
-                    message.MessageContent = $"<img src='/AnselLib/ChatImage/{imageName}' onclick='showPicModal(this)'>";                    
+                    message.MessageContent = $"<img src='/AnselLib/ChatImage/{imageName}' onclick='showPicModal(this)'>";
                     if (i == 0)
                         await _context.SaveChangesAsync();
                     else
                         _context.MessageTables.Add(message);
-                        await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                     // deep copy, then add into return list
                     var theMsg = new MessageTable();
                     Common.DeepCopy(ref message, ref theMsg);
