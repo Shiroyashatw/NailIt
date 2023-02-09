@@ -66,7 +66,7 @@ function now3(nowMember) {
             } else if (e[i].orderStateC == 'A4' || e[i].orderStateC == 'A5') {
                 e[i].orderCompleteTime = e[i].orderCompleteTime.replace('T', ' ');
                 (ood.finlist).push(e[i]);
-            } else if (e[i].orderStateC == 'A6') {
+            } else if (e[i].orderStateC == 'A7') {
                 e[i].orderCancelTime = e[i].orderCancelTime.replace('T', ' ');
                 (ood.cancellist).push(e[i]);
             } 
