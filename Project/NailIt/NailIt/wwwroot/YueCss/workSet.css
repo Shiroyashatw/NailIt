@@ -164,3 +164,26 @@ footer {
 }
 
 
+.ratings {
+	margin: 0 .1rem;
+	line-height: 20px;
+	position: relative;
+	vertical-align: middle;
+	display: inline-block;
+	color: #ddd;
+	font-size: 25px;
+	overflow:hidden;
+	padding-top:0px;
+	padding-bottom:2px;
+}
+
+#full_star {
+	width: 50%; 
+        position: absolute;
+        left: 1px;
+        top: 0.6px;
+        white-space: nowrap;
+        overflow: hidden;
+        color: #FFC000;
+        line-height: 20px;
+}
