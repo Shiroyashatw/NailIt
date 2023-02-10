@@ -757,6 +757,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     await showChatMember();
     // 確認有無指定對話人員，進入聊天室，-1為沒有指定
     await showPersonAtEntry($("#findMemberId").val());
-    // Check new message per 10 sec
-    setInterval(showNewMsg, 10 * 1000);
+    // Check new message per 3 sec
+    setInterval(showNewMsg, 3 * 1000);
 });
