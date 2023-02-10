@@ -14,7 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link href="../YueCss/workSet.css" rel="stylesheet" />
     <link href="../YueCss/calen.css" rel="stylesheet" />
-    <link href="../nail-polish.ico" type="image/x-icon" rel="icon" />
+    <link href="/messageImage_1675689510333.jpg" type="image/x-icon" rel="icon" />
     <title>會員中心</title>
 </head>
 <body>
@@ -39,7 +39,7 @@
                     </ul>
                 </div>
                 <div class="col-4 pt-3">
-                    <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
+                    <p class="navend1"><span id="daNick">尚未登入&nbsp&nbsp&nbsp&nbsp&nbsp</span><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
                 </div>
                 <div class="col-1 d-flex align-items-center justify-content-end navend2">
                     <div style="position:relative">
@@ -727,7 +727,7 @@
                             </div>
                             <div class="tab-order" id="finished" style="overflow:auto;height:400px">
                                 <div v-for="(item,key) in evafinlist">
-                                    <div class="ratings">
+                                    <div class="ratings" >
                                         <div class="emptystar">★★★★★</div>
                                         <div v-bind:style="{'width': item.commentScore}" class="fullstar">★★★★★</div>
                                     </div>
@@ -1002,7 +1002,7 @@
             nowmembb = nowMember;
             xxxx(nowMember);
             now1(nowMember);
-            now2(nowMember);
+           
             now3(nowMember);
             now4(nowMember);
             now5(nowMember);
@@ -1056,7 +1056,7 @@
                                 this.memberlist.memberGender = false;
                             }
 
-
+                          
                             $.ajax({
                                 type: "put",
                                 url: "/api/MemberTables/1",
@@ -1232,6 +1232,8 @@
                         $("#Gender").text("女");
                         $("#inputGroupSelect01").val(1);
                     }
+                    if (e.memberBirth != null) {
+
                     $("#bir").text((e.memberBirth).substr(0, 10));
                     $("#year").val((e.memberBirth).substr(0, 4));
                     var mon = (e.memberBirth).indexOf("-", 5);
@@ -1246,6 +1248,7 @@
                     };
                     $("#inputGroupSelect02").val(month).selected;
                     $("#inputGroupSelect03").val(day1).selected;
+                    }
                     if (e.memberManicurist == true) {
                         $("#memberManicurist").css("display", "none");
                     }
@@ -1255,9 +1258,52 @@
                         $("#shopisopen").css("display", "none");
                         $("#btnshowmodif").attr("disabled", true);
                     }
-                }
-            })
+                    if (e.memberManicurist == true) {                      
 
+                                $.ajax({
+                                    type: "get",
+                                    url: "/api/Manicuristtables/" + nowMember,
+                                    success: function (e) {
+                                        app.shoplistcard = e;
+                                        app.shoplist = e;
+                                        $("#city").val((e.manicuristAddress).substr(0, 3));
+                                        var town = (e.manicuristAddress);
+                                        var num = 0;
+                                        if (town.indexOf("鄉", 3) > 0) {
+                                            num = town.indexOf("鄉", 3)
+                                        } else if (town.indexOf("鎮", 3) > 0) {
+                                            num = town.indexOf("鎮", 3);
+                                        } else if (town.indexOf("區", 3) > 0) {
+                                            num = town.indexOf("區", 3);
+                                        } else if (town.indexOf("市", 3) > 0) {
+                                            num = town.indexOf("市", 3)
+                                        };
+                                        for (var i = 0; i < area_data[town.substr(0, 3)].length; i++) {
+                                            document.getElementById("hometown").add(new Option(area_data[town.substr(0, 3)][i], area_data[town.substr(0, 3)][i]))
+                                        }
+                                        $("#hometown").val(town.substring(3, 3));
+                                        $("#address").val(town.substring(num + 1));
+
+                                        if (e.manicuristBankAccount != null) {
+                                            $("#counnt1").css("visibility", "hidden");
+                                            $(".bankaccount-div").css("visibility", "visible");
+                                            $("#bankaccount1").html("**** **** **** " + (e.manicuristBankAccount).substr(12, 4));
+                                        }
+
+                                        if (e.manicuristSalonName != null) {
+
+                                            $("#shopnotnotopen").css("display", "none");
+                                        }
+
+                                    }
+                                })
+                            }
+                        }
+
+                    
+                
+            })
+    
         }
         function now1(nowMember) {
 
@@ -1273,6 +1319,7 @@
                     }
                 }
             })
+           
         }
 
       
@@ -1384,50 +1431,9 @@
             })
 
         }
-    
-        function now2(nowMember) {
-            if (app.memberlist[0].memberManicurist == true) {
+       
 
-                $.ajax({
-                    type: "get",
-                    url: "/api/Manicuristtables/" + nowMember,
-                    success: function (e) {
-                        app.shoplistcard = e;
-                        app.shoplist = e;
-                        $("#city").val((e.manicuristAddress).substr(0, 3));
-                        var town = (e.manicuristAddress);
-                        var num = 0;
-                        if (town.indexOf("鄉", 3) > 0) {
-                            num = town.indexOf("鄉", 3)
-                        } else if (town.indexOf("鎮", 3) > 0) {
-                            num = town.indexOf("鎮", 3);
-                        } else if (town.indexOf("區", 3) > 0) {
-                            num = town.indexOf("區", 3);
-                        } else if (town.indexOf("市", 3) > 0) {
-                            num = town.indexOf("市", 3)
-                        };
-                        for (var i = 0; i < area_data[town.substr(0, 3)].length; i++) {
-                            document.getElementById("hometown").add(new Option(area_data[town.substr(0, 3)][i], area_data[town.substr(0, 3)][i]))
-                        }
-                        $("#hometown").val(town.substring(3, 3));
-                        $("#address").val(town.substring(num + 1));
-
-                        if (e.manicuristBankAccount != null) {
-                            $("#counnt1").css("visibility", "hidden");
-                            $(".bankaccount-div").css("visibility", "visible");
-                            $("#bankaccount1").html("**** **** **** " + (e.manicuristBankAccount).substr(12, 4));
-                        }
-
-                        if (e.manicuristSalonName != null) {
-                        
-                            $("#shopnotnotopen").css("display", "none");
-                        }
-
-                    }
-                })
-            }
-        }
-
+        
 
 
         function randomstr(e) {

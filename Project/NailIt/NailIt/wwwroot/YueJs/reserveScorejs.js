@@ -34,7 +34,7 @@ function reserveScore(search=false)
 				<input id="searchStart" type="date"  />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
 				<input id="searchEnd" type="date"  />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveScore(true)" />
+				<img src="../YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveScore(true)" />
 				<br />
 				<div	
 					id="removeNaildiv"
@@ -142,8 +142,8 @@ function getScoreDetail(i)
 	thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
 
 	infoModal.innerHTML = `<div>
-                <h5>完成訂單</h5> 
-				<image id="Xpng" src="./YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
+                <h5>訂單詳情</h5> 
+				<image id="Xpng" src="../YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
                 <hr />
                 <span class="detailItem">施作項目：`+ x.order_ItemName + `</span>
 				<br />
@@ -196,7 +196,7 @@ function reserveScoreGo(i)
 
 	infoModal.innerHTML = `<div class="row" style="margin-top: 3%">
 					<div style="margin-left: 3%; display: inline-block; width: 30%">
-						<img src="`+ x.order_Cover+`" width="100%" height="145px" style="margin-left: 3%" />
+						<img src="../YipLib/`+ x.order_Cover+`" width="100%" height="145px" style="margin-left: 3%" />
 					</div>
 					<div style="margin-left: 2%; display: inline-block; width: 60%">
 						<span style="font-size: 120%"><b>`+ x.order_ItemName+`</b></span>

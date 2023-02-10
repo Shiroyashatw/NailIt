@@ -926,7 +926,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         else $("#ModelArticleLike").css("color", "rgb(108, 117, 125)");
         $("#ModelArticleLikesCount").text(article.article.articleLikesCount);
         $("#ModalArticleTitle").children()[0].innerText = article.article.articleTitle;
-        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.localYYYYMMDDHHmm();
+        $("#ModalArticleTitle").children()[1].innerText = article.article.articleLastEdit.YYYYMMDDHHmm(8);
         if (article.article.articleLastEdit != article.article.articleBuildTime)
             $("#ModalArticleTitle").children()[1].innerText += "(已編輯)";
         $("#ModalArticleContent").html(article.article.articleContent);

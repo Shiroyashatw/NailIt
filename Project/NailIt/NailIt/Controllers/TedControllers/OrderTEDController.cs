@@ -80,7 +80,8 @@ namespace NailIt.Controllers.TedControllers
         {
             var orderTable = await _context.OrderTables.FindAsync(id);
             SysNoticeTable notic = new SysNoticeTable();
-            if (newstat[0] == "A4")
+            notic.SysNoticeBuildTime = DateTime.UtcNow;
+            if (newstat[0] == "A5")
             {
                 orderTable.OrderCompleteTime = DateTime.Now;
                 notic.SysNoticeTitle = "訂單已完成";
@@ -88,7 +89,7 @@ namespace NailIt.Controllers.TedControllers
                 notic.SysNoticeTarget = orderTable.MemberId;
                 notic.SysNoticeState = false;
             }
-            else if (newstat[0] == "A6")
+            else if (newstat[0] == "A7")
             {
                 orderTable.OrderCancelTime = DateTime.Now;
                 notic.SysNoticeTitle = "訂單已取消";

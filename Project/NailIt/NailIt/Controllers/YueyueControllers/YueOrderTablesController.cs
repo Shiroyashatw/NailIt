@@ -57,6 +57,7 @@ namespace NailIt.Controllers.YueyueControllers
                 order_part = Code.CodeRepresent,
                 order_removal = Code2.CodeRepresent,
                 order_item=Order.OrderItem,
+                member_star = Member.MemberScore,
                 demoSet_Content = Order.OrderType == true ? subDemoSet.DemoSetContent : "",
                 order_Cover = Order.OrderType == true ? subDemoSet.DemoSetCover : subMamicurist.ManicuristPic
             };
@@ -80,7 +81,7 @@ namespace NailIt.Controllers.YueyueControllers
             _context.Entry(myOrder).State = EntityState.Modified;
             myOrder.OrderStateC = state;
             SysNoticeTable daNotice = new SysNoticeTable();
-            daNotice.SysNoticeBuildTime = DateTime.Now;
+            daNotice.SysNoticeBuildTime = DateTime.UtcNow;
             if (state == "A1")
             {
                 daNotice.SysNoticeTitle = "預約已被確認";

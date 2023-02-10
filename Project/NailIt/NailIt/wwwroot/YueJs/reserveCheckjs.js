@@ -52,7 +52,9 @@ function checkLoop(search = false) {
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
+	var stars;
 	for (var x of myData) {
+	stars = x.member_star == null ? 0 : x.member_star;  
 		if (search) {
 			if (searchStart.value == "" || searchEnd.value == "") {
 				let myDate = new Date();
@@ -79,10 +81,14 @@ function checkLoop(search = false) {
 						<span style="font-size: 120%" onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName+`</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content + `</span>
-						<br /><br />
+						<br />
 						<span>訂單編號：`+ thisOrderId +`</span>
 						<br />
-						<span>預約客戶：`+ x.member_Nickname +`</span>
+						<span>預約客戶：`+ x.member_Nickname + `</span>
+								<div class="ratings">
+                                <div id="empty_star">★★★★★</div>
+                                <div id="full_star" style="width:`+ stars * 20 +`%">★★★★★</div>
+                        </div>
 						<br />
 						<span>施作時間：`+ thisStartTime +`</span>
 					</div>
@@ -140,18 +146,15 @@ function getCheckDetail(i,str)
 	var thisOrderId = "";
 	var thisOrderTime = "";
 	var thisStartTime = "";
-	var myTitle = "";
+	var myTitle = "預約訂單詳情";
 	thisOrderId = (x.order_ID + 100000000).toString().substring(1);
 	thisOrderTime = x.order_OrderTime.substring(0, 10) + " " + x.order_OrderTime.substring(11, 19);
 	thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
-	if (str == "yes")
-		myTitle = "預約訂單確認";
-	else
-		myTitle = "預約訂單取消";
+	
 
 	infoModal.innerHTML = `<div>
                 <h5>`+myTitle+`</h5> 
-				<image id="Xpng" src="./YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
+				<image id="Xpng" src="../YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
                 <hr />
                 <span class="detailItem">施作項目：`+ x.order_ItemName +`</span>
 				<br />

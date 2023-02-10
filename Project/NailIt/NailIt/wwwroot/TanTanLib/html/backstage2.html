@@ -15,17 +15,7 @@
 
 
     <link rel="stylesheet" href="../css/backstage.css">
-    <style>
-        .btn {
-            background-color: white;
-            color: black;
-            font-weight: bold;
-            border: 2px solid black;
-            height: 60px;
-            margin: 1% 0%;
-            border-radius: 0px;
-        }
-    </style>
+
 
 </head>
 
@@ -41,7 +31,7 @@
                     </div>
 
                     <div class="col-3  pt-3 justify-content-end" id="navend">
-                         Hi 管理員{{myname}} / <b style="font-size:14px;" onclick="plzlogout()">登出</b>
+                         Hi 王東元{{myname}} / <b style="font-size:14px;" onclick="plzlogout()">登出</b>
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -69,7 +59,7 @@
                     <div class="col-1"></div>
                     <div class="px-0 col-7 mycon">
                         <!-- 1審核------------------------------------------------------------------------------ -->
-                        <div id="report" class="tabcontent"  >
+                        <div id="report" class="tabcontent" style="display:none" >
                             <b id="rigtil">後臺管理 ＞ <u>審核檢舉</u></b>
                             <!-- 檢舉條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
@@ -169,7 +159,7 @@
                             </div>
                         </div>
                         <!-- 2通知------------------------------------------------------------------------------- -->
-                        <div id="sysmes" class="tabcontent" style="display:none">
+                        <div id="sysmes" class="tabcontent" >
                             <b id="rigtil">後臺管理 ＞ <u>系統通知</u></b>
                             <!-- 通知條件篩選------------------------------------------------------------------------------------------- -->
                             <div class="mt-5 ml-2">
@@ -632,7 +622,7 @@
                         <p class="mb-1">通知時間：</p>
                         <input id="datestart" class="mb-2" type="datetime-local" v-model="noticetime">
                         <p class="mb-1">通知管理人員：</p>
-                        <input class="mb-2" type="text" value="1 ADMIN" disabled="disabled">
+                        <input class="mb-2" type="text" value="5 wangeast" disabled="disabled">
                         <p class="mb-1">通知建日日期：</p>
                         <input id="adddate" class="mb-2" type="datetime" disabled="disabled">
 

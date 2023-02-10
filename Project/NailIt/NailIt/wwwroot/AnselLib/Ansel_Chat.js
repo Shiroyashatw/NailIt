@@ -10,6 +10,7 @@ var scop = {
     memberid: 0, // 目前開啟context menu的人員Id
     chattingMembers: [], // 有聊天記錄的人員清單, for 人員list過濾篩選器
     currentChatMemId: 0, // 目前聊天對象Id
+    loadingTime: null // 近期更新聊天室時間
 }
 //#region Function
 //#region Action
@@ -81,7 +82,7 @@ var showSearchChatMember = async function () {
 // Checking for new messages 
 var showNewMsg = async function () {
     // call api (getNewMsg)
-    let result = await getNewMsg(new Date().addHours(-8).YYYYMMDD());
+    let result = await getNewMsg((new Date(scop.loadingTime).toISOString()));
     if (!!result && result.length > 0) {
         // Reload ChatMembers 對話人員目錄
         showChatMember();
@@ -94,7 +95,7 @@ var showNewMsg = async function () {
                 // show messages
                 for (const message of result2) {
                     // print Date
-                    let messageDate = message.messageTime.localYYYYMMDD();
+                    let messageDate = message.messageTime.YYYYMMDD(8);
                     if (messageDate != new Date().YYYYMMDD()) {
                         let messageDateHTML = `
                             <div class="my-3 d-flex justify-content-center">
@@ -186,8 +187,8 @@ var showSingleMemberMsg = async function (obj) {
         let messageDate;
         for (const message of result) {
             // print Date
-            if (messageDate != message.messageTime.localYYYYMMDD()) {
-                messageDate = message.messageTime.localYYYYMMDD();
+            if (messageDate != message.messageTime.YYYYMMDD(8)) {
+                messageDate = message.messageTime.YYYYMMDD(8);
                 let messageDateHTML = `
                     <div class="my-3 d-flex justify-content-center">
                         <span class="px-3 bg-secondary text-white rounded">${messageDate}</span>
@@ -214,8 +215,8 @@ var showSingleMemberMsg = async function (obj) {
         let messageDate;
         for (const message of result2) {
             // print Date
-            if (messageDate != message.messageTime.localYYYYMMDD()) {
-                messageDate = message.messageTime.localYYYYMMDD();
+            if (messageDate != message.messageTime.YYYYMMDD(8)) {
+                messageDate = message.messageTime.YYYYMMDD(8);
                 let messageDateHTML = `
                     <div class="my-3 d-flex justify-content-center">
                         <span class="px-3 bg-secondary text-white rounded">${messageDate}</span>
@@ -265,7 +266,6 @@ var showMyNewMsg = async function () {
         return;
     }
     content = await elmDataURLToLink(draftMessage.innerHTML);
-    console.log(content);
     // get value from textarea
     let message = new MessageTable({
         messageSender: navScop.loginId,
@@ -287,6 +287,10 @@ var showMyNewMsg = async function () {
         BindingMemberRightMenu([$("#chattingMembers").children()[0]]); // first one
         // update scop.chattingMembers, for fliter
         updateThechattingMember(result);
+        // after updating, check if someone should be chosen.
+        if (scop.currentChatMemId > 0) {            
+            $(`div[data-memberid='${scop.currentChatMemId}']`).addClass("chosen");
+        }
     }
 }
 var showChatMember = async function () {
@@ -298,6 +302,12 @@ var showChatMember = async function () {
         // system notic can't be add in blacklist, so there is a not()
         BindingMemberRightMenu($(".data-memberid").not("div[data-memberid='0']"));
         scop.chattingMembers = result;
+        // record latest loading time        
+        scop.loadingTime = new Date();
+        // after updating, check if someone should be chosen.
+        if (scop.currentChatMemId > 0) {            
+            $(`div[data-memberid='${scop.currentChatMemId}']`).addClass("chosen");
+        }
     }
 }
 //#endregion
@@ -330,7 +340,7 @@ var renderMessage = async function (message, slide) {
                 <div class="mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex">
                         <span class="bg-secondary text-white rounded px-3 py-2">${message.messageContent}</span>                    
-                        <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end">${message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -340,7 +350,7 @@ var renderMessage = async function (message, slide) {
                 <div class="mb-1" data-messageid="${message.messageId}" style="display: flex;">
                     <div class="d-flex">
                         <span class="bg-secondary text-white rounded px-1 py-1">${message.messageContent}</span>
-                        <span class="col-2 px-2 align-self-end">${message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end">${message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -353,7 +363,7 @@ var renderMessage = async function (message, slide) {
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
                         <span class="rounded px-3 py-2" style="border: 4px solid black;">${message.messageContent}</span>
-                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -363,7 +373,7 @@ var renderMessage = async function (message, slide) {
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
                         <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
-                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -373,7 +383,7 @@ var renderMessage = async function (message, slide) {
                 <div class="myMessage mb-1" data-messageid="${message.messageId}">
                     <div class="d-flex flex-row-reverse">
                         <span class="rounded" style="border: 4px solid black;">${message.messageContent}</span>
-                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.indexOf("Z") != -1 ? message.messageTime.HHmm() : message.messageTime.localHHmm()}</span>
+                        <span class="col-2 px-2 align-self-end" style="text-align:right">${message.messageTime.indexOf("Z") != -1 ? message.messageTime.HHmm() : message.messageTime.HHmm(8)}</span>
                     </div>
                 </div>`;
         }
@@ -551,6 +561,7 @@ function chattingMembersSplice(memberid) {
 function scrolltoId(id) {
     let access = document.getElementById(id);
     access.scrollIntoView();
+    document.documentElement.scrollTop = 0; // 外層scroll
 }
 // Save dataURL image. Replace image src dataURL to url link.
 async function elmDataURLToLink(html) {
@@ -746,6 +757,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     await showChatMember();
     // 確認有無指定對話人員，進入聊天室，-1為沒有指定
     await showPersonAtEntry($("#findMemberId").val());
-    // Check new message per 10 sec
-    setInterval(showNewMsg, 10 * 1000);
+    // Check new message per 3 sec
+    setInterval(showNewMsg, 3 * 1000);
 });

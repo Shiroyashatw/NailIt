@@ -31,9 +31,6 @@ namespace NailIt.Controllers.TanTanControllers
             _httpContextAccessor = httpContextAccessor;
 
         }
-
-
-
         // GET: api/ReportTables
         [HttpGet]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetReportTables()
@@ -164,6 +161,7 @@ namespace NailIt.Controllers.TanTanControllers
         {
             var reportTable = from o in _context.ReportTables
                               join c in _context.CodeTables on o.ReportPlaceC equals c.CodeId
+                              join r in _context.CodeTables on o.ReportReasonC equals r.CodeId
                               join m in _context.MemberTables on o.ReportBuilder equals m.MemberId into mlist
                               from m in mlist.DefaultIfEmpty()
                               join a in _context.MemberTables on o.ReportTarget equals a.MemberId into alist
@@ -186,6 +184,7 @@ namespace NailIt.Controllers.TanTanControllers
                                   ReportResult = o.ReportResult,
                                   CodeUseIn = c.CodeId,
                                   CodeRepresent = c.CodeRepresent,
+                                  CodeRepresentr = r.CodeRepresent,
                                   BuilderMemberName = m.MemberName,
                                   TargetMemberName = a.MemberName,
                                   ManagerName = ma.ManagerName
@@ -200,7 +199,7 @@ namespace NailIt.Controllers.TanTanControllers
         }
 
         ////GET: api/ReportTables/5
-        //[HttpGet("{id}")]
+        //[HttpGet("get/{id}")]
         //public async Task<ActionResult<ReportTable>> GetReportTable2(int id)
         //{
         //    var reportTable = await _context.ReportTables.FindAsync(id);
@@ -219,8 +218,8 @@ namespace NailIt.Controllers.TanTanControllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReportTable(int id, ReportTable reportTable)
         {
-            var Claim = _httpContextAccessor.HttpContext.User.Claims.ToList();
-            var ManagerId = Claim.Where(a => a.Type == "ManagerId").First().Value;
+            //var Claim = _httpContextAccessor.HttpContext.User.Claims.ToList();
+            //var ManagerId = Claim.Where(a => a.Type == "ManagerId").First().Value;
             if (id != reportTable.ReportId)
             {
                 return BadRequest();
@@ -233,7 +232,7 @@ namespace NailIt.Controllers.TanTanControllers
                                       select o).FirstOrDefault();
             CertainReportTable.ReportResult = reportTable.ReportResult;
             CertainReportTable.ReportCheckTime = reportTable.ReportCheckTime;
-            CertainReportTable.ManagerId = Int16.Parse(ManagerId);
+            CertainReportTable.ManagerId = id;
 
             try
             {
@@ -254,7 +253,7 @@ namespace NailIt.Controllers.TanTanControllers
             return NoContent();
         }
 
-        //// POST: api/ReportTables
+        // POST: api/ReportTables
 
         //[HttpPost]
         //public async Task<ActionResult<ReportTable>> PostReportTable(ReportTable reportTable)

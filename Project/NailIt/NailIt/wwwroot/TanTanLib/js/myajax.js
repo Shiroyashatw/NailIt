@@ -39,7 +39,7 @@ var mydata = new Vue({
         noticeget: [{ "NdataS": "1900-01-01", "NdataE": "3000-01-01", "NoiceMem": 3, "NoiceState": true, "NoiceStateN": "NOPE" }],
         //3.訂單-----------------------------------------------------------------------------------------------------------------------------------------------------
         order: [{}],
-        //order2: [{}],
+        order2: [{}],
         //[{
         //    "orderId": 1, "memberId": 1, "manicuristId": 2, "planId": 1, "orderPrice": 2500.0000, "orderDeposit": 200.0000,
         //    "orderPartC": "C1", "orderRemovalC": "B2", "orderType": true, "orderItem": 1, "orderItemName": "繽紛雪人",
@@ -75,58 +75,278 @@ var mydata = new Vue({
         pageNum: 1.
     }
 })
+
 //GET訂單資料表
-//var pageNum = 0;
-
-//$.ajax({
-//    type: "get",
-//    url: "/api/OrderTables2/2/0",
-//    success: function (e) {
-//        mydata.order2 = e;
-//        console.log(e);
-//    }
-//})
+var pageNum = 0;
+var urlorderresult = "1900-01-01/3000-01-01/AA/0";
 
 
-//function nextorder() {
-//    pageNum++;
-//    mydata.pageNum = pageNum+1;
-//    if (mydata.orderpage - 1 < pageNum) {
-//        pageNum = mydata.orderpage - 1
-//        mydata.pageNum = pageNum + 1
-//    }
-//    console.log(pageNum)
-
-//    $.ajax({
-//        type: "get",
-//        url: "/api/OrderTables2/2/" + pageNum,
-//        success: function (e) {
-//            mydata.order2 = e;
-//            console.log(e);
-//        }
-//    })
-//}
-//function uporder() {
-//    pageNum--;
-//    mydata.pageNum = pageNum + 1;
-//    if (pageNum < 0) {
-//        pageNum = 0;
-//        mydata.pageNum = pageNum + 1;
-//    }
-
-//    console.log(pageNum)
-//    $.ajax({
-//        type: "get",
-//        url: "/api/OrderTables2/2/" + pageNum,
-//        success: function (e) {
-//            mydata.order2 = e;
-//            console.log(e);
-//        }
-//    })
-//}
 
 
-//登出
+////3.訂單--------------------------------------------------------------------------------------------------------------------------------
+//GET訂單資料表
+$.ajax({
+    type: "get",
+    url: "/api/OrderTables2",
+    success: function (e) {
+        mydata.order = e;
+        console.log(e);
+        //訂單總項目 跟 訂單頁數
+        mydata.ordernum = e.length;
+        if (mydata.ordernum >= 5) {
+            if (mydata.ordernum / 5 <= 0) {
+                mydata.orderpage = 1;
+            } else {
+                mydata.orderpage = Math.ceil(mydata.ordernum / 5);
+            }
+
+        } else {
+            mydata.orderpage = 1
+        };
+        mydata.pageNum = 1;
+    }
+})
+//GET take skip
+$.ajax({
+    type: "get",
+    url: "/api/OrderTables2/2/0",
+    success: function (e) {
+        mydata.order2 = e;
+        console.log(e);
+    }
+})
+
+//GET單一訂單資料表
+function revieworder(e) {
+    mydata.ordermodel = e.value;
+    console.log(mydata.ordermodel);
+
+    $.ajax({
+        type: "get",
+        url: "/api/OrderTables2/" + mydata.ordermodel,
+        success: function (e) {
+            mydata.oneorder = e;
+            console.log(e);
+
+        }
+    })
+
+}
+
+
+//GET訂單篩選
+function selorder() {
+    pageNum = 0;
+    mydata.orderpage = 0;
+    mydata.pageNum = 0;
+    // orderget: [{ "OdataS": "1900-01-01", "OdataE": "3000-01-01", "orderStateC": "AA", "orderId": 0 }]
+    var OdataS = $("#orderdatestart").val();
+    var OdataE = $("#orderdateend").val();
+    //value="0">一般會員,value="1">店家／設計師,value="2">全體
+    var orderStateC = $("#orderstate").val();
+    //value="3" selected>請選擇狀態,value="0">未通知,value="1">已通知
+    var orderId = $("#orderId").val();
+    console.log(OdataS);
+    console.log(OdataE);
+    console.log(orderStateC);
+    console.log(orderId);
+
+    //開始時間
+    if (OdataS == "") {
+        mydata.orderget[0].OdataS = "1900-01-01";
+    } else {
+        mydata.orderget[0].OdataS = OdataS
+    }
+    console.log(mydata.orderget[0].OdataS)
+
+    //結束時間
+    if (OdataE == "") {
+        mydata.orderget[0].OdataE = "3000-01-01";
+    } else {
+        mydata.orderget[0].OdataE = OdataE
+    }
+    console.log(mydata.orderget[0].OdataE)
+    //訂單狀態
+    if (orderStateC == "AA") {
+        mydata.orderget[0].orderStateC = "AA";
+    } else {
+        mydata.orderget[0].orderStateC = orderStateC;
+    }
+    console.log(mydata.orderget[0].orderStateC)
+
+    //訂單編號
+    if (orderId == "") {
+        mydata.orderget[0].orderId = 0;
+    } else {
+        mydata.orderget[0].orderId = orderId;
+    }
+
+    urlorderresult = mydata.orderget[0].OdataS + "/" + mydata.orderget[0].OdataE + "/" + mydata.orderget[0].orderStateC + "/" + mydata.orderget[0].orderId;
+    console.log(urlorderresult)
+
+    $.ajax({
+        type: "get",
+        async: false,
+        url: "/api/OrderTables2/condition/" + urlorderresult,
+        success: function (e) {
+            mydata.order2 = e;
+            //console.log(e);
+            //訂單總項目 跟 訂單頁數
+            mydata.ordernum = e.length;
+            if (mydata.ordernum > 5) {
+                if (mydata.ordernum / 5<=0) {
+                    mydata.orderpage = 1;
+                } else {
+                    mydata.orderpage = Math.ceil(mydata.ordernum/5);
+                }
+                
+            } else {
+                mydata.orderpage = 1
+            };
+            mydata.pageNum = 1;
+        }
+    })
+
+    //GET訂單篩選有skip take
+    $.ajax({
+        type: "get",
+        async: false,
+        url: "/api/OrderTables2/condition/" + urlorderresult + "/0",
+        success: function (e) {
+            mydata.order2 = e;
+            console.log(e);
+            mydata.pageNum = 1;
+        }
+    })
+    console.log(mydata.orderpage)
+    if (mydata.orderpage == 1) {
+        $('#uporder').css('text-decoration-line', 'none');
+        $('#uporder').attr("disabled", 'disabled')
+        $('#uporder').css('color', 'gray');
+        $('#nextorder').css('text-decoration-line', 'none');
+        $('#nextorder').attr("disabled", 'disabled')
+        $('#nextorder').css('color', 'gray');
+    } else {
+        $('#uporder').css('text-decoration-line', 'none');
+        $('#uporder').attr("disabled", 'disabled')
+        $('#uporder').css('color', 'gray');
+        $('#nextorder').css('text-decoration-line', 'underline');
+        $('#nextorder').attr('disabled', 'able');
+        $('#nextorder').css('color', 'black');
+    }
+    mydata.orderget[0].OdataS = "1900-01-01";
+    mydata.orderget[0].OdataE = "3000-01-01";
+    mydata.orderget[0].orderStateC = "AA";
+    mydata.orderget[0].orderId = 0;
+
+}
+/*下一頁*/
+function nextorder() {
+    
+    if (mydata.orderpage <= pageNum + 1) {
+        pageNum = pageNum;
+
+    } else {
+        pageNum++;
+        mydata.pageNum = pageNum + 1;
+    }
+
+    console.log(pageNum)
+
+    if (pageNum == mydata.orderpage - 1) {
+        $('#nextorder').css('text-decoration-line', 'none');
+        $('#nextorder').attr('disabled', 'disabled');
+        $('#nextorder').css('color', 'gray');
+        $('#uporder').css('text-decoration-line', 'underline');
+        $('#uporder').attr('disabled', 'able');
+        $('#uporder').css('color', 'black');
+    } else if (pageNum + 1 > 0) {
+        $('#uporder').css('text-decoration-line', 'underline');
+        $('#uporder').attr('disabled', 'able');
+        $('#uporder').css('color', 'black');
+    }
+    else if (pageNum == 0) {
+        $('#uporder').css('text-decoration-line', 'none');
+        $('#uporder').attr("disabled", 'disabled')
+
+    }
+
+    //如果最後一頁，那麼安建就鎖定。
+
+    //$.ajax({
+    //    type: "get",
+    //    url: "/api/OrderTables2/2/" + pageNum,
+    //    success: function (e) {
+    //        mydata.order2 = e;
+    //        console.log(e);
+    //    }
+    //})
+    console.log(urlorderresult)
+    $.ajax({
+        type: "get",
+        async: false,
+        url: "/api/OrderTables2/condition/" + urlorderresult + "/" + pageNum,
+        success: function (e) {
+            mydata.order2 = e;
+            console.log(e);
+
+        }
+    })
+}
+/*上一頁*/
+function uporder() {
+
+    console.log(pageNum)
+
+    if (pageNum == 0) {
+        pageNum = 0;
+        mydata.pageNum = pageNum + 1;
+    } else {
+        pageNum--;
+    }
+    mydata.pageNum = pageNum + 1;
+
+    if (pageNum == 0) {
+        $('#uporder').css('text-decoration-line', 'none');
+        $('#uporder').attr("disabled", 'disabled')
+        $('#uporder').css('color', 'gray');
+        $('#nextorder').css('text-decoration-line', 'underline');
+        $('#nextorder').attr('disabled', 'able');
+        $('#nextorder').css('color', 'black');
+    } else if (pageNum > 1) {
+        $('#uporder').css('text-decoration-line', 'underline');
+        $('#uporder').attr('disabled', 'able');
+        $('#nextorder').css('text-decoration-line', 'underline');
+        $('#nextorder').attr('disabled', 'able');
+        $('#nextorder').css('color', 'black');
+    }
+
+    console.log(pageNum)
+    //$.ajax({
+    //    type: "get",
+    //    url: "/api/OrderTables2/2/" + pageNum,
+    //    success: function (e) {
+    //        mydata.order2 = e;
+    //        console.log(e);
+    //    }
+    //})
+    $.ajax({
+        type: "get",
+        async: false,
+        url: "/api/OrderTables2/condition/" + urlorderresult + "/" + pageNum,
+        success: function (e) {
+            mydata.order2 = e;
+            console.log(e);
+
+        }
+    })
+}
+
+
+
+
+
+//登出-------------------------------------------------------------------------------------------------------------------------------------
 function plzlogout() {
     $.ajax({
         type: "delete",
@@ -164,8 +384,8 @@ function plzlogin() {
             if (mydata.name == "-1") {
                 alert("帳號密碼錯誤");
             } else {
-                
-                window.location = "/TanTanLib/html/backstage2.html"
+
+                window.location = "/TanTanLib/html/backstage-report.html"
 
 
             }
@@ -250,9 +470,7 @@ function savemanager() {
         contentType: "application/json",
         data: JSON.stringify(mydata.managerpost[0]),
         success: function () {
-
-            window.location = "/TanTanLib/html/backstage2.html"
-
+            window.location = "/TanTanLib/html/backstage-manager.html"
         }
 
     });
@@ -274,14 +492,7 @@ function putmanager(e) {
         contentType: "application/json",
         data: JSON.stringify(mydata.managerput[0]),
         success: function () {
-            window.location = "/TanTanLib/html/backstage2.html"
-            var tabcontent;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tabcontent[4].style.display = "block";
-
+            window.location = "/TanTanLib/html/backstage-manager.html"
         }
     })
 }
@@ -313,14 +524,7 @@ function delmanmem(e) {
         type: "delete",
         url: "/api/ManagerTables/" + mydata.managermodel,
         success: function () {
-            window.location = "/TanTanLib/html/backstage2.html"
-            var tabcontent;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tabcontent[4].style.display = "block";
-
+            window.location = "/TanTanLib/html/backstage-manager.html"
         }
     })
 }
@@ -443,117 +647,6 @@ function reviewmem(e) {
     })
 }
 
-
-////3.訂單--------------------------------------------------------------------------------------------------------------------------------
-//GET訂單資料表
-
-$.ajax({
-    type: "get",
-    url: "/api/OrderTables2",
-    success: function (e) {
-        mydata.order = e;
-        console.log(e);
-        //訂單總項目 跟 訂單頁數
-        mydata.ordernum = e.length;
-        if (mydata.ordernum >= 5) {
-            mydata.orderpage = Math.ceil(mydata.ordernum / 5)
-        } else {
-            mydata.orderpage = 1;
-
-        };
-        //mydata.pageNum = 1;
-    }
-})
-
-
-
-//GET單一訂單資料表
-function revieworder(e) {
-    mydata.ordermodel = e.value;
-    console.log(mydata.ordermodel);
-
-    $.ajax({
-        type: "get",
-        url: "/api/OrderTables2/" + mydata.ordermodel,
-        success: function (e) {
-            mydata.oneorder = e;
-            console.log(e);
-
-        }
-    })
-}
-
-//GET訂單篩選
-function selorder() {
-
-    // orderget: [{ "OdataS": "1900-01-01", "OdataE": "3000-01-01", "orderStateC": "AA", "orderId": 0 }]
-    var OdataS = $("#orderdatestart").val();
-    var OdataE = $("#orderdateend").val();
-    //value="0">一般會員,value="1">店家／設計師,value="2">全體
-    var orderStateC = $("#orderstate").val();
-    //value="3" selected>請選擇狀態,value="0">未通知,value="1">已通知
-    var orderId = $("#orderId").val();
-    console.log(OdataS);
-    console.log(OdataE);
-    console.log(orderStateC);
-    console.log(orderId);
-
-    //開始時間
-    if (OdataS == "") {
-        mydata.orderget[0].OdataS = "1900-01-01";
-    } else {
-        mydata.orderget[0].OdataS = OdataS
-    }
-    console.log(mydata.orderget[0].OdataS)
-
-    //結束時間
-    if (OdataE == "") {
-        mydata.orderget[0].OdataE = "3000-01-01";
-    } else {
-        mydata.orderget[0].OdataE = OdataE
-    }
-    console.log(mydata.orderget[0].OdataE)
-    //訂單狀態
-    if (orderStateC == "AA") {
-        mydata.orderget[0].orderStateC = "AA";
-    } else {
-        mydata.orderget[0].orderStateC = orderStateC;
-    }
-    console.log(mydata.orderget[0].orderStateC)
-
-    //訂單編號
-    if (orderId == "") {
-        mydata.orderget[0].orderId = 0;
-    } else {
-        mydata.orderget[0].orderId = orderId;
-    }
-
-    var urlorderresult = mydata.orderget[0].OdataS + "/" + mydata.orderget[0].OdataE + "/" + mydata.orderget[0].orderStateC + "/" + mydata.orderget[0].orderId;
-    console.log(urlorderresult)
-
-    $.ajax({
-        type: "get",
-        url: "/api/OrderTables2/condition/" + urlorderresult,
-        success: function (e) {
-            mydata.order = e;
-            console.log(e);
-            //訂單總項目 跟 訂單頁數
-            mydata.ordernum = e.length;
-            if (mydata.ordernum >= 5) {
-                mydata.orderpage = Math.ceil(mydata.ordernum / 5)
-            } else {
-                mydata.orderpage = 1
-            };
-            //mydata.pageNum = 1;
-        }
-    })
-
-    mydata.orderget[0].OdataS = "1900-01-01";
-    mydata.orderget[0].OdataE = "3000-01-01";
-    mydata.orderget[0].orderStateC = "AA";
-    mydata.orderget[0].orderId = 0;
-
-}
 
 
 
@@ -823,7 +916,7 @@ function changereviewreport(e) {
     console.log(now);
     mydata.reportput[0].reportId = mydata.reportmodel;
     mydata.reportput[0].reportCheckTime = now;
-    /*mydata.reportput[0].managerId = 1;*/
+    mydata.reportput[0].managerId = 4;
     console.log(mydata.reportput[0]);
     $.ajax({
         type: "put",
@@ -831,7 +924,7 @@ function changereviewreport(e) {
         contentType: "application/json",
         data: JSON.stringify(mydata.reportput[0]),
         success: function () {
-            window.location = "/TanTanLib/html/backstage2.html"
+            window.location = "/TanTanLib/html/backstage-report.html"
 
         }
 
@@ -902,14 +995,7 @@ function delnotice(e) {
         type: "delete",
         url: "/api/NoticeTables/delete/" + mydata.noticemodel,
         success: function () {
-            window.location = "/TanTanLib/html/backstage2.html"
-            var tabcontent;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-
-            }
-
+            window.location = "/TanTanLib/html/backstage-notice.html"
 
         }
     })
@@ -975,7 +1061,7 @@ function savenotice() {
     mydata.noticepost[0].noticeBuildTime = addnotdate;
     mydata.noticepost[0].noticePushTime = mydata.noticetime + ":00.000";
     mydata.noticepost[0].noticeState = false;
-    mydata.noticepost[0].noticeManagerId = 1;
+    mydata.noticepost[0].noticeManagerId = 4;
 
     $.ajax({
         type: "post",
@@ -984,15 +1070,9 @@ function savenotice() {
         contentType: "application/json",
         data: JSON.stringify(mydata.noticepost[0]),
         success: function () {
-            window.location = "/TanTanLib/html/backstage2.html"
-            var tabcontent;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (var i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tabcontent[1].style.display = "block";
-
-        }
+            window.location = "/TanTanLib/html/backstage-notice.html"
+            
+        }   
     })
 
     //2. 回傳到noticeread
@@ -1050,7 +1130,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage2.html"
+                    window.location = "/TanTanLib/html/backstage-notice.html"
                 }
             })
         }
@@ -1067,7 +1147,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage2.html"
+                    window.location = "/TanTanLib/html/backstage-notice.html"
                 }
             })
         }
@@ -1083,7 +1163,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage2.html"
+                    window.location = "/TanTanLib/html/backstage-notice.html"
                 }
             })
         }
@@ -1097,7 +1177,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage2.html"
+                    window.location = "/TanTanLib/html/backstage-notice.html"
                 }
             })
         }

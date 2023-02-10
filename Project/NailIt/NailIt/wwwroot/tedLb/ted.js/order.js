@@ -66,7 +66,7 @@ function now3(nowMember) {
             } else if (e[i].orderStateC == 'A4' || e[i].orderStateC == 'A5') {
                 e[i].orderCompleteTime = e[i].orderCompleteTime.replace('T', ' ');
                 (ood.finlist).push(e[i]);
-            } else if (e[i].orderStateC == 'A6') {
+            } else if (e[i].orderStateC == 'A7') {
                 e[i].orderCancelTime = e[i].orderCancelTime.replace('T', ' ');
                 (ood.cancellist).push(e[i]);
             } 
@@ -137,7 +137,7 @@ function cancelorderbtn(e) {
     }
     var realid = cancelid.substr(num, cancelid.length - num);
 
-    var ooder = ["A6"];
+    var ooder = ["A7"];
     if (confirm('是否確定要取消預約?') == true) {
         $.ajax({
             type: "put",

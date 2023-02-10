@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Nailit會員登入</title>
     <link rel="stylesheet" href="./YueCss/bootstrap.css" />
     <script src="/YueJs/jquery.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
     <link href="./YueCss/workSet.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="../messageImage_1675689510333.jpg">
     <style>
         .mybtn {
             font-weight: bold;
@@ -26,6 +27,18 @@
             color: white;
             text-decoration-line: none;
         }
+
+        .Navimg {
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50px;
+        }
+      
+            .LinkTo:hover {
+                color: #FF6733;
+                text-decoration: none;
+            }
+
     </style>
 
 </head>
@@ -36,7 +49,9 @@
             <div class="row opacity-25 p-0 " id="navall">
                 <div class="col-1 p-0"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
-                    Nail IT
+                    <a href="./TanTanLib/html/cover.html">
+                        <img class="Navimg" src="./YiPLib/UploadFolder/70.png" />
+                    </a>
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
@@ -49,8 +64,6 @@
                     <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
                 </div>
                 <div class="col-1 d-flex align-items-center justify-content-end navend2">
-                    <img class="mt-1 mr-3" id="chat" src="../images/chat-box.png">
-                    <img id="noti mr-0" src="../images/notification.png">
                 </div>
                 <div class="col-1 p-0"></div>
             </div>
@@ -59,12 +72,12 @@
         <div class="row" style="padding-top:90px">
             <div class="col-md-1" style=""></div>
             <div class="col-md-5 " style="background-color: white; height: 500px;">
-                <p class="mt-3">首頁 > 會員登入</p>
+                <p class="mt-3"><a style="color:black" href="/TanTanLib/html/cover.html">首頁</a> ＞ <a style="color: #FF6733; font-weight: bold; " href="./Yuelogin.html">登入</a></p>
                 <h5 class="mt-5"><b>會員登入</b></h5>
-                <div >
+                <div>
                     <label for="accountInput" style="font-size: 120%; " class="mt-3">帳號：</label>
                     <input id="accountInput" type="text" style=" width: 240px;height:30px " placeholder=" 請輸入您的帳號" />
-                </div >
+                </div>
                 <div class="mt-1">
                     <label for="pwInput" style="font-size: 120%;" class="mt-3">密碼：</label>
                     <input id="pwInput" type="password" style=" width: 240px;height:30px " placeholder=" 請輸入您的密碼" />

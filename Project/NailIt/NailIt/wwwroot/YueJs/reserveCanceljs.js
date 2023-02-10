@@ -30,7 +30,7 @@ function reserveCancel(search = false) {
 				<input  id="searchStart" type="date" />
 				<label for="">&nbsp&nbsp&nbsp&nbsp至&nbsp&nbsp&nbsp</label>
 				<input   id="searchEnd" type="date" />
-				<img src="./YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCancel(true)" />
+				<img src="../YuePic/big.jpg" width="26px" style="margin-left: 4%" onclick="reserveCancel(true)" />
 				<br />
 				<div
 					id="removeNaildiv"
@@ -127,7 +127,7 @@ function getCancelDetail(i) {
 
 	infoModal.innerHTML = `<div>
                 <h5>已取消訂單詳請</h5> 
-				<image id="Xpng" src="./YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
+				<image id="Xpng" src="../YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
                 <hr />
                 <span class="detailItem">施作項目：`+ x.order_ItemName + `</span>
 				<br />
