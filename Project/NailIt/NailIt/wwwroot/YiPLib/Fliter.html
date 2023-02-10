@@ -673,13 +673,13 @@
                         <label>地區</label>
                         <div>
                             <div>
-                                <select v-model="SelectedCity" class="SelectStyle" onchange="ShowCountry(this)">
+                                <select class="SelectStyle" onchange="ShowCountry(this)">
                                     <option value="none" selected disabled hidden>請選擇縣市</option>
                                     <option v-for="(item,key) in City" v-bind:value="[key]">{{City[key]}}</option>
                                 </select>
                             </div>
                             <div class="mt-2">
-                                <select v-model="SelectedArea" class="SelectStyle" v-if="ShowAreas" onchange="ShowArea(this)">
+                                <select class="SelectStyle" v-if="ShowAreas" onchange="ShowArea(this)">
                                     <option value="none" selected disabled hidden>請選擇地區</option>
                                     <option v-if="Area" v-for="(item,key) in Area" v-bind:value="Area[key]">{{item}}</option>
                                 </select>
@@ -1240,14 +1240,17 @@
         async function ShowCountry(e) {
             app.Area = [];
             //console.log(app.AreaList);
-            for (Area in app.AreaList[e.value]) {
-                await app.Area.push(app.AreaList[e.value][Area].AreaName);
+            for (Num in app.AreaList[e.value]) {
+                //console.log(Num);
+                //console.log(app.AreaList[e.value][Num].AreaName);
+                await app.Area.push(app.AreaList[e.value][Num].AreaName);
             }
             app.ShowAreas = true;
             //console.log(app.City[e.value]);
             let AreaStr;
             AreaStr = app.City[e.value].replace("臺", "台");
             app.QueryCondition = app.City[e.value];
+            console.log("SelectedCity---"+app.SelectedCity);
             $.ajax({
                 type: "get",
                 url: "/api/DemoSet/GetCountyDemo/?Country=" + AreaStr,
