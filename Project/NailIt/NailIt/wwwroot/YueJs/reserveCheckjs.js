@@ -52,7 +52,9 @@ function checkLoop(search = false) {
 	var i = 0;
 	var thisOrderId = "";
 	var answer = "";
+	var stars;
 	for (var x of myData) {
+	stars = x.member_star == null ? 0 : x.member_star;  
 		if (search) {
 			if (searchStart.value == "" || searchEnd.value == "") {
 				let myDate = new Date();
@@ -79,10 +81,14 @@ function checkLoop(search = false) {
 						<span style="font-size: 120%" onclick="javascript:location.href='`+ picTo +`'"><b>`+ x.order_ItemName+`</b></span>
 						<br />
 						<span style="color: gray">`+ x.demoSet_Content + `</span>
-						<br /><br />
+						<br />
 						<span>訂單編號：`+ thisOrderId +`</span>
 						<br />
-						<span>預約客戶：`+ x.member_Nickname +`</span>
+						<span>預約客戶：`+ x.member_Nickname + `</span>
+								<div class="ratings">
+                                <div id="empty_star">★★★★★</div>
+                                <div id="full_star" style="width:`+ stars * 20 +`%">★★★★★</div>
+                        </div>
 						<br />
 						<span>施作時間：`+ thisStartTime +`</span>
 					</div>
