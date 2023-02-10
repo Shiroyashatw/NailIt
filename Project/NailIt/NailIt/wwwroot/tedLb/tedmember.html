@@ -27,7 +27,9 @@
             <div class="row opacity-25 p-0 " id="navall">
                 <div class="col-1 p-0"></div>
                 <div class="col-2 d-flex align-items-center" id="brand">
-                    Nail IT
+                    <a href="/TanTanLib/html/cover.html">
+                        <img class="Navimg" src="../YiPLib/UploadFolder/70.png" />
+                    </a>
                 </div>
                 <div class="col-3">
                     <ul class="navmid d-flex justify-content-between align-items-center p-0 pt-2">
@@ -40,18 +42,18 @@
                     <p class="navend1"><a id="huiORreg" style="color:black" href="../YueRegister.html"> 註冊&nbsp</a> / <a id="loginORout" style="color:black" href="../Yuelogin.html"> &nbsp登入 </a></p>
                 </div>
                 <div class="col-1 d-flex align-items-center justify-content-end navend2">
-    <div style="position:relative">
-        <img class="mt-1 mr-3 cursor-pointer" id="chat" src="../images/chat-box.png" onclick="showChatPage()">
-        <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
-    </div>
-    <div class="dropdown">
-        <img class="cursor-pointer dropbtn-sysNotic" src="../images/notification.png" onclick="showSysNotic()">
-        <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
-        <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
-            <a class="drop-item">--目前沒有未讀系統訊息--</a>
-        </div>
-    </div>
-</div>
+                    <div style="position:relative">
+                        <img class="mt-1 mr-3 cursor-pointer" id="chat" src="../images/chat-box.png" onclick="showChatPage()">
+                        <div class="unread-badge-message bg-danger rounded-circle d-none"></div>
+                    </div>
+                    <div class="dropdown">
+                        <img class="cursor-pointer dropbtn-sysNotic" src="../images/notification.png" onclick="showSysNotic()">
+                        <div class="unread-badge-sysNotic bg-danger rounded-circle d-none"></div>
+                        <div id="sysNoticDropDown" class="dropdown-content dropdown-content-sysNotic rounded" style="background-color:#ccc;max-width:450px">
+                            <a class="drop-item">--目前沒有未讀系統訊息--</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-1 p-0"></div>
             </div>
         </nav>
@@ -544,7 +546,7 @@
                                     <div class="product-information"><p>{{fin.orderItemName}}</p><p style="color:gray" class="productdetil">{{fin.demoSetContent}}</p><p class="productdetil">完成日期:{{fin.orderCompleteTime}}</p></div>
                                     <div v-if="fin.orderType" class="btn-cancel-order"><button onclick="regref(this)" v-bind:id="'rere'+fin.demoSetId" style="width:100px;height:30px" class="cancel-btn">再預約</button></div>
                                     <div  v-else="fin.orderType" class="btn-cancel-order"><button onclick="regref1(this)" v-bind:id="'rerere'+fin.manicuristId" style="width:100px;height:30px" class="cancel-btn">再預約</button></div>
-                                    <div class="btn-order-stat"><pre>訂金 NT${{fin.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'orderfin'+[key]" onclick="Getorderfin(this)" data-target="#showdetilfin" href="#">詳情</a></P><button v-if="fin.orderStateC == 'A4'" style="width:100px;height:30px" disabled="disabled" class="ing-btn">未評價</button><button style="width:100px;height:30px" v-else="fin.orderStateC == 'A5'" disabled="disabled" class="ing-btn">已評價</button></div>
+                                    <div class="btn-order-stat"><pre>訂金 NT${{fin.orderDeposit}}</pre> <P><a style="color: #FF6733;" data-toggle="modal" v-bind:id="'orderfin'+[key]" onclick="Getorderfin(this)" data-target="#showdetilfin" href="#">詳情</a></P><button v-if="fin.orderStateC == 'A4'" style="width:100px;height:30px" disabled="disabled" class="ing-btn">未評價</button><button style="width:100px;height:30px" v-else="fin.orderStateC == 'A6'" disabled="disabled" class="ing-btn">已評價</button></div>
                                 </div>
                                 <!-- 訂單詳情-->
                                 <div class="modal fade" id="showdetilfin" tabindex="-1" role="dialog" aria-labelledby="showdetilfin" aria-hidden="true">
