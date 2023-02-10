@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using NailIt.Models;
 
 namespace NailIt.Controllers.TedControllers
@@ -32,7 +33,6 @@ namespace NailIt.Controllers.TedControllers
         public async Task<ActionResult<MemberTable>> GetMemberTable(int id)
         {
             var memberTable = await _context.MemberTables.FindAsync(id);
-
             if (memberTable == null)
             {
                 return NotFound();
