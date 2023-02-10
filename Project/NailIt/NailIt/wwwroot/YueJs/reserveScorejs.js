@@ -142,7 +142,7 @@ function getScoreDetail(i)
 	thisStartTime = x.plan_StartTime.substring(0, 10) + " " + x.plan_StartTime.substring(11, 19);
 
 	infoModal.innerHTML = `<div>
-                <h5>完成訂單</h5> 
+                <h5>訂單詳情</h5> 
 				<image id="Xpng" src="../YuePic/X.png" style="heigh:8%;width:8%;position:absolute;right:2%;top:2%" onclick="closeInfoModal()"></image>
                 <hr />
                 <span class="detailItem">施作項目：`+ x.order_ItemName + `</span>

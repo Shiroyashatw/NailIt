@@ -32,12 +32,14 @@ function headChange() {
 		huiORreg.href = "/tedLb/tedmember.html#";
 		loginORout.innerText = "登出";
 		loginORout.addEventListener("click", YueLogout, true);
+		daNick.innerHTML = "Hi！" + nowNickName + "&nbsp&nbsp&nbsp&nbsp&nbsp";
 	}
 	else {
 		huiORreg.innerText = "註冊";
 		huiORreg.href = "/YueRegister.html";
 		loginORout.innerText = "登入";
 		loginORout.href = "/Yuelogin.html";
+		daNick.innerHTML = "尚未登入&nbsp&nbsp&nbsp&nbsp&nbsp";
 	}
 }
 
