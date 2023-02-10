@@ -27,5 +27,6 @@ namespace NailIt.Models
         public string demoSet_Content { get; set; }
         public string order_Cover { get; set; }
         public int order_item { get; set; }
+        public double? member_star { get; set; }
     }
 }

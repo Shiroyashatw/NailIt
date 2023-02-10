@@ -916,7 +916,7 @@ function changereviewreport(e) {
     console.log(now);
     mydata.reportput[0].reportId = mydata.reportmodel;
     mydata.reportput[0].reportCheckTime = now;
-    mydata.reportput[0].managerId = 5;
+    mydata.reportput[0].managerId = 4;
     console.log(mydata.reportput[0]);
     $.ajax({
         type: "put",
@@ -1061,7 +1061,7 @@ function savenotice() {
     mydata.noticepost[0].noticeBuildTime = addnotdate;
     mydata.noticepost[0].noticePushTime = mydata.noticetime + ":00.000";
     mydata.noticepost[0].noticeState = false;
-    mydata.noticepost[0].noticeManagerId = 1;
+    mydata.noticepost[0].noticeManagerId = 4;
 
     $.ajax({
         type: "post",
@@ -1071,7 +1071,8 @@ function savenotice() {
         data: JSON.stringify(mydata.noticepost[0]),
         success: function () {
             window.location = "/TanTanLib/html/backstage-notice.html"
-        }
+            
+        }   
     })
 
     //2. 回傳到noticeread
@@ -1129,7 +1130,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage2.html"
+                    window.location = "/TanTanLib/html/backstage-notice.html"
                 }
             })
         }
@@ -1146,7 +1147,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage2.html"
+                    window.location = "/TanTanLib/html/backstage-notice.html"
                 }
             })
         }
@@ -1162,7 +1163,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage2.html"
+                    window.location = "/TanTanLib/html/backstage-notice.html"
                 }
             })
         }
@@ -1176,7 +1177,7 @@ function savenotice() {
                 contentType: "application/json",
                 data: JSON.stringify(mydata.noticereadpost[0]),
                 success: function () {
-                    window.location = "/TanTanLib/html/backstage2.html"
+                    window.location = "/TanTanLib/html/backstage-notice.html"
                 }
             })
         }
