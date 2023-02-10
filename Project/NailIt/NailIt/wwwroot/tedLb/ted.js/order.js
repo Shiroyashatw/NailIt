@@ -137,7 +137,7 @@ function cancelorderbtn(e) {
     }
     var realid = cancelid.substr(num, cancelid.length - num);
 
-    var ooder = ["A6"];
+    var ooder = ["A7"];
     if (confirm('是否確定要取消預約?') == true) {
         $.ajax({
             type: "put",
